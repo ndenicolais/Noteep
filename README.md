@@ -1,16 +1,36 @@
-# noteep
+## 🔶 Authors
+- [@ndn21](https://github.com/ndenicolais)
 
-A new Flutter project.
+## 📄 Description
+<img src="images/noteep_logo.png" title="Noteep's logo" width="140" height="140">
+This application allows you to create a digital notebook of your own notes. You can organize notes visually and set notifications to remind you of important events. It’s ideal for anyone who wants to keep their notes well organized and easily accessible.
 
-## Getting Started
+## 💎 Release
+<img src="images/noteep_version.png" title="Noteep's version">
+App release 1.0.0 is available for download. You can download it from the following link:
 
-This project is a starting point for a Flutter application.
+[Download v1.0.0](https://github.com/ndenicolais/Noteep/releases/download/v1.0.0/Noteep.0.0.apk)
 
-A few resources to get you started if this is your first Flutter project:
+## 🔑 Features
+- Login via Google or email & password
+- Data storage with Firestore Database
+- Responsive design for all screens with ScreenUtil
+- Navigation with transition effects with Get
+- Light and dark theme variants
+- English and Italian languages variants
+- Customizable colors and fonts
+- Notifications for each note synced across multiple devices
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 🎨 Screenshots
+<img src="images/noteep_release.png" title="Noteep's release">
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 📌 Packages
+Below is a list of some of the most relevant packages:
+- [get](https://pub.dev/packages/get)
+- [flutter_screenutil](https://pub.dev/packages/flutter_screenutil)
+- [google_fonts](https://pub.dev/packages/google_fonts)
+- [cloud_firestore](https://pub.dev/packages/cloud_firestore)
+- [intl](https://pub.dev/packages/intl)
+- [provider](https://pub.dev/packages/provider)
+- [shared_preferences](https://pub.dev/packages/shared_preferences)
+- [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications)
