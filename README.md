@@ -9,7 +9,7 @@ This application allows you to create a digital notebook of your own notes. You 
 <img src="images/noteep_version.png" title="Noteep's version">
 App release 1.0.0 is available for download. You can download it from the following link:
 
-[Download v1.0.0](https://github.com/ndenicolais/Noteep/releases/download/v1.0.0/Noteep_v.1.0.0.apk)
+[Download v1.0.0](https://github.com/ndenicolais/Noteep/releases/download/v1.0.0/Noteep_v1.0.0.apk)
 
 ## 🔑 Features
 - Login via Google or email & password
