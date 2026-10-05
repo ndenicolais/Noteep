@@ -1,204 +1,144 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:noteep/theme/app_colors.dart';
+// Noteep — Copyright © 2026 Nicola De Nicolais — All Rights Reserved.
+// Licensed under the GNU GPL v3 with Additional Commercial Restrictions.
+//
+// Commercial use, including publishing or monetizing on any app store,
+// requires explicit written permission from the copyright holder.
+//
+// Author: Nicola De Nicolais
+// Contact: ndn21dev@gmail.com
+// GitHub: https://github.com/ndenicolais
 
+import 'package:flutter/material.dart';
+import 'app_colors.dart';
+import 'app_font_sizes.dart';
+import 'app_radius.dart';
+
+/// App-wide Material 3 themes built from the [AppColors] palette.
+///
+/// Light  → warm-white surfaces, warm-brown primary, warm-yellow containers.
+/// Dark   → dark-slate surfaces, warm-yellow primary, warm-brown containers.
 class AppTheme {
-  static ThemeData lightTheme() {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      systemNavigationBarColor: AppColors.baseLight,
-      systemNavigationBarIconBrightness: Brightness.dark,
-    ));
-    return ThemeData(
-      colorScheme: const ColorScheme.light(
-        primary: AppColors.baseLight,
-        onPrimary: AppColors.featureDark,
-        secondary: AppColors.baseDark,
-        onSecondary: AppColors.baseLight,
-        tertiary: AppColors.featureDark,
-        onTertiary: AppColors.baseDark,
-        onError: AppColors.errorColor,
-      ),
-      checkboxTheme: CheckboxThemeData(
-        fillColor: WidgetStateProperty.all(AppColors.baseLight),
-        checkColor: WidgetStateProperty.all(AppColors.baseDark),
-        side: BorderSide(
-          color: AppColors.featureDark,
-          width: 1,
-        ),
-      ),
-      datePickerTheme: DatePickerThemeData(
-        backgroundColor: AppColors.baseLight,
-        surfaceTintColor: AppColors.featureDark,
-        headerBackgroundColor: AppColors.baseDark,
-        headerForegroundColor: AppColors.featureDark,
-        todayBackgroundColor: WidgetStateProperty.all(AppColors.featureDark),
-        todayForegroundColor: WidgetStateProperty.all(AppColors.baseDark),
-        dividerColor: AppColors.baseDark,
-      ),
-      inputDecorationTheme: InputDecorationTheme(
-        labelStyle: GoogleFonts.exo2(
-          color: AppColors.featureDark,
-        ),
-        errorStyle: GoogleFonts.exo2(
-          color: AppColors.errorColor,
-          fontWeight: FontWeight.w600,
-        ),
-        errorBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: AppColors.errorColor,
-          ),
-        ),
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: AppColors.baseDark,
-          ),
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: AppColors.baseDark,
-          ),
-        ),
-      ),
-      textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(
-          textStyle: GoogleFonts.exo2(
-            color: AppColors.featureDark,
-          ),
-          foregroundColor: AppColors.baseDark,
-        ),
-      ),
-      textSelectionTheme: const TextSelectionThemeData(
-        selectionColor: AppColors.featureDark,
-        selectionHandleColor: AppColors.featureDark,
-      ),
-      textTheme: TextTheme(
-        displayLarge: GoogleFonts.exo2(),
-        displayMedium: GoogleFonts.exo2(),
-        displaySmall: GoogleFonts.exo2(),
-        headlineLarge: GoogleFonts.exo2(),
-        headlineMedium: GoogleFonts.exo2(),
-        headlineSmall: GoogleFonts.exo2(),
-        titleLarge: GoogleFonts.exo2(),
-        titleMedium: GoogleFonts.exo2(),
-        titleSmall: GoogleFonts.exo2(),
-        bodyLarge: GoogleFonts.exo2(),
-        bodyMedium: GoogleFonts.exo2(),
-        bodySmall: GoogleFonts.exo2(),
-        labelLarge: GoogleFonts.exo2(),
-        labelMedium: GoogleFonts.exo2(),
-        labelSmall: GoogleFonts.exo2(),
-      ),
-      timePickerTheme: TimePickerThemeData(
-        backgroundColor: AppColors.baseLight,
-        dialBackgroundColor: AppColors.baseDark,
-        dialHandColor: AppColors.baseLight,
-        dialTextColor: AppColors.featureDark,
-        helpTextStyle: GoogleFonts.exo2(
-          color: AppColors.featureDark,
-        ),
-        hourMinuteColor: AppColors.baseDark,
-        hourMinuteTextColor: AppColors.featureDark,
-      ),
+  AppTheme._();
+
+  // ─── Light ──────────────────────────────────────────────────────────────────
+
+  static ThemeData get light {
+    final base = ColorScheme.fromSeed(
+      seedColor: AppColors.warmBrown,
+      brightness: Brightness.light,
     );
+    final cs = base.copyWith(
+      primary: AppColors.warmBrown,
+      onPrimary: AppColors.dark,
+      primaryContainer: AppColors.warmYellow,
+      onPrimaryContainer: AppColors.dark,
+      secondary: AppColors.warmYellow,
+      onSecondary: AppColors.dark,
+      secondaryContainer: const Color(0xFFFFF3DC),
+      onSecondaryContainer: AppColors.dark,
+      surface: AppColors.white,
+      onSurface: AppColors.dark,
+      surfaceContainerHighest: const Color(0xFFF5EDD8),
+      onSurfaceVariant: AppColors.dark,
+    );
+    return _build(cs);
   }
 
-  static ThemeData darkTheme() {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      systemNavigationBarColor: AppColors.baseDark,
-      systemNavigationBarIconBrightness: Brightness.light,
-    ));
+  // ─── Dark ───────────────────────────────────────────────────────────────────
+
+  static ThemeData get dark {
+    final base = ColorScheme.fromSeed(
+      seedColor: AppColors.warmBrown,
+      brightness: Brightness.dark,
+    );
+    final cs = base.copyWith(
+      primary: AppColors.warmYellow,
+      onPrimary: AppColors.dark,
+      primaryContainer: AppColors.warmBrown,
+      onPrimaryContainer: AppColors.dark,
+      secondary: AppColors.warmBrown,
+      onSecondary: AppColors.dark,
+      secondaryContainer: const Color(0xFF5A4A32),
+      onSecondaryContainer: AppColors.white,
+      surface: AppColors.dark,
+      onSurface: AppColors.white,
+      surfaceContainerHighest: const Color(0xFF4A4C5A),
+      onSurfaceVariant: AppColors.white,
+    );
+    return _build(cs);
+  }
+
+  // ─── Shared builder ─────────────────────────────────────────────────────────
+
+  static ThemeData _build(ColorScheme cs) {
     return ThemeData(
-      colorScheme: const ColorScheme.dark(
-        primary: AppColors.baseDark,
-        onPrimary: AppColors.baseLight,
-        secondary: AppColors.featureDark,
-        onSecondary: AppColors.baseDark,
-        tertiary: AppColors.baseLight,
-        onTertiary: AppColors.featureDark,
-        onError: AppColors.errorColor,
-      ),
-      checkboxTheme: CheckboxThemeData(
-        fillColor: WidgetStateProperty.all(AppColors.baseDark),
-        checkColor: WidgetStateProperty.all(AppColors.baseLight),
-        side: BorderSide(
-          color: AppColors.featureDark,
-          width: 1,
-        ),
-      ),
-      datePickerTheme: DatePickerThemeData(
-        backgroundColor: AppColors.baseDark,
-        surfaceTintColor: AppColors.baseLight,
-        headerBackgroundColor: AppColors.featureDark,
-        headerForegroundColor: AppColors.baseLight,
-        todayBackgroundColor: WidgetStateProperty.all(AppColors.baseLight),
-        todayForegroundColor: WidgetStateProperty.all(AppColors.featureDark),
-        dividerColor: AppColors.featureDark,
-      ),
-      inputDecorationTheme: InputDecorationTheme(
-        labelStyle: GoogleFonts.exo2(
-          color: AppColors.baseLight,
-        ),
-        errorStyle: GoogleFonts.exo2(
-          color: AppColors.errorColor,
+      colorScheme: cs,
+      useMaterial3: true,
+      textTheme: ThemeData(
+        brightness: cs.brightness,
+      ).textTheme.apply(fontFamily: 'Exo 2'),
+
+      // AppBar
+      appBarTheme: AppBarTheme(
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        backgroundColor: cs.surface,
+        foregroundColor: cs.onSurface,
+        titleTextStyle: TextStyle(
+          fontFamily: 'Exo 2',
+          color: cs.onSurface,
+          fontSize: AppFontSizes.xl,
           fontWeight: FontWeight.w600,
         ),
-        errorBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: AppColors.errorColor,
-          ),
+      ),
+
+      // Drawer
+      drawerTheme: DrawerThemeData(backgroundColor: cs.surface),
+
+      // NavigationRail
+      navigationRailTheme: NavigationRailThemeData(
+        backgroundColor: cs.surface,
+        indicatorColor: cs.primaryContainer,
+        selectedIconTheme: IconThemeData(color: cs.onPrimaryContainer),
+        unselectedIconTheme: IconThemeData(color: cs.onSurface.withAlpha(150)),
+        selectedLabelTextStyle: TextStyle(
+          fontFamily: 'Exo 2',
+          color: cs.onSurface,
+          fontWeight: FontWeight.w600,
+          fontSize: AppFontSizes.sm,
         ),
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: AppColors.featureDark,
-          ),
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
-            color: AppColors.featureDark,
-          ),
+        unselectedLabelTextStyle: TextStyle(
+          fontFamily: 'Exo 2',
+          color: cs.onSurface.withAlpha(150),
+          fontSize: AppFontSizes.sm,
         ),
       ),
-      textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(
-          textStyle: GoogleFonts.exo2(
-            color: AppColors.baseLight,
-          ),
-          foregroundColor: AppColors.featureDark,
+
+      // Cards
+      cardTheme: CardThemeData(
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.md),
         ),
       ),
-      textSelectionTheme: const TextSelectionThemeData(
-        selectionColor: AppColors.baseLight,
-        selectionHandleColor: AppColors.baseLight,
+
+      // FAB
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: cs.primary,
+        foregroundColor: cs.onPrimary,
       ),
-      textTheme: TextTheme(
-        displayLarge: GoogleFonts.exo2(),
-        displayMedium: GoogleFonts.exo2(),
-        displaySmall: GoogleFonts.exo2(),
-        headlineLarge: GoogleFonts.exo2(),
-        headlineMedium: GoogleFonts.exo2(),
-        headlineSmall: GoogleFonts.exo2(),
-        titleLarge: GoogleFonts.exo2(),
-        titleMedium: GoogleFonts.exo2(),
-        titleSmall: GoogleFonts.exo2(),
-        bodyLarge: GoogleFonts.exo2(),
-        bodyMedium: GoogleFonts.exo2(),
-        bodySmall: GoogleFonts.exo2(),
-        labelLarge: GoogleFonts.exo2(),
-        labelMedium: GoogleFonts.exo2(),
-        labelSmall: GoogleFonts.exo2(),
-      ),
-      timePickerTheme: TimePickerThemeData(
-        backgroundColor: AppColors.baseDark,
-        dialBackgroundColor: AppColors.featureDark,
-        dialHandColor: AppColors.baseDark,
-        dialTextColor: AppColors.baseLight,
-        helpTextStyle: GoogleFonts.exo2(
-          color: AppColors.baseLight,
+
+      // Chips
+      chipTheme: ChipThemeData(
+        backgroundColor: cs.secondaryContainer,
+        labelStyle: TextStyle(
+          color: cs.onSecondaryContainer,
+          fontSize: AppFontSizes.xs,
         ),
-        hourMinuteColor: AppColors.featureDark,
-        hourMinuteTextColor: AppColors.baseLight,
       ),
+
+      // Sliders (style editor)
+      sliderTheme: SliderThemeData(activeTrackColor: cs.primary),
     );
   }
 }
