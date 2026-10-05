@@ -461,10 +461,18 @@ dart run build_runner build --delete-conflicting-outputs
 flutter run
 ```
 
-### Android Deploy
-A PowerShell deployment script is provided:
-```powershell
-.\deploy_android.ps1
+### Android Release Signing
+Release builds are signed with the keystore described in `android/key.properties` (git-ignored):
+```properties
+storeFile=C:/path/to/noteep-release.jks
+storePassword=...
+keyAlias=noteep
+keyPassword=...
+```
+Without this file, release builds fall back to the debug key (local testing only). Register the release keystore SHA-1 in the Firebase console, otherwise Google Sign-In fails.
+
+```bash
+flutter build apk --release --target-platform android-arm64
 ```
 
 ### Testing
