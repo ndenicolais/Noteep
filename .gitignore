@@ -44,8 +44,9 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-# Ignore google-services.json file
+# Ignore Firebase config files (generated locally)
 android/app/google-services.json
+lib/firebase_options.dart
 
 # Android debug
 .cxx/

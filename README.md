@@ -439,6 +439,7 @@ On every load, items with `deletedAt` older than 7 days are batch-deleted from F
 - Flutter SDK **≥ 3.7.2** / Dart SDK **^3.7.2**
 - A Firebase project with **Authentication** and **Firestore** enabled
 - `google-services.json` placed in `android/app/`
+- `lib/firebase_options.dart` generated with [`flutterfire configure`](https://firebase.google.com/docs/flutter/setup) (both files are git-ignored)
 
 ### Setup
 

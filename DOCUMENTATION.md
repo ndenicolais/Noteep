@@ -173,7 +173,7 @@ Servizi stateless o singleton, non legati a Riverpod (istanziati direttamente do
 
 Sequenza di avvio:
 1. `WidgetsFlutterBinding.ensureInitialized()`
-2. `Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)` (da `firebase_options.dart`)
+2. `Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)` (da `firebase_options.dart`, git-ignored come `google-services.json`: va generato in locale con `flutterfire configure`)
 3. `NotificationService.init()` + richiesta permessi notifiche
 4. `WidgetService.init()` (home widget Android)
 5. `initializeDateFormatting('it')` (date in italiano)
