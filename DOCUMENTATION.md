@@ -24,7 +24,7 @@ Principi chiave:
 ```
 lib/
 ├── main.dart                  # bootstrap app, auth gate, route table
-├── firebase_options.dart      # config Firebase per piattaforma (iOS incompleto, vedi §11)
+├── firebase_options.dart      # config Firebase Android + Web (git-ignored)
 ├── models/                    # classi dati immutabili-per-copyWith + (to/from)Json
 ├── providers/                 # Riverpod: un file per dominio, + providers/settings/
 ├── screens/                   # una sottocartella per feature-schermata complessa,
@@ -199,5 +199,5 @@ Pattern riusabile per estendere la copertura ad altri provider/schermate: creare
 ## 11. Note di manutenzione
 
 - **Migrazione provider non ancora fatta**: tutti i provider usano `StateNotifierProvider` (pattern Riverpod "legacy" ma pienamente supportato), non `Notifier`/`AsyncNotifier` con `@riverpod` code-gen — nonostante `riverpod_annotation`/`riverpod_generator`/`build_runner` siano già dipendenze del progetto. Nessun file `.g.dart` esiste. Se si deciderà di migrare, l'ordine a rischio crescente consigliato è: `audio_provider` → provider enum di `settings/ui_provider.dart` → `backupStatusProvider` → `calendarProvider` → `notesProvider` → `tasksProvider`+`taskListsProvider` (in coppia, per la dipendenza incrociata) → `authNotifierProvider` → i due provider undo/redo (`family`+`autoDispose`, i più delicati).
-- **Build iOS incompleta**: `lib/firebase_options.dart` ha placeholder non compilati per la sezione `ios` (`apiKey`/`appId` = `'TODO_IOS_*'`). Web e Android hanno valori reali. Non è previsto un rilascio iOS a breve termine.
+- **Piattaforme**: solo Android e Web. Le cartelle `ios/`, `macos/`, `linux/`, `windows/` sono state rimosse e `DefaultFirebaseOptions.currentPlatform` lancia `UnsupportedError` sulle altre piattaforme.
 - **`sharedPreferencesProvider`** è dichiarato in `notes_provider.dart` per motivi storici, ma è cross-cutting (usato da ~7 provider di settings). Andrebbe idealmente spostato in un file dedicato tipo `core_providers.dart` in un futuro refactor.
