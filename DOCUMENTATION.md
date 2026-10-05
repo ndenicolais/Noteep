@@ -123,6 +123,7 @@ sharedPreferencesProvider (dichiarato in notes_provider.dart, iniettato in main.
 | `reminders_screen.dart` | Elenco unificato promemoria note+task, sezioni "In arrivo"/"Scaduti" | legge `reminder` da note/task attivi; rimozione cancella anche la notifica via `NotificationService` |
 | `export_screen.dart` | Esporta note attive in PDF/TXT/JSON/CSV/HTML | `activeNotesProvider`, `downloadFile` (utils/downloader.dart) |
 | `info_screen.dart` | Info app statica (versione da `appVersion`, changelog completo, licenze OSS) | nessuno |
+| `boot_error_screen.dart` | `BootErrorApp`: `MaterialApp` autonoma mostrata se l'avvio fallisce, con pulsante Riprova (vedi §9) | nessuno |
 | `note_template_screen.dart` | Bottom sheet scelta template nota | nessuno (usa `kNoteTemplates`) |
 
 ---
@@ -160,6 +161,7 @@ Servizi stateless o singleton, non legati a Riverpod (istanziati direttamente do
 | `dialogs/move_to_list_dialog.dart` | `showMoveToListDialog` — dialog per spostare un task in un altro elenco. |
 | `data_export_service.dart` | `DataExportService` — encoding/scrittura JSON (`exportJson`) e file-picking+decoding JSON (`pickAndDecodeJson`), scrittura ICS (`exportIcs`) e file-picking ICS (`pickIcsContent`); usato da `settings_screen.dart` per tenere fuori dal widget l'I/O e il parsing generico (il parsing modello-specifico e l'aggiornamento dei provider restano nella schermata). |
 | `changelog_service.dart` | `ChangelogService.pendingEntries(prefs, currentVersion)` — confronta `appVersion` con `last_seen_changelog_version` su SharedPreferences: prima installazione → salva e non mostra nulla; stessa versione → nulla; altrimenti restituisce le voci più nuove di quella vista (tutto lo storico se la versione vista non è in elenco). |
+| `app_bootstrap.dart` | `AppBootstrap` — handler globali degli errori (`installErrorHandlers`) e inizializzazione dei servizi all'avvio (`init`), distinguendo servizi obbligatori e opzionali (vedi §9). |
 
 ---
 
@@ -174,13 +176,13 @@ Servizi stateless o singleton, non legati a Riverpod (istanziati direttamente do
 
 ## 9. Inizializzazione app (`lib/main.dart`) e Firebase
 
-Sequenza di avvio:
+Sequenza di avvio (logica in `utils/app_bootstrap.dart`, `main.dart` fa solo da orchestratore):
 1. `WidgetsFlutterBinding.ensureInitialized()`
-2. `Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)` (da `firebase_options.dart`, git-ignored come `google-services.json`: va generato in locale con `flutterfire configure`)
-3. `NotificationService.init()` + richiesta permessi notifiche
-4. `WidgetService.init()` (home widget Android)
-5. `initializeDateFormatting('it')` (date in italiano)
-6. `SharedPreferences.getInstance()` → iniettato in `ProviderScope` via `sharedPreferencesProvider.overrideWithValue(...)`
+2. `AppBootstrap.installErrorHandlers()`: `PlatformDispatcher.onError` logga (solo debug) gli errori async non gestiti invece di far crashare l'app; in release `ErrorWidget.builder` sostituisce il riquadro grigio con un'icona neutra.
+3. `AppBootstrap.init()`:
+   - **obbligatori** (se falliscono l'avvio fallisce): `Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)` (saltato se già inizializzato, per il retry; `firebase_options.dart` è git-ignored come `google-services.json`: va generato in locale con `flutterfire configure`) e `SharedPreferences.getInstance()`;
+   - **opzionali** (errore solo loggato, l'app parte comunque): `NotificationService.init()` + permessi, `WidgetService.init()`, `initializeDateFormatting('it')`.
+4. Successo → `runApp(ProviderScope(...))` con `sharedPreferencesProvider.overrideWithValue(prefs)`. Errore → `runApp(BootErrorApp(...))` (`screens/boot_error_screen.dart`): schermata "Impossibile avviare Noteep" con pulsante **Riprova** che rilancia l'intera sequenza (in debug mostra anche l'eccezione).
 
 `NotesApp` (`ConsumerWidget`) legge `themeModeProvider` per il tema e `authStateProvider` per l'auth gate: `.when(loading: splash, error: LoginScreen, data: user != null ? HomeScreen : LoginScreen)`. Un `ref.listen` su note/task attivi tiene sincronizzato l'home widget Android. Le schermate principali (Tasks/Reminders/Calendar/Labels/Archive/Trash/Settings) hanno named route (vedi `AppRoutes` in `app_drawer.dart`); `NoteEditorScreen`/`TaskEditorScreen` si aprono invece con `Navigator.push` diretto (non hanno una route con nome, perché richiedono sempre un parametro `note`/`task`).
 
@@ -195,6 +197,7 @@ flutter test
 - **`test/providers/notes_provider_test.dart`**, **`tasks_provider_test.dart`** — unit test dei notifier contro [`fake_cloud_firestore`](https://pub.dev/packages/fake_cloud_firestore) (dev dependency), istanziando `NotesNotifier`/`TasksNotifier`/`TaskListsNotifier` direttamente (bypassando `currentUserProvider`/Firebase Auth reale). Copertura: CRUD, ciclo cestino, tag, `reorderNotes`, dipendenza incrociata `taskListsProvider → tasksProvider.clearListReferences`, provider derivati/filtrati.
 - **`test/screens/note_editor_screen_test.dart`**, **`task_editor_screen_test.dart`** — widget test che montano le due schermate editor dentro un `ProviderScope` con `notesProvider`/`tasksProvider` sovrascritti allo stesso pattern fake-Firestore. Nessun progetto Firebase reale necessario per eseguire la suite.
 - **`test/utils/changelog_service_test.dart`** — unit test di `ChangelogService` con `SharedPreferences.setMockInitialValues` e una lista di voci fittizia (prima installazione, stessa versione, aggiornamento, versione sconosciuta).
+- **`test/screens/boot_error_screen_test.dart`** — widget test di `BootErrorApp` (messaggio visibile, Riprova invoca il callback).
 
 Pattern riusabile per estendere la copertura ad altri provider/schermate: creare il notifier con `FakeFirebaseFirestore()`, oppure — per provider che dipendono da `sharedPreferencesProvider` (tutto `providers/settings/`) — usare `SharedPreferences.setMockInitialValues({})` e passare l'istanza via override nel `ProviderContainer`/`ProviderScope`.
 

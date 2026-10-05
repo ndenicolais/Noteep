@@ -8,18 +8,16 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
-import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'firebase_options.dart';
 import 'providers/auth_provider.dart';
 import 'providers/notes_provider.dart';
 import 'providers/tasks_provider.dart';
 import 'providers/settings/theme_provider.dart';
 import 'screens/archive_screen.dart';
 import 'screens/auth/login_screen.dart';
+import 'screens/boot_error_screen.dart';
 import 'screens/calendar/calendar_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/labels_screen.dart';
@@ -29,23 +27,28 @@ import 'screens/tasks_screen.dart';
 import 'screens/trash_screen.dart';
 import 'theme/app_theme.dart';
 import 'widgets/app_drawer.dart';
-import 'utils/notification_service.dart';
+import 'utils/app_bootstrap.dart';
 import 'utils/widget_service.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await NotificationService.instance.init();
-  await NotificationService.instance.requestPermissions();
-  await WidgetService.instance.init();
-  await initializeDateFormatting('it', null);
-  final prefs = await SharedPreferences.getInstance();
-  runApp(
-    ProviderScope(
-      overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
-      child: const NotesApp(),
-    ),
-  );
+  AppBootstrap.installErrorHandlers();
+  _start();
+}
+
+Future<void> _start() async {
+  try {
+    final prefs = await AppBootstrap.init();
+    runApp(
+      ProviderScope(
+        overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+        child: const NotesApp(),
+      ),
+    );
+  } catch (e, st) {
+    if (kDebugMode) debugPrint('Bootstrap failed: $e\n$st');
+    runApp(BootErrorApp(error: e, onRetry: _start));
+  }
 }
 
 class NotesApp extends ConsumerWidget {
@@ -92,9 +95,8 @@ class NotesApp extends ConsumerWidget {
     final latest =
         notes.isEmpty
             ? ''
-            : (List.of(notes)..sort(
-              (a, b) => b.updatedAt.compareTo(a.updatedAt),
-            )).first.title;
+            : (List.of(notes)
+              ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt))).first.title;
     WidgetService.instance.updateWidget(
       noteCount: notes.length.toString(),
       taskCount: tasks.where((t) => !t.isCompleted).length.toString(),

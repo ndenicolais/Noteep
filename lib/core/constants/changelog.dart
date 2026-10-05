@@ -29,6 +29,7 @@ const List<ChangelogEntry> changelogEntries = [
       'Etichette, archivio e cestino con eliminazione automatica dopo 7 giorni.',
       'Statistiche, esportazione delle note in PDF, TXT, JSON, CSV e HTML, backup manuali e automatici.',
       'Widget per la schermata Home di Android.',
+      'Se l\'avvio non riesce, al posto di una schermata bianca compare un messaggio con il pulsante Riprova.',
     ],
   ),
 ];
