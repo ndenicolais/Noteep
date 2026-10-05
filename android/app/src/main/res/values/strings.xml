@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Noteep</string>
+    <string name="widget_no_notes">Nessuna nota recente</string>
+</resources>

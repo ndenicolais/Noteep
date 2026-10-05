@@ -13,6 +13,34 @@ subprojects {
     project.evaluationDependsOn(":app")
 }
 
+// home_widget ships a Kotlin source file that needs JVM target 11 to inline
+// (see HomeWidgetBackgroundWorker.kt), one step above this project's default
+// of 1.8 — bump only that module's Kotlin compile, rather than forcing every
+// plugin to a higher target and risking new Java/Kotlin mismatches in others
+// (audio_waveforms et al. are fine left at their own defaults).
+subprojects {
+    if (project.path == ":home_widget") {
+        tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+            kotlinOptions {
+                jvmTarget = "11"
+            }
+        }
+        // Keep the Java side consistent with the Kotlin bump above. The
+        // Kotlin/Java consistency check reads android.compileOptions
+        // directly, so the JavaCompile task's own properties aren't enough
+        // — the extension itself has to be set, after the module's own
+        // build.gradle has already run (hence afterEvaluate).
+        afterEvaluate {
+            android {
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_11
+                    targetCompatibility JavaVersion.VERSION_11
+                }
+            }
+        }
+    }
+}
+
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
