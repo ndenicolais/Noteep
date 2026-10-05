@@ -190,11 +190,18 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
               ),
               TextButton(
                 onPressed: () {
-                  notifyOnError(
-                    ref.read(tasksProvider.notifier).deleteTask(_task.id),
-                    context,
-                  );
                   _softDeleted = true;
+                  // A never-saved task is not in the provider: nothing to trash.
+                  if (!_isNew) {
+                    final notifier = ref.read(tasksProvider.notifier);
+                    final id = _task.id;
+                    notifyWithUndo(
+                      notifier.softDelete(id),
+                      context,
+                      message: 'Task spostato nel cestino',
+                      onUndo: () => notifier.restoreFromTrash(id),
+                    );
+                  }
                   Navigator.pop(ctx);
                   Navigator.pop(context);
                 },

@@ -353,7 +353,7 @@ void _confirmDeleteTask(BuildContext context, WidgetRef ref, TaskModel task) {
     builder:
         (ctx) => AlertDialog(
           title: const Text('Elimina task'),
-          content: Text('Vuoi davvero eliminare "${task.title}"?'),
+          content: Text('Vuoi spostare "${task.title}" nel cestino?'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
@@ -361,9 +361,12 @@ void _confirmDeleteTask(BuildContext context, WidgetRef ref, TaskModel task) {
             ),
             TextButton(
               onPressed: () {
-                notifyOnError(
-                  ref.read(tasksProvider.notifier).deleteTask(task.id),
+                final notifier = ref.read(tasksProvider.notifier);
+                notifyWithUndo(
+                  notifier.softDelete(task.id),
                   context,
+                  message: 'Task spostato nel cestino',
+                  onUndo: () => notifier.restoreFromTrash(task.id),
                 );
                 Navigator.pop(ctx);
               },

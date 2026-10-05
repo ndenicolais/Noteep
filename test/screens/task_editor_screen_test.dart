@@ -29,18 +29,20 @@ void main() {
     return ProviderScope(
       overrides: [tasksProvider.overrideWith((ref) => notifier)],
       child: MaterialApp(
-        home: Builder(
-          builder:
-              (context) => ElevatedButton(
-                onPressed:
-                    () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => TaskEditorScreen(task: task),
+        home: Scaffold(
+          body: Builder(
+            builder:
+                (context) => ElevatedButton(
+                  onPressed:
+                      () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => TaskEditorScreen(task: task),
+                        ),
                       ),
-                    ),
-                child: const Text('open'),
-              ),
+                  child: const Text('open'),
+                ),
+          ),
         ),
       ),
     );
@@ -95,5 +97,29 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('First subtask'), findsOneWidget);
+  });
+
+  testWidgets('deleting moves the task to the trash and Annulla restores it', (
+    tester,
+  ) async {
+    final task = TaskModel(title: 'To trash');
+    await notifier.addTask(task);
+
+    await tester.pumpWidget(wrap(task));
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byTooltip('Elimina task'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Elimina'));
+    await tester.pumpAndSettle();
+
+    expect(notifier.state.single.deletedAt, isNotNull);
+    expect(find.text('Task spostato nel cestino'), findsOneWidget);
+
+    await tester.tap(find.text('Annulla'));
+    await tester.pumpAndSettle();
+
+    expect(notifier.state.single.deletedAt, isNull);
   });
 }

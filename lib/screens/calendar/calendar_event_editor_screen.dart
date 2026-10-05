@@ -136,10 +136,17 @@ class _CalendarEventEditorScreenState
               ),
               TextButton(
                 onPressed: () {
-                  notifyOnError(
-                    ref.read(calendarProvider.notifier).softDelete(_event.id),
-                    context,
-                  );
+                  // A never-saved event is not in the provider: nothing to trash.
+                  if (!_isNew) {
+                    final notifier = ref.read(calendarProvider.notifier);
+                    final id = _event.id;
+                    notifyWithUndo(
+                      notifier.softDelete(id),
+                      context,
+                      message: 'Evento spostato nel cestino',
+                      onUndo: () => notifier.restoreFromTrash(id),
+                    );
+                  }
                   _softDeleted = true;
                   Navigator.pop(ctx);
                   Navigator.pop(context);

@@ -133,9 +133,7 @@ class NoteEditorController extends ChangeNotifier {
   // ─── Audio notes ──────────────────────────────────────────────────────────
 
   void addAudioNote(AudioNote audioNote) {
-    updateNote(
-      (n) => n.copyWith(audioNotes: [...n.audioNotes, audioNote]),
-    );
+    updateNote((n) => n.copyWith(audioNotes: [...n.audioNotes, audioNote]));
   }
 
   void removeAudioNote(String audioNoteId) {
@@ -148,8 +146,14 @@ class NoteEditorController extends ChangeNotifier {
 
   // ─── Delete ───────────────────────────────────────────────────────────────
 
-  Future<void> delete() {
+  /// Moves the note to the trash. Returns null if the note was never saved,
+  /// so there is nothing to trash (or to restore with [restore]).
+  Future<void>? delete() {
     _softDeleted = true;
-    return _ref.read(notesProvider.notifier).deleteNote(_note.id);
+    if (_isNew) return null;
+    return _ref.read(notesProvider.notifier).softDelete(_note.id);
   }
+
+  Future<void> restore() =>
+      _ref.read(notesProvider.notifier).restoreFromTrash(_note.id);
 }

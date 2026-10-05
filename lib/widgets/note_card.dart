@@ -109,12 +109,21 @@ class NoteCard extends ConsumerWidget {
     if (!context.mounted) return;
     switch (action) {
       case 'pin':
-        notifyOnError(ref.read(notesProvider.notifier).togglePin(note.id), context);
+        notifyOnError(
+          ref.read(notesProvider.notifier).togglePin(note.id),
+          context,
+        );
         break;
       case 'archive':
-        notifyOnError(
-          ref.read(notesProvider.notifier).toggleArchive(note.id),
+        final notifier = ref.read(notesProvider.notifier);
+        notifyWithUndo(
+          notifier.toggleArchive(note.id),
           context,
+          message:
+              note.isArchived
+                  ? 'Nota rimossa dall\'archivio'
+                  : 'Nota archiviata',
+          onUndo: () => notifier.toggleArchive(note.id),
         );
         break;
       case 'lock':
@@ -131,7 +140,13 @@ class NoteCard extends ConsumerWidget {
         );
         break;
       case 'delete':
-        notifyOnError(ref.read(notesProvider.notifier).softDelete(note.id), context);
+        final notifier = ref.read(notesProvider.notifier);
+        notifyWithUndo(
+          notifier.softDelete(note.id),
+          context,
+          message: 'Nota spostata nel cestino',
+          onUndo: () => notifier.restoreFromTrash(note.id),
+        );
         break;
     }
   }

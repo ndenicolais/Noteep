@@ -454,7 +454,15 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
               ),
               TextButton(
                 onPressed: () {
-                  notifyOnError(_controller.delete(), context);
+                  final pending = _controller.delete();
+                  if (pending != null) {
+                    notifyWithUndo(
+                      pending,
+                      context,
+                      message: 'Nota spostata nel cestino',
+                      onUndo: _controller.restore,
+                    );
+                  }
                   Navigator.pop(ctx);
                   Navigator.pop(context);
                 },
@@ -615,10 +623,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
           onAddChecklistItem: () {
             _controller.updateNote(
               (n) => n.copyWith(
-                checklistItems: [
-                  ...n.checklistItems,
-                  ChecklistItem(text: ''),
-                ],
+                checklistItems: [...n.checklistItems, ChecklistItem(text: '')],
               ),
             );
             _save();
