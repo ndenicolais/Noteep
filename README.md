@@ -419,6 +419,12 @@ users/
 
 Each `StateNotifier` holds the `uid` and a `FirebaseFirestore` reference, loading its collection on construction. Write operations use `doc(id).set(...)` for upserts and `batch.commit()` for bulk changes (reorder, tag rename/delete, replaceAll, clearAll).
 
+### Security Rules
+`firestore.rules` restricts every signed-in user to their own `users/{uid}/` branch; everything else is denied. Deploy with:
+```bash
+firebase deploy --only firestore:rules
+```
+
 ### Trash Auto-Purge
 On every load, items with `deletedAt` older than 7 days are batch-deleted from Firestore and removed from in-memory state.
 
@@ -459,6 +465,8 @@ dart run build_runner build --delete-conflicting-outputs
 
 # 4. Run the app
 flutter run
+# Web: keep port 5000, it is the authorized OAuth origin / API key referrer
+flutter run -d chrome --web-port 5000
 ```
 
 ### Android Release Signing

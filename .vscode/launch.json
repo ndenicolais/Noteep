@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Noteep (Android)",
+      "request": "launch",
+      "type": "dart"
+    },
+    {
+      "name": "Noteep (Web)",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "chrome",
+      // Fixed port: http://localhost:5000 is the authorized origin for the
+      // Google OAuth web client and the web API key referrer restriction.
+      "args": ["--web-port", "5000"]
+    }
+  ]
+}
