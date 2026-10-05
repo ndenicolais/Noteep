@@ -146,12 +146,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     Object? loadError,
   ) {
     if (notes.isEmpty) {
+      if (loadError != null) {
+        return EmptyState(
+          icon: Icons.cloud_off,
+          message:
+              'Errore di sincronizzazione. Verifica la connessione e riprova.',
+          actionLabel: 'Riprova',
+          actionIcon: Icons.refresh,
+          onAction: ref.read(notesProvider.notifier).reload,
+        );
+      }
+      // Empty because of the search query: creating a note wouldn't help.
+      final hasNotes = ref.read(activeNotesProvider).isNotEmpty;
       return EmptyState(
-        icon: loadError != null ? Icons.cloud_off : Icons.note_alt_outlined,
-        message:
-            loadError != null
-                ? 'Errore di sincronizzazione. Verifica la connessione e riprova.'
-                : 'Nessuna nota trovata',
+        icon: Icons.note_alt_outlined,
+        message: hasNotes ? 'Nessuna nota trovata' : 'Ancora nessuna nota',
+        actionLabel: hasNotes ? null : 'Crea la prima nota',
+        actionIcon: Icons.add,
+        onAction: () => _openEditor(NoteType.note),
       );
     }
     return layout == HomeLayout.grid

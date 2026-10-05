@@ -18,11 +18,21 @@ class EmptyState extends StatelessWidget {
     required this.icon,
     required this.message,
     this.iconSize = 80,
+    this.actionLabel,
+    this.actionIcon,
+    this.onAction,
   });
 
   final IconData icon;
   final String message;
   final double iconSize;
+
+  /// Optional call-to-action button shown under the message (e.g. "Riprova"
+  /// on a sync error, "Crea la prima nota" on an empty list). Shown only when
+  /// both [actionLabel] and [onAction] are set.
+  final String? actionLabel;
+  final IconData? actionIcon;
+  final VoidCallback? onAction;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +51,14 @@ class EmptyState extends StatelessWidget {
               fontSize: AppFontSizes.lg,
             ),
           ),
+          if (actionLabel != null && onAction != null) ...[
+            const SizedBox(height: 24),
+            FilledButton.tonalIcon(
+              onPressed: onAction,
+              icon: Icon(actionIcon ?? Icons.arrow_forward),
+              label: Text(actionLabel!),
+            ),
+          ],
         ],
       ),
     );

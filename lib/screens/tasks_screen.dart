@@ -320,12 +320,16 @@ class _TaskList extends ConsumerWidget {
       }
       return PullToRefresh(
         onRefresh: refresh,
+        // No "create" action: the quick-add field is always visible above.
         child: EmptyState(
           icon: loadError != null ? Icons.cloud_off : Icons.task_alt,
           message:
               loadError != null
                   ? 'Errore di sincronizzazione. Verifica la connessione e riprova.'
                   : 'Nessun task trovato',
+          actionLabel: loadError != null ? 'Riprova' : null,
+          actionIcon: Icons.refresh,
+          onAction: refresh,
         ),
       );
     }
