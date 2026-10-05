@@ -30,6 +30,7 @@ import '../widgets/changelog_dialog.dart';
 import '../widgets/nav_scaffold.dart';
 import '../widgets/sort_sheet.dart';
 import '../widgets/shared/empty_state.dart';
+import '../widgets/shared/pull_to_refresh.dart';
 import '../widgets/shared/search_field.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -119,35 +120,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       body:
           notes.isEmpty && isLoading && loadError == null
               ? const Center(child: CircularProgressIndicator())
-              : notes.isEmpty
-              ? EmptyState(
-                icon:
-                    loadError != null
-                        ? Icons.cloud_off
-                        : Icons.note_alt_outlined,
-                message:
-                    loadError != null
-                        ? 'Errore di sincronizzazione. Verifica la connessione e riprova.'
-                        : 'Nessuna nota trovata',
-              )
-              : layout == HomeLayout.grid
-              ? ReorderableGridView(
-                notes: notes,
-                onReorder: (from, to) {
-                  ref.read(sortOrderProvider.notifier).state = SortOrder.custom;
-                  ref
-                      .read(notesProvider.notifier)
-                      .reorderNotes(notes, from, from < to ? to + 1 : to);
-                },
-              )
-              : ReorderableListViewWidget(
-                notes: notes,
-                onReorder: (oldIndex, newIndex) {
-                  ref.read(sortOrderProvider.notifier).state = SortOrder.custom;
-                  ref
-                      .read(notesProvider.notifier)
-                      .reorderNotes(notes, oldIndex, newIndex);
-                },
+              : PullToRefresh(
+                onRefresh: ref.read(notesProvider.notifier).reload,
+                childIsScrollable: notes.isNotEmpty,
+                child: _buildNotes(notes, layout, loadError),
               ),
       floatingActionButton: SpeedDialFab(
         onNoteTap: () => _openEditor(NoteType.note),
@@ -162,6 +138,41 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         onTemplateTap: _openFromTemplate,
       ),
     );
+  }
+
+  Widget _buildNotes(
+    List<NoteModel> notes,
+    HomeLayout layout,
+    Object? loadError,
+  ) {
+    if (notes.isEmpty) {
+      return EmptyState(
+        icon: loadError != null ? Icons.cloud_off : Icons.note_alt_outlined,
+        message:
+            loadError != null
+                ? 'Errore di sincronizzazione. Verifica la connessione e riprova.'
+                : 'Nessuna nota trovata',
+      );
+    }
+    return layout == HomeLayout.grid
+        ? ReorderableGridView(
+          notes: notes,
+          onReorder: (from, to) {
+            ref.read(sortOrderProvider.notifier).state = SortOrder.custom;
+            ref
+                .read(notesProvider.notifier)
+                .reorderNotes(notes, from, from < to ? to + 1 : to);
+          },
+        )
+        : ReorderableListViewWidget(
+          notes: notes,
+          onReorder: (oldIndex, newIndex) {
+            ref.read(sortOrderProvider.notifier).state = SortOrder.custom;
+            ref
+                .read(notesProvider.notifier)
+                .reorderNotes(notes, oldIndex, newIndex);
+          },
+        );
   }
 
   void _openEditor(NoteType type) {

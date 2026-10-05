@@ -69,7 +69,11 @@ class NotesNotifier extends StateNotifier<List<NoteModel>> {
     }
   }
 
-  Future<void> _load() async {
+  /// Re-fetches all notes from Firestore, replacing local state (e.g.
+  /// pull-to-refresh after a sync error or edits from another device).
+  Future<void> reload() => _load(replace: true);
+
+  Future<void> _load({bool replace = false}) async {
     if (_uid.isEmpty) return;
     try {
       final snap = await _col.get();
@@ -79,10 +83,14 @@ class NotesNotifier extends StateNotifier<List<NoteModel>> {
             data['id'] = doc.id;
             return NoteModel.fromJson(data);
           }).toList();
-      // Merge instead of replace: a note added/edited locally while this
-      // initial fetch was in flight must not be wiped out by it.
-      final existingIds = state.map((n) => n.id).toSet();
-      state = [...state, ...notes.where((n) => !existingIds.contains(n.id))];
+      if (replace) {
+        state = notes;
+      } else {
+        // Merge instead of replace: a note added/edited locally while this
+        // initial fetch was in flight must not be wiped out by it.
+        final existingIds = state.map((n) => n.id).toSet();
+        state = [...state, ...notes.where((n) => !existingIds.contains(n.id))];
+      }
       _onLoadError(null);
       await _purgeOldTrashFirestore();
     } catch (e) {

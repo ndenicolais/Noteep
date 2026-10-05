@@ -67,6 +67,26 @@ void main() {
       expect(await firestoreDoc(note.id), isNull);
     });
 
+    test('reload replaces state with what is in Firestore', () async {
+      final kept = NoteModel(title: 'Kept');
+      final removed = NoteModel(title: 'Removed elsewhere');
+      await notifier.addNote(kept);
+      await notifier.addNote(removed);
+
+      // Simulate edits made from another device.
+      final col = firestore
+          .collection('users')
+          .doc('test-uid')
+          .collection('notes');
+      await col.doc(removed.id).delete();
+      await col.doc(kept.id).update({'title': 'Edited elsewhere'});
+
+      await notifier.reload();
+
+      expect(notifier.state.single.id, kept.id);
+      expect(notifier.state.single.title, 'Edited elsewhere');
+    });
+
     test('clearAll removes every note', () async {
       await notifier.addNote(NoteModel(title: 'A'));
       await notifier.addNote(NoteModel(title: 'B'));

@@ -48,7 +48,11 @@ class TasksNotifier extends StateNotifier<List<TaskModel>> {
     }
   }
 
-  Future<void> _load() async {
+  /// Re-fetches all tasks from Firestore, replacing local state (e.g.
+  /// pull-to-refresh after a sync error or edits from another device).
+  Future<void> reload() => _load(replace: true);
+
+  Future<void> _load({bool replace = false}) async {
     if (_uid.isEmpty) return;
     try {
       final snap = await _col.get();
@@ -58,10 +62,14 @@ class TasksNotifier extends StateNotifier<List<TaskModel>> {
             data['id'] = doc.id;
             return TaskModel.fromJson(data);
           }).toList();
-      // Merge instead of replace: any task added/edited locally while this
-      // initial fetch was in flight must not be wiped out by it.
-      final existingIds = state.map((t) => t.id).toSet();
-      state = [...state, ...tasks.where((t) => !existingIds.contains(t.id))];
+      if (replace) {
+        state = tasks;
+      } else {
+        // Merge instead of replace: any task added/edited locally while this
+        // initial fetch was in flight must not be wiped out by it.
+        final existingIds = state.map((t) => t.id).toSet();
+        state = [...state, ...tasks.where((t) => !existingIds.contains(t.id))];
+      }
       _onLoadError(null);
       await _purgeOldTrashFirestore();
     } catch (e) {
@@ -302,7 +310,10 @@ class TaskListsNotifier extends StateNotifier<List<TaskListModel>> {
     }
   }
 
-  Future<void> _load() async {
+  /// Re-fetches all task lists from Firestore, replacing local state.
+  Future<void> reload() => _load(replace: true);
+
+  Future<void> _load({bool replace = false}) async {
     if (_uid.isEmpty) return;
     final snap = await _col.get();
     final lists =
@@ -311,6 +322,10 @@ class TaskListsNotifier extends StateNotifier<List<TaskListModel>> {
           data['id'] = doc.id;
           return TaskListModel.fromJson(data);
         }).toList();
+    if (replace) {
+      state = lists;
+      return;
+    }
     final existingIds = state.map((l) => l.id).toSet();
     state = [...state, ...lists.where((l) => !existingIds.contains(l.id))];
   }

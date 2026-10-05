@@ -48,6 +48,7 @@ class _ReorderableGridViewState extends State<ReorderableGridView> {
             dragDevices: {PointerDeviceKind.touch, PointerDeviceKind.mouse},
           ),
           child: CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
               SliverPadding(
                 padding: const EdgeInsets.fromLTRB(12, 12, 12, 80),

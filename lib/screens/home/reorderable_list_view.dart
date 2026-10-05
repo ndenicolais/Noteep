@@ -31,6 +31,7 @@ class ReorderableListViewWidget extends StatelessWidget {
       ),
       child: ReorderableListView.builder(
         padding: const EdgeInsets.fromLTRB(12, 12, 12, 80),
+        physics: const AlwaysScrollableScrollPhysics(),
         buildDefaultDragHandles: false,
         // onReorderItem gives the post-removal index; onReorder (and
         // NotesNotifier.reorderNotes) expect the legacy pre-removal one.

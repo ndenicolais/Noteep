@@ -17,6 +17,7 @@ import '../providers/settings/ui_provider.dart';
 import '../widgets/nav_scaffold.dart';
 import '../widgets/sort_sheet.dart';
 import '../widgets/shared/empty_state.dart';
+import '../widgets/shared/pull_to_refresh.dart';
 import '../widgets/shared/error_feedback.dart';
 import '../widgets/shared/search_field.dart';
 import '../utils/dialogs/move_to_list_dialog.dart';
@@ -253,12 +254,10 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
                 Expanded(
                   child: TabBarView(
                     children: [
-                      _TaskList(tasksProvider: filteredTasksProvider),
-                      _TaskList(tasksProvider: specialTasksProvider),
+                      _TaskList(source: filteredTasksProvider),
+                      _TaskList(source: specialTasksProvider),
                       ...taskLists.map(
-                        (l) => _TaskList(
-                          tasksProvider: taskListTasksProvider(l.id),
-                        ),
+                        (l) => _TaskList(source: taskListTasksProvider(l.id)),
                       ),
                     ],
                   ),
@@ -273,12 +272,12 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
 }
 
 class _TaskList extends ConsumerWidget {
-  final ProviderListenable<List<TaskModel>> tasksProvider;
-  const _TaskList({required this.tasksProvider});
+  final ProviderListenable<List<TaskModel>> source;
+  const _TaskList({required this.source});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tasks = ref.watch(tasksProvider);
+    final tasks = ref.watch(source);
     final sort = ref.watch(taskSortOrderProvider);
 
     // Sort tasks: uncompleted first, then by the active sort order — explicit
@@ -306,22 +305,44 @@ class _TaskList extends ConsumerWidget {
     final completedTasks = sortedTasks.where((t) => t.isCompleted).toList();
     final activeTasks = sortedTasks.where((t) => !t.isCompleted).toList();
 
+    // Task-list failures surface through tasksLoadErrorProvider on the tasks
+    // reload, which hits the same backend, so they are not reported twice.
+    Future<void> refresh() => Future.wait([
+      ref.read(tasksProvider.notifier).reload(),
+      ref.read(taskListsProvider.notifier).reload().catchError((_) {}),
+    ]);
+
     if (tasks.isEmpty) {
       final loadError = ref.watch(tasksLoadErrorProvider);
       final isLoading = ref.watch(tasksLoadingProvider);
       if (isLoading && loadError == null) {
         return const Center(child: CircularProgressIndicator());
       }
-      return EmptyState(
-        icon: loadError != null ? Icons.cloud_off : Icons.task_alt,
-        message:
-            loadError != null
-                ? 'Errore di sincronizzazione. Verifica la connessione e riprova.'
-                : 'Nessun task trovato',
+      return PullToRefresh(
+        onRefresh: refresh,
+        child: EmptyState(
+          icon: loadError != null ? Icons.cloud_off : Icons.task_alt,
+          message:
+              loadError != null
+                  ? 'Errore di sincronizzazione. Verifica la connessione e riprova.'
+                  : 'Nessun task trovato',
+        ),
       );
     }
 
+    return PullToRefresh(
+      onRefresh: refresh,
+      childIsScrollable: true,
+      child: _buildList(activeTasks, completedTasks),
+    );
+  }
+
+  Widget _buildList(
+    List<TaskModel> activeTasks,
+    List<TaskModel> completedTasks,
+  ) {
     return ListView(
+      physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.all(16),
       children: [
         if (activeTasks.isNotEmpty) ...[
