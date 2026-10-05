@@ -18,6 +18,7 @@ import '../widgets/nav_scaffold.dart';
 import '../widgets/sort_sheet.dart';
 import '../widgets/shared/empty_state.dart';
 import '../widgets/shared/pull_to_refresh.dart';
+import '../widgets/shared/swipe_actions.dart';
 import '../widgets/shared/error_feedback.dart';
 import '../widgets/shared/search_field.dart';
 import '../utils/dialogs/move_to_list_dialog.dart';
@@ -411,6 +412,42 @@ class _TaskItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final notifier = ref.read(tasksProvider.notifier);
+    final cs = Theme.of(context).colorScheme;
+    return SwipeActions(
+      id: task.id,
+      start: SwipeAction(
+        icon: task.isCompleted ? Icons.undo : Icons.check,
+        label: task.isCompleted ? 'Riapri' : 'Completa',
+        color: Colors.green,
+        // A completed task stays in the list (or is hidden by the
+        // "show completed" setting), so the row snaps back.
+        removesItem: false,
+        onTriggered:
+            () => notifyWithUndo(
+              notifier.toggleComplete(task.id),
+              context,
+              message: task.isCompleted ? 'Task riaperto' : 'Task completato',
+              onUndo: () => notifier.toggleComplete(task.id),
+            ),
+      ),
+      end: SwipeAction(
+        icon: Icons.delete_outline,
+        label: 'Cestino',
+        color: cs.error,
+        onTriggered:
+            () => notifyWithUndo(
+              notifier.softDelete(task.id),
+              context,
+              message: 'Task spostato nel cestino',
+              onUndo: () => notifier.restoreFromTrash(task.id),
+            ),
+      ),
+      child: _buildTile(context, ref),
+    );
+  }
+
+  Widget _buildTile(BuildContext context, WidgetRef ref) {
     return ListTile(
       onTap: () {
         Navigator.push(

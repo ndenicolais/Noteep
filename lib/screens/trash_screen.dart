@@ -18,6 +18,7 @@ import '../providers/tasks_provider.dart';
 import '../providers/calendar_provider.dart';
 import '../widgets/nav_scaffold.dart';
 import '../widgets/shared/error_feedback.dart';
+import '../widgets/shared/swipe_actions.dart';
 
 class TrashScreen extends ConsumerWidget {
   const TrashScreen({super.key});
@@ -264,13 +265,13 @@ class _TrashNoteCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Dismissible(
       key: ValueKey(note.id),
-      background: _DismissBackground(
+      background: DismissBackground(
         alignment: Alignment.centerLeft,
         color: Colors.green,
         icon: Icons.restore,
         label: 'Ripristina',
       ),
-      secondaryBackground: _DismissBackground(
+      secondaryBackground: DismissBackground(
         alignment: Alignment.centerRight,
         color: Colors.red,
         icon: Icons.delete_forever,
@@ -365,36 +366,6 @@ class _TrashNoteCard extends ConsumerWidget {
               ),
             ],
           ),
-    );
-  }
-}
-
-class _DismissBackground extends StatelessWidget {
-  const _DismissBackground({
-    required this.alignment,
-    required this.color,
-    required this.icon,
-    required this.label,
-  });
-  final Alignment alignment;
-  final Color color;
-  final IconData icon;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: color,
-      alignment: alignment,
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: Colors.white),
-          const SizedBox(width: 6),
-          Text(label, style: const TextStyle(color: Colors.white)),
-        ],
-      ),
     );
   }
 }

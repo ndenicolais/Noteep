@@ -12,6 +12,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../../models/note_model.dart';
 import '../../widgets/note_card.dart';
+import 'note_swipe_actions.dart';
 
 class ReorderableListViewWidget extends StatelessWidget {
   const ReorderableListViewWidget({
@@ -44,9 +45,12 @@ class ReorderableListViewWidget extends StatelessWidget {
             index: i,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8),
-              child: MouseRegion(
-                cursor: SystemMouseCursors.grab,
-                child: NoteCard(note: note),
+              child: NoteSwipeActions(
+                note: note,
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.grab,
+                  child: NoteCard(note: note),
+                ),
               ),
             ),
           );

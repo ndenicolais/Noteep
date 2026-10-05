@@ -33,6 +33,7 @@ const List<ChangelogEntry> changelogEntries = [
       'Eliminare una nota o un\'attività dall\'editor ora la sposta nel cestino invece di cancellarla definitivamente.',
       'Trascina verso il basso su note e attività per aggiornarle, ad esempio dopo un errore di connessione o modifiche fatte da un altro dispositivo.',
       'Pulsante "Riprova" quando la sincronizzazione non riesce e "Crea la prima nota" quando non ne hai ancora.',
+      'Scorri un\'attività verso destra per completarla o verso sinistra per spostarla nel cestino; in vista elenco, scorri una nota verso destra per archiviarla o verso sinistra per cestinarla.',
       'Selettori di data e ora, menu di sistema e date tutti in italiano.',
       'Se l\'avvio non riesce, al posto di una schermata bianca compare un messaggio con il pulsante Riprova.',
     ],
