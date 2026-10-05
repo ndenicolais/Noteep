@@ -8,7 +8,7 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show debugPrint, kDebugMode, kIsWeb;
 import 'package:just_audio/just_audio.dart';
 import 'package:record/record.dart';
 import 'package:path_provider/path_provider.dart';
@@ -95,7 +95,7 @@ class AudioRecordingService {
         }
       }
     } catch (e) {
-      print('Stop recording error: $e');
+      if (kDebugMode) debugPrint('Stop recording error: $e');
       _isRecording = false;
     }
     return null;
@@ -116,7 +116,7 @@ class AudioRecordingService {
         _currentRecordingPath = null;
       }
     } catch (e) {
-      print('Cancel recording error: $e');
+      if (kDebugMode) debugPrint('Cancel recording error: $e');
     }
   }
 
@@ -127,7 +127,7 @@ class AudioRecordingService {
       await _audioPlayer.play();
       _isPlaying = true;
     } catch (e) {
-      print('Play audio error: $e');
+      if (kDebugMode) debugPrint('Play audio error: $e');
       _isPlaying = false;
     }
   }
@@ -138,7 +138,7 @@ class AudioRecordingService {
       await _audioPlayer.pause();
       _isPlaying = false;
     } catch (e) {
-      print('Pause audio error: $e');
+      if (kDebugMode) debugPrint('Pause audio error: $e');
     }
   }
 
@@ -148,7 +148,7 @@ class AudioRecordingService {
       await _audioPlayer.play();
       _isPlaying = true;
     } catch (e) {
-      print('Resume audio error: $e');
+      if (kDebugMode) debugPrint('Resume audio error: $e');
     }
   }
 
@@ -158,7 +158,7 @@ class AudioRecordingService {
       await _audioPlayer.stop();
       _isPlaying = false;
     } catch (e) {
-      print('Stop audio error: $e');
+      if (kDebugMode) debugPrint('Stop audio error: $e');
     }
   }
 
@@ -183,7 +183,7 @@ class AudioRecordingService {
     try {
       await _audioPlayer.seek(duration);
     } catch (e) {
-      print('Seek error: $e');
+      if (kDebugMode) debugPrint('Seek error: $e');
     }
   }
 
@@ -196,7 +196,7 @@ class AudioRecordingService {
       await player.dispose();
       return duration;
     } catch (e) {
-      print('Get duration error: $e');
+      if (kDebugMode) debugPrint('Get duration error: $e');
       return Duration.zero;
     }
   }
@@ -211,7 +211,7 @@ class AudioRecordingService {
       }
       return false;
     } catch (e) {
-      print('Delete audio file error: $e');
+      if (kDebugMode) debugPrint('Delete audio file error: $e');
       return false;
     }
   }
@@ -228,7 +228,7 @@ class AudioRecordingService {
       await _recorder.dispose();
       await _audioPlayer.dispose();
     } catch (e) {
-      print('Dispose error: $e');
+      if (kDebugMode) debugPrint('Dispose error: $e');
     }
   }
 }

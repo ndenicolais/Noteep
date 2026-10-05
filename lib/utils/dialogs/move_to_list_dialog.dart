@@ -30,42 +30,35 @@ void showMoveToListDialog({
           title: const Text('Sposta in un elenco'),
           content: SizedBox(
             width: double.maxFinite,
-            child: ListView(
-              shrinkWrap: true,
-              children: [
-                ListTile(
-                  title: const Text('Nessun elenco'),
-                  leading: Radio<String?>(
-                    value: null,
-                    groupValue: currentListId,
-                    onChanged: (v) {
-                      onListSelected(v);
+            child: RadioGroup<String?>(
+              groupValue: currentListId,
+              onChanged: (v) {
+                onListSelected(v);
+                Navigator.pop(context);
+              },
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  ListTile(
+                    title: const Text('Nessun elenco'),
+                    leading: const Radio<String?>(value: null),
+                    onTap: () {
+                      onListSelected(null);
                       Navigator.pop(context);
                     },
                   ),
-                  onTap: () {
-                    onListSelected(null);
-                    Navigator.pop(context);
-                  },
-                ),
-                ...lists.map(
-                  (l) => ListTile(
-                    title: Text(l.name),
-                    leading: Radio<String?>(
-                      value: l.id,
-                      groupValue: currentListId,
-                      onChanged: (v) {
-                        onListSelected(v);
+                  ...lists.map(
+                    (l) => ListTile(
+                      title: Text(l.name),
+                      leading: Radio<String?>(value: l.id),
+                      onTap: () {
+                        onListSelected(l.id);
                         Navigator.pop(context);
                       },
                     ),
-                    onTap: () {
-                      onListSelected(l.id);
-                      Navigator.pop(context);
-                    },
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

@@ -11,6 +11,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:archive/archive_io.dart';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -71,7 +72,9 @@ class BackupService {
         ZipFileEncoder().zipDirectory(
           tempDir,
           filename: backupPath,
-          onProgress: (file) => print('Backup: $file'),
+          onProgress: (file) {
+            if (kDebugMode) debugPrint('Backup: $file');
+          },
         );
 
         // Clean up temp directory
@@ -86,7 +89,7 @@ class BackupService {
         rethrow;
       }
     } catch (e) {
-      print('Backup error: $e');
+      if (kDebugMode) debugPrint('Backup error: $e');
       return null;
     }
   }
@@ -127,7 +130,7 @@ class BackupService {
         rethrow;
       }
     } catch (e) {
-      print('Restore error: $e');
+      if (kDebugMode) debugPrint('Restore error: $e');
       return null;
     }
   }
@@ -143,7 +146,7 @@ class BackupService {
       );
       return files;
     } catch (e) {
-      print('List backups error: $e');
+      if (kDebugMode) debugPrint('List backups error: $e');
       return [];
     }
   }
@@ -171,7 +174,7 @@ class BackupService {
       }
       return false;
     } catch (e) {
-      print('Delete backup error: $e');
+      if (kDebugMode) debugPrint('Delete backup error: $e');
       return false;
     }
   }
@@ -192,7 +195,7 @@ class BackupService {
         }
       }
     } catch (e) {
-      print('Clean old backups error: $e');
+      if (kDebugMode) debugPrint('Clean old backups error: $e');
     }
   }
 
@@ -219,7 +222,7 @@ class BackupService {
       }
       return null;
     } catch (e) {
-      print('Get last backup time error: $e');
+      if (kDebugMode) debugPrint('Get last backup time error: $e');
       return null;
     }
   }
@@ -233,7 +236,7 @@ class BackupService {
         DateTime.now().toIso8601String(),
       );
     } catch (e) {
-      print('Set last backup time error: $e');
+      if (kDebugMode) debugPrint('Set last backup time error: $e');
     }
   }
 }

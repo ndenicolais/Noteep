@@ -238,22 +238,24 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
           (context) => AlertDialog(
             title: const Text('Ripetizione'),
             content: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  for (final type in RecurrenceType.values)
-                    RadioListTile<RecurrenceType>(
-                      title: Text(recurrenceLabel(type)),
-                      value: type,
-                      groupValue: _task.recurrence,
-                      onChanged: (v) {
-                        if (v != null) {
-                          setState(() => _task = _task.copyWith(recurrence: v));
-                          Navigator.pop(context);
-                        }
-                      },
-                    ),
-                ],
+              child: RadioGroup<RecurrenceType>(
+                groupValue: _task.recurrence,
+                onChanged: (v) {
+                  if (v != null) {
+                    setState(() => _task = _task.copyWith(recurrence: v));
+                    Navigator.pop(context);
+                  }
+                },
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    for (final type in RecurrenceType.values)
+                      RadioListTile<RecurrenceType>(
+                        title: Text(recurrenceLabel(type)),
+                        value: type,
+                      ),
+                  ],
+                ),
               ),
             ),
           ),

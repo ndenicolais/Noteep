@@ -28,23 +28,26 @@ class SettingsAppearanceSection extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         const SettingsSectionHeader(title: 'Aspetto'),
-        RadioListTile<ThemeMode>(
-          title: const Text('Sistema'),
-          value: ThemeMode.system,
+        RadioGroup<ThemeMode>(
           groupValue: themeMode,
           onChanged: (v) => onChanged(v!),
-        ),
-        RadioListTile<ThemeMode>(
-          title: const Text('Chiaro'),
-          value: ThemeMode.light,
-          groupValue: themeMode,
-          onChanged: (v) => onChanged(v!),
-        ),
-        RadioListTile<ThemeMode>(
-          title: const Text('Scuro'),
-          value: ThemeMode.dark,
-          groupValue: themeMode,
-          onChanged: (v) => onChanged(v!),
+          child: const Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              RadioListTile<ThemeMode>(
+                title: Text('Sistema'),
+                value: ThemeMode.system,
+              ),
+              RadioListTile<ThemeMode>(
+                title: Text('Chiaro'),
+                value: ThemeMode.light,
+              ),
+              RadioListTile<ThemeMode>(
+                title: Text('Scuro'),
+                value: ThemeMode.dark,
+              ),
+            ],
+          ),
         ),
       ],
     );

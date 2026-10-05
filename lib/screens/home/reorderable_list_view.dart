@@ -32,7 +32,9 @@ class ReorderableListViewWidget extends StatelessWidget {
       child: ReorderableListView.builder(
         padding: const EdgeInsets.fromLTRB(12, 12, 12, 80),
         buildDefaultDragHandles: false,
-        onReorder: onReorder,
+        // onReorderItem gives the post-removal index; onReorder (and
+        // NotesNotifier.reorderNotes) expect the legacy pre-removal one.
+        onReorderItem: (o, n) => onReorder(o, n > o ? n + 1 : n),
         itemCount: notes.length,
         itemBuilder: (_, i) {
           final note = notes[i];
