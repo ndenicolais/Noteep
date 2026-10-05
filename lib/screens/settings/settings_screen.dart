@@ -327,8 +327,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             decoded['taskLists'] != null
                 ? (decoded['taskLists'] as List<dynamic>)
                     .map(
-                      (e) =>
-                          TaskListModel.fromJson(e as Map<String, dynamic>),
+                      (e) => TaskListModel.fromJson(e as Map<String, dynamic>),
                     )
                     .toList()
                 : null;
@@ -445,8 +444,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             decoded['taskLists'] != null
                 ? (decoded['taskLists'] as List<dynamic>)
                     .map(
-                      (e) =>
-                          TaskListModel.fromJson(e as Map<String, dynamic>),
+                      (e) => TaskListModel.fromJson(e as Map<String, dynamic>),
                     )
                     .toList()
                 : null;

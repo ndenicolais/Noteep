@@ -20,8 +20,7 @@ class AudioRecorderSheet extends ConsumerStatefulWidget {
   const AudioRecorderSheet({super.key});
 
   @override
-  ConsumerState<AudioRecorderSheet> createState() =>
-      _AudioRecorderSheetState();
+  ConsumerState<AudioRecorderSheet> createState() => _AudioRecorderSheetState();
 }
 
 class _AudioRecorderSheetState extends ConsumerState<AudioRecorderSheet> {

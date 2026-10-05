@@ -113,14 +113,11 @@ class TasksNotifier extends StateNotifier<List<TaskModel>> {
     _purgeOldTrashFirestore();
   }
 
-  Future<void> addTask(TaskModel task) => _mutate(
-    (current) => [task, ...current],
-    () => _saveDoc(task),
-  );
+  Future<void> addTask(TaskModel task) =>
+      _mutate((current) => [task, ...current], () => _saveDoc(task));
 
   Future<void> updateTask(TaskModel updated) => _mutate(
-    (current) =>
-        current.map((t) => t.id == updated.id ? updated : t).toList(),
+    (current) => current.map((t) => t.id == updated.id ? updated : t).toList(),
     () => _saveDoc(updated),
   );
 
@@ -135,9 +132,9 @@ class TasksNotifier extends StateNotifier<List<TaskModel>> {
   }
 
   Future<void> restoreFromTrash(String id) async {
-    final updated = state.firstWhere((t) => t.id == id).copyWith(
-      clearDeletedAt: true,
-    );
+    final updated = state
+        .firstWhere((t) => t.id == id)
+        .copyWith(clearDeletedAt: true);
     await _mutate(
       (current) => current.map((t) => t.id == id ? updated : t).toList(),
       () => _saveDoc(updated),
@@ -363,7 +360,11 @@ class TaskListsNotifier extends StateNotifier<List<TaskListModel>> {
 final taskListsProvider =
     StateNotifierProvider<TaskListsNotifier, List<TaskListModel>>((ref) {
       final user = ref.watch(currentUserProvider);
-      return TaskListsNotifier(user?.uid ?? '', FirebaseFirestore.instance, ref);
+      return TaskListsNotifier(
+        user?.uid ?? '',
+        FirebaseFirestore.instance,
+        ref,
+      );
     });
 
 // ─── Filtered & Sorted Providers ─────────────────────────────────────────────

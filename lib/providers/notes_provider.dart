@@ -147,9 +147,7 @@ class NotesNotifier extends StateNotifier<List<NoteModel>> {
     await _mutate(
       (current) => current.where((n) => n.deletedAt == null).toList(),
       () => _commitInChunks(
-        trashed
-            .map((n) => (WriteBatch b) => b.delete(_col.doc(n.id)))
-            .toList(),
+        trashed.map((n) => (WriteBatch b) => b.delete(_col.doc(n.id))).toList(),
       ),
     );
   }
@@ -244,8 +242,7 @@ class NotesNotifier extends StateNotifier<List<NoteModel>> {
         ),
     };
     await _mutate(
-      (current) =>
-          current.map((n) => updates[n.id] ?? n).toList(),
+      (current) => current.map((n) => updates[n.id] ?? n).toList(),
       () => _commitInChunks(
         updates.values
             .map((n) => (WriteBatch b) => b.set(_col.doc(n.id), n.toJson()))
@@ -263,8 +260,7 @@ class NotesNotifier extends StateNotifier<List<NoteModel>> {
         n.id: n.copyWith(tags: n.tags.where((t) => t != tag).toList()),
     };
     await _mutate(
-      (current) =>
-          current.map((n) => updates[n.id] ?? n).toList(),
+      (current) => current.map((n) => updates[n.id] ?? n).toList(),
       () => _commitInChunks(
         updates.values
             .map((n) => (WriteBatch b) => b.set(_col.doc(n.id), n.toJson()))

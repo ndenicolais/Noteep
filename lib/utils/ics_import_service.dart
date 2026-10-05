@@ -52,8 +52,7 @@ class IcsImportService {
         final baseKey =
             (semiIdx == -1 ? keyPart : keyPart.substring(0, semiIdx))
                 .toUpperCase();
-        final rawParamStr =
-            semiIdx == -1 ? '' : keyPart.substring(semiIdx + 1);
+        final rawParamStr = semiIdx == -1 ? '' : keyPart.substring(semiIdx + 1);
 
         props[baseKey] = value;
         propParams[baseKey] = rawParamStr.toUpperCase();
@@ -173,11 +172,7 @@ class IcsImportService {
         case RecurrenceType.weekly:
           return startTime.add(Duration(days: n * 7));
         case RecurrenceType.monthly:
-          return DateTime(
-            startTime.year,
-            startTime.month + n,
-            startTime.day,
-          );
+          return DateTime(startTime.year, startTime.month + n, startTime.day);
         case RecurrenceType.yearly:
           return DateTime(startTime.year + n, startTime.month, startTime.day);
         case RecurrenceType.none:

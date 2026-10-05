@@ -24,11 +24,10 @@ class NoteHistoryState {
 /// `autoDispose` releases each note's history once no editor screen is
 /// watching it anymore — without it, every note ever opened during a
 /// session keeps its (up to 100-entry) undo/redo stack alive forever.
-final noteChangeHistoryProvider = StateNotifierProvider.autoDispose.family<
-  NoteChangeHistoryNotifier,
-  NoteHistoryState,
-  String
->((ref, noteId) => NoteChangeHistoryNotifier());
+final noteChangeHistoryProvider = StateNotifierProvider.autoDispose
+    .family<NoteChangeHistoryNotifier, NoteHistoryState, String>(
+      (ref, noteId) => NoteChangeHistoryNotifier(),
+    );
 
 class NoteChangeHistoryNotifier extends StateNotifier<NoteHistoryState> {
   NoteChangeHistoryNotifier() : super(NoteHistoryState.empty);

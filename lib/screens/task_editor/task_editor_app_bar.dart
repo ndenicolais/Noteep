@@ -59,7 +59,9 @@ class TaskEditorAppBar extends ConsumerWidget implements PreferredSizeWidget {
           tooltip: task.isPinned ? 'Sposta in alto' : 'Fissa in alto',
         ),
         IconButton(
-          icon: Icon(task.isArchived ? Icons.unarchive : Icons.archive_outlined),
+          icon: Icon(
+            task.isArchived ? Icons.unarchive : Icons.archive_outlined,
+          ),
           tooltip: task.isArchived ? 'Ripristina' : 'Archivia',
           onPressed: onArchive,
         ),

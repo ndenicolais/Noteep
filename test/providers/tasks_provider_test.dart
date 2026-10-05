@@ -13,7 +13,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noteep/models/task_list_model.dart';
 import 'package:noteep/models/task_model.dart';
-import 'package:noteep/providers/notes_provider.dart' show sharedPreferencesProvider;
+import 'package:noteep/providers/notes_provider.dart'
+    show sharedPreferencesProvider;
 import 'package:noteep/providers/tasks_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -221,9 +222,36 @@ void main() {
       prefs = await SharedPreferences.getInstance();
     });
 
+    test('activeTasksProvider/archivedTasksProvider/trashedTasksProvider '
+        'filter by archive/trash status', () async {
+      final container = ProviderContainer(
+        overrides: [
+          tasksProvider.overrideWith((ref) => notifier),
+          sharedPreferencesProvider.overrideWithValue(prefs),
+        ],
+      );
+      addTearDown(container.dispose);
+
+      final active = TaskModel(title: 'Active');
+      final archived = TaskModel(title: 'Archived', isArchived: true);
+      final trashed = TaskModel(title: 'Trashed', deletedAt: DateTime.now());
+      await notifier.addTask(active);
+      await notifier.addTask(archived);
+      await notifier.addTask(trashed);
+
+      expect(container.read(activeTasksProvider).map((t) => t.title), [
+        'Active',
+      ]);
+      expect(container.read(archivedTasksProvider).map((t) => t.title), [
+        'Archived',
+      ]);
+      expect(container.read(trashedTasksProvider).map((t) => t.title), [
+        'Trashed',
+      ]);
+    });
+
     test(
-      'activeTasksProvider/archivedTasksProvider/trashedTasksProvider '
-      'filter by archive/trash status',
+      'specialTasksProvider only returns non-archived special tasks',
       () async {
         final container = ProviderContainer(
           overrides: [
@@ -233,50 +261,19 @@ void main() {
         );
         addTearDown(container.dispose);
 
-        final active = TaskModel(title: 'Active');
-        final archived = TaskModel(title: 'Archived', isArchived: true);
-        final trashed = TaskModel(title: 'Trashed', deletedAt: DateTime.now());
-        await notifier.addTask(active);
-        await notifier.addTask(archived);
-        await notifier.addTask(trashed);
+        final special = TaskModel(title: 'Special', isSpecial: true);
+        final archivedSpecial = TaskModel(
+          title: 'ArchivedSpecial',
+          isSpecial: true,
+          isArchived: true,
+        );
+        await notifier.addTask(special);
+        await notifier.addTask(archivedSpecial);
 
-        expect(
-          container.read(activeTasksProvider).map((t) => t.title),
-          ['Active'],
-        );
-        expect(
-          container.read(archivedTasksProvider).map((t) => t.title),
-          ['Archived'],
-        );
-        expect(
-          container.read(trashedTasksProvider).map((t) => t.title),
-          ['Trashed'],
-        );
+        expect(container.read(specialTasksProvider).map((t) => t.title), [
+          'Special',
+        ]);
       },
     );
-
-    test('specialTasksProvider only returns non-archived special tasks', () async {
-      final container = ProviderContainer(
-        overrides: [
-          tasksProvider.overrideWith((ref) => notifier),
-          sharedPreferencesProvider.overrideWithValue(prefs),
-        ],
-      );
-      addTearDown(container.dispose);
-
-      final special = TaskModel(title: 'Special', isSpecial: true);
-      final archivedSpecial = TaskModel(
-        title: 'ArchivedSpecial',
-        isSpecial: true,
-        isArchived: true,
-      );
-      await notifier.addTask(special);
-      await notifier.addTask(archivedSpecial);
-
-      expect(
-        container.read(specialTasksProvider).map((t) => t.title),
-        ['Special'],
-      );
-    });
   });
 }

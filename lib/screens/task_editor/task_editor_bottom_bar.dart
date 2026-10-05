@@ -45,8 +45,7 @@ class TaskEditorBottomBar extends StatelessWidget {
           IconButton(
             icon: Icon(
               hasReminder ? Icons.alarm : Icons.alarm_add_outlined,
-              color:
-                  hasReminder ? Theme.of(context).colorScheme.primary : null,
+              color: hasReminder ? Theme.of(context).colorScheme.primary : null,
             ),
             onPressed: onReminder,
             tooltip: 'Promemoria',

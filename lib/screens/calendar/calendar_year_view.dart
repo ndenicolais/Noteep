@@ -81,7 +81,8 @@ class CalendarYearView extends StatelessWidget {
                 allEvents: allEvents,
                 today: DateTime.now(),
                 colorScheme: colorScheme,
-                onMonthTap: () => onMonthSelected(DateTime(year, monthIndex + 1)),
+                onMonthTap:
+                    () => onMonthSelected(DateTime(year, monthIndex + 1)),
               );
             },
           ),

@@ -51,9 +51,7 @@ class SettingsGlobalBackupSection extends StatelessWidget {
         ListTile(
           leading: Icon(Icons.delete_forever_outlined, color: error),
           title: Text('Cancella tutti i dati', style: TextStyle(color: error)),
-          subtitle: const Text(
-            'Elimina definitivamente note, task ed eventi',
-          ),
+          subtitle: const Text('Elimina definitivamente note, task ed eventi'),
           trailing: const Icon(Icons.chevron_right),
           onTap: onClearAll,
         ),

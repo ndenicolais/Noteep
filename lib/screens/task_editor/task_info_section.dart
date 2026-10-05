@@ -101,7 +101,10 @@ class TaskInfoSection extends StatelessWidget {
                     children: [
                       Icon(Icons.playlist_add_check, size: 16, color: primary),
                       const SizedBox(width: 8),
-                      Text(listName, style: TextStyle(color: primary, fontSize: 12)),
+                      Text(
+                        listName,
+                        style: TextStyle(color: primary, fontSize: 12),
+                      ),
                     ],
                   );
                 },

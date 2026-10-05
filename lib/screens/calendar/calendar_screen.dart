@@ -239,7 +239,8 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
           allEvents: allEvents,
           onPreviousDay:
               () => setState(
-                () => _focusedDay = _focusedDay.subtract(const Duration(days: 1)),
+                () =>
+                    _focusedDay = _focusedDay.subtract(const Duration(days: 1)),
               ),
           onNextDay:
               () => setState(
@@ -255,7 +256,8 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
           allEvents: allEvents,
           onPrevious:
               () => setState(
-                () => _focusedDay = _focusedDay.subtract(const Duration(days: 7)),
+                () =>
+                    _focusedDay = _focusedDay.subtract(const Duration(days: 7)),
               ),
           onNext:
               () => setState(
@@ -318,7 +320,8 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
           allEvents: allEvents,
           onPrevious:
               () => setState(
-                () => _focusedDay = _focusedDay.subtract(const Duration(days: 7)),
+                () =>
+                    _focusedDay = _focusedDay.subtract(const Duration(days: 7)),
               ),
           onNext:
               () => setState(

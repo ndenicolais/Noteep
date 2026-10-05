@@ -153,8 +153,7 @@ class CalendarNotifier extends StateNotifier<List<CalendarEventModel>> {
   /// events whose [id] already exists in the current state.
   Future<void> importEvents(List<CalendarEventModel> events) async {
     final existingIds = state.map((e) => e.id).toSet();
-    final newEvents =
-        events.where((e) => !existingIds.contains(e.id)).toList();
+    final newEvents = events.where((e) => !existingIds.contains(e.id)).toList();
     if (newEvents.isEmpty) return;
     await _mutate(
       (current) => [...newEvents, ...current],

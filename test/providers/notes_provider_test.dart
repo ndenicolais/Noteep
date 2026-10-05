@@ -142,14 +142,12 @@ void main() {
 
       await notifier.renameTag('work', 'job');
 
-      expect(
-        notifier.state.firstWhere((n) => n.id == withTag.id).tags,
-        ['job'],
-      );
-      expect(
-        notifier.state.firstWhere((n) => n.id == other.id).tags,
-        ['personal'],
-      );
+      expect(notifier.state.firstWhere((n) => n.id == withTag.id).tags, [
+        'job',
+      ]);
+      expect(notifier.state.firstWhere((n) => n.id == other.id).tags, [
+        'personal',
+      ]);
     });
 
     test('deleteTag removes the tag from every note that has it', () async {
@@ -182,10 +180,7 @@ void main() {
       final note = NoteModel(title: 'Untouched');
       await notifier.addNote(note);
 
-      expect(
-        () => notifier.toggleArchive('non-existent-id'),
-        throwsStateError,
-      );
+      expect(() => notifier.toggleArchive('non-existent-id'), throwsStateError);
       expect(notifier.state.single.id, note.id);
     },
   );
@@ -205,18 +200,15 @@ void main() {
       await notifier.addNote(archived);
       await notifier.addNote(trashed);
 
-      expect(
-        container.read(activeNotesProvider).map((n) => n.title),
-        ['Active'],
-      );
-      expect(
-        container.read(archivedNotesProvider).map((n) => n.title),
-        ['Archived'],
-      );
-      expect(
-        container.read(trashedNotesProvider).map((n) => n.title),
-        ['Trashed'],
-      );
+      expect(container.read(activeNotesProvider).map((n) => n.title), [
+        'Active',
+      ]);
+      expect(container.read(archivedNotesProvider).map((n) => n.title), [
+        'Archived',
+      ]);
+      expect(container.read(trashedNotesProvider).map((n) => n.title), [
+        'Trashed',
+      ]);
     });
   });
 }
