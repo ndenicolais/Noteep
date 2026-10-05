@@ -115,10 +115,13 @@ Export notes to **PDF** format (rendered with the `pdf` / `printing` packages); 
 | ICS import / export | Calendar interoperability |
 | Export notes | Opens the PDF export screen |
 | Statistics | Opens the statistics screen |
-| App info | Version, build number, author |
+| App info | Version, build number, changelog, author |
 
 ### Home Screen Widget
 Android home screen widget support via `home_widget`.
+
+### Changelog
+After an update, a "Changelog" dialog lists what changed since the last version the user saw (nothing is shown on a fresh install). The full history is always available from **Info app**.
 
 ---
 

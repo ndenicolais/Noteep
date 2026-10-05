@@ -11,6 +11,7 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../core/constants/app_version.dart';
 import '../models/note_model.dart';
 import '../providers/calendar_provider.dart';
 import '../providers/notes_provider.dart';
@@ -18,12 +19,14 @@ import '../providers/tasks_provider.dart';
 import '../providers/settings/backup_provider.dart';
 import '../providers/settings/ui_provider.dart';
 import '../utils/backup_service.dart';
+import '../utils/changelog_service.dart';
 import '../screens/note_editor/note_editor_screen.dart';
 import '../screens/note_template_screen.dart';
 import '../screens/tasks_screen.dart';
 import '../screens/home/speed_dial_fab.dart';
 import '../screens/home/reorderable_grid_view.dart';
 import '../screens/home/reorderable_list_view.dart';
+import '../widgets/changelog_dialog.dart';
 import '../widgets/nav_scaffold.dart';
 import '../widgets/sort_sheet.dart';
 import '../widgets/shared/empty_state.dart';
@@ -42,7 +45,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _maybeRunAutoBackup());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _maybeShowChangelog();
+      _maybeRunAutoBackup();
+    });
+  }
+
+  Future<void> _maybeShowChangelog() async {
+    final pending = await ChangelogService.pendingEntries(
+      ref.read(sharedPreferencesProvider),
+      appVersion,
+    );
+    if (pending.isEmpty || !mounted) return;
+    await showChangelogDialog(context, entries: pending);
   }
 
   @override

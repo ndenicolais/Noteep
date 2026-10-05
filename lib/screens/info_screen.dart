@@ -9,12 +9,11 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../core/constants/app_version.dart';
+import '../widgets/changelog_dialog.dart';
 
 class InfoScreen extends StatelessWidget {
   const InfoScreen({super.key});
-
-  static const _version = '1.0.0';
-  static const _buildNumber = '1';
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +51,7 @@ class InfoScreen extends StatelessWidget {
           ),
           Center(
             child: Text(
-              'Versione $_version (build $_buildNumber)',
+              'Versione $appVersion (build $appBuildNumber)',
               style: tt.bodySmall?.copyWith(color: cs.onSurfaceVariant),
             ),
           ),
@@ -113,6 +112,20 @@ class InfoScreen extends StatelessWidget {
           ),
           const SizedBox(height: 24),
 
+          // ── Changelog ────────────────────────────────────────────────────
+          _SectionHeader(label: 'Changelog'),
+          const SizedBox(height: 8),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: Icon(Icons.history_outlined, color: cs.primary),
+            title: const Text('Visualizza changelog'),
+            subtitle: const Text('Le modifiche di ogni versione'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => showChangelogDialog(context),
+          ),
+          const Divider(height: 1),
+          const SizedBox(height: 24),
+
           // ── Licenze ──────────────────────────────────────────────────────
           _SectionHeader(label: 'Licenze open source'),
           const SizedBox(height: 8),
@@ -126,7 +139,7 @@ class InfoScreen extends StatelessWidget {
                 () => showLicensePage(
                   context: context,
                   applicationName: 'Noteep',
-                  applicationVersion: _version,
+                  applicationVersion: appVersion,
                   applicationIcon: Padding(
                     padding: const EdgeInsets.all(8),
                     child: Icon(

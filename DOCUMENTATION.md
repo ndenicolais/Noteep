@@ -25,6 +25,7 @@ Principi chiave:
 lib/
 ├── main.dart                  # bootstrap app, auth gate, route table
 ├── firebase_options.dart      # config Firebase Android + Web (git-ignored)
+├── core/constants/            # app_version.dart (versione, allineata a pubspec), changelog.dart (voci Changelog)
 ├── models/                    # classi dati immutabili-per-copyWith + (to/from)Json
 ├── providers/                 # Riverpod: un file per dominio, + providers/settings/
 ├── screens/                   # una sottocartella per feature-schermata complessa,
@@ -121,7 +122,7 @@ sharedPreferencesProvider (dichiarato in notes_provider.dart, iniettato in main.
 | `labels_screen.dart` | Gestione etichette globali (crea/rinomina/elimina) | `allTagsProvider`, `customLabelsProvider` |
 | `reminders_screen.dart` | Elenco unificato promemoria note+task, sezioni "In arrivo"/"Scaduti" | legge `reminder` da note/task attivi; rimozione cancella anche la notifica via `NotificationService` |
 | `export_screen.dart` | Esporta note attive in PDF/TXT/JSON/CSV/HTML | `activeNotesProvider`, `downloadFile` (utils/downloader.dart) |
-| `info_screen.dart` | Info app statica (versione, licenze OSS) | nessuno |
+| `info_screen.dart` | Info app statica (versione da `appVersion`, changelog completo, licenze OSS) | nessuno |
 | `note_template_screen.dart` | Bottom sheet scelta template nota | nessuno (usa `kNoteTemplates`) |
 
 ---
@@ -132,6 +133,7 @@ sharedPreferencesProvider (dichiarato in notes_provider.dart, iniettato in main.
 - `app_drawer.dart` — `AppDrawer`, `AppRoutes` (costanti named routes), `navigateToSection` (Home fa `popUntil` root, le altre sezioni push/pushReplacement).
 - `note_card.dart` — Card nota (home + archivio): rendering stile custom, preview checklist, menu rapido long-press (pin/archivia/blocca/cestina) con sblocco biometrico via `NoteLockService`.
 - `reminder_banner.dart` — `ReminderBanner`, condiviso tra `note_editor` e `task_editor`.
+- `changelog_dialog.dart` — `ChangelogDialog` + `showChangelogDialog(context, {entries})`: dialog "Changelog" con titolo `vX.Y.Z` e bullet per versione. Aperto in automatico da `home_screen.dart` dopo un aggiornamento (solo le voci da `ChangelogService.pendingEntries`) e manualmente da `info_screen.dart` (storico completo).
 - `sort_sheet.dart` — Bottom sheet di ordinamento condiviso note/task (`SortOrder`).
 - `shared/search_field.dart` — Campo ricerca generico legato a uno `StateProvider<String>` passato come parametro.
 - `shared/empty_state.dart` — `EmptyState`, placeholder icona+messaggio condiviso dalle liste vuote/errore di Home, Tasks e Archivio.
@@ -157,6 +159,7 @@ Servizi stateless o singleton, non legati a Riverpod (istanziati direttamente do
 | `downloader.dart` (+ `_io.dart`/`_web.dart`/`_stub.dart`) | Export condizionale per salvare/scaricare file cross-piattaforma (`path_provider` su mobile/desktop, Blob+AnchorElement su web). |
 | `dialogs/move_to_list_dialog.dart` | `showMoveToListDialog` — dialog per spostare un task in un altro elenco. |
 | `data_export_service.dart` | `DataExportService` — encoding/scrittura JSON (`exportJson`) e file-picking+decoding JSON (`pickAndDecodeJson`), scrittura ICS (`exportIcs`) e file-picking ICS (`pickIcsContent`); usato da `settings_screen.dart` per tenere fuori dal widget l'I/O e il parsing generico (il parsing modello-specifico e l'aggiornamento dei provider restano nella schermata). |
+| `changelog_service.dart` | `ChangelogService.pendingEntries(prefs, currentVersion)` — confronta `appVersion` con `last_seen_changelog_version` su SharedPreferences: prima installazione → salva e non mostra nulla; stessa versione → nulla; altrimenti restituisce le voci più nuove di quella vista (tutto lo storico se la versione vista non è in elenco). |
 
 ---
 
@@ -191,6 +194,7 @@ flutter test
 
 - **`test/providers/notes_provider_test.dart`**, **`tasks_provider_test.dart`** — unit test dei notifier contro [`fake_cloud_firestore`](https://pub.dev/packages/fake_cloud_firestore) (dev dependency), istanziando `NotesNotifier`/`TasksNotifier`/`TaskListsNotifier` direttamente (bypassando `currentUserProvider`/Firebase Auth reale). Copertura: CRUD, ciclo cestino, tag, `reorderNotes`, dipendenza incrociata `taskListsProvider → tasksProvider.clearListReferences`, provider derivati/filtrati.
 - **`test/screens/note_editor_screen_test.dart`**, **`task_editor_screen_test.dart`** — widget test che montano le due schermate editor dentro un `ProviderScope` con `notesProvider`/`tasksProvider` sovrascritti allo stesso pattern fake-Firestore. Nessun progetto Firebase reale necessario per eseguire la suite.
+- **`test/utils/changelog_service_test.dart`** — unit test di `ChangelogService` con `SharedPreferences.setMockInitialValues` e una lista di voci fittizia (prima installazione, stessa versione, aggiornamento, versione sconosciuta).
 
 Pattern riusabile per estendere la copertura ad altri provider/schermate: creare il notifier con `FakeFirebaseFirestore()`, oppure — per provider che dipendono da `sharedPreferencesProvider` (tutto `providers/settings/`) — usare `SharedPreferences.setMockInitialValues({})` e passare l'istanza via override nel `ProviderContainer`/`ProviderScope`.
 
@@ -201,3 +205,4 @@ Pattern riusabile per estendere la copertura ad altri provider/schermate: creare
 - **Migrazione provider non ancora fatta**: tutti i provider usano `StateNotifierProvider` (pattern Riverpod "legacy" ma pienamente supportato), non `Notifier`/`AsyncNotifier` con `@riverpod` code-gen — nonostante `riverpod_annotation`/`riverpod_generator`/`build_runner` siano già dipendenze del progetto. Nessun file `.g.dart` esiste. Se si deciderà di migrare, l'ordine a rischio crescente consigliato è: `audio_provider` → provider enum di `settings/ui_provider.dart` → `backupStatusProvider` → `calendarProvider` → `notesProvider` → `tasksProvider`+`taskListsProvider` (in coppia, per la dipendenza incrociata) → `authNotifierProvider` → i due provider undo/redo (`family`+`autoDispose`, i più delicati).
 - **Piattaforme**: solo Android e Web. Le cartelle `ios/`, `macos/`, `linux/`, `windows/` sono state rimosse e `DefaultFirebaseOptions.currentPlatform` lancia `UnsupportedError` sulle altre piattaforme.
 - **`sharedPreferencesProvider`** è dichiarato in `notes_provider.dart` per motivi storici, ma è cross-cutting (usato da ~7 provider di settings). Andrebbe idealmente spostato in un file dedicato tipo `core_providers.dart` in un futuro refactor.
+- **Versione e changelog**: a ogni release aggiornare insieme `version:` in `pubspec.yaml` (`X.Y.Z+N`, con `N` sempre crescente: è il `versionCode` Android) e `appVersion`/`appBuildNumber` in `lib/core/constants/app_version.dart`, e aggiungere in testa a `changelogEntries` la voce della nuova versione.
