@@ -46,3 +46,22 @@ app.*.map.json
 
 # Ignore google-services.json file
 android/app/google-services.json
+
+# Android debug
+.cxx/
+
+# Kotlin compiler daemon sessions
+android/.kotlin/
+
+# Local release build script
+deploy_android.ps1
+
+# Local AI assistant context (not shared with the team)
+CLAUDE.md
+TASKS.md
+
+# Raw device screenshots (sources for tool/preview, kept locally)
+images/screenshots/*_raw.png
+
+# Local helper scripts and tooling
+/tool/
