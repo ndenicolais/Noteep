@@ -12,6 +12,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart' show Intl;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../firebase_options.dart';
 import 'notification_service.dart';
@@ -55,7 +56,11 @@ class AppBootstrap {
       await NotificationService.instance.requestPermissions();
     });
     await _optional('home widget', WidgetService.instance.init);
-    await _optional('date formatting', () => initializeDateFormatting('it'));
+    await _optional('date formatting', () async {
+      await initializeDateFormatting('it');
+      // DateFormat calls without an explicit locale use this one.
+      Intl.defaultLocale = 'it';
+    });
     return SharedPreferences.getInstance();
   }
 

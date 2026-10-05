@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
   # UI & Styling
   cupertino_icons: ^1.0.8
@@ -16,7 +18,7 @@ dependencies:
   riverpod_annotation: ^2.6.1
   uuid: ^4.5.1
   shared_preferences: ^2.3.4
-  intl: ^0.19.0
+  intl: ^0.20.2
   pdf: ^3.11.1
   printing: ^5.13.1
   path_provider: ^2.1.4

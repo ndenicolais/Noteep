@@ -10,6 +10,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'providers/auth_provider.dart';
 import 'providers/notes_provider.dart';
@@ -72,6 +73,11 @@ class NotesApp extends ConsumerWidget {
       themeMode: themeMode,
       themeAnimationDuration: const Duration(milliseconds: 300),
       themeAnimationCurve: Curves.easeInOut,
+      // UI strings are Italian-only for now, so system widgets (pickers,
+      // text selection menu, tooltips) are pinned to Italian to match.
+      locale: const Locale('it'),
+      supportedLocales: const [Locale('it'), Locale('en')],
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
       home: authState.when(
         loading: () => const _SplashScreen(),
         error: (_, __) => const LoginScreen(),

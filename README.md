@@ -515,7 +515,8 @@ flutter test
 | `file_picker` | ^8.1.7 | File picker (ICS, backup) |
 | `flutter_markdown` | ^0.7.6 | Markdown rendering |
 | `path_provider` | ^2.1.4 | File system paths |
-| `intl` | ^0.19.0 | Date formatting / i18n |
+| `intl` | ^0.20.2 | Date formatting / i18n |
+| `flutter_localizations` | SDK | Italian Material/Cupertino widgets (pickers, menus) |
 | `uuid` | ^4.5.1 | UUID generation |
 | `fake_cloud_firestore` *(dev)* | latest | Firestore fake for provider/widget tests |
 
