@@ -64,7 +64,7 @@ Tutti i modelli seguono lo stesso pattern: costruttore con default sensati, `cop
 
 ## 4. Gestione dello stato — Provider Riverpod (`lib/providers/`)
 
-**Nessun uso di code-gen** (`@riverpod`/`riverpod_generator`): tutti i provider sono dichiarati manualmente con `StateNotifierProvider`/`Provider`/`StreamProvider`/`StateProvider`. Le dipendenze `riverpod_annotation`/`riverpod_generator`/`build_runner` sono in `pubspec.yaml` ma **inutilizzate** (vedi §11).
+**Nessun uso di code-gen** (`@riverpod`/`riverpod_generator`): tutti i provider sono dichiarati manualmente con `StateNotifierProvider`/`Provider`/`StreamProvider`/`StateProvider`. Le dipendenze di code-gen (`riverpod_annotation`/`riverpod_generator`/`build_runner`) sono state rimosse perché inutilizzate (vedi §11).
 
 ### Grafo di dipendenza principale
 
@@ -213,7 +213,7 @@ Pattern riusabile per estendere la copertura ad altri provider/schermate: creare
 
 ## 11. Note di manutenzione
 
-- **Migrazione provider non ancora fatta**: tutti i provider usano `StateNotifierProvider` (pattern Riverpod "legacy" ma pienamente supportato), non `Notifier`/`AsyncNotifier` con `@riverpod` code-gen — nonostante `riverpod_annotation`/`riverpod_generator`/`build_runner` siano già dipendenze del progetto. Nessun file `.g.dart` esiste. Se si deciderà di migrare, l'ordine a rischio crescente consigliato è: `audio_provider` → provider enum di `settings/ui_provider.dart` → `backupStatusProvider` → `calendarProvider` → `notesProvider` → `tasksProvider`+`taskListsProvider` (in coppia, per la dipendenza incrociata) → `authNotifierProvider` → i due provider undo/redo (`family`+`autoDispose`, i più delicati).
+- **Migrazione provider non ancora fatta**: tutti i provider usano `StateNotifierProvider` (pattern Riverpod "legacy" ma pienamente supportato), non `Notifier`/`AsyncNotifier` con `@riverpod` code-gen. Se si deciderà di migrare (`Notifier` funziona anche con provider dichiarati a mano; per usare `@riverpod` vanno riaggiunte `riverpod_annotation`, `riverpod_generator` e `build_runner`), l'ordine a rischio crescente consigliato è: `audio_provider` → provider enum di `settings/ui_provider.dart` → `backupStatusProvider` → `calendarProvider` → `notesProvider` → `tasksProvider`+`taskListsProvider` (in coppia, per la dipendenza incrociata) → `authNotifierProvider` → i due provider undo/redo (`family`+`autoDispose`, i più delicati).
 - **Piattaforme**: solo Android e Web. Le cartelle `ios/`, `macos/`, `linux/`, `windows/` sono state rimosse e `DefaultFirebaseOptions.currentPlatform` lancia `UnsupportedError` sulle altre piattaforme.
 - **`sharedPreferencesProvider`** è dichiarato in `notes_provider.dart` per motivi storici, ma è cross-cutting (usato da ~7 provider di settings). Andrebbe idealmente spostato in un file dedicato tipo `core_providers.dart` in un futuro refactor.
 - **Versione e changelog**: a ogni release aggiornare insieme `version:` in `pubspec.yaml` (`X.Y.Z+N`, con `N` sempre crescente: è il `versionCode` Android) e `appVersion`/`appBuildNumber` in `lib/core/constants/app_version.dart`, e aggiungere in testa a `changelogEntries` la voce della nuova versione.

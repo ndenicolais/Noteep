@@ -460,10 +460,7 @@ cd Noteep
 # 2. Install dependencies
 flutter pub get
 
-# 3. Run code generation (Riverpod annotations)
-dart run build_runner build --delete-conflicting-outputs
-
-# 4. Run the app
+# 3. Run the app
 flutter run
 # Web: keep port 5000, it is the authorized OAuth origin / API key referrer
 flutter run -d chrome --web-port 5000
@@ -499,7 +496,6 @@ flutter test
 | Package | Version | Purpose |
 |---|---|---|
 | `flutter_riverpod` | ^2.6.1 | State management |
-| `riverpod_annotation` | ^2.6.1 | Code-gen for Riverpod |
 | `firebase_core` | ^3.13.1 | Firebase initialisation |
 | `firebase_auth` | ^5.5.3 | Authentication |
 | `cloud_firestore` | ^5.6.6 | Cloud database |
