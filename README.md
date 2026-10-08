@@ -178,7 +178,8 @@ lib/
 │       ├── theme_provider.dart   # ThemeMode (SharedPreferences)
 │       ├── ui_provider.dart      # Layout, sort order, search query
 │       ├── backup_provider.dart  # Backup frequency settings
-│       └── backup_restore.dart   # Full-backup parsing + restore (JSON and ZIP)
+│       ├── backup_restore.dart   # Full-backup parsing + restore (JSON and ZIP)
+│       └── data_actions.dart     # Settings data ops: export, import, clear, ICS
 ├── screens/
 │   ├── home_screen.dart          # Main notes list (grid / list)
 │   ├── tasks_screen.dart         # Tasks list with tab bar
