@@ -96,17 +96,9 @@ class NotesApp extends ConsumerWidget {
   }
 
   void _syncHomeWidget(WidgetRef ref) {
-    final notes = ref.read(activeNotesProvider);
-    final tasks = ref.read(activeTasksProvider);
-    final latest =
-        notes.isEmpty
-            ? ''
-            : (List.of(notes)
-              ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt))).first.title;
-    WidgetService.instance.updateWidget(
-      noteCount: notes.length.toString(),
-      taskCount: tasks.where((t) => !t.isCompleted).length.toString(),
-      latestNote: latest,
+    WidgetService.instance.scheduleSync(
+      ref.read(activeNotesProvider),
+      ref.read(activeTasksProvider),
     );
   }
 }

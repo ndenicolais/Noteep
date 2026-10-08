@@ -160,7 +160,7 @@ Servizi stateless o singleton, non legati a Riverpod (istanziati direttamente do
 | `notification_service.dart` | Wrapper `flutter_local_notifications` + `timezone`: init, permessi Android, `scheduleNotification`/`cancelNotification`, ID deterministici (`idForNote`/`idForTask`/`idForEvent`). |
 | `note_lock_service.dart` | Wrapper `local_auth` per lock biometrico delle note (no-op su web). |
 | `recurrence.dart` | Enum `RecurrenceType` + helper di parsing/etichette, condiviso da task e calendario. |
-| `widget_service.dart` | `WidgetService` — integrazione `home_widget` Android (aggiorna il widget home screen con conteggio note/task e ultima nota; no-op su web). |
+| `widget_service.dart` | `WidgetService` — integrazione `home_widget` Android (aggiorna il widget home screen con conteggio note/task e ultima nota; no-op su web). `scheduleSync(notes, tasks)` — chiamato dai `ref.listen` in `main.dart` — fa debounce di 500 ms, trova l'ultima nota con una scansione singola e salta la scrittura se i valori non sono cambiati. |
 | `downloader.dart` (+ `_io.dart`/`_web.dart`/`_stub.dart`) | Export condizionale per salvare/scaricare file cross-piattaforma (`path_provider` su mobile/desktop, Blob+AnchorElement su web). |
 | `dialogs/move_to_list_dialog.dart` | `showMoveToListDialog` — dialog per spostare un task in un altro elenco. |
 | `data_export_service.dart` | `DataExportService` — encoding/scrittura JSON (`exportJson`) e file-picking+decoding JSON (`pickAndDecodeJson`), scrittura ICS (`exportIcs`) e file-picking ICS (`pickIcsContent`); usato da `settings_screen.dart` per tenere fuori dal widget l'I/O e il parsing generico (il parsing modello-specifico e l'aggiornamento dei provider restano nella schermata). |
