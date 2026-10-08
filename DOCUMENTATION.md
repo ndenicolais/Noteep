@@ -54,8 +54,8 @@ Tutti i modelli seguono lo stesso pattern: costruttore con default sensati, `cop
 | `subtask_model.dart` | `SubtaskModel` | `title`, `isCompleted`, timestamp |
 | `calendar_model.dart` | `CalendarEventModel` | `title`, `description`, `startTime`/`endTime`, `isAllDay`, `isBirthday`, `isNameDay`, `isPinned`, `isArchived`, `recurrence`, `recurrenceEndDate` (da RRULE UNTIL/COUNT import ICS), `reminder`, `tags[]`, timestamp |
 | `audio_note.dart` | `AudioNote` | `filename`, `filepath`, `duration`, `createdAt`, `transcription?` |
-| `change_history.dart` | `NoteChange` (astratta) | Pattern Command: `NoteTitleChange`, `NoteTextChange`, `NoteStyleChange`, `ChecklistItem*Change`, `AudioNote*Change` — ciascuna con `apply`/`undo` |
-| `task_change_history.dart` | `TaskChange` (astratta) | Equivalente per task: `TaskTitleChange`, `TaskDescriptionChange`, `TaskCompletedChange`, `TaskDueDateChange`, `TaskPinnedChange`, `TaskRecurrenceChange`, `Subtask*Change` |
+| `change_history.dart` | `NoteChange` (astratta) | Pattern Command: `NoteTitleChange`, `NoteTextChange` — ciascuna con `apply`/`undo`. Solo titolo e testo sono annullabili; le classi per stile, checklist e audio sono state rimosse perché mai usate. |
+| `task_change_history.dart` | `TaskChange` (astratta) | Equivalente per task: `TaskTitleChange`, `TaskDescriptionChange` (le altre classi, mai usate, sono state rimosse). |
 | `note_template.dart` | `NoteTemplate` + `kNoteTemplates` | 6 template predefiniti (riunione, diario, progetto, spesa, viaggio, brainstorming) usati da `note_template_screen.dart` |
 
 `RecurrenceType` (`none`/`daily`/`weekly`/`monthly`/`yearly`) è definito in `utils/recurrence.dart` ed è condiviso tra `TaskModel` e `CalendarEventModel`.
