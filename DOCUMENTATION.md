@@ -155,8 +155,8 @@ Servizi stateless o singleton, non legati a Riverpod (istanziati direttamente do
 |---|---|
 | `audio_service.dart` | `AudioRecordingService` — registrazione (`record`), riproduzione (`just_audio`), gestione file audio. |
 | `backup_service.dart` | `BackupService` — crea/estrae zip di backup (note+task+calendario in JSON), lista/elimina backup, retention 30 backup, traccia `last_backup_time`. |
-| `ics_export_service.dart` | Genera stringa ICS (VCALENDAR/VEVENT) da `CalendarEventModel`, incluse ricorrenze. |
-| `ics_import_service.dart` | Parser ICS manuale: unfolding righe, DTSTART/DTEND/RRULE/TZID, risoluzione UNTIL/COUNT, rilevamento compleanni da CATEGORIES. |
+| `ics_export_service.dart` | Genera stringa ICS (VCALENDAR/VEVENT) da `CalendarEventModel`, incluse ricorrenze; una data di fine ricorrenza diventa `UNTIL=` (data per gli eventi tutto il giorno, fine della giornata locale in UTC per quelli con orario). |
+| `ics_import_service.dart` | Parser ICS manuale: unfolding righe, DTSTART/DTEND/RRULE/TZID, risoluzione UNTIL/COUNT, rilevamento compleanni da CATEGORIES. `COUNT=` giornaliero/settimanale è calcolato in giorni di calendario (non `Duration`, che sbaglierebbe di un giorno a cavallo del cambio d'ora); gli orari con `TZID` diventano `DateTime` locali normali (non `TZDateTime`); l'unescape è a passata singola, così `\\n` resta una barra seguita da n. |
 | `notification_service.dart` | Wrapper `flutter_local_notifications` + `timezone`: init, permessi Android, `scheduleNotification`/`cancelNotification`, ID deterministici (`idForNote`/`idForTask`/`idForEvent`). |
 | `note_lock_service.dart` | Wrapper `local_auth` per lock biometrico delle note (no-op su web). |
 | `recurrence.dart` | Enum `RecurrenceType` + helper di parsing/etichette, condiviso da task e calendario. |
@@ -207,6 +207,7 @@ flutter test
 - **`test/widgets/empty_state_test.dart`** — widget test di `EmptyState` (pulsante mostrato solo con `actionLabel`, tap invoca `onAction`).
 - **`test/widgets/swipe_actions_test.dart`** — widget test di `SwipeActions` (swipe a destra con `removesItem: false` lascia la riga, swipe a sinistra la rimuove).
 - **`test/utils/recurrence_test.dart`** — unit test puri (senza widget né Firestore) di `recurrenceTypeFromString` (round-trip, fallback a `none`) e di `calendarEventOccursOn`: ogni tipo di ricorrenza, orario ignorato, nessuna occorrenza prima dell'inizio, fine ricorrenza inclusiva, mensile del 31 che salta i mesi corti, annuale del 29 febbraio solo negli anni bisestili.
+- **`test/utils/ics_service_test.dart`** — unit test di `IcsImportService`/`IcsExportService` e del round trip export→import: date tutto il giorno e UTC, `TZID` (inizializza i fusi con `timezone/data/latest.dart`), fine predefinita, eventi scartati, unfolding, unescape, HTML, compleanni, tutte le `FREQ`, `UNTIL`/`COUNT` (anche a cavallo del cambio d'ora), conservazione di `recurrenceEndDate` nel round trip.
 
 Pattern riusabile per estendere la copertura ad altri provider/schermate: creare il notifier con `FakeFirebaseFirestore()`, oppure — per provider che dipendono da `sharedPreferencesProvider` (tutto `providers/settings/`) — usare `SharedPreferences.setMockInitialValues({})` e passare l'istanza via override nel `ProviderContainer`/`ProviderScope`.
 

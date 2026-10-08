@@ -166,11 +166,21 @@ class IcsImportService {
       final count = int.parse(countMatch.group(1)!);
       if (count <= 1) return startTime;
       final n = count - 1;
+      // Calendar-day arithmetic, not Duration: adding 24h steps across a
+      // DST change would land on the previous day and drop the last one.
+      DateTime plusDays(int days) => DateTime(
+        startTime.year,
+        startTime.month,
+        startTime.day + days,
+        startTime.hour,
+        startTime.minute,
+        startTime.second,
+      );
       switch (recurrence) {
         case RecurrenceType.daily:
-          return startTime.add(Duration(days: n));
+          return plusDays(n);
         case RecurrenceType.weekly:
-          return startTime.add(Duration(days: n * 7));
+          return plusDays(n * 7);
         case RecurrenceType.monthly:
           return DateTime(startTime.year, startTime.month + n, startTime.day);
         case RecurrenceType.yearly:
@@ -206,7 +216,19 @@ class IcsImportService {
         if (tzid != null) {
           try {
             final location = tz.getLocation(tzid);
-            return tz.TZDateTime(location, y, mo, d, h, mi, s).toLocal();
+            // Plain local DateTime, not a TZDateTime: the latter depends on
+            // tz.local and serialises with an offset that reloads as UTC.
+            return DateTime.fromMillisecondsSinceEpoch(
+              tz.TZDateTime(
+                location,
+                y,
+                mo,
+                d,
+                h,
+                mi,
+                s,
+              ).millisecondsSinceEpoch,
+            );
           } catch (_) {
             // Unknown/unavailable TZID — fall back to treating it as local.
           }
@@ -219,13 +241,13 @@ class IcsImportService {
   }
 
   /// Unescape ICS text escape sequences.
+  /// Single pass, so an escaped backslash followed by "n" (`\\n`) stays a
+  /// literal backslash + n instead of turning into a newline.
   static String _unescape(String s) {
-    return s
-        .replaceAll(r'\n', '\n')
-        .replaceAll(r'\N', '\n')
-        .replaceAll(r'\,', ',')
-        .replaceAll(r'\;', ';')
-        .replaceAll(r'\\', r'\');
+    return s.replaceAllMapped(RegExp(r'\\([\\;,nN])'), (m) {
+      final c = m.group(1)!;
+      return c == 'n' || c == 'N' ? '\n' : c;
+    });
   }
 
   /// Strip HTML tags and convert <br> to newlines.

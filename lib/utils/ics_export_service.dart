@@ -37,7 +37,7 @@ class IcsExportService {
       }
 
       if (event.recurrence != RecurrenceType.none) {
-        buf.writeln('RRULE:${_rrule(event.recurrence)}');
+        buf.writeln('RRULE:${_rrule(event.recurrence)}${_until(event)}');
       }
 
       buf.writeln(
@@ -92,6 +92,17 @@ class IcsExportService {
       case RecurrenceType.none:
         return '';
     }
+  }
+
+  /// Returns the `;UNTIL=` clause for a bounded recurrence, or ''. The end
+  /// date is inclusive, so timed events use the end of that local day
+  /// (in UTC, as RFC 5545 requires when DTSTART is UTC).
+  static String _until(CalendarEventModel event) {
+    final end = event.recurrenceEndDate;
+    if (end == null) return '';
+    if (event.isAllDay) return ';UNTIL=${_formatDate(end)}';
+    final endOfDay = DateTime(end.year, end.month, end.day, 23, 59, 59);
+    return ';UNTIL=${_formatDateTimeUtc(endOfDay.toUtc())}';
   }
 
   /// Escapes special characters in ICS text values.
