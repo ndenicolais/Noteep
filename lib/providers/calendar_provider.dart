@@ -177,14 +177,23 @@ class CalendarNotifier extends StateNotifier<List<CalendarEventModel>> {
   }
 
   /// Replaces the entire calendar collection (used for full backup restore).
-  Future<void> replaceAll(List<CalendarEventModel> events) => _mutate(
-    (_) => events,
-    () => _commitInChunks(
-      events
-          .map((e) => (WriteBatch b) => b.set(_col.doc(e.id), e.toJson()))
-          .toList(),
-    ),
-  );
+  /// Events missing from [events] are deleted from Firestore too, otherwise
+  /// they would reappear on the next load.
+  Future<void> replaceAll(List<CalendarEventModel> events) {
+    final keep = {for (final e in events) e.id};
+    final stale = [
+      for (final e in state)
+        if (!keep.contains(e.id)) e.id,
+    ];
+    return _mutate(
+      (_) => events,
+      () => _commitInChunks([
+        for (final id in stale) (WriteBatch b) => b.delete(_col.doc(id)),
+        for (final e in events)
+          (WriteBatch b) => b.set(_col.doc(e.id), e.toJson()),
+      ]),
+    );
+  }
 }
 
 final calendarProvider =

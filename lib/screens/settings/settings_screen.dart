@@ -21,6 +21,8 @@ import '../../providers/tasks_provider.dart';
 import '../../providers/settings/theme_provider.dart';
 import '../../providers/settings/ui_provider.dart';
 import '../../providers/settings/backup_provider.dart';
+import '../../core/constants/app_version.dart';
+import '../../providers/settings/backup_restore.dart';
 import '../../utils/backup_service.dart' show BackupFrequency;
 import '../../utils/data_export_service.dart';
 import '../../utils/ics_export_service.dart';
@@ -287,7 +289,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       savedMessagePrefix: 'Backup salvato in:\n',
       buildData:
           () => {
-            'version': '2.0.0',
+            'version': appVersion,
             'exportedAt': DateTime.now().toIso8601String(),
             'notes': ref.read(notesProvider).map((n) => n.toJson()).toList(),
             'tasks': ref.read(tasksProvider).map((t) => t.toJson()).toList(),
@@ -308,49 +310,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       confirmMessage:
           'I dati attuali (note, task ed eventi) verranno sostituiti con quelli del backup. Continuare?',
       successMessage: 'Backup importato con successo.',
-      applyDecoded: (decoded) {
-        // Parse every section first so a malformed one throws before any
-        // provider is touched.
-        final notes =
-            decoded['notes'] != null
-                ? (decoded['notes'] as List<dynamic>)
-                    .map((e) => NoteModel.fromJson(e as Map<String, dynamic>))
-                    .toList()
-                : null;
-        final tasks =
-            decoded['tasks'] != null
-                ? (decoded['tasks'] as List<dynamic>)
-                    .map((e) => TaskModel.fromJson(e as Map<String, dynamic>))
-                    .toList()
-                : null;
-        final taskLists =
-            decoded['taskLists'] != null
-                ? (decoded['taskLists'] as List<dynamic>)
-                    .map(
-                      (e) => TaskListModel.fromJson(e as Map<String, dynamic>),
-                    )
-                    .toList()
-                : null;
-        final events =
-            decoded['calendar'] != null
-                ? (decoded['calendar'] as List<dynamic>)
-                    .map(
-                      (e) => CalendarEventModel.fromJson(
-                        e as Map<String, dynamic>,
-                      ),
-                    )
-                    .toList()
-                : null;
-
-        if (notes != null) ref.read(notesProvider.notifier).replaceAll(notes);
-        if (tasks != null) ref.read(tasksProvider.notifier).replaceAll(tasks);
-        if (taskLists != null) {
-          ref.read(taskListsProvider.notifier).replaceAll(taskLists);
-        }
-        if (events != null) {
-          ref.read(calendarProvider.notifier).replaceAll(events);
-        }
-      },
+      // fromJson parses every section before any provider is touched.
+      applyDecoded:
+          (decoded) => ref
+              .read(backupRestorerProvider)
+              .apply(FullBackupData.fromJson(decoded)),
     );
   }
 

@@ -278,14 +278,23 @@ class NotesNotifier extends StateNotifier<List<NoteModel>> {
   }
 
   /// Replaces the entire notes collection (used for full backup restore).
-  Future<void> replaceAll(List<NoteModel> notes) => _mutate(
-    (_) => notes,
-    () => _commitInChunks(
-      notes
-          .map((n) => (WriteBatch b) => b.set(_col.doc(n.id), n.toJson()))
-          .toList(),
-    ),
-  );
+  /// Notes missing from [notes] are deleted from Firestore too, otherwise
+  /// they would reappear on the next load.
+  Future<void> replaceAll(List<NoteModel> notes) {
+    final keep = {for (final n in notes) n.id};
+    final stale = [
+      for (final n in state)
+        if (!keep.contains(n.id)) n.id,
+    ];
+    return _mutate(
+      (_) => notes,
+      () => _commitInChunks([
+        for (final id in stale) (WriteBatch b) => b.delete(_col.doc(id)),
+        for (final n in notes)
+          (WriteBatch b) => b.set(_col.doc(n.id), n.toJson()),
+      ]),
+    );
+  }
 
   /// Permanently removes all notes.
   Future<void> clearAll() {

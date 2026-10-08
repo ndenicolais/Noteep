@@ -11,8 +11,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/settings/backup_provider.dart';
+import '../../providers/settings/backup_restore.dart';
 import '../../theme/app_radius.dart';
 import '../../utils/backup_service.dart' show BackupFrequency, BackupService;
+import '../../widgets/shared/error_feedback.dart';
 
 /// Bottom sheet to pick the automatic backup frequency.
 void showBackupFrequencySheet(
@@ -82,8 +84,54 @@ void showBackupFrequencySheet(
   );
 }
 
-/// Bottom sheet listing saved local backups, with delete support.
+/// Asks for confirmation, then replaces all data with the zip backup at
+/// [path]. [context] must outlive the backups sheet (the settings screen).
+Future<void> _restoreBackup(
+  BuildContext context,
+  WidgetRef ref,
+  String path,
+) async {
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder:
+        (ctx) => AlertDialog(
+          title: const Text('Ripristina backup'),
+          content: const Text(
+            'I dati attuali (note, task ed eventi) verranno sostituiti con quelli del backup. Continuare?',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, false),
+              child: const Text('Annulla'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(ctx, true),
+              child: const Text('Ripristina'),
+            ),
+          ],
+        ),
+  );
+  if (confirmed != true) return;
+
+  final restorer = ref.read(backupRestorerProvider);
+  final data = await restorer.readZip(path);
+  if (!context.mounted) return;
+  final messenger = ScaffoldMessenger.of(context);
+  if (data == null) {
+    messenger.showSnackBar(
+      const SnackBar(content: Text('Impossibile leggere il backup.')),
+    );
+    return;
+  }
+  notifyOnError(restorer.apply(data), context);
+  messenger.showSnackBar(
+    const SnackBar(content: Text('Backup ripristinato con successo.')),
+  );
+}
+
+/// Bottom sheet listing saved local backups, with restore and delete.
 void showBackupsSheet(BuildContext context, WidgetRef ref) {
+  final screenContext = context;
   showModalBottomSheet(
     context: context,
     shape: const RoundedRectangleBorder(
@@ -143,14 +191,24 @@ void showBackupsSheet(BuildContext context, WidgetRef ref) {
                   final size =
                       (info['size'] as int) / (1024 * 1024); // Convert to MB
 
+                  void restore() {
+                    Navigator.pop(context);
+                    _restoreBackup(screenContext, ref, info['path'] as String);
+                  }
+
                   return ListTile(
                     title: Text(info['name'] as String),
                     subtitle: Text(
                       '${info['date']} - ${size.toStringAsFixed(2)} MB',
                     ),
+                    onTap: restore,
                     trailing: PopupMenuButton(
                       itemBuilder:
                           (context) => [
+                            PopupMenuItem(
+                              onTap: restore,
+                              child: const Text('Ripristina'),
+                            ),
                             PopupMenuItem(
                               child: const Text('Elimina'),
                               onTap: () async {

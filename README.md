@@ -102,7 +102,7 @@ Export notes to **PDF** format (rendered with the `pdf` / `printing` packages); 
 - Manual backup to a local **ZIP** file containing `notes.json`, `tasks.json`, `calendar.json`, and `metadata.json`
 - Automatic backups with configurable frequency (daily / weekly / monthly)
 - Up to **30** backup files retained; older ones purged automatically
-- Full restore from any saved backup file
+- Restore any saved backup from the backup list in Settings (tap it, confirm, current data is replaced)
 
 ### Settings
 | Option | Values |
@@ -177,7 +177,8 @@ lib/
 │   └── settings/
 │       ├── theme_provider.dart   # ThemeMode (SharedPreferences)
 │       ├── ui_provider.dart      # Layout, sort order, search query
-│       └── backup_provider.dart  # Backup frequency settings
+│       ├── backup_provider.dart  # Backup frequency settings
+│       └── backup_restore.dart   # Full-backup parsing + restore (JSON and ZIP)
 ├── screens/
 │   ├── home_screen.dart          # Main notes list (grid / list)
 │   ├── tasks_screen.dart         # Tasks list with tab bar

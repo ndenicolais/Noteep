@@ -228,14 +228,23 @@ class TasksNotifier extends StateNotifier<List<TaskModel>> {
   }
 
   /// Replaces the entire tasks collection (used for full backup restore).
-  Future<void> replaceAll(List<TaskModel> tasks) => _mutate(
-    (_) => tasks,
-    () => _commitInChunks(
-      tasks
-          .map((t) => (WriteBatch b) => b.set(_col.doc(t.id), t.toJson()))
-          .toList(),
-    ),
-  );
+  /// Tasks missing from [tasks] are deleted from Firestore too, otherwise
+  /// they would reappear on the next load.
+  Future<void> replaceAll(List<TaskModel> tasks) {
+    final keep = {for (final t in tasks) t.id};
+    final stale = [
+      for (final t in state)
+        if (!keep.contains(t.id)) t.id,
+    ];
+    return _mutate(
+      (_) => tasks,
+      () => _commitInChunks([
+        for (final id in stale) (WriteBatch b) => b.delete(_col.doc(id)),
+        for (final t in tasks)
+          (WriteBatch b) => b.set(_col.doc(t.id), t.toJson()),
+      ]),
+    );
+  }
 
   /// Permanently removes all tasks.
   Future<void> clearAll() {
@@ -351,14 +360,23 @@ class TaskListsNotifier extends StateNotifier<List<TaskListModel>> {
   }
 
   /// Replaces the entire task-lists collection (used for full backup restore).
-  Future<void> replaceAll(List<TaskListModel> lists) => _mutate(
-    (_) => lists,
-    () => _commitInChunks(
-      lists
-          .map((l) => (WriteBatch b) => b.set(_col.doc(l.id), l.toJson()))
-          .toList(),
-    ),
-  );
+  /// Lists missing from [lists] are deleted from Firestore too, otherwise
+  /// they would reappear on the next load.
+  Future<void> replaceAll(List<TaskListModel> lists) {
+    final keep = {for (final l in lists) l.id};
+    final stale = [
+      for (final l in state)
+        if (!keep.contains(l.id)) l.id,
+    ];
+    return _mutate(
+      (_) => lists,
+      () => _commitInChunks([
+        for (final id in stale) (WriteBatch b) => b.delete(_col.doc(id)),
+        for (final l in lists)
+          (WriteBatch b) => b.set(_col.doc(l.id), l.toJson()),
+      ]),
+    );
+  }
 
   /// Permanently removes all task lists.
   Future<void> clearAll() {

@@ -36,6 +36,8 @@ const List<ChangelogEntry> changelogEntries = [
       'Scorri un\'attività verso destra per completarla o verso sinistra per spostarla nel cestino; in vista elenco, scorri una nota verso destra per archiviarla o verso sinistra per cestinarla.',
       'Selettori di data e ora, menu di sistema e date tutti in italiano.',
       'Se l\'avvio non riesce, al posto di una schermata bianca compare un messaggio con il pulsante Riprova.',
+      'Ripristino dei backup automatici: in Impostazioni, apri l\'elenco dei backup e tocca quello da ripristinare.',
+      'Importare un backup completo ora elimina davvero note, attività ed eventi che non ne fanno parte, invece di farli ricomparire al riavvio.',
       'Calendario ICS: gli eventi ricorrenti esportati mantengono la data di fine, quelli importati non perdono più l\'ultima ripetizione a cavallo del cambio d\'ora, gli orari con fuso esplicito restano corretti e il testo con barre rovesciate viene letto bene.',
     ],
   ),
