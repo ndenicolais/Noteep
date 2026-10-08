@@ -206,6 +206,7 @@ flutter test
 - **`test/screens/boot_error_screen_test.dart`** — widget test di `BootErrorApp` (messaggio visibile, Riprova invoca il callback).
 - **`test/widgets/empty_state_test.dart`** — widget test di `EmptyState` (pulsante mostrato solo con `actionLabel`, tap invoca `onAction`).
 - **`test/widgets/swipe_actions_test.dart`** — widget test di `SwipeActions` (swipe a destra con `removesItem: false` lascia la riga, swipe a sinistra la rimuove).
+- **`test/utils/recurrence_test.dart`** — unit test puri (senza widget né Firestore) di `recurrenceTypeFromString` (round-trip, fallback a `none`) e di `calendarEventOccursOn`: ogni tipo di ricorrenza, orario ignorato, nessuna occorrenza prima dell'inizio, fine ricorrenza inclusiva, mensile del 31 che salta i mesi corti, annuale del 29 febbraio solo negli anni bisestili.
 
 Pattern riusabile per estendere la copertura ad altri provider/schermate: creare il notifier con `FakeFirebaseFirestore()`, oppure — per provider che dipendono da `sharedPreferencesProvider` (tutto `providers/settings/`) — usare `SharedPreferences.setMockInitialValues({})` e passare l'istanza via override nel `ProviderContainer`/`ProviderScope`.
 
