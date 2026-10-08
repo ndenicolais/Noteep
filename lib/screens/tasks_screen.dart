@@ -8,6 +8,7 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
+import '../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/task_model.dart';
@@ -22,7 +23,6 @@ import '../widgets/shared/swipe_actions.dart';
 import '../widgets/shared/error_feedback.dart';
 import '../widgets/shared/search_field.dart';
 import '../utils/dialogs/move_to_list_dialog.dart';
-import 'task_editor/task_editor_screen.dart';
 
 class TasksScreen extends ConsumerStatefulWidget {
   const TasksScreen({super.key});
@@ -450,10 +450,7 @@ class _TaskItem extends ConsumerWidget {
   Widget _buildTile(BuildContext context, WidgetRef ref) {
     return ListTile(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => TaskEditorScreen(task: task)),
-        );
+        AppNav.openTask(context, task);
       },
       leading: Checkbox(
         value: task.isCompleted,
@@ -500,12 +497,7 @@ class _TaskItem extends ConsumerWidget {
             icon: const Icon(Icons.more_vert),
             onSelected: (value) {
               if (value == 'edit') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => TaskEditorScreen(task: task),
-                  ),
-                );
+                AppNav.openTask(context, task);
               } else if (value == 'move') {
                 showMoveToListDialog(
                   context: context,

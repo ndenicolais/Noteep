@@ -8,9 +8,8 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
+import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
-import '../export_screen.dart';
-import '../statistics/statistics_screen.dart';
 import 'settings_section_header.dart';
 
 /// "Dati note" section: statistics, export screen, JSON export/import/clear.
@@ -41,22 +40,14 @@ class SettingsNotesDataSection extends StatelessWidget {
             'Visualizza tutte le informazioni sulle tue note',
           ),
           trailing: const Icon(Icons.chevron_right),
-          onTap:
-              () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const StatisticsScreen()),
-              ),
+          onTap: () => AppNav.openStatistics(context),
         ),
         ListTile(
           leading: Icon(Icons.upload, color: primary),
           title: const Text('Esporta note'),
           subtitle: const Text('Esporta tutte le note in diversi formati'),
           trailing: const Icon(Icons.chevron_right),
-          onTap:
-              () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const ExportScreen()),
-              ),
+          onTap: () => AppNav.openExport(context),
         ),
         ListTile(
           leading: Icon(Icons.download_outlined, color: primary),

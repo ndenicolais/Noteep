@@ -8,10 +8,10 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
+import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
-import 'calendar_event_editor_screen.dart';
 import 'calendar_event_tile.dart';
 
 /// List of events matching the current search query, sorted most-recent first.
@@ -58,13 +58,7 @@ class CalendarSearchResultsView extends StatelessWidget {
           leading: _buildLeading(context, event, colorScheme),
           title: Text(event.title.isEmpty ? '(senza titolo)' : event.title),
           subtitle: Text('$dayOfWeek, $dateStr • $timeStr'),
-          onTap:
-              () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => CalendarEventEditorScreen(event: event),
-                ),
-              ),
+          onTap: () => AppNav.openEvent(context, event),
         );
       },
     );

@@ -9,9 +9,11 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../core/routing/app_router.dart';
 import 'app_drawer.dart';
 
-export 'app_drawer.dart' show DrawerSection, AppRoutes;
+export '../core/routing/app_router.dart' show AppRoutes;
+export 'app_drawer.dart' show DrawerSection;
 
 /// Responsive scaffold.
 /// - Wide (≥700 px): NavigationRail on left, collapsible via hamburger button.

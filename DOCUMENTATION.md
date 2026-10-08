@@ -24,9 +24,10 @@ Principi chiave:
 
 ```
 lib/
-├── main.dart                  # bootstrap app, auth gate, route table
+├── main.dart                  # bootstrap app, auth gate, collega AppRouter
 ├── firebase_options.dart      # config Firebase Android + Web (git-ignored)
 ├── core/constants/            # app_version.dart (versione, allineata a pubspec), changelog.dart (voci Changelog)
+├── core/routing/              # app_router.dart: AppRoutes, AppRouter (onGenerateRoute/onUnknownRoute), AppNav
 ├── models/                    # classi dati immutabili-per-copyWith + (to/from)Json
 ├── providers/                 # Riverpod: un file per dominio, + providers/settings/
 ├── screens/                   # una sottocartella per feature-schermata complessa,
@@ -134,7 +135,7 @@ sharedPreferencesProvider (dichiarato in notes_provider.dart, iniettato in main.
 ## 6. Widget condivisi (`lib/widgets/`)
 
 - `nav_scaffold.dart` — Scaffold comune con drawer/AppBar per le schermate principali (`DrawerSection` enum).
-- `app_drawer.dart` — `AppDrawer`, `AppRoutes` (costanti named routes), `navigateToSection` (Home fa `popUntil` root, le altre sezioni push/pushReplacement).
+- `app_drawer.dart` — `AppDrawer`, `navigateToSection` (Home fa `popUntil` root, le altre sezioni push/pushReplacement).
 - `note_card.dart` — Card nota (home + archivio): rendering stile custom, preview checklist, menu rapido long-press (pin/archivia/blocca/cestina) con sblocco biometrico via `NoteLockService`.
 - `reminder_banner.dart` — `ReminderBanner`, condiviso tra `note_editor` e `task_editor`.
 - `changelog_dialog.dart` — `ChangelogDialog` + `showChangelogDialog(context, {entries})`: dialog "Changelog" con titolo `vX.Y.Z` e bullet per versione. Aperto in automatico da `home_screen.dart` dopo un aggiornamento (solo le voci da `ChangelogService.pendingEntries`) e manualmente da `info_screen.dart` (storico completo).
@@ -192,7 +193,7 @@ Sequenza di avvio (logica in `utils/app_bootstrap.dart`, `main.dart` fa solo da 
 
 **Lingua**: `MaterialApp` ha `locale: Locale('it')` fisso, `supportedLocales` it/en e `GlobalMaterialLocalizations.delegates` (`flutter_localizations`), così i widget di sistema (date/time picker, menu di selezione testo, tooltip) sono in italiano come il resto dell'UI, che ha stringhe italiane hardcoded. Quando verrà introdotta la localizzazione completa (`.arb` + `gen-l10n`) il `locale` fisso andrà rimosso.
 
-`NotesApp` (`ConsumerWidget`) legge `themeModeProvider` per il tema e `authStateProvider` per l'auth gate: `.when(loading: splash, error: LoginScreen, data: user != null ? HomeScreen : LoginScreen)`. Un `ref.listen` su note/task attivi tiene sincronizzato l'home widget Android. Le schermate principali (Tasks/Reminders/Calendar/Labels/Archive/Trash/Settings) hanno named route (vedi `AppRoutes` in `app_drawer.dart`); `NoteEditorScreen`/`TaskEditorScreen` si aprono invece con `Navigator.push` diretto (non hanno una route con nome, perché richiedono sempre un parametro `note`/`task`).
+`NotesApp` (`ConsumerWidget`) legge `themeModeProvider` per il tema e `authStateProvider` per l'auth gate: `.when(loading: splash, error: LoginScreen, data: user != null ? HomeScreen : LoginScreen)`. Un `ref.listen` su note/task attivi tiene sincronizzato l'home widget Android. Tutta la navigazione passa da `core/routing/app_router.dart`: `MaterialApp` usa `AppRouter.onGenerateRoute` (un `switch` su `AppRoutes`: sezioni del drawer, Statistiche, Esporta, Info, e gli editor nota/task/evento che richiedono un argomento tipizzato — `NoteRouteArgs`, `TaskModel`, `CalendarEventModel`) e `AppRouter.onUnknownRoute`, che mostra `UnknownRouteScreen` ("Pagina non trovata" + "Torna alla home") per nomi sconosciuti o argomenti mancanti/del tipo sbagliato invece di andare in crash. Gli screen non usano `Navigator.push(MaterialPageRoute(...))`: chiamano gli helper tipizzati `AppNav.openNote/openTask/openEvent/openTasks/openStatistics/openExport/openInfo`. `AppRoutes` è riesportato da `nav_scaffold.dart`. Le notifiche non hanno ancora un payload: il deep link dal tocco su un promemoria è il passo successivo.
 
 ---
 
@@ -215,6 +216,7 @@ flutter test
 - **`test/providers/undo_redo_test.dart`** — stack di `NoteChangeHistoryNotifier`/`TaskChangeHistoryNotifier` (undo/redo, una nuova modifica svuota il redo, limite di 50 con scarto della più vecchia, `clear`), le quattro `*Change` usate dagli editor (titolo/testo nota, titolo/descrizione task) e `NoteUndoRedoManager`/`TaskUndoRedoManager` tramite un `Consumer` che espone il `WidgetRef` (persistenza su `fake_cloud_firestore`, nessun salvataggio di una nota non ancora memorizzata).
 - **`test/theme/app_colors_test.dart`** — `AppColors.contrastRatio` (21 nero/bianco, 1 su colori uguali, simmetria) e `contrastingTextColor`: sceglie sempre l'opzione a contrasto maggiore (anche su toni saturi medi), testo scuro sugli swatch chiari e bianco su quelli scuri, contrasto ≥ 4.5 (WCAG AA) su tutti gli swatch delle note.
 - **`test/providers/data_actions_test.dart`** — `DataActions` contro `fake_cloud_firestore`: chiavi dei payload di export e `appVersion` nel backup completo, `hasLockedNotes`, round trip export completo → clear → import, import per sezione da un backup completo (solo la sezione richiesta), file senza la sezione, dati malformati che lanciano in modo sincrono senza modificare nulla, `icsExport`/`importIcs` (con e senza eventi), clear per sezione e `clearAll` anche su Firestore.
+- **`test/core/app_router_test.dart`** — `AppRouter`: ogni route di sezione costruisce il proprio screen, gli editor ricevono gli argomenti tipizzati, route di dettaglio senza argomenti o con argomenti del tipo sbagliato e nomi sconosciuti vengono rifiutati, `onUnknownRoute` mostra "Pagina non trovata" e "Torna alla home" riporta alla root.
 
 Pattern riusabile per estendere la copertura ad altri provider/schermate: creare il notifier con `FakeFirebaseFirestore()`, oppure — per provider che dipendono da `sharedPreferencesProvider` (tutto `providers/settings/`) — usare `SharedPreferences.setMockInitialValues({})` e passare l'istanza via override nel `ProviderContainer`/`ProviderScope`.
 

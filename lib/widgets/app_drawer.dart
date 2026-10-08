@@ -10,6 +10,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../core/routing/app_router.dart';
 import '../providers/auth_provider.dart';
 
 // ─── Sections enum ────────────────────────────────────────────────────────────
@@ -23,18 +24,6 @@ enum DrawerSection {
   archive,
   trash,
   settings,
-}
-
-// ─── Named route constants ────────────────────────────────────────────────────
-
-class AppRoutes {
-  static const tasks = '/tasks';
-  static const reminders = '/reminders';
-  static const calendar = '/calendar';
-  static const labels = '/labels';
-  static const archive = '/archive';
-  static const trash = '/trash';
-  static const settings = '/settings';
 }
 
 // ─── Shared navigation rule ───────────────────────────────────────────────────

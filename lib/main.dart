@@ -12,22 +12,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'core/routing/app_router.dart';
 import 'providers/auth_provider.dart';
 import 'providers/notes_provider.dart';
 import 'providers/tasks_provider.dart';
 import 'providers/settings/theme_provider.dart';
-import 'screens/archive_screen.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/boot_error_screen.dart';
-import 'screens/calendar/calendar_screen.dart';
 import 'screens/home_screen.dart';
-import 'screens/labels_screen.dart';
-import 'screens/reminders_screen.dart';
-import 'screens/settings/settings_screen.dart';
-import 'screens/tasks_screen.dart';
-import 'screens/trash_screen.dart';
 import 'theme/app_theme.dart';
-import 'widgets/app_drawer.dart';
 import 'utils/app_bootstrap.dart';
 import 'utils/widget_service.dart';
 
@@ -83,15 +76,8 @@ class NotesApp extends ConsumerWidget {
         error: (_, __) => const LoginScreen(),
         data: (user) => user != null ? const HomeScreen() : const LoginScreen(),
       ),
-      routes: {
-        AppRoutes.tasks: (_) => const TasksScreen(),
-        AppRoutes.reminders: (_) => const RemindersScreen(),
-        AppRoutes.calendar: (_) => const CalendarWorkspaceView(),
-        AppRoutes.labels: (_) => const LabelsScreen(),
-        AppRoutes.archive: (_) => const ArchiveScreen(),
-        AppRoutes.trash: (_) => const TrashScreen(),
-        AppRoutes.settings: (_) => const SettingsScreen(),
-      },
+      onGenerateRoute: AppRouter.onGenerateRoute,
+      onUnknownRoute: AppRouter.onUnknownRoute,
     );
   }
 

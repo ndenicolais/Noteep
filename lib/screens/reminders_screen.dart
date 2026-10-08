@@ -8,6 +8,7 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
+import '../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -17,8 +18,6 @@ import '../providers/notes_provider.dart';
 import '../providers/tasks_provider.dart';
 import '../utils/notification_service.dart';
 import '../widgets/nav_scaffold.dart';
-import 'note_editor/note_editor_screen.dart';
-import 'task_editor/task_editor_screen.dart';
 
 // ─── Sealed union for reminder items ─────────────────────────────────────────
 
@@ -230,19 +229,9 @@ class _ReminderCard extends ConsumerWidget {
 
   void _openItem(BuildContext context) {
     if (item is _NoteReminder) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => NoteEditorScreen(note: (item as _NoteReminder).note),
-        ),
-      );
+      AppNav.openNote(context, (item as _NoteReminder).note);
     } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => TaskEditorScreen(task: (item as _TaskReminder).task),
-        ),
-      );
+      AppNav.openTask(context, (item as _TaskReminder).task);
     }
   }
 

@@ -8,12 +8,12 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
+import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
 import 'calendar_day_cell.dart';
 import 'calendar_day_events_sheet.dart';
-import 'calendar_event_editor_screen.dart';
 import 'calendar_utils.dart';
 
 /// Classic month grid view of the calendar workspace.
@@ -146,14 +146,9 @@ class CalendarMonthView extends StatelessWidget {
                           onTap:
                               isCurrentMonth && day != null
                                   ? dayEvents.length == 1
-                                      ? () => Navigator.push(
+                                      ? () => AppNav.openEvent(
                                         context,
-                                        MaterialPageRoute(
-                                          builder:
-                                              (_) => CalendarEventEditorScreen(
-                                                event: dayEvents.first,
-                                              ),
-                                        ),
+                                        dayEvents.first,
                                       )
                                       : () => showDayEventsBottomSheet(
                                         context,

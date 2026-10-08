@@ -8,6 +8,7 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
+import '../../core/routing/app_router.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,7 +16,6 @@ import '../../models/calendar_model.dart';
 import '../../providers/calendar_provider.dart';
 import '../../widgets/nav_scaffold.dart';
 import 'calendar_day_view.dart';
-import 'calendar_event_editor_screen.dart';
 import 'calendar_month_view.dart';
 import 'calendar_multi_day_view.dart';
 import 'calendar_schedule_view.dart';
@@ -219,12 +219,7 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
             startTime: now,
             endTime: now.add(const Duration(hours: 1)),
           );
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => CalendarEventEditorScreen(event: newEvent),
-            ),
-          );
+          AppNav.openEvent(context, newEvent);
         },
         child: const Icon(Icons.add),
       ),

@@ -8,10 +8,10 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
+import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
-import 'calendar_event_editor_screen.dart';
 import 'calendar_event_tile.dart';
 
 /// Shows the bottom sheet listing all events of a given [day], with a
@@ -69,14 +69,7 @@ void showDayEventsBottomSheet(
                           startTime: day,
                           endTime: day.add(const Duration(hours: 1)),
                         );
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder:
-                                (_) =>
-                                    CalendarEventEditorScreen(event: newEvent),
-                          ),
-                        );
+                        AppNav.openEvent(context, newEvent);
                       },
                       icon: const Icon(Icons.add, size: 18),
                       label: const Text('Aggiungi'),
@@ -103,15 +96,7 @@ void showDayEventsBottomSheet(
                               event: event,
                               onTap: () {
                                 Navigator.pop(ctx);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder:
-                                        (_) => CalendarEventEditorScreen(
-                                          event: event,
-                                        ),
-                                  ),
-                                );
+                                AppNav.openEvent(context, event);
                               },
                             );
                           },

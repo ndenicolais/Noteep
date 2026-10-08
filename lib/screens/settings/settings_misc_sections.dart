@@ -8,8 +8,8 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
+import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
-import '../info_screen.dart';
 import 'settings_section_header.dart';
 
 /// "Google Drive" section: coming-soon sync entry point.
@@ -55,11 +55,7 @@ class SettingsInfoSection extends StatelessWidget {
       title: const Text('Info app'),
       subtitle: const Text('Informazioni sull\'app e sulla versione'),
       trailing: const Icon(Icons.chevron_right),
-      onTap:
-          () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const InfoScreen()),
-          ),
+      onTap: () => AppNav.openInfo(context),
     );
   }
 }

@@ -8,6 +8,7 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
+import '../core/routing/app_router.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,9 +21,7 @@ import '../providers/settings/backup_provider.dart';
 import '../providers/settings/ui_provider.dart';
 import '../utils/backup_service.dart';
 import '../utils/changelog_service.dart';
-import '../screens/note_editor/note_editor_screen.dart';
 import '../screens/note_template_screen.dart';
-import '../screens/tasks_screen.dart';
 import '../screens/home/speed_dial_fab.dart';
 import '../screens/home/reorderable_grid_view.dart';
 import '../screens/home/reorderable_list_view.dart';
@@ -129,10 +128,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         onNoteTap: () => _openEditor(NoteType.note),
         onChecklistTap: () => _openEditor(NoteType.checklist),
         onTaskTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const TasksScreen()),
-          );
+          AppNav.openTasks(context);
         },
         onAudioNoteTap: _openAudioNote,
         onTemplateTap: _openFromTemplate,
@@ -188,24 +184,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void _openEditor(NoteType type) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => NoteEditorScreen(note: NoteModel(type: type)),
-      ),
-    );
+    AppNav.openNote(context, NoteModel(type: type));
   }
 
   void _openAudioNote() {
-    Navigator.push(
+    AppNav.openNote(
       context,
-      MaterialPageRoute(
-        builder:
-            (_) => NoteEditorScreen(
-              note: NoteModel(type: NoteType.note),
-              autoOpenRecorder: true,
-            ),
-      ),
+      NoteModel(type: NoteType.note),
+      autoOpenRecorder: true,
     );
   }
 
@@ -225,10 +211,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               )
               .toList(),
     );
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => NoteEditorScreen(note: note)),
-    );
+    AppNav.openNote(context, note);
   }
 
   void _showSortSheet(BuildContext context, SortOrder current) {

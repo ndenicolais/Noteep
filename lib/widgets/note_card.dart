@@ -8,11 +8,11 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
+import '../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/note_model.dart';
 import '../providers/notes_provider.dart';
-import '../screens/note_editor/note_editor_screen.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_font_sizes.dart';
 import '../theme/app_radius.dart';
@@ -37,10 +37,7 @@ class NoteCard extends ConsumerWidget {
       if (!ok) return;
     }
     if (!context.mounted) return;
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => NoteEditorScreen(note: note)),
-    );
+    AppNav.openNote(context, note);
   }
 
   Future<void> _showQuickActions(

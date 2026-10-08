@@ -8,10 +8,10 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
+import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
-import 'calendar_event_editor_screen.dart';
 import 'calendar_event_tile.dart';
 import 'calendar_utils.dart';
 
@@ -102,15 +102,7 @@ class CalendarDayView extends StatelessWidget {
                       final event = dayEvents[i];
                       return CalendarEventListTile(
                         event: event,
-                        onTap:
-                            () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder:
-                                    (_) =>
-                                        CalendarEventEditorScreen(event: event),
-                              ),
-                            ),
+                        onTap: () => AppNav.openEvent(context, event),
                       );
                     },
                   ),

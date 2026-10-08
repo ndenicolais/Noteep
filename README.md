@@ -157,6 +157,9 @@ UI Widget
 ```
 lib/
 ├── main.dart                     # App entry point, Firebase init, routing
+├── core/
+│   └── routing/
+│       └── app_router.dart       # AppRoutes, AppRouter, typed AppNav helpers
 ├── models/
 │   ├── note_model.dart           # NoteModel, NoteStyle, ChecklistItem, NoteType
 │   ├── audio_note.dart           # AudioNote
@@ -189,6 +192,7 @@ lib/
 │   ├── reminders_screen.dart
 │   ├── export_screen.dart        # PDF export
 │   ├── info_screen.dart
+│   ├── unknown_route_screen.dart # "Page not found" for unknown routes
 │   ├── note_template_screen.dart
 │   ├── auth/
 │   │   └── login_screen.dart
@@ -309,21 +313,22 @@ Same timestamp fields as `NoteModel` and `TaskModel`, plus `startTime`, `endTime
 |---|---|---|
 | `LoginScreen` | — | Email/password and Google sign-in |
 | `HomeScreen` | `/` | Notes grid/list with FAB (speed dial) |
-| `NoteEditorScreen` | push | Create or edit a note / checklist |
+| `NoteEditorScreen` | `/note` | Create or edit a note / checklist |
 | `TasksScreen` | `/tasks` | Tabbed tasks view (All / Special / custom lists) |
-| `TaskEditorScreen` | push | Create or edit a task |
+| `TaskEditorScreen` | `/task` | Create or edit a task |
 | `RemindersScreen` | `/reminders` | All upcoming reminders |
 | `CalendarWorkspaceView` | `/calendar` | Full calendar with event editor |
 | `LabelsScreen` | `/labels` | Manage tags |
 | `ArchiveScreen` | `/archive` | Archived notes and tasks |
 | `TrashScreen` | `/trash` | Trashed items (7-day auto-purge) |
 | `SettingsScreen` | `/settings` | App preferences and backup |
-| `ExportScreen` | push from Settings | PDF export |
-| `StatisticsScreen` | push from Settings | Usage statistics |
-| `InfoScreen` | push from Settings | App version and author info |
+| `CalendarEventEditorScreen` | `/event` | Create or edit a calendar event |
+| `ExportScreen` | `/export` | PDF export |
+| `StatisticsScreen` | `/statistics` | Usage statistics |
+| `InfoScreen` | `/info` | App version and author info |
 
 ### Navigation
-The `AppDrawer` (slide-in from the left) is present on all main screens and provides direct access to every top-level route.
+The `AppDrawer` (slide-in from the left) is present on all main screens and provides direct access to every top-level route. All routes are resolved by `AppRouter` (`lib/core/routing/app_router.dart`); screens navigate through typed `AppNav` helpers, and unknown routes show a "page not found" screen.
 
 ---
 

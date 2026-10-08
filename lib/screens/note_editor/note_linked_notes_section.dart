@@ -8,9 +8,9 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
+import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import '../../models/note_model.dart';
-import 'note_editor_screen.dart';
 
 /// "Note collegate" section: chips linking to the notes referenced by the
 /// current one, each opening its own editor on tap.
@@ -56,13 +56,7 @@ class NoteLinkedNotesSection extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    onPressed:
-                        () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => NoteEditorScreen(note: ln),
-                          ),
-                        ),
+                    onPressed: () => AppNav.openNote(context, ln),
                   );
                 }).toList(),
           ),

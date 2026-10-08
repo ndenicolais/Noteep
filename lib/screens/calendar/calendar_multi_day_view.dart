@@ -8,10 +8,10 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
+import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
-import 'calendar_event_editor_screen.dart';
 import 'calendar_utils.dart';
 
 /// Multi-day agenda view used for the "Settimana" and "7 giorni" modes.
@@ -152,16 +152,7 @@ class CalendarMultiDayView extends StatelessWidget {
                         itemBuilder: (_, i) {
                           final event = dayEvents[i];
                           return GestureDetector(
-                            onTap:
-                                () => Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder:
-                                        (_) => CalendarEventEditorScreen(
-                                          event: event,
-                                        ),
-                                  ),
-                                ),
+                            onTap: () => AppNav.openEvent(context, event),
                             child: Container(
                               margin: const EdgeInsets.fromLTRB(2, 0, 2, 2),
                               padding: const EdgeInsets.symmetric(
