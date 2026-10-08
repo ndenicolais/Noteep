@@ -15,6 +15,7 @@ import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../core/constants/app_version.dart';
 
 enum BackupFrequency { daily, weekly, monthly }
 
@@ -63,7 +64,7 @@ class BackupService {
         // Create metadata
         final metadata = {
           'timestamp': DateTime.now().toIso8601String(),
-          'version': '2.0.0',
+          'version': appVersion,
         };
         final metadataFile = File('${tempDir.path}/metadata.json');
         await metadataFile.writeAsString(jsonEncode(metadata));
@@ -106,11 +107,15 @@ class BackupService {
       extractDir.createSync();
 
       try {
-        // Extract zip
+        // Extract zip. extractArchiveToDisk is async: without awaiting it the
+        // JSON files below would be read before they are written.
         final inputStream = InputFileStream(backupPath);
-        final archive = ZipDecoder().decodeBuffer(inputStream);
-        extractArchiveToDisk(archive, extractDir.path);
-        inputStream.close();
+        try {
+          final archive = ZipDecoder().decodeBuffer(inputStream);
+          await extractArchiveToDisk(archive, extractDir.path);
+        } finally {
+          await inputStream.close();
+        }
 
         // Read files
         final notesFile = File('${extractDir.path}/notes.json');
@@ -154,7 +159,7 @@ class BackupService {
   /// Get backup file info
   static Map<String, dynamic> getBackupInfo(FileSystemEntity file) {
     final stat = file.statSync();
-    final name = file.path.split('/').last;
+    final name = file.uri.pathSegments.last;
 
     return {
       'name': name,
