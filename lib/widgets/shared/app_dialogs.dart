@@ -29,6 +29,77 @@ Future<T?> showAppSheet<T>(
   );
 }
 
+/// Shared "title + single text field + Annulla/confirm" dialog.
+///
+/// Resolves to the trimmed text when confirmed (button or keyboard submit)
+/// and non-empty; `null` when cancelled, dismissed or left empty.
+Future<String?> showAppTextInputDialog(
+  BuildContext context, {
+  required String title,
+  required String hintText,
+  required String confirmLabel,
+}) {
+  return showDialog<String>(
+    context: context,
+    builder:
+        (_) => _TextInputDialog(
+          title: title,
+          hintText: hintText,
+          confirmLabel: confirmLabel,
+        ),
+  );
+}
+
+class _TextInputDialog extends StatefulWidget {
+  const _TextInputDialog({
+    required this.title,
+    required this.hintText,
+    required this.confirmLabel,
+  });
+
+  final String title;
+  final String hintText;
+  final String confirmLabel;
+
+  @override
+  State<_TextInputDialog> createState() => _TextInputDialogState();
+}
+
+class _TextInputDialogState extends State<_TextInputDialog> {
+  final _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _submit() {
+    final text = _controller.text.trim();
+    Navigator.pop(context, text.isEmpty ? null : text);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(widget.title),
+      content: TextField(
+        controller: _controller,
+        autofocus: true,
+        decoration: InputDecoration(hintText: widget.hintText),
+        onSubmitted: (_) => _submit(),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Annulla'),
+        ),
+        TextButton(onPressed: _submit, child: Text(widget.confirmLabel)),
+      ],
+    );
+  }
+}
+
 /// Shared "title + message + Annulla/confirm" dialog.
 ///
 /// Resolves to `true` only when the user taps the confirm button; dismissing

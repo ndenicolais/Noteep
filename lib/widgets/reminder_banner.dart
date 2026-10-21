@@ -13,7 +13,8 @@ import 'package:intl/intl.dart';
 import '../theme/app_font_sizes.dart';
 import '../theme/app_spacing.dart';
 
-/// Banner shown at the top of the note/task editor when a reminder is set.
+/// Banner shown at the top of the note/task/event editor when a reminder is
+/// set: tap to change it, × to remove it.
 class ReminderBanner extends StatelessWidget {
   const ReminderBanner({
     super.key,
@@ -50,12 +51,17 @@ class ReminderBanner extends StatelessWidget {
                 ),
               ),
             ),
-            GestureDetector(
-              onTap: onRemove,
-              child: Icon(
-                Icons.close,
-                size: 16,
-                color: colorScheme.onPrimaryContainer,
+            Semantics(
+              button: true,
+              label: 'Rimuovi promemoria',
+              excludeSemantics: true,
+              child: GestureDetector(
+                onTap: onRemove,
+                child: Icon(
+                  Icons.close,
+                  size: 16,
+                  color: colorScheme.onPrimaryContainer,
+                ),
               ),
             ),
           ],

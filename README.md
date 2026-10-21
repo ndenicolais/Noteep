@@ -185,7 +185,6 @@ lib/
 │       └── data_actions.dart     # Settings data ops: export, import, clear, ICS
 ├── screens/
 │   ├── home_screen.dart          # Main notes list (grid / list)
-│   ├── tasks_screen.dart         # Tasks list with tab bar
 │   ├── archive_screen.dart
 │   ├── trash_screen.dart
 │   ├── labels_screen.dart        # Tag management
@@ -195,7 +194,16 @@ lib/
 │   ├── unknown_route_screen.dart # "Page not found" for unknown routes
 │   ├── note_template_screen.dart
 │   ├── auth/
-│   │   └── login_screen.dart
+│   │   ├── login_screen.dart
+│   │   ├── login_forms.dart
+│   │   ├── login_widgets.dart
+│   │   ├── login_validators.dart
+│   │   └── reset_password_dialog.dart
+│   ├── tasks/
+│   │   ├── tasks_screen.dart     # Tasks list with tab bar
+│   │   ├── task_list_view.dart
+│   │   ├── task_item.dart
+│   │   └── task_sorting.dart
 │   ├── home/
 │   │   ├── reorderable_grid_view.dart
 │   │   ├── reorderable_list_view.dart
@@ -210,6 +218,8 @@ lib/
 │   ├── calendar/
 │   │   ├── calendar_screen.dart
 │   │   ├── calendar_event_editor_screen.dart
+│   │   ├── calendar_event_editor_bars.dart
+│   │   ├── calendar_event_details_section.dart
 │   │   ├── calendar_day_cell.dart
 │   │   ├── calendar_mini_month.dart
 │   │   ├── calendar_search_bar.dart

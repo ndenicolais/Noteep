@@ -18,7 +18,7 @@ import 'package:noteep/screens/reminders_screen.dart';
 import 'package:noteep/screens/settings/settings_screen.dart';
 import 'package:noteep/screens/statistics/statistics_screen.dart';
 import 'package:noteep/screens/task_editor/task_editor_screen.dart';
-import 'package:noteep/screens/tasks_screen.dart';
+import 'package:noteep/screens/tasks/tasks_screen.dart';
 import 'package:noteep/screens/trash_screen.dart';
 import 'package:noteep/screens/unknown_route_screen.dart';
 

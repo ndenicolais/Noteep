@@ -23,7 +23,7 @@ import '../../screens/reminders_screen.dart';
 import '../../screens/settings/settings_screen.dart';
 import '../../screens/statistics/statistics_screen.dart';
 import '../../screens/task_editor/task_editor_screen.dart';
-import '../../screens/tasks_screen.dart';
+import '../../screens/tasks/tasks_screen.dart';
 import '../../screens/trash_screen.dart';
 import '../../screens/unknown_route_screen.dart';
 

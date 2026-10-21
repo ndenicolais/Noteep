@@ -14,12 +14,15 @@ import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
 import '../../providers/calendar_provider.dart';
 import '../../theme/app_font_sizes.dart';
+import '../../theme/app_radius.dart';
 import '../../theme/app_spacing.dart';
 import '../../core/routing/notification_target.dart';
 import '../../utils/notification_service.dart';
-import '../../utils/recurrence.dart';
 import '../../widgets/shared/app_dialogs.dart';
+import '../../widgets/reminder_banner.dart';
 import '../../widgets/shared/error_feedback.dart';
+import 'calendar_event_details_section.dart';
+import 'calendar_event_editor_bars.dart';
 
 class CalendarEventEditorScreen extends ConsumerStatefulWidget {
   const CalendarEventEditorScreen({super.key, required this.event});
@@ -230,87 +233,33 @@ class _CalendarEventEditorScreenState
         if (didPop) _save();
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Evento'),
-          elevation: 0,
-          actions: [
-            IconButton(
-              icon: Icon(
-                _event.isPinned ? Icons.push_pin : Icons.push_pin_outlined,
+        appBar: CalendarEventEditorAppBar(
+          isPinned: _event.isPinned,
+          isArchived: _event.isArchived,
+          onTogglePin:
+              () => setState(
+                () => _event = _event.copyWith(isPinned: !_event.isPinned),
               ),
-              onPressed:
-                  () => setState(
-                    () => _event = _event.copyWith(isPinned: !_event.isPinned),
-                  ),
-              tooltip: _event.isPinned ? 'Sposta in alto' : 'Fissa in alto',
-            ),
-            IconButton(
-              icon: Icon(
-                _event.isArchived ? Icons.unarchive : Icons.archive_outlined,
-              ),
-              tooltip: _event.isArchived ? 'Ripristina' : 'Archivia',
-              onPressed: () {
-                setState(
-                  () =>
-                      _event = _event.copyWith(isArchived: !_event.isArchived),
-                );
-                _save();
-                Navigator.pop(context);
-              },
-            ),
-          ],
+          onToggleArchive: () {
+            setState(
+              () => _event = _event.copyWith(isArchived: !_event.isArchived),
+            );
+            _save();
+            Navigator.pop(context);
+          },
         ),
         body: ListView(
           padding: const EdgeInsets.all(AppSpacing.lg),
           children: [
-            // Reminder banner
             if (_event.reminder != null)
-              GestureDetector(
-                onTap: _setReminder,
-                child: Container(
-                  margin: const EdgeInsets.only(bottom: AppSpacing.md),
-                  decoration: BoxDecoration(
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.primaryContainer.withAlpha(180),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.lg,
-                    vertical: 6,
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.alarm,
-                        size: 16,
-                        color: Theme.of(context).colorScheme.onPrimaryContainer,
-                      ),
-                      const SizedBox(width: AppSpacing.sm),
-                      Expanded(
-                        child: Text(
-                          DateFormat(
-                            'dd MMM yyyy, HH:mm',
-                          ).format(_event.reminder!),
-                          style: TextStyle(
-                            fontSize: AppFontSizes.sm,
-                            color:
-                                Theme.of(
-                                  context,
-                                ).colorScheme.onPrimaryContainer,
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: _removeReminder,
-                        child: Icon(
-                          Icons.close,
-                          size: 16,
-                          color:
-                              Theme.of(context).colorScheme.onPrimaryContainer,
-                        ),
-                      ),
-                    ],
+              Padding(
+                padding: const EdgeInsets.only(bottom: AppSpacing.md),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(AppRadius.sm),
+                  child: ReminderBanner(
+                    reminder: _event.reminder!,
+                    onTap: _setReminder,
+                    onRemove: _removeReminder,
                   ),
                 ),
               ),
@@ -332,101 +281,10 @@ class _CalendarEventEditorScreenState
               ),
             ),
             const SizedBox(height: AppSpacing.lg),
-
-            // Data (Opzionale)
-            ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: const Icon(Icons.calendar_today_outlined),
-              title: Text(
-                DateFormat(
-                  'EEEE, dd MMMM yyyy',
-                  'it_IT',
-                ).format(_event.startTime),
-              ),
-              subtitle:
-                  _event.isAllDay
-                      ? const Text('Tutto il giorno')
-                      : Text(
-                        '${DateFormat('HH:mm').format(_event.startTime)} - '
-                        '${DateFormat('HH:mm').format(_event.endTime)}',
-                      ),
-              onTap: _openDateTimePicker,
-            ),
-            const SizedBox(height: AppSpacing.sm),
-
-            // Toggle All Day
-            CheckboxListTile(
-              contentPadding: EdgeInsets.zero,
-              title: const Text('Tutto il giorno'),
-              value: _event.isAllDay,
-              onChanged: (value) {
-                if (value != null) {
-                  setState(() => _event = _event.copyWith(isAllDay: value));
-                }
-              },
-            ),
-            const SizedBox(height: AppSpacing.sm),
-
-            // Toggle Birthday
-            CheckboxListTile(
-              contentPadding: EdgeInsets.zero,
-              secondary: const Icon(Icons.cake_outlined),
-              title: const Text('Compleanno'),
-              value: _event.isBirthday,
-              onChanged: (value) {
-                if (value != null) {
-                  setState(() => _event = _event.copyWith(isBirthday: value));
-                }
-              },
-            ),
-
-            // Toggle Name Day
-            CheckboxListTile(
-              contentPadding: EdgeInsets.zero,
-              secondary: const Icon(Icons.auto_awesome_outlined),
-              title: const Text('Onomastico'),
-              value: _event.isNameDay,
-              onChanged: (value) {
-                if (value != null) {
-                  setState(() => _event = _event.copyWith(isNameDay: value));
-                }
-              },
-            ),
-            const SizedBox(height: AppSpacing.lg),
-
-            // Ricorrenza
-            ListTile(
-              contentPadding: EdgeInsets.zero,
-              leading: const Icon(Icons.repeat_outlined),
-              title: const Text('Ricorrenza'),
-              subtitle: Text(_event.recurrence.label),
-              onTap: () {
-                showAppSheet(
-                  context,
-                  builder:
-                      (ctx) => ListView(
-                        shrinkWrap: true,
-                        children:
-                            RecurrenceType.values
-                                .map(
-                                  (type) => ListTile(
-                                    title: Text(type.label),
-                                    selected: _event.recurrence == type,
-                                    onTap: () {
-                                      setState(
-                                        () =>
-                                            _event = _event.copyWith(
-                                              recurrence: type,
-                                            ),
-                                      );
-                                      Navigator.pop(ctx);
-                                    },
-                                  ),
-                                )
-                                .toList(),
-                      ),
-                );
-              },
+            CalendarEventDetailsSection(
+              event: _event,
+              onPickDateTime: _openDateTimePicker,
+              onChanged: (e) => setState(() => _event = e),
             ),
             const SizedBox(height: AppSpacing.lg),
 
@@ -448,8 +306,6 @@ class _CalendarEventEditorScreenState
               ),
             ),
             const SizedBox(height: AppSpacing.lg),
-
-            // Data ultima modifica
             Text(
               'Ultima modifica: ${DateFormat('dd MMM, HH:mm').format(_event.updatedAt)}',
               style: TextStyle(
@@ -459,35 +315,11 @@ class _CalendarEventEditorScreenState
             ),
           ],
         ),
-        bottomNavigationBar: BottomAppBar(
-          color: Theme.of(context).colorScheme.surface,
-          child: Row(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.delete_outline),
-                onPressed: _confirmDelete,
-                tooltip: 'Elimina evento',
-              ),
-              IconButton(
-                icon: Icon(
-                  _event.reminder != null
-                      ? Icons.alarm
-                      : Icons.alarm_add_outlined,
-                  color:
-                      _event.reminder != null
-                          ? Theme.of(context).colorScheme.primary
-                          : null,
-                ),
-                onPressed: _setReminder,
-                tooltip: 'Promemoria',
-              ),
-              const Spacer(),
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Chiudi'),
-              ),
-            ],
-          ),
+        bottomNavigationBar: CalendarEventEditorBottomBar(
+          hasReminder: _event.reminder != null,
+          onDelete: _confirmDelete,
+          onReminder: _setReminder,
+          onClose: () => Navigator.pop(context),
         ),
       ),
     );
