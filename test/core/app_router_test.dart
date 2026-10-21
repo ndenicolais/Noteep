@@ -44,7 +44,11 @@ void main() {
     );
     if (route == null) return null;
     expect(route.settings.name, name);
-    return (route as MaterialPageRoute).builder(context);
+    return switch (route) {
+      FadeThroughPageRoute r => r.builder(context),
+      MaterialPageRoute r => r.builder(context),
+      _ => fail('unexpected route type ${route.runtimeType}'),
+    };
   }
 
   testWidgets('maps every section route to its screen', (tester) async {
@@ -126,4 +130,28 @@ void main() {
     expect(find.text('Home'), findsOneWidget);
     expect(find.byType(UnknownRouteScreen), findsNothing);
   });
+
+  test(
+    'drawer sections fade through, detail screens use MaterialPageRoute',
+    () {
+      for (final name in AppRouter.sectionRoutes) {
+        expect(
+          AppRouter.onGenerateRoute(RouteSettings(name: name)),
+          isA<FadeThroughPageRoute>(),
+          reason: name,
+        );
+      }
+      for (final name in [
+        AppRoutes.statistics,
+        AppRoutes.export,
+        AppRoutes.info,
+      ]) {
+        expect(
+          AppRouter.onGenerateRoute(RouteSettings(name: name)),
+          isA<MaterialPageRoute>(),
+          reason: name,
+        );
+      }
+    },
+  );
 }

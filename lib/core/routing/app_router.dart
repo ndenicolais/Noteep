@@ -59,9 +59,24 @@ class NoteRouteArgs {
 /// Builds every named route. A missing or wrongly typed argument for a
 /// detail route is treated as an unknown route instead of crashing.
 abstract final class AppRouter {
+  /// Drawer sections: switching between them fades through instead of
+  /// sliding, since they are siblings rather than a drill-down.
+  static const sectionRoutes = {
+    AppRoutes.tasks,
+    AppRoutes.reminders,
+    AppRoutes.calendar,
+    AppRoutes.labels,
+    AppRoutes.archive,
+    AppRoutes.trash,
+    AppRoutes.settings,
+  };
+
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     final builder = _builderFor(settings);
     if (builder == null) return null;
+    if (sectionRoutes.contains(settings.name)) {
+      return FadeThroughPageRoute(builder: builder, settings: settings);
+    }
     return MaterialPageRoute(builder: builder, settings: settings);
   }
 
@@ -97,6 +112,41 @@ abstract final class AppRouter {
       _ => null,
     };
   }
+}
+
+/// Material "fade through": the new page fades in while scaling up
+/// slightly, after a short delay that lets the old page start fading out.
+/// Instant when the platform asks to reduce motion.
+class FadeThroughPageRoute<T> extends PageRouteBuilder<T> {
+  FadeThroughPageRoute({required this.builder, super.settings})
+    : super(
+        transitionDuration: const Duration(milliseconds: 300),
+        reverseTransitionDuration: const Duration(milliseconds: 250),
+        pageBuilder: (context, _, _) => builder(context),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          if (MediaQuery.disableAnimationsOf(context)) return child;
+          final incoming = CurvedAnimation(
+            parent: animation,
+            curve: const Interval(0.3, 1, curve: Curves.easeOut),
+          );
+          final outgoing = CurvedAnimation(
+            parent: secondaryAnimation,
+            curve: const Interval(0, 0.3, curve: Curves.easeIn),
+          );
+          return FadeTransition(
+            opacity: incoming,
+            child: ScaleTransition(
+              scale: Tween<double>(begin: 0.92, end: 1).animate(incoming),
+              child: FadeTransition(
+                opacity: ReverseAnimation(outgoing),
+                child: child,
+              ),
+            ),
+          );
+        },
+      );
+
+  final WidgetBuilder builder;
 }
 
 /// Typed navigation helpers, so call sites can't pass the wrong arguments.

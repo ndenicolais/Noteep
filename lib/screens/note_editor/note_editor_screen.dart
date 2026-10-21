@@ -27,6 +27,7 @@ import '../../utils/note_lock_service.dart';
 import '../../widgets/reminder_banner.dart';
 import '../../widgets/shared/app_dialogs.dart';
 import '../../widgets/shared/error_feedback.dart';
+import '../../widgets/shared/note_hero.dart';
 import '../../widgets/style_editor/color_picker_widget.dart';
 import '../../widgets/style_editor/style_editor_sheet.dart';
 import 'note_audio_notes_section.dart';
@@ -480,152 +481,160 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
       onPopInvokedWithResult: (didPop, _) {
         if (didPop) _save();
       },
-      child: Scaffold(
-        backgroundColor: effectiveBg,
-        appBar: NoteEditorAppBar(
-          note: _note,
-          effectiveBg: effectiveBg,
-          uiFg: uiFg,
-          isSaving: _controller.isSaving,
-          markdownMode: _markdownMode,
-          onToggleMarkdown:
-              () => setState(() => _markdownMode = !_markdownMode),
-          onToggleLock: _toggleLock,
-          onUndo: _performUndo,
-          onRedo: _performRedo,
-          onPin: () {
-            _controller.updateNote((n) => n.copyWith(isPinned: !n.isPinned));
-            _save();
-          },
-          onArchive: () {
-            _controller.updateNote(
-              (n) => n.copyWith(isArchived: !n.isArchived),
-            );
-            _save();
-            Navigator.pop(context);
-          },
-          onShare: _shareNote,
-        ),
-        body: Column(
-          children: [
-            if (hasReminder)
-              ReminderBanner(
-                reminder: _note.reminder!,
-                onTap: _setReminder,
-                onRemove: _removeReminder,
-              ),
-            // Campo Titolo
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.lg,
-                AppSpacing.sm,
-                AppSpacing.lg,
-                0,
-              ),
-              child: TextField(
-                controller: _titleController,
-                focusNode: _titleFocusNode,
-                style: _titleStyle(context),
-                maxLines: null,
-                decoration: InputDecoration(
-                  hintText: 'Titolo',
-                  hintStyle: _titleStyle(context).copyWith(
-                    color: (s.titleFontColor ?? effectiveFg).withAlpha(80),
+      child: NoteHero(
+        noteId: _note.id,
+        color: effectiveBg,
+        isPage: true,
+        child: Scaffold(
+          backgroundColor: effectiveBg,
+          appBar: NoteEditorAppBar(
+            note: _note,
+            effectiveBg: effectiveBg,
+            uiFg: uiFg,
+            isSaving: _controller.isSaving,
+            markdownMode: _markdownMode,
+            onToggleMarkdown:
+                () => setState(() => _markdownMode = !_markdownMode),
+            onToggleLock: _toggleLock,
+            onUndo: _performUndo,
+            onRedo: _performRedo,
+            onPin: () {
+              _controller.updateNote((n) => n.copyWith(isPinned: !n.isPinned));
+              _save();
+            },
+            onArchive: () {
+              _controller.updateNote(
+                (n) => n.copyWith(isArchived: !n.isArchived),
+              );
+              _save();
+              Navigator.pop(context);
+            },
+            onShare: _shareNote,
+          ),
+          body: Column(
+            children: [
+              if (hasReminder)
+                ReminderBanner(
+                  reminder: _note.reminder!,
+                  onTap: _setReminder,
+                  onRemove: _removeReminder,
+                ),
+              // Campo Titolo
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.lg,
+                  AppSpacing.sm,
+                  AppSpacing.lg,
+                  0,
+                ),
+                child: TextField(
+                  controller: _titleController,
+                  focusNode: _titleFocusNode,
+                  style: _titleStyle(context),
+                  maxLines: null,
+                  decoration: InputDecoration(
+                    hintText: 'Titolo',
+                    hintStyle: _titleStyle(context).copyWith(
+                      color: (s.titleFontColor ?? effectiveFg).withAlpha(80),
+                    ),
+                    border: InputBorder.none,
                   ),
-                  border: InputBorder.none,
                 ),
               ),
-            ),
-            // Area Contenuto (Nota o Checklist)
-            Expanded(
-              child: ListView(
-                padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-                children: [
-                  if (_note.type == NoteType.checklist)
-                    NoteChecklistEditor(
-                      items: _note.checklistItems,
-                      textStyle: _contentStyle(context),
-                      onChanged: (items) {
-                        _controller.updateNote(
-                          (n) => n.copyWith(checklistItems: items),
-                        );
-                        _save();
-                      },
-                    )
-                  else if (_markdownMode)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.lg,
-                      ),
-                      child: MarkdownBody(
-                        data: _contentController.text,
-                        styleSheet: MarkdownStyleSheet.fromTheme(
-                          Theme.of(context),
-                        ).copyWith(p: _contentStyle(context)),
-                      ),
-                    )
-                  else
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.lg,
-                      ),
-                      child: TextField(
-                        controller: _contentController,
-                        focusNode: _contentFocusNode,
-                        style: _contentStyle(context),
-                        maxLines: null,
-                        textAlignVertical: TextAlignVertical.top,
-                        decoration: const InputDecoration(
-                          hintText: 'Nota',
-                          border: InputBorder.none,
+              // Area Contenuto (Nota o Checklist)
+              Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+                  children: [
+                    if (_note.type == NoteType.checklist)
+                      NoteChecklistEditor(
+                        items: _note.checklistItems,
+                        textStyle: _contentStyle(context),
+                        onChanged: (items) {
+                          _controller.updateNote(
+                            (n) => n.copyWith(checklistItems: items),
+                          );
+                          _save();
+                        },
+                      )
+                    else if (_markdownMode)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.lg,
+                        ),
+                        child: MarkdownBody(
+                          data: _contentController.text,
+                          styleSheet: MarkdownStyleSheet.fromTheme(
+                            Theme.of(context),
+                          ).copyWith(p: _contentStyle(context)),
+                        ),
+                      )
+                    else
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.lg,
+                        ),
+                        child: TextField(
+                          controller: _contentController,
+                          focusNode: _contentFocusNode,
+                          style: _contentStyle(context),
+                          maxLines: null,
+                          textAlignVertical: TextAlignVertical.top,
+                          decoration: const InputDecoration(
+                            hintText: 'Nota',
+                            border: InputBorder.none,
+                          ),
                         ),
                       ),
-                    ),
-                  if (_note.linkedNoteIds.isNotEmpty)
-                    NoteLinkedNotesSection(linkedNotes: linkedNotes),
-                  if (_note.audioNotes.isNotEmpty)
-                    NoteAudioNotesSection(
-                      audioNotes: _note.audioNotes,
-                      onDelete: _deleteAudioNote,
-                    ),
-                ],
-              ),
-            ),
-            // Footer con data ultima modifica
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.lg,
-                vertical: 6,
-              ),
-              child: Text(
-                'Ultima modifica: ${DateFormat('dd MMM, HH:mm').format(_note.updatedAt)}',
-                style: TextStyle(
-                  fontSize: AppFontSizes.sm,
-                  color: effectiveFg.withAlpha(150),
+                    if (_note.linkedNoteIds.isNotEmpty)
+                      NoteLinkedNotesSection(linkedNotes: linkedNotes),
+                    if (_note.audioNotes.isNotEmpty)
+                      NoteAudioNotesSection(
+                        audioNotes: _note.audioNotes,
+                        onDelete: _deleteAudioNote,
+                      ),
+                  ],
                 ),
               ),
-            ),
-          ],
-        ),
-        bottomNavigationBar: NoteEditorBottomBar(
-          effectiveBg: effectiveBg,
-          uiFg: uiFg,
-          hasReminder: hasReminder,
-          isChecklist: _note.type == NoteType.checklist,
-          onBackgroundPicker: _openBackgroundPicker,
-          onStyleEditor: _openStyleEditor,
-          onReminder: _setReminder,
-          onLinkNote: _showLinkNoteDialog,
-          onRecordAudio: _openAudioRecorder,
-          onAddChecklistItem: () {
-            _controller.updateNote(
-              (n) => n.copyWith(
-                checklistItems: [...n.checklistItems, ChecklistItem(text: '')],
+              // Footer con data ultima modifica
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.lg,
+                  vertical: 6,
+                ),
+                child: Text(
+                  'Ultima modifica: ${DateFormat('dd MMM, HH:mm').format(_note.updatedAt)}',
+                  style: TextStyle(
+                    fontSize: AppFontSizes.sm,
+                    color: effectiveFg.withAlpha(150),
+                  ),
+                ),
               ),
-            );
-            _save();
-          },
-          onDelete: _confirmDelete,
+            ],
+          ),
+          bottomNavigationBar: NoteEditorBottomBar(
+            effectiveBg: effectiveBg,
+            uiFg: uiFg,
+            hasReminder: hasReminder,
+            isChecklist: _note.type == NoteType.checklist,
+            onBackgroundPicker: _openBackgroundPicker,
+            onStyleEditor: _openStyleEditor,
+            onReminder: _setReminder,
+            onLinkNote: _showLinkNoteDialog,
+            onRecordAudio: _openAudioRecorder,
+            onAddChecklistItem: () {
+              _controller.updateNote(
+                (n) => n.copyWith(
+                  checklistItems: [
+                    ...n.checklistItems,
+                    ChecklistItem(text: ''),
+                  ],
+                ),
+              );
+              _save();
+            },
+            onDelete: _confirmDelete,
+          ),
         ),
       ),
     );

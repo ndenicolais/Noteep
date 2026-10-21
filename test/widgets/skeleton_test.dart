@@ -67,6 +67,29 @@ void main() {
       expect(find.text('b'), findsOneWidget);
     });
 
+    testWidgets('the outgoing child keeps its state while fading out', (
+      tester,
+    ) async {
+      final controller = ScrollController();
+      addTearDown(controller.dispose);
+      Widget list() => ListView(
+        key: const ValueKey('list'),
+        controller: controller,
+        children: [for (var i = 0; i < 50; i++) Text('row $i')],
+      );
+      await tester.pumpWidget(_app(FadeSwitcher(child: list())));
+      controller.jumpTo(300);
+      await tester.pump();
+
+      await tester.pumpWidget(
+        _app(const FadeSwitcher(child: Text('b', key: ValueKey('b')))),
+      );
+      await tester.pump(const Duration(milliseconds: 100));
+      // Same scroll position: the list was not remounted when it became
+      // the outgoing child.
+      expect(controller.offset, 300);
+    });
+
     testWidgets('switches instantly when animations are disabled', (
       tester,
     ) async {

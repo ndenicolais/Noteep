@@ -17,6 +17,7 @@ import '../theme/app_colors.dart';
 import '../theme/app_font_sizes.dart';
 import '../theme/app_radius.dart';
 import '../theme/app_spacing.dart';
+import 'shared/note_hero.dart';
 import '../utils/note_lock_service.dart';
 import 'shared/error_feedback.dart';
 
@@ -179,114 +180,119 @@ class NoteCard extends ConsumerWidget {
       onTap: onTap ?? () => _openNote(context),
       onLongPressStart:
           (details) => _showQuickActions(context, ref, details.globalPosition),
-      child: Card(
-        color: s.backgroundColor,
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppRadius.md),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.md),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (note.isPinned || note.isLocked || note.reminder != null)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    if (note.reminder != null)
-                      Icon(
-                        Icons.alarm,
-                        size: 14,
-                        color: s.fontColor?.withAlpha(153),
-                        semanticLabel: 'Promemoria impostato',
-                      ),
-                    if (note.isLocked)
-                      Padding(
-                        padding: const EdgeInsets.only(left: AppSpacing.xs),
-                        child: Icon(
-                          Icons.lock_outline,
+      child: NoteHero(
+        noteId: note.id,
+        color: effectiveBg,
+        isPage: false,
+        child: Card(
+          color: s.backgroundColor,
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppRadius.md),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(AppSpacing.md),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (note.isPinned || note.isLocked || note.reminder != null)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      if (note.reminder != null)
+                        Icon(
+                          Icons.alarm,
                           size: 14,
                           color: s.fontColor?.withAlpha(153),
-                          semanticLabel: 'Nota protetta',
+                          semanticLabel: 'Promemoria impostato',
                         ),
-                      ),
-                    if (note.isPinned)
-                      Padding(
-                        padding: const EdgeInsets.only(left: AppSpacing.xs),
-                        child: Icon(
-                          Icons.push_pin,
-                          size: 14,
-                          color: s.fontColor?.withAlpha(153),
-                          semanticLabel: 'Nota fissata',
+                      if (note.isLocked)
+                        Padding(
+                          padding: const EdgeInsets.only(left: AppSpacing.xs),
+                          child: Icon(
+                            Icons.lock_outline,
+                            size: 14,
+                            color: s.fontColor?.withAlpha(153),
+                            semanticLabel: 'Nota protetta',
+                          ),
                         ),
+                      if (note.isPinned)
+                        Padding(
+                          padding: const EdgeInsets.only(left: AppSpacing.xs),
+                          child: Icon(
+                            Icons.push_pin,
+                            size: 14,
+                            color: s.fontColor?.withAlpha(153),
+                            semanticLabel: 'Nota fissata',
+                          ),
+                        ),
+                    ],
+                  ),
+                if (note.isLocked) ...[
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.lock, size: 16, color: textStyle.color),
+                      const SizedBox(width: 6),
+                      Text(
+                        'Nota protetta',
+                        style: textStyle.copyWith(fontStyle: FontStyle.italic),
                       ),
-                  ],
-                ),
-              if (note.isLocked) ...[
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.lock, size: 16, color: textStyle.color),
-                    const SizedBox(width: 6),
+                    ],
+                  ),
+                ] else ...[
+                  if (note.title.isNotEmpty) ...[
                     Text(
-                      'Nota protetta',
-                      style: textStyle.copyWith(fontStyle: FontStyle.italic),
+                      note.title,
+                      style: titleStyle,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
+                    const SizedBox(height: AppSpacing.xs),
                   ],
-                ),
-              ] else ...[
-                if (note.title.isNotEmpty) ...[
-                  Text(
-                    note.title,
-                    style: titleStyle,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: AppSpacing.xs),
+                  if (note.type == NoteType.checklist)
+                    _ChecklistPreview(note: note, textStyle: textStyle)
+                  else
+                    Text(
+                      note.content,
+                      style: textStyle,
+                      maxLines: 8,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                 ],
-                if (note.type == NoteType.checklist)
-                  _ChecklistPreview(note: note, textStyle: textStyle)
-                else
-                  Text(
-                    note.content,
-                    style: textStyle,
-                    maxLines: 8,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-              ],
-              if (note.tags.isNotEmpty) ...[
-                const SizedBox(height: AppSpacing.sm),
-                Wrap(
-                  spacing: 4,
-                  children:
-                      note.tags
-                          .map(
-                            (t) => Chip(
-                              label: Text(
-                                t,
-                                style: TextStyle(
-                                  fontSize: AppFontSizes.xs,
-                                  color:
-                                      Theme.of(
-                                        context,
-                                      ).colorScheme.onSecondaryContainer,
+                if (note.tags.isNotEmpty) ...[
+                  const SizedBox(height: AppSpacing.sm),
+                  Wrap(
+                    spacing: 4,
+                    children:
+                        note.tags
+                            .map(
+                              (t) => Chip(
+                                label: Text(
+                                  t,
+                                  style: TextStyle(
+                                    fontSize: AppFontSizes.xs,
+                                    color:
+                                        Theme.of(
+                                          context,
+                                        ).colorScheme.onSecondaryContainer,
+                                  ),
                                 ),
+                                backgroundColor:
+                                    Theme.of(
+                                      context,
+                                    ).colorScheme.secondaryContainer,
+                                padding: EdgeInsets.zero,
+                                materialTapTargetSize:
+                                    MaterialTapTargetSize.shrinkWrap,
                               ),
-                              backgroundColor:
-                                  Theme.of(
-                                    context,
-                                  ).colorScheme.secondaryContainer,
-                              padding: EdgeInsets.zero,
-                              materialTapTargetSize:
-                                  MaterialTapTargetSize.shrinkWrap,
-                            ),
-                          )
-                          .toList(),
-                ),
+                            )
+                            .toList(),
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),

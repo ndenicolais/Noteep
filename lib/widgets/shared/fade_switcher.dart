@@ -16,7 +16,7 @@ import 'package:flutter/material.dart';
 /// triggers the fade, so data updates inside the same state don't animate.
 /// Children fill the available space (unlike [AnimatedSwitcher]'s default
 /// centered stack), and the fade is skipped when the platform asks to
-/// reduce motion.
+/// reduce motion. Heroes in the outgoing child are disabled.
 class FadeSwitcher extends StatelessWidget {
   const FadeSwitcher({super.key, required this.child});
 
@@ -32,7 +32,16 @@ class FadeSwitcher extends StatelessWidget {
       layoutBuilder:
           (current, previous) => Stack(
             fit: StackFit.expand,
-            children: [...previous, if (current != null) current],
+            children: [
+              // Outgoing children may hold heroes with the same tags as the
+              // incoming one (e.g. note cards when switching grid/list).
+              // Every child gets the same keyed wrapper, so one that turns
+              // from incoming to outgoing keeps its state (scroll position).
+              for (final p in previous)
+                HeroMode(key: p.key, enabled: false, child: p),
+              if (current != null)
+                HeroMode(key: current.key, enabled: true, child: current),
+            ],
           ),
       child: child,
     );
