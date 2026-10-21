@@ -40,32 +40,37 @@ class SearchField extends ConsumerWidget {
         color: Theme.of(context).colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(24),
       ),
-      child: TextField(
-        controller: controller,
-        textAlignVertical: TextAlignVertical.center,
-        decoration: InputDecoration(
-          hintText: hintText,
-          prefixIcon: const Icon(Icons.search),
-          suffixIcon:
-              query.isNotEmpty
-                  ? IconButton(
-                    icon: const Icon(Icons.clear, size: 20),
-                    onPressed: () {
-                      controller.clear();
-                      ref.read(provider.notifier).state = '';
-                      onChanged?.call();
-                    },
-                    tooltip: 'Cancella ricerca',
-                  )
-                  : null,
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.zero,
-          isDense: true,
+      // Fixed-height field inside the app bar: cap the system text size so
+      // the text isn't clipped (the field still grows to 1.5×).
+      child: MediaQuery.withClampedTextScaling(
+        maxScaleFactor: 1.5,
+        child: TextField(
+          controller: controller,
+          textAlignVertical: TextAlignVertical.center,
+          decoration: InputDecoration(
+            hintText: hintText,
+            prefixIcon: const Icon(Icons.search),
+            suffixIcon:
+                query.isNotEmpty
+                    ? IconButton(
+                      icon: const Icon(Icons.clear, size: 20),
+                      onPressed: () {
+                        controller.clear();
+                        ref.read(provider.notifier).state = '';
+                        onChanged?.call();
+                      },
+                      tooltip: 'Cancella ricerca',
+                    )
+                    : null,
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.zero,
+            isDense: true,
+          ),
+          onChanged: (v) {
+            ref.read(provider.notifier).state = v;
+            onChanged?.call();
+          },
         ),
-        onChanged: (v) {
-          ref.read(provider.notifier).state = v;
-          onChanged?.call();
-        },
       ),
     );
   }

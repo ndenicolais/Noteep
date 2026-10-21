@@ -10,6 +10,7 @@
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import '../../models/note_model.dart';
 import '../../theme/app_radius.dart';
 import '../../theme/app_spacing.dart';
@@ -142,7 +143,18 @@ class _ReorderableGridViewState extends State<ReorderableGridView> {
                       ),
                     )
                     : const BoxDecoration(),
-            child: NoteCard(note: note),
+            child: NoteCard(
+              note: note,
+              // Screen-reader alternative to drag & drop, same indices.
+              extraSemanticsActions: {
+                if (i > 0)
+                  const CustomSemanticsAction(label: 'Sposta prima'):
+                      () => widget.onReorder(i, i - 1),
+                if (i < widget.notes.length - 1)
+                  const CustomSemanticsAction(label: 'Sposta dopo'):
+                      () => widget.onReorder(i, i + 1),
+              },
+            ),
           ),
         );
       },

@@ -113,8 +113,8 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
 
   void _showSortSheet(BuildContext context, WidgetRef ref) {
     final current = ref.read(taskSortOrderProvider);
-    showModalBottomSheet(
-      context: context,
+    showAppSheet(
+      context,
       builder:
           (_) => SortSheet(
             current: current,

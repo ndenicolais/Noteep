@@ -28,6 +28,7 @@ import '../screens/home/notes_skeleton.dart';
 import '../screens/home/reorderable_list_view.dart';
 import '../widgets/changelog_dialog.dart';
 import '../widgets/nav_scaffold.dart';
+import '../widgets/shared/app_dialogs.dart';
 import '../widgets/sort_sheet.dart';
 import '../widgets/shared/empty_state.dart';
 import '../widgets/shared/fade_switcher.dart';
@@ -226,8 +227,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void _showSortSheet(BuildContext context, SortOrder current) {
-    showModalBottomSheet(
-      context: context,
+    showAppSheet(
+      context,
       builder:
           (_) => SortSheet(
             current: current,

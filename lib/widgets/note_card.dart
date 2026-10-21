@@ -10,6 +10,7 @@
 
 import '../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/note_model.dart';
 import '../providers/notes_provider.dart';
@@ -27,11 +28,16 @@ class NoteCard extends ConsumerWidget {
     required this.note,
     this.onTap,
     this.onToggleChecklist,
+    this.extraSemanticsActions = const {},
   });
 
   final NoteModel note;
   final VoidCallback? onTap;
   final Function(String)? onToggleChecklist;
+
+  /// Screen-reader actions added by the container (e.g. "Sposta prima/dopo"
+  /// in the Home grid, where reordering is otherwise drag-only).
+  final Map<CustomSemanticsAction, VoidCallback> extraSemanticsActions;
 
   Future<void> _openNote(BuildContext context) async {
     if (note.isLocked) {
@@ -105,7 +111,17 @@ class NoteCard extends ConsumerWidget {
       ],
     );
 
-    if (!context.mounted) return;
+    if (!context.mounted || action == null) return;
+    await _runAction(context, ref, action);
+  }
+
+  /// Runs a quick action, from the long-press menu or from the matching
+  /// screen-reader custom action.
+  Future<void> _runAction(
+    BuildContext context,
+    WidgetRef ref,
+    String action,
+  ) async {
     switch (action) {
       case 'pin':
         notifyOnError(
@@ -176,122 +192,152 @@ class NoteCard extends ConsumerWidget {
           (s.titleIsItalic ?? false) ? FontStyle.italic : FontStyle.normal,
     );
 
-    return GestureDetector(
-      onTap: onTap ?? () => _openNote(context),
-      onLongPressStart:
-          (details) => _showQuickActions(context, ref, details.globalPosition),
-      child: NoteHero(
-        noteId: note.id,
-        color: effectiveBg,
-        isPage: false,
-        child: Card(
-          color: s.backgroundColor,
-          elevation: 2,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppRadius.md),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(AppSpacing.md),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (note.isPinned || note.isLocked || note.reminder != null)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      if (note.reminder != null)
-                        Icon(
-                          Icons.alarm,
-                          size: 14,
-                          color: s.fontColor?.withAlpha(153),
-                          semanticLabel: 'Promemoria impostato',
-                        ),
-                      if (note.isLocked)
-                        Padding(
-                          padding: const EdgeInsets.only(left: AppSpacing.xs),
-                          child: Icon(
-                            Icons.lock_outline,
-                            size: 14,
-                            color: s.fontColor?.withAlpha(153),
-                            semanticLabel: 'Nota protetta',
-                          ),
-                        ),
-                      if (note.isPinned)
-                        Padding(
-                          padding: const EdgeInsets.only(left: AppSpacing.xs),
-                          child: Icon(
-                            Icons.push_pin,
-                            size: 14,
-                            color: s.fontColor?.withAlpha(153),
-                            semanticLabel: 'Nota fissata',
-                          ),
-                        ),
-                    ],
-                  ),
-                if (note.isLocked) ...[
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.lock, size: 16, color: textStyle.color),
-                      const SizedBox(width: 6),
-                      Text(
-                        'Nota protetta',
-                        style: textStyle.copyWith(fontStyle: FontStyle.italic),
+    // One screen-reader node per card: its text, tap to open, and the
+    // long-press menu entries as custom actions (TalkBack "Azioni"), so
+    // they don't depend on a long press at an arbitrary position.
+    return MergeSemantics(
+      child: Semantics(
+        onTapHint: 'Apri nota',
+        customSemanticsActions: {
+          CustomSemanticsAction(label: note.isPinned ? 'Rimuovi pin' : 'Fissa'):
+              () => _runAction(context, ref, 'pin'),
+          CustomSemanticsAction(
+                label: note.isArchived ? 'Ripristina' : 'Archivia',
+              ):
+              () => _runAction(context, ref, 'archive'),
+          CustomSemanticsAction(label: note.isLocked ? 'Sblocca' : 'Blocca'):
+              () => _runAction(context, ref, 'lock'),
+          const CustomSemanticsAction(label: 'Sposta nel cestino'):
+              () => _runAction(context, ref, 'delete'),
+          ...extraSemanticsActions,
+        },
+        child: GestureDetector(
+          onTap: onTap ?? () => _openNote(context),
+          onLongPressStart:
+              (details) =>
+                  _showQuickActions(context, ref, details.globalPosition),
+          child: NoteHero(
+            noteId: note.id,
+            color: effectiveBg,
+            isPage: false,
+            child: Card(
+              color: s.backgroundColor,
+              elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppRadius.md),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(AppSpacing.md),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (note.isPinned || note.isLocked || note.reminder != null)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          if (note.reminder != null)
+                            Icon(
+                              Icons.alarm,
+                              size: 14,
+                              color: s.fontColor?.withAlpha(153),
+                              semanticLabel: 'Promemoria impostato',
+                            ),
+                          if (note.isLocked)
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: AppSpacing.xs,
+                              ),
+                              child: Icon(
+                                Icons.lock_outline,
+                                size: 14,
+                                color: s.fontColor?.withAlpha(153),
+                                semanticLabel: 'Nota protetta',
+                              ),
+                            ),
+                          if (note.isPinned)
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: AppSpacing.xs,
+                              ),
+                              child: Icon(
+                                Icons.push_pin,
+                                size: 14,
+                                color: s.fontColor?.withAlpha(153),
+                                semanticLabel: 'Nota fissata',
+                              ),
+                            ),
+                        ],
                       ),
+                    if (note.isLocked) ...[
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.lock, size: 16, color: textStyle.color),
+                          const SizedBox(width: 6),
+                          Flexible(
+                            child: Text(
+                              'Nota protetta',
+                              style: textStyle.copyWith(
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ] else ...[
+                      if (note.title.isNotEmpty) ...[
+                        Text(
+                          note.title,
+                          style: titleStyle,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: AppSpacing.xs),
+                      ],
+                      if (note.type == NoteType.checklist)
+                        _ChecklistPreview(note: note, textStyle: textStyle)
+                      else
+                        Text(
+                          note.content,
+                          style: textStyle,
+                          maxLines: 8,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                     ],
-                  ),
-                ] else ...[
-                  if (note.title.isNotEmpty) ...[
-                    Text(
-                      note.title,
-                      style: titleStyle,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: AppSpacing.xs),
-                  ],
-                  if (note.type == NoteType.checklist)
-                    _ChecklistPreview(note: note, textStyle: textStyle)
-                  else
-                    Text(
-                      note.content,
-                      style: textStyle,
-                      maxLines: 8,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                ],
-                if (note.tags.isNotEmpty) ...[
-                  const SizedBox(height: AppSpacing.sm),
-                  Wrap(
-                    spacing: 4,
-                    children:
-                        note.tags
-                            .map(
-                              (t) => Chip(
-                                label: Text(
-                                  t,
-                                  style: TextStyle(
-                                    fontSize: AppFontSizes.xs,
-                                    color:
+                    if (note.tags.isNotEmpty) ...[
+                      const SizedBox(height: AppSpacing.sm),
+                      Wrap(
+                        spacing: 4,
+                        children:
+                            note.tags
+                                .map(
+                                  (t) => Chip(
+                                    label: Text(
+                                      t,
+                                      style: TextStyle(
+                                        fontSize: AppFontSizes.xs,
+                                        color:
+                                            Theme.of(
+                                              context,
+                                            ).colorScheme.onSecondaryContainer,
+                                      ),
+                                    ),
+                                    backgroundColor:
                                         Theme.of(
                                           context,
-                                        ).colorScheme.onSecondaryContainer,
+                                        ).colorScheme.secondaryContainer,
+                                    padding: EdgeInsets.zero,
+                                    materialTapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
                                   ),
-                                ),
-                                backgroundColor:
-                                    Theme.of(
-                                      context,
-                                    ).colorScheme.secondaryContainer,
-                                padding: EdgeInsets.zero,
-                                materialTapTargetSize:
-                                    MaterialTapTargetSize.shrinkWrap,
-                              ),
-                            )
-                            .toList(),
-                  ),
-                ],
-              ],
+                                )
+                                .toList(),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
             ),
           ),
         ),

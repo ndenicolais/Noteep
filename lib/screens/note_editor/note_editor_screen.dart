@@ -316,8 +316,8 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
     final allNotes =
         ref.read(activeNotesProvider).where((n) => n.id != _note.id).toList();
 
-    showModalBottomSheet(
-      context: context,
+    showAppSheet(
+      context,
       isScrollControlled: true,
       builder:
           (ctx) => NoteLinkSheet(
@@ -371,8 +371,8 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
   }
 
   void _openStyleEditor() {
-    showModalBottomSheet(
-      context: context,
+    showAppSheet(
+      context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder:
@@ -388,8 +388,8 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
 
   void _openBackgroundPicker() {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    showModalBottomSheet(
-      context: context,
+    showAppSheet(
+      context,
       builder:
           (ctx) => Padding(
             padding: const EdgeInsets.all(AppSpacing.lg),
@@ -425,8 +425,8 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
   // ─── Audio notes ──────────────────────────────────────────────────────────
 
   Future<void> _openAudioRecorder() async {
-    final recorded = await showModalBottomSheet<AudioNote>(
-      context: context,
+    final recorded = await showAppSheet<AudioNote>(
+      context,
       isScrollControlled: true,
       builder: (_) => const AudioRecorderSheet(),
     );

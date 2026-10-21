@@ -24,8 +24,8 @@ void showBackupFrequencySheet(
   WidgetRef ref,
   BackupFrequency current,
 ) {
-  showModalBottomSheet(
-    context: context,
+  showAppSheet(
+    context,
     builder: (_) {
       return Column(
         mainAxisSize: MainAxisSize.min,
@@ -121,8 +121,8 @@ Future<void> _restoreBackup(
 /// Bottom sheet listing saved local backups, with restore and delete.
 void showBackupsSheet(BuildContext context, WidgetRef ref) {
   final screenContext = context;
-  showModalBottomSheet(
-    context: context,
+  showAppSheet(
+    context,
     isScrollControlled: true,
     builder: (_) {
       return FutureBuilder(

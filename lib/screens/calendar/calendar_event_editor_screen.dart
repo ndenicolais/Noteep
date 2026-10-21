@@ -401,8 +401,8 @@ class _CalendarEventEditorScreenState
               title: const Text('Ricorrenza'),
               subtitle: Text(_event.recurrence.label),
               onTap: () {
-                showModalBottomSheet(
-                  context: context,
+                showAppSheet(
+                  context,
                   builder:
                       (ctx) => ListView(
                         shrinkWrap: true,

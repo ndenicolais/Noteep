@@ -10,18 +10,9 @@
 
 import 'package:flutter/material.dart';
 import '../../models/note_model.dart';
-import '../../theme/app_font_sizes.dart';
 import '../../theme/app_spacing.dart';
 import 'color_picker_widget.dart';
-
-const _kFonts = [
-  'Exo 2',
-  'Montserrat',
-  'Open Sans',
-  'Dancing Script',
-  'Playfair Display',
-  'Pacifico',
-];
+import 'font_family_picker.dart';
 
 class TitleStyleControls extends StatelessWidget {
   const TitleStyleControls({
@@ -50,31 +41,9 @@ class TitleStyleControls extends StatelessWidget {
         // Font family
         Text('Font', style: Theme.of(context).textTheme.labelLarge),
         const SizedBox(height: AppSpacing.sm),
-        SizedBox(
-          height: 44,
-          // An always-visible scrollbar hints that more fonts are
-          // scrollable off-screen — otherwise desktop/web users with a
-          // mouse (no swipe gesture) may never discover the rest.
-          child: Scrollbar(
-            thumbVisibility: true,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: _kFonts.length,
-              separatorBuilder: (_, __) => const SizedBox(width: AppSpacing.sm),
-              itemBuilder: (_, i) {
-                final f = _kFonts[i];
-                return ChoiceChip(
-                  label: Text(
-                    f,
-                    style: TextStyle(fontFamily: f, fontSize: AppFontSizes.sm),
-                  ),
-                  selected: effectiveFamily == f,
-                  onSelected:
-                      (_) => onChanged(style.copyWith(titleFontFamily: f)),
-                );
-              },
-            ),
-          ),
+        FontFamilyPicker(
+          selected: effectiveFamily,
+          onSelected: (f) => onChanged(style.copyWith(titleFontFamily: f)),
         ),
         const SizedBox(height: AppSpacing.lg),
 

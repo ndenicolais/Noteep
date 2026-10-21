@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
 import '../../theme/app_spacing.dart';
+import '../../widgets/shared/app_dialogs.dart';
 import 'calendar_event_tile.dart';
 
 /// Shows the bottom sheet listing all events of a given [day], with a
@@ -25,8 +26,8 @@ void showDayEventsBottomSheet(
   final colorScheme = Theme.of(context).colorScheme;
   final dateStr = DateFormat('EEEE, d MMMM yyyy', 'it_IT').format(day);
 
-  showModalBottomSheet(
-    context: context,
+  showAppSheet(
+    context,
     isScrollControlled: true,
     builder: (ctx) {
       return DraggableScrollableSheet(

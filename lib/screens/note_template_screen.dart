@@ -13,12 +13,13 @@ import '../models/note_model.dart';
 import '../models/note_template.dart';
 import '../theme/app_font_sizes.dart';
 import '../theme/app_spacing.dart';
+import '../widgets/shared/app_dialogs.dart';
 
 /// Shows a bottom sheet to pick a note template.
 /// Returns the chosen [NoteTemplate] or null if dismissed.
 Future<NoteTemplate?> showNoteTemplateSheet(BuildContext context) {
-  return showModalBottomSheet<NoteTemplate>(
-    context: context,
+  return showAppSheet<NoteTemplate>(
+    context,
     isScrollControlled: true,
     builder: (_) => const _NoteTemplateSheet(),
   );

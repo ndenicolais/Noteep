@@ -24,6 +24,7 @@ const List<ChangelogEntry> changelogEntries = [
       'Nuova griglia della Home "a mattoncini": ogni nota occupa solo lo spazio che le serve, senza vuoti tra le note corte e senza tagliare quelle lunghe.',
       'Toccando la notifica di un promemoria si apre direttamente la nota, l\'attività o l\'evento collegato, anche ad app chiusa.',
       'Animazioni più fluide: la nota si espande dalla sua card quando la apri e il passaggio tra le sezioni del menu avviene in dissolvenza. Con le animazioni ridotte del sistema restano disattivate.',
+      'Accessibilità: con TalkBack ogni nota si legge per intero e le azioni rapide (fissa, archivia, blocca, cestino, sposta) sono nel menu Azioni; con il testo di sistema molto grande schede e campi non vengono più tagliati, e i pannelli dal basso non finiscono sotto la barra di navigazione.',
     ],
   ),
   ChangelogEntry(
