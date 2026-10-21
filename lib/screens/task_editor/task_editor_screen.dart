@@ -19,6 +19,7 @@ import '../../providers/tasks_provider.dart';
 import '../../providers/tasks_undo_redo_provider.dart';
 import '../../theme/app_font_sizes.dart';
 import '../../theme/app_spacing.dart';
+import '../../core/routing/notification_target.dart';
 import '../../utils/notification_service.dart';
 import '../../utils/recurrence.dart';
 import '../../utils/dialogs/move_to_list_dialog.dart';
@@ -331,6 +332,7 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
                 _task.description.length > 80 ? 80 : _task.description.length,
               ),
       scheduledAt: scheduled,
+      target: NotificationTarget.task(_task.id),
     );
 
     if (mounted) {

@@ -90,7 +90,7 @@ Noteep is a full-featured Flutter note-taking and productivity app. It combines 
 | Archive / Trash | Same soft-delete pipeline as notes and tasks |
 
 ### Reminders Screen
-Dedicated screen listing all upcoming reminders across notes, tasks, and calendar events in a single view.
+Dedicated screen listing all upcoming reminders across notes, tasks, and calendar events in a single view. Tapping a reminder notification opens the linked note, task or event directly, even from a cold start.
 
 ### Statistics
 Visual dashboard with counts broken down by entity type (Notes, Tasks, Calendar Events) and state (Active, Archived, Trashed). Charts powered by `fl_chart`.

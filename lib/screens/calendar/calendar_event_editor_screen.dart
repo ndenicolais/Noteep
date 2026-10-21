@@ -15,6 +15,7 @@ import '../../models/calendar_model.dart';
 import '../../providers/calendar_provider.dart';
 import '../../theme/app_font_sizes.dart';
 import '../../theme/app_spacing.dart';
+import '../../core/routing/notification_target.dart';
 import '../../utils/notification_service.dart';
 import '../../utils/recurrence.dart';
 import '../../widgets/shared/app_dialogs.dart';
@@ -192,6 +193,7 @@ class _CalendarEventEditorScreenState
                 _event.description.length > 80 ? 80 : _event.description.length,
               ),
       scheduledAt: scheduled,
+      target: NotificationTarget.event(_event.id),
     );
 
     if (mounted) {

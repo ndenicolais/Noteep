@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/routing/app_router.dart';
+import 'core/routing/notification_launch_handler.dart';
 import 'providers/auth_provider.dart';
 import 'providers/notes_provider.dart';
 import 'providers/tasks_provider.dart';
@@ -75,7 +76,11 @@ class NotesApp extends ConsumerWidget {
       home: authState.when(
         loading: () => const _SplashScreen(),
         error: (_, __) => const LoginScreen(),
-        data: (user) => user != null ? const HomeScreen() : const LoginScreen(),
+        data:
+            (user) =>
+                user != null
+                    ? NotificationLaunchHandler(child: const HomeScreen())
+                    : const LoginScreen(),
       ),
       onGenerateRoute: AppRouter.onGenerateRoute,
       onUnknownRoute: AppRouter.onUnknownRoute,

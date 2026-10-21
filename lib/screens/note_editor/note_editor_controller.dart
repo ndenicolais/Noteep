@@ -14,6 +14,7 @@ import '../../models/audio_note.dart';
 import '../../models/note_model.dart';
 import '../../providers/notes_provider.dart';
 import '../../providers/notes_undo_redo_provider.dart';
+import '../../core/routing/notification_target.dart';
 import '../../utils/notification_service.dart';
 
 /// Owns [NoteEditorScreen]'s note state and every Firestore/notification
@@ -97,6 +98,7 @@ class NoteEditorController extends ChangeNotifier {
               ? 'Hai un promemoria per questa nota'
               : content.substring(0, content.length > 80 ? 80 : content.length),
       scheduledAt: scheduled,
+      target: NotificationTarget.note(_note.id),
     );
   }
 

@@ -1,16 +1,24 @@
 // Noteep — Copyright © 2026 Nicola De Nicolais — All Rights Reserved.
 // Licensed under the GNU GPL v3 with Additional Commercial Restrictions.
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz_data;
+import '../core/routing/notification_target.dart';
 
 class NotificationService {
   NotificationService._();
   static final NotificationService instance = NotificationService._();
 
   final _plugin = FlutterLocalNotificationsPlugin();
+
+  /// Target of the last tapped reminder, waiting to be opened by
+  /// `NotificationLaunchHandler` (which resets it to `null` once handled).
+  /// Set both when the app was launched by the tap and when it was already
+  /// running.
+  final ValueNotifier<NotificationTarget?> pendingTarget = ValueNotifier(null);
 
   static const _channelId = 'noteep_reminders';
   static const _channelName = 'Promemoria';
@@ -33,7 +41,21 @@ class NotificationService {
       android: androidSettings,
       iOS: iosSettings,
     );
-    await _plugin.initialize(settings);
+    await _plugin.initialize(
+      settings,
+      onDidReceiveNotificationResponse: (r) => _onTapped(r.payload),
+    );
+
+    // App started (cold) by tapping a notification.
+    final launch = await _plugin.getNotificationAppLaunchDetails();
+    if (launch?.didNotificationLaunchApp ?? false) {
+      _onTapped(launch!.notificationResponse?.payload);
+    }
+  }
+
+  void _onTapped(String? payload) {
+    final target = NotificationTarget.parse(payload);
+    if (target != null) pendingTarget.value = target;
   }
 
   Future<bool> requestPermissions() async {
@@ -50,6 +72,7 @@ class NotificationService {
     required String title,
     required String body,
     required DateTime scheduledAt,
+    required NotificationTarget target,
   }) async {
     final tzDate = tz.TZDateTime.from(scheduledAt, tz.local);
     if (tzDate.isBefore(tz.TZDateTime.now(tz.local))) return;
@@ -73,6 +96,7 @@ class NotificationService {
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
+      payload: target.encode(),
     );
   }
 
