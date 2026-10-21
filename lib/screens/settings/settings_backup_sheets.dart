@@ -12,8 +12,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/settings/backup_provider.dart';
 import '../../providers/settings/backup_restore.dart';
-import '../../theme/app_radius.dart';
+import '../../theme/app_font_sizes.dart';
+import '../../theme/app_spacing.dart';
 import '../../utils/backup_service.dart' show BackupFrequency, BackupService;
+import '../../widgets/shared/app_dialogs.dart';
 import '../../widgets/shared/error_feedback.dart';
 
 /// Bottom sheet to pick the automatic backup frequency.
@@ -24,18 +26,18 @@ void showBackupFrequencySheet(
 ) {
   showModalBottomSheet(
     context: context,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xl)),
-    ),
     builder: (_) {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           const Padding(
-            padding: EdgeInsets.all(16),
+            padding: EdgeInsets.all(AppSpacing.lg),
             child: Text(
               'Frequenza backup',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: AppFontSizes.xl,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           ListTile(
@@ -77,7 +79,7 @@ void showBackupFrequencySheet(
               Navigator.pop(context);
             },
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.lg),
         ],
       );
     },
@@ -91,27 +93,14 @@ Future<void> _restoreBackup(
   WidgetRef ref,
   String path,
 ) async {
-  final confirmed = await showDialog<bool>(
-    context: context,
-    builder:
-        (ctx) => AlertDialog(
-          title: const Text('Ripristina backup'),
-          content: const Text(
-            'I dati attuali (note, task ed eventi) verranno sostituiti con quelli del backup. Continuare?',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('Annulla'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('Ripristina'),
-            ),
-          ],
-        ),
+  final confirmed = await showAppConfirmDialog(
+    context,
+    title: 'Ripristina backup',
+    message:
+        'I dati attuali (note, task ed eventi) verranno sostituiti con quelli del backup. Continuare?',
+    confirmLabel: 'Ripristina',
   );
-  if (confirmed != true) return;
+  if (!confirmed || !context.mounted) return;
 
   final restorer = ref.read(backupRestorerProvider);
   final data = await restorer.readZip(path);
@@ -134,9 +123,6 @@ void showBackupsSheet(BuildContext context, WidgetRef ref) {
   final screenContext = context;
   showModalBottomSheet(
     context: context,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xl)),
-    ),
     isScrollControlled: true,
     builder: (_) {
       return FutureBuilder(
@@ -144,14 +130,14 @@ void showBackupsSheet(BuildContext context, WidgetRef ref) {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Padding(
-              padding: EdgeInsets.all(16),
+              padding: EdgeInsets.all(AppSpacing.lg),
               child: CircularProgressIndicator(),
             );
           }
 
           if (snapshot.hasError || !snapshot.hasData) {
             return Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(AppSpacing.lg),
               child: Text(
                 'Errore nel caricamento dei backup: ${snapshot.error}',
               ),
@@ -161,7 +147,7 @@ void showBackupsSheet(BuildContext context, WidgetRef ref) {
           final backups = snapshot.data!;
           if (backups.isEmpty) {
             return const Padding(
-              padding: EdgeInsets.all(16),
+              padding: EdgeInsets.all(AppSpacing.lg),
               child: Text('Nessun backup disponibile'),
             );
           }
@@ -175,11 +161,11 @@ void showBackupsSheet(BuildContext context, WidgetRef ref) {
                 itemBuilder: (context, index) {
                   if (index == 0) {
                     return const Padding(
-                      padding: EdgeInsets.all(16),
+                      padding: EdgeInsets.all(AppSpacing.lg),
                       child: Text(
                         'Backup disponibili',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: AppFontSizes.xl,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

@@ -12,6 +12,7 @@ import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
+import '../../theme/app_spacing.dart';
 import 'calendar_day_cell.dart';
 import 'calendar_day_events_sheet.dart';
 import 'calendar_utils.dart';
@@ -48,7 +49,10 @@ class CalendarMonthView extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.xs,
+            vertical: AppSpacing.xxs,
+          ),
           child: Row(
             children: [
               IconButton(
@@ -82,7 +86,9 @@ class CalendarMonthView extends StatelessWidget {
                     (d) => Expanded(
                       child: Center(
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: AppSpacing.xs,
+                          ),
                           child: Text(
                             d,
                             style: TextStyle(

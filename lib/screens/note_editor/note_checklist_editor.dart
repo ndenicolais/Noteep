@@ -10,6 +10,7 @@
 
 import 'package:flutter/material.dart';
 import '../../models/note_model.dart';
+import '../../theme/app_spacing.dart';
 
 class NoteChecklistEditor extends StatelessWidget {
   const NoteChecklistEditor({
@@ -32,7 +33,7 @@ class NoteChecklistEditor extends StatelessWidget {
       itemBuilder: (context, index) {
         final item = items[index];
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
           child: Row(
             children: [
               Checkbox(

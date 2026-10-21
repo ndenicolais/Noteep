@@ -12,6 +12,8 @@ import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
+import '../../theme/app_font_sizes.dart';
+import '../../theme/app_spacing.dart';
 import 'calendar_event_tile.dart';
 import 'calendar_utils.dart';
 
@@ -44,7 +46,10 @@ class CalendarDayView extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.xs,
+            vertical: AppSpacing.xxs,
+          ),
           child: Row(
             children: [
               IconButton(
@@ -57,7 +62,7 @@ class CalendarDayView extends StatelessWidget {
                   dateStr,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: AppFontSizes.md,
                     fontWeight: FontWeight.bold,
                     color:
                         isToday ? colorScheme.primary : colorScheme.onSurface,
@@ -85,12 +90,12 @@ class CalendarDayView extends StatelessWidget {
                           size: 64,
                           color: colorScheme.outlineVariant,
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: AppSpacing.lg),
                         Text(
                           'Nessun evento per questo giorno',
                           style: TextStyle(
                             color: colorScheme.outline,
-                            fontSize: 16,
+                            fontSize: AppFontSizes.lg,
                           ),
                         ),
                       ],

@@ -16,6 +16,7 @@ import '../providers/notes_provider.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_font_sizes.dart';
 import '../theme/app_radius.dart';
+import '../theme/app_spacing.dart';
 import '../utils/note_lock_service.dart';
 import 'shared/error_feedback.dart';
 
@@ -58,7 +59,7 @@ class NoteCard extends ConsumerWidget {
           child: Row(
             children: [
               Icon(note.isPinned ? Icons.push_pin : Icons.push_pin_outlined),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppSpacing.md),
               Text(note.isPinned ? 'Rimuovi pin' : 'Fissa'),
             ],
           ),
@@ -68,7 +69,7 @@ class NoteCard extends ConsumerWidget {
           child: Row(
             children: [
               Icon(note.isArchived ? Icons.unarchive : Icons.archive_outlined),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppSpacing.md),
               Text(note.isArchived ? 'Ripristina' : 'Archivia'),
             ],
           ),
@@ -78,7 +79,7 @@ class NoteCard extends ConsumerWidget {
           child: Row(
             children: [
               Icon(note.isLocked ? Icons.lock_open_outlined : Icons.lock),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppSpacing.md),
               Text(note.isLocked ? 'Sblocca' : 'Blocca'),
             ],
           ),
@@ -92,7 +93,7 @@ class NoteCard extends ConsumerWidget {
                 Icons.delete_outline,
                 color: Theme.of(context).colorScheme.error,
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppSpacing.md),
               Text(
                 'Sposta nel cestino',
                 style: TextStyle(color: Theme.of(context).colorScheme.error),
@@ -185,7 +186,7 @@ class NoteCard extends ConsumerWidget {
           borderRadius: BorderRadius.circular(AppRadius.md),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(AppSpacing.md),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -203,7 +204,7 @@ class NoteCard extends ConsumerWidget {
                       ),
                     if (note.isLocked)
                       Padding(
-                        padding: const EdgeInsets.only(left: 4),
+                        padding: const EdgeInsets.only(left: AppSpacing.xs),
                         child: Icon(
                           Icons.lock_outline,
                           size: 14,
@@ -213,7 +214,7 @@ class NoteCard extends ConsumerWidget {
                       ),
                     if (note.isPinned)
                       Padding(
-                        padding: const EdgeInsets.only(left: 4),
+                        padding: const EdgeInsets.only(left: AppSpacing.xs),
                         child: Icon(
                           Icons.push_pin,
                           size: 14,
@@ -243,7 +244,7 @@ class NoteCard extends ConsumerWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: AppSpacing.xs),
                 ],
                 if (note.type == NoteType.checklist)
                   _ChecklistPreview(note: note, textStyle: textStyle)
@@ -256,7 +257,7 @@ class NoteCard extends ConsumerWidget {
                   ),
               ],
               if (note.tags.isNotEmpty) ...[
-                const SizedBox(height: 8),
+                const SizedBox(height: AppSpacing.sm),
                 Wrap(
                   spacing: 4,
                   children:
@@ -314,7 +315,7 @@ class _ChecklistPreview extends StatelessWidget {
                 size: 16,
                 color: textStyle.color,
               ),
-              const SizedBox(width: 4),
+              const SizedBox(width: AppSpacing.xs),
               Expanded(
                 child: Text(
                   item.text,

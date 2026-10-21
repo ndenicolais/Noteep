@@ -10,6 +10,7 @@
 
 import 'package:flutter/material.dart';
 import '../../models/audio_note.dart';
+import '../../theme/app_spacing.dart';
 import 'note_audio_player_tile.dart';
 
 /// "Audio" section listing the audio notes attached to the current note.
@@ -31,7 +32,7 @@ class NoteAudioNotesSection extends StatelessWidget {
       children: [
         const Divider(height: 24),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
           child: Row(
             children: [
               Icon(Icons.mic_none_outlined, size: 16, color: onSurfaceVariant),

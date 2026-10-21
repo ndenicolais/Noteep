@@ -10,6 +10,7 @@
 
 import 'package:flutter/material.dart';
 import '../../models/calendar_model.dart';
+import '../../theme/app_spacing.dart';
 
 class CalendarDayCell extends StatelessWidget {
   const CalendarDayCell({
@@ -84,8 +85,8 @@ class CalendarDayCell extends StatelessWidget {
                     // Day number
                     Padding(
                       padding: const EdgeInsets.only(
-                        left: 4,
-                        right: 4,
+                        left: AppSpacing.xs,
+                        right: AppSpacing.xs,
                         top: _topPad,
                       ),
                       child: Align(
@@ -120,7 +121,7 @@ class CalendarDayCell extends StatelessWidget {
                     ...visibleEvents.map(
                       (e) => Padding(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 2,
+                          horizontal: AppSpacing.xxs,
                           vertical: _chipSpacing / 2,
                         ),
                         child: SizedBox(
@@ -143,7 +144,9 @@ class CalendarDayCell extends StatelessWidget {
                               children: [
                                 if (e.isBirthday || e.isNameDay)
                                   Padding(
-                                    padding: const EdgeInsets.only(right: 4),
+                                    padding: const EdgeInsets.only(
+                                      right: AppSpacing.xs,
+                                    ),
                                     child: Icon(
                                       e.isBirthday
                                           ? Icons.cake
@@ -180,7 +183,10 @@ class CalendarDayCell extends StatelessWidget {
                     // Overflow indicator
                     if (overflowCount > 0)
                       Padding(
-                        padding: const EdgeInsets.only(left: 4, top: 1),
+                        padding: const EdgeInsets.only(
+                          left: AppSpacing.xs,
+                          top: 1,
+                        ),
                         child: Text(
                           '+$overflowCount',
                           style: TextStyle(

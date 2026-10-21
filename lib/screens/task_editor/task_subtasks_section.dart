@@ -10,6 +10,8 @@
 
 import 'package:flutter/material.dart';
 import '../../models/subtask_model.dart';
+import '../../theme/app_font_sizes.dart';
+import '../../theme/app_spacing.dart';
 
 /// Lists the task's subtasks with completion checkboxes and delete buttons.
 /// Only rendered when [subtasks] is non-empty.
@@ -29,24 +31,27 @@ class TaskSubtasksList extends StatelessWidget {
   Widget build(BuildContext context) {
     final completed = subtasks.where((s) => !s.isCompleted).length;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.lg,
+        vertical: AppSpacing.sm,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             'Sottoattività ($completed/${subtasks.length})',
             style: TextStyle(
-              fontSize: 12,
+              fontSize: AppFontSizes.sm,
               color: Theme.of(context).colorScheme.primary,
               fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
           ...subtasks.asMap().entries.map((entry) {
             final index = entry.key;
             final subtask = entry.value;
             return Padding(
-              padding: const EdgeInsets.only(bottom: 4),
+              padding: const EdgeInsets.only(bottom: AppSpacing.xs),
               child: Row(
                 children: [
                   Checkbox(
@@ -100,7 +105,10 @@ class TaskAddSubtaskField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.lg,
+        vertical: AppSpacing.sm,
+      ),
       child: Row(
         children: [
           Expanded(
@@ -113,14 +121,14 @@ class TaskAddSubtaskField extends StatelessWidget {
                 ),
                 isDense: true,
                 contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
+                  horizontal: AppSpacing.md,
+                  vertical: AppSpacing.sm,
                 ),
               ),
               onSubmitted: (_) => onAdd(),
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: AppSpacing.sm),
           IconButton(icon: const Icon(Icons.add), onPressed: onAdd),
         ],
       ),

@@ -11,6 +11,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../../models/note_model.dart';
+import '../../theme/app_spacing.dart';
 import '../../widgets/note_card.dart';
 import 'note_swipe_actions.dart';
 
@@ -31,7 +32,12 @@ class ReorderableListViewWidget extends StatelessWidget {
         dragDevices: {PointerDeviceKind.touch, PointerDeviceKind.mouse},
       ),
       child: ReorderableListView.builder(
-        padding: const EdgeInsets.fromLTRB(12, 12, 12, 80),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.md,
+          AppSpacing.md,
+          AppSpacing.md,
+          80,
+        ),
         physics: const AlwaysScrollableScrollPhysics(),
         buildDefaultDragHandles: false,
         // onReorderItem gives the post-removal index; onReorder (and
@@ -44,7 +50,7 @@ class ReorderableListViewWidget extends StatelessWidget {
             key: ValueKey(note.id),
             index: i,
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.only(bottom: AppSpacing.sm),
               child: NoteSwipeActions(
                 note: note,
                 child: MouseRegion(

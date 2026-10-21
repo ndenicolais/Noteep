@@ -11,6 +11,8 @@
 import 'package:flutter/material.dart';
 import '../models/note_model.dart';
 import '../models/note_template.dart';
+import '../theme/app_font_sizes.dart';
+import '../theme/app_spacing.dart';
 
 /// Shows a bottom sheet to pick a note template.
 /// Returns the chosen [NoteTemplate] or null if dismissed.
@@ -18,9 +20,6 @@ Future<NoteTemplate?> showNoteTemplateSheet(BuildContext context) {
   return showModalBottomSheet<NoteTemplate>(
     context: context,
     isScrollControlled: true,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-    ),
     builder: (_) => const _NoteTemplateSheet(),
   );
 }
@@ -43,7 +42,7 @@ class _NoteTemplateSheet extends StatelessWidget {
       builder: (context, scrollController) {
         return Column(
           children: [
-            const SizedBox(height: 12),
+            const SizedBox(height: AppSpacing.md),
             Container(
               width: 40,
               height: 4,
@@ -52,9 +51,9 @@ class _NoteTemplateSheet extends StatelessWidget {
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
               child: Text(
                 'Scegli un modello',
                 style: Theme.of(
@@ -62,14 +61,19 @@ class _NoteTemplateSheet extends StatelessWidget {
                 ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacing.sm),
             Expanded(
               child: ListView(
                 controller: scrollController,
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.lg,
+                  AppSpacing.sm,
+                  AppSpacing.lg,
+                  AppSpacing.xxl,
+                ),
                 children: [
                   _TemplateSection(title: 'Note', templates: textTemplates),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: AppSpacing.sm),
                   _TemplateSection(
                     title: 'Checklist',
                     templates: checklistTemplates,
@@ -95,7 +99,7 @@ class _TemplateSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
           child: Text(
             title,
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
@@ -117,7 +121,7 @@ class _TemplateCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isChecklist = template.type == NoteType.checklist;
     return Card(
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: const EdgeInsets.only(bottom: AppSpacing.sm),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: () => Navigator.pop(context, template),
@@ -137,7 +141,7 @@ class _TemplateCard extends StatelessWidget {
                 child: Center(
                   child: Text(
                     template.icon,
-                    style: const TextStyle(fontSize: 22),
+                    style: const TextStyle(fontSize: AppFontSizes.xxl),
                   ),
                 ),
               ),
@@ -152,7 +156,7 @@ class _TemplateCard extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: AppSpacing.xxs),
                     Text(
                       template.description,
                       style: Theme.of(context).textTheme.bodySmall,
@@ -162,7 +166,7 @@ class _TemplateCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: AppSpacing.sm),
               Icon(
                 isChecklist
                     ? Icons.checklist_rtl_outlined

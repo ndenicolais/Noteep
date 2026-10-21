@@ -20,6 +20,7 @@ import 'providers/settings/theme_provider.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/boot_error_screen.dart';
 import 'screens/home_screen.dart';
+import 'theme/app_spacing.dart';
 import 'theme/app_theme.dart';
 import 'utils/app_bootstrap.dart';
 import 'utils/widget_service.dart';
@@ -112,7 +113,7 @@ class _SplashScreen extends StatelessWidget {
                 color: Theme.of(context).colorScheme.onPrimaryContainer,
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSpacing.xl),
             const CircularProgressIndicator(),
           ],
         ),

@@ -10,6 +10,7 @@
 
 import 'package:flutter/material.dart';
 import '../core/routing/app_router.dart';
+import '../theme/app_spacing.dart';
 import 'app_drawer.dart';
 
 export '../core/routing/app_router.dart' show AppRoutes;
@@ -62,23 +63,23 @@ class _NavScaffoldState extends State<NavScaffold> {
             if (widget.section == DrawerSection.home ||
                 widget.section == DrawerSection.tasks ||
                 widget.section == DrawerSection.calendar) ...[
-              const SizedBox(width: 32),
+              const SizedBox(width: AppSpacing.xxl),
               Image.asset(
                 'assets/images/app_logo_icon.png',
                 width: 24,
                 height: 24,
               ),
-              const SizedBox(width: 4),
+              const SizedBox(width: AppSpacing.xs),
               Text(
                 'Noteep',
                 style: Theme.of(
                   context,
                 ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
               ),
-              const SizedBox(width: 16),
+              const SizedBox(width: AppSpacing.lg),
             ],
           ],
-          const SizedBox(width: 32),
+          const SizedBox(width: AppSpacing.xxl),
           if (widget.titleWidget != null) Flexible(child: widget.titleWidget!),
         ],
       ),
@@ -95,7 +96,7 @@ class _NavScaffoldState extends State<NavScaffold> {
       return Scaffold(
         appBar: _buildAppBar(
           hamburger: IconButton(
-            padding: const EdgeInsets.only(left: 32),
+            padding: const EdgeInsets.only(left: AppSpacing.xxl),
             icon: const Icon(Icons.menu),
             onPressed: _toggleCollapse,
             tooltip: _collapsed ? 'Espandi menu' : 'Comprimi menu',

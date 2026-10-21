@@ -14,6 +14,7 @@ import 'package:noteep/providers/settings/ui_provider.dart';
 import '../../providers/calendar_provider.dart';
 import '../../providers/notes_provider.dart';
 import '../../providers/tasks_provider.dart';
+import '../../theme/app_spacing.dart';
 import 'statistics_widgets.dart';
 
 /// Class d'appoggio immutabile per aggregare i dati ed evitare re-build inutili
@@ -94,20 +95,20 @@ class StatisticsScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Statistiche')),
       body: const SingleChildScrollView(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(AppSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _NotesSection(),
-            SizedBox(height: 24),
+            SizedBox(height: AppSpacing.xl),
             _TasksSection(),
-            SizedBox(height: 24),
+            SizedBox(height: AppSpacing.xl),
             _CalendarSection(),
-            SizedBox(height: 24),
+            SizedBox(height: AppSpacing.xl),
             _TagsSection(),
-            SizedBox(height: 32),
+            SizedBox(height: AppSpacing.xxl),
             _ChartsSection(),
-            SizedBox(height: 32),
+            SizedBox(height: AppSpacing.xxl),
           ],
         ),
       ),
@@ -129,7 +130,7 @@ class _NotesSection extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const StatsSectionHeader(title: 'Note', icon: Icons.notes),
-        const SizedBox(height: 12),
+        const SizedBox(height: AppSpacing.md),
         StatsGrid(
           items: [
             StatsDataItem(
@@ -171,7 +172,7 @@ class _TasksSection extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const StatsSectionHeader(title: 'Task', icon: Icons.task_alt),
-        const SizedBox(height: 12),
+        const SizedBox(height: AppSpacing.md),
         StatsGrid(
           items: [
             StatsDataItem(
@@ -216,7 +217,7 @@ class _CalendarSection extends ConsumerWidget {
           title: 'Calendario',
           icon: Icons.calendar_today,
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: AppSpacing.md),
         StatsGrid(
           items: [
             StatsDataItem(
@@ -271,7 +272,7 @@ class _TagsSection extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         const StatsSectionHeader(title: 'Etichette', icon: Icons.label_outline),
-        const SizedBox(height: 12),
+        const SizedBox(height: AppSpacing.md),
         StatsGrid(
           items: [
             StatsDataItem(
@@ -309,7 +310,7 @@ class _ChartsSection extends ConsumerWidget {
           title: 'Distribuzione Note',
           icon: Icons.pie_chart_outline,
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: AppSpacing.md),
         SizedBox(
           height: 200,
           child:
@@ -338,14 +339,14 @@ class _ChartsSection extends ConsumerWidget {
                   ),
         ),
 
-        const SizedBox(height: 32),
+        const SizedBox(height: AppSpacing.xxl),
 
         // Grafico Task
         const StatsSectionHeader(
           title: 'Distribuzione Task',
           icon: Icons.pie_chart_outline,
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: AppSpacing.md),
         SizedBox(
           height: 200,
           child:
@@ -374,14 +375,14 @@ class _ChartsSection extends ConsumerWidget {
                   ),
         ),
 
-        const SizedBox(height: 32),
+        const SizedBox(height: AppSpacing.xxl),
 
         // Barra di Completamento
         const StatsSectionHeader(
           title: 'Completamento Task',
           icon: Icons.bar_chart_outlined,
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: AppSpacing.md),
         SizedBox(
           height: 180,
           child: TaskCompletionBar(
@@ -412,7 +413,7 @@ class _EmptyChartPlaceholder extends StatelessWidget {
             size: 36,
             color: Theme.of(context).colorScheme.outline,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
           Text(
             message,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(

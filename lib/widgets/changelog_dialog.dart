@@ -10,6 +10,7 @@
 
 import 'package:flutter/material.dart';
 import '../core/constants/changelog.dart';
+import '../theme/app_spacing.dart';
 
 Future<void> showChangelogDialog(
   BuildContext context, {
@@ -41,7 +42,7 @@ class ChangelogDialog extends StatelessWidget {
                 'v${entry.version}',
                 style: tt.titleSmall?.copyWith(fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppSpacing.sm),
               for (final bullet in entry.bullets)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 6),
@@ -53,7 +54,7 @@ class ChangelogDialog extends StatelessWidget {
                     ],
                   ),
                 ),
-              const SizedBox(height: 12),
+              const SizedBox(height: AppSpacing.md),
             ],
           ],
         ),

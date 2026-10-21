@@ -16,7 +16,10 @@ import '../models/calendar_model.dart';
 import '../providers/notes_provider.dart';
 import '../providers/tasks_provider.dart';
 import '../providers/calendar_provider.dart';
+import '../theme/app_font_sizes.dart';
+import '../theme/app_spacing.dart';
 import '../widgets/nav_scaffold.dart';
+import '../widgets/shared/app_dialogs.dart';
 import '../widgets/shared/error_feedback.dart';
 import '../widgets/shared/swipe_actions.dart';
 
@@ -46,7 +49,10 @@ class TrashScreen extends ConsumerWidget {
             Container(
               width: double.infinity,
               color: Theme.of(context).colorScheme.surfaceContainerHighest,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.lg,
+                vertical: 10,
+              ),
               child: Text(
                 'Gli elementi vengono eliminati definitivamente dopo 7 giorni.',
                 style: Theme.of(context).textTheme.bodySmall,
@@ -70,49 +76,30 @@ class TrashScreen extends ConsumerWidget {
     );
   }
 
-  void _confirmEmptyTrash(BuildContext context, WidgetRef ref) {
-    showDialog(
-      context: context,
-      builder:
-          (ctx) => AlertDialog(
-            title: const Text('Svuota cestino'),
-            content: const Text(
-              'Tutti gli elementi nel cestino verranno eliminati definitivamente.',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(ctx),
-                child: const Text('Annulla'),
-              ),
-              FilledButton(
-                style: FilledButton.styleFrom(backgroundColor: Colors.red),
-                onPressed: () {
-                  notifyOnError(
-                    ref.read(notesProvider.notifier).emptyTrash(),
-                    context,
-                  );
-                  // Svuotiamo anche gli altri
-                  for (final t in ref.read(trashedTasksProvider)) {
-                    notifyOnError(
-                      ref.read(tasksProvider.notifier).permanentlyDelete(t.id),
-                      context,
-                    );
-                  }
-                  for (final e in ref.read(trashedEventsProvider)) {
-                    notifyOnError(
-                      ref
-                          .read(calendarProvider.notifier)
-                          .permanentlyDelete(e.id),
-                      context,
-                    );
-                  }
-                  Navigator.pop(ctx);
-                },
-                child: const Text('Svuota'),
-              ),
-            ],
-          ),
+  Future<void> _confirmEmptyTrash(BuildContext context, WidgetRef ref) async {
+    final confirmed = await showAppConfirmDialog(
+      context,
+      title: 'Svuota cestino',
+      message:
+          'Tutti gli elementi nel cestino verranno eliminati definitivamente.',
+      confirmLabel: 'Svuota',
+      destructive: true,
     );
+    if (!confirmed || !context.mounted) return;
+    notifyOnError(ref.read(notesProvider.notifier).emptyTrash(), context);
+    // Svuotiamo anche gli altri
+    for (final t in ref.read(trashedTasksProvider)) {
+      notifyOnError(
+        ref.read(tasksProvider.notifier).permanentlyDelete(t.id),
+        context,
+      );
+    }
+    for (final e in ref.read(trashedEventsProvider)) {
+      notifyOnError(
+        ref.read(calendarProvider.notifier).permanentlyDelete(e.id),
+        context,
+      );
+    }
   }
 }
 
@@ -133,19 +120,22 @@ class _NoteTrashList extends StatelessWidget {
               size: 64,
               color: colorScheme.outlineVariant,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             Text(
               'Nessuna nota nel cestino',
-              style: TextStyle(color: colorScheme.outline, fontSize: 16),
+              style: TextStyle(
+                color: colorScheme.outline,
+                fontSize: AppFontSizes.lg,
+              ),
             ),
           ],
         ),
       );
     }
     return ListView.separated(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(AppSpacing.md),
       itemCount: items.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 8),
+      separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.sm),
       itemBuilder: (_, i) => _TrashNoteCard(note: items[i]),
     );
   }
@@ -168,19 +158,22 @@ class _TaskTrashList extends ConsumerWidget {
               size: 64,
               color: colorScheme.outlineVariant,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             Text(
               'Nessun task nel cestino',
-              style: TextStyle(color: colorScheme.outline, fontSize: 16),
+              style: TextStyle(
+                color: colorScheme.outline,
+                fontSize: AppFontSizes.lg,
+              ),
             ),
           ],
         ),
       );
     }
     return ListView.separated(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(AppSpacing.md),
       itemCount: items.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 8),
+      separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.sm),
       itemBuilder: (_, i) {
         final task = items[i];
         return ListTile(
@@ -214,19 +207,22 @@ class _EventTrashList extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.event_busy, size: 64, color: colorScheme.outlineVariant),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             Text(
               'Nessun evento nel cestino',
-              style: TextStyle(color: colorScheme.outline, fontSize: 16),
+              style: TextStyle(
+                color: colorScheme.outline,
+                fontSize: AppFontSizes.lg,
+              ),
             ),
           ],
         ),
       );
     }
     return ListView.separated(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(AppSpacing.md),
       itemCount: items.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 8),
+      separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.sm),
       itemBuilder: (_, i) {
         final event = items[i];
         return ListTile(
@@ -307,7 +303,7 @@ class _TrashNoteCard extends ConsumerWidget {
             _daysLeft(),
             style: TextStyle(
               color: Theme.of(context).colorScheme.error,
-              fontSize: 12,
+              fontSize: AppFontSizes.sm,
             ),
           ),
           trailing: PopupMenuButton<String>(
@@ -347,25 +343,13 @@ class _TrashNoteCard extends ConsumerWidget {
     );
   }
 
-  Future<bool?> _confirmPermanentDelete(BuildContext context) {
-    return showDialog<bool>(
-      context: context,
-      builder:
-          (ctx) => AlertDialog(
-            title: const Text('Elimina definitivamente'),
-            content: const Text('La nota verrà eliminata in modo permanente.'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(ctx, false),
-                child: const Text('Annulla'),
-              ),
-              FilledButton(
-                style: FilledButton.styleFrom(backgroundColor: Colors.red),
-                onPressed: () => Navigator.pop(ctx, true),
-                child: const Text('Elimina'),
-              ),
-            ],
-          ),
+  Future<bool> _confirmPermanentDelete(BuildContext context) {
+    return showAppConfirmDialog(
+      context,
+      title: 'Elimina definitivamente',
+      message: 'La nota verrà eliminata in modo permanente.',
+      confirmLabel: 'Elimina',
+      destructive: true,
     );
   }
 }

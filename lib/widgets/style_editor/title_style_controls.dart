@@ -11,6 +11,7 @@
 import 'package:flutter/material.dart';
 import '../../models/note_model.dart';
 import '../../theme/app_font_sizes.dart';
+import '../../theme/app_spacing.dart';
 import 'color_picker_widget.dart';
 
 const _kFonts = [
@@ -48,7 +49,7 @@ class TitleStyleControls extends StatelessWidget {
       children: [
         // Font family
         Text('Font', style: Theme.of(context).textTheme.labelLarge),
-        const SizedBox(height: 8),
+        const SizedBox(height: AppSpacing.sm),
         SizedBox(
           height: 44,
           // An always-visible scrollbar hints that more fonts are
@@ -59,7 +60,7 @@ class TitleStyleControls extends StatelessWidget {
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: _kFonts.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 8),
+              separatorBuilder: (_, __) => const SizedBox(width: AppSpacing.sm),
               itemBuilder: (_, i) {
                 final f = _kFonts[i];
                 return ChoiceChip(
@@ -75,7 +76,7 @@ class TitleStyleControls extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.lg),
 
         // Font size
         Text(
@@ -89,7 +90,7 @@ class TitleStyleControls extends StatelessWidget {
           value: effectiveSize,
           onChanged: (v) => onChanged(style.copyWith(titleFontSize: v)),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: AppSpacing.sm),
 
         // Bold / Italic
         Row(
@@ -99,7 +100,7 @@ class TitleStyleControls extends StatelessWidget {
               selected: effectiveBold,
               onSelected: (v) => onChanged(style.copyWith(titleIsBold: v)),
             ),
-            const SizedBox(width: 8),
+            const SizedBox(width: AppSpacing.sm),
             FilterChip(
               label: const Text('Corsivo'),
               selected: effectiveItalic,
@@ -107,17 +108,17 @@ class TitleStyleControls extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.lg),
 
         // Title font color
         Text('Colore titolo', style: Theme.of(context).textTheme.labelLarge),
-        const SizedBox(height: 8),
+        const SizedBox(height: AppSpacing.sm),
         ColorPickerWidget(
           current: effectiveColor,
           isDark: true,
           onPick: (c) => onChanged(style.copyWith(titleFontColor: c)),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.lg),
 
         // Reset to inherit from content
         OutlinedButton.icon(

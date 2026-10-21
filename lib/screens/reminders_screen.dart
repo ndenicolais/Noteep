@@ -16,6 +16,9 @@ import '../models/note_model.dart';
 import '../models/task_model.dart';
 import '../providers/notes_provider.dart';
 import '../providers/tasks_provider.dart';
+import '../theme/app_font_sizes.dart';
+import '../theme/app_radius.dart';
+import '../theme/app_spacing.dart';
 import '../utils/notification_service.dart';
 import '../widgets/nav_scaffold.dart';
 
@@ -82,7 +85,7 @@ class RemindersScreen extends ConsumerWidget {
           items.isEmpty
               ? _EmptyState()
               : ListView(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(AppSpacing.md),
                 children: [
                   if (upcoming.isNotEmpty) ...[
                     const _SectionHeader(
@@ -92,7 +95,7 @@ class RemindersScreen extends ConsumerWidget {
                     ...upcoming.map((item) => _ReminderCard(item: item)),
                   ],
                   if (past.isNotEmpty) ...[
-                    const SizedBox(height: 8),
+                    const SizedBox(height: AppSpacing.sm),
                     const _SectionHeader(icon: Icons.history, label: 'Scaduti'),
                     ...past.map(
                       (item) => _ReminderCard(item: item, past: true),
@@ -115,7 +118,7 @@ class _EmptyState extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.alarm_outlined, size: 72, color: cs.outlineVariant),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.lg),
           Text(
             'Nessun promemoria',
             style: TextStyle(
@@ -124,7 +127,7 @@ class _EmptyState extends StatelessWidget {
               fontWeight: FontWeight.w600,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
           Text(
             'Aggiungi un promemoria aprendo\nuna nota o un task.',
             textAlign: TextAlign.center,
@@ -146,7 +149,10 @@ class _SectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+      padding: const EdgeInsets.symmetric(
+        vertical: AppSpacing.sm,
+        horizontal: AppSpacing.xs,
+      ),
       child: Row(
         children: [
           Icon(icon, size: 18, color: Theme.of(context).colorScheme.primary),
@@ -178,8 +184,10 @@ class _ReminderCard extends ConsumerWidget {
     final isNote = item is _NoteReminder;
 
     return Card(
-      margin: const EdgeInsets.only(bottom: 8),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      margin: const EdgeInsets.only(bottom: AppSpacing.sm),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.md),
+      ),
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: past ? cs.errorContainer : cs.primaryContainer,
@@ -206,11 +214,11 @@ class _ReminderCard extends ConsumerWidget {
               size: 14,
               color: past ? cs.error : cs.primary,
             ),
-            const SizedBox(width: 4),
+            const SizedBox(width: AppSpacing.xs),
             Text(
               dateStr,
               style: TextStyle(
-                fontSize: 12,
+                fontSize: AppFontSizes.sm,
                 color: past ? cs.error : cs.secondary,
                 fontWeight: past ? FontWeight.w500 : null,
               ),

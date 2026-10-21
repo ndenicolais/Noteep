@@ -15,9 +15,11 @@ import '../../providers/settings/theme_provider.dart';
 import '../../providers/settings/ui_provider.dart';
 import '../../providers/settings/backup_provider.dart';
 import '../../providers/settings/data_actions.dart';
+import '../../theme/app_spacing.dart';
 import '../../utils/backup_service.dart' show BackupFrequency;
 import '../../utils/data_export_service.dart';
 import '../../widgets/nav_scaffold.dart';
+import '../../widgets/shared/app_dialogs.dart';
 import '../../widgets/shared/error_feedback.dart';
 import 'settings_appearance_section.dart';
 import 'settings_backup_section.dart';
@@ -109,9 +111,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       section: DrawerSection.settings,
       titleWidget: const Text('Impostazioni'),
       body: ListView.separated(
-        padding: const EdgeInsets.only(bottom: 32),
+        padding: const EdgeInsets.only(bottom: AppSpacing.xxl),
         itemCount: sections.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 16),
+        separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.lg),
         itemBuilder: (_, i) => sections[i],
       ),
     );
@@ -132,27 +134,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   /// the UI — export is not encrypted).
   Future<bool> _confirmLockedNotesExport(BuildContext context) async {
     if (!_actions.hasLockedNotes) return true;
-    final proceed = await showDialog<bool>(
-      context: context,
-      builder:
-          (ctx) => AlertDialog(
-            title: const Text('Note protette incluse'),
-            content: const Text(
-              'Il file esportato conterrà anche il testo delle note protette, in chiaro e non cifrato. Vuoi continuare?',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(ctx, false),
-                child: const Text('Annulla'),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pop(ctx, true),
-                child: const Text('Esporta comunque'),
-              ),
-            ],
-          ),
+    return showAppConfirmDialog(
+      context,
+      title: 'Note protette incluse',
+      message:
+          'Il file esportato conterrà anche il testo delle note protette, in chiaro e non cifrato. Vuoi continuare?',
+      confirmLabel: 'Esporta comunque',
     );
-    return proceed == true;
   }
 
   Future<void> _exportJson(
@@ -188,25 +176,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     required Future<void> Function(Map<String, dynamic> decoded) importData,
     required String successMessage,
   }) async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder:
-          (ctx) => AlertDialog(
-            title: Text(confirmTitle),
-            content: Text(confirmMessage),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(ctx, false),
-                child: const Text('Annulla'),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pop(ctx, true),
-                child: const Text('Importa'),
-              ),
-            ],
-          ),
+    final confirmed = await showAppConfirmDialog(
+      context,
+      title: confirmTitle,
+      message: confirmMessage,
+      confirmLabel: 'Importa',
     );
-    if (confirmed != true) return;
+    if (!confirmed) return;
     if (!context.mounted) return;
 
     final decoded = await DataExportService.pickAndDecodeJson();

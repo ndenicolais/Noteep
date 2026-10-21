@@ -10,6 +10,8 @@
 
 import 'package:flutter/material.dart';
 import '../core/constants/app_version.dart';
+import '../theme/app_font_sizes.dart';
+import '../theme/app_spacing.dart';
 import '../widgets/changelog_dialog.dart';
 
 class InfoScreen extends StatelessWidget {
@@ -23,10 +25,13 @@ class InfoScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Info app')),
       body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.xl,
+          vertical: AppSpacing.lg,
+        ),
         children: [
           // ── Logo + Nome ──────────────────────────────────────────────────
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.lg),
           Center(
             child: Container(
               width: 96,
@@ -42,7 +47,7 @@ class InfoScreen extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.lg),
           Center(
             child: Text(
               'Noteep',
@@ -55,11 +60,11 @@ class InfoScreen extends StatelessWidget {
               style: tt.bodySmall?.copyWith(color: cs.onSurfaceVariant),
             ),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: AppSpacing.xxl),
 
           // ── Descrizione ──────────────────────────────────────────────────
           _SectionHeader(label: 'Descrizione'),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
           Text(
             'Noteep è un\'app per prendere note, creare liste di controllo '
             'e gestire le tue idee in modo semplice e veloce. '
@@ -67,11 +72,11 @@ class InfoScreen extends StatelessWidget {
             'etichette, archivio e molto altro.',
             style: tt.bodyMedium,
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.xl),
 
           // ── Funzionalità ─────────────────────────────────────────────────
           _SectionHeader(label: 'Funzionalità'),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
           ...[
             (Icons.note_outlined, 'Note di testo con formattazione'),
             (Icons.checklist_outlined, 'Liste di controllo interattive'),
@@ -84,21 +89,21 @@ class InfoScreen extends StatelessWidget {
             ),
           ].map(
             (item) => Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4),
+              padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
               child: Row(
                 children: [
                   Icon(item.$1, size: 20, color: cs.primary),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: AppSpacing.md),
                   Expanded(child: Text(item.$2, style: tt.bodyMedium)),
                 ],
               ),
             ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.xl),
 
           // ── Tecnologie ───────────────────────────────────────────────────
           _SectionHeader(label: 'Tecnologie'),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
           Wrap(
             spacing: 8,
             runSpacing: 8,
@@ -110,11 +115,11 @@ class InfoScreen extends StatelessWidget {
               _TechChip(label: 'SharedPreferences'),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.xl),
 
           // ── Changelog ────────────────────────────────────────────────────
           _SectionHeader(label: 'Changelog'),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
           ListTile(
             contentPadding: EdgeInsets.zero,
             leading: Icon(Icons.history_outlined, color: cs.primary),
@@ -124,11 +129,11 @@ class InfoScreen extends StatelessWidget {
             onTap: () => showChangelogDialog(context),
           ),
           const Divider(height: 1),
-          const SizedBox(height: 24),
+          const SizedBox(height: AppSpacing.xl),
 
           // ── Licenze ──────────────────────────────────────────────────────
           _SectionHeader(label: 'Licenze open source'),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
           ListTile(
             contentPadding: EdgeInsets.zero,
             leading: Icon(Icons.article_outlined, color: cs.primary),
@@ -141,7 +146,7 @@ class InfoScreen extends StatelessWidget {
                   applicationName: 'Noteep',
                   applicationVersion: appVersion,
                   applicationIcon: Padding(
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(AppSpacing.sm),
                     child: Icon(
                       Icons.note_alt_outlined,
                       size: 48,
@@ -151,7 +156,7 @@ class InfoScreen extends StatelessWidget {
                 ),
           ),
           const Divider(height: 1),
-          const SizedBox(height: 32),
+          const SizedBox(height: AppSpacing.xxl),
 
           // ── Copyright ────────────────────────────────────────────────────
           Center(
@@ -160,7 +165,7 @@ class InfoScreen extends StatelessWidget {
               style: tt.bodySmall?.copyWith(color: cs.onSurfaceVariant),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.lg),
         ],
       ),
     );
@@ -192,7 +197,7 @@ class _TechChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Chip(
-      label: Text(label, style: const TextStyle(fontSize: 12)),
+      label: Text(label, style: const TextStyle(fontSize: AppFontSizes.sm)),
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       labelStyle: TextStyle(
         color: Theme.of(context).colorScheme.onSecondaryContainer,

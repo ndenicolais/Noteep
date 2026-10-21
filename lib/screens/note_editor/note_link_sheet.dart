@@ -10,6 +10,8 @@
 
 import 'package:flutter/material.dart';
 import '../../models/note_model.dart';
+import '../../theme/app_font_sizes.dart';
+import '../../theme/app_spacing.dart';
 
 class NoteLinkSheet extends StatefulWidget {
   const NoteLinkSheet({
@@ -55,7 +57,7 @@ class _NoteLinkSheetState extends State<NoteLinkSheet> {
           (_, scroll) => Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(AppSpacing.lg),
                 child: TextField(
                   autofocus: true,
                   decoration: InputDecoration(
@@ -93,7 +95,9 @@ class _NoteLinkSheetState extends State<NoteLinkSheet> {
                                 note.content,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(fontSize: 12),
+                                style: const TextStyle(
+                                  fontSize: AppFontSizes.sm,
+                                ),
                               )
                               : null,
                       onChanged: (_) => widget.onToggle(note.id),

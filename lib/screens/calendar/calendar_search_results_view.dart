@@ -12,6 +12,8 @@ import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
+import '../../theme/app_font_sizes.dart';
+import '../../theme/app_spacing.dart';
 import 'calendar_event_tile.dart';
 
 /// List of events matching the current search query, sorted most-recent first.
@@ -30,10 +32,13 @@ class CalendarSearchResultsView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.event_busy, size: 64, color: colorScheme.outlineVariant),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             Text(
               'Nessun evento trovato',
-              style: TextStyle(color: colorScheme.outline, fontSize: 16),
+              style: TextStyle(
+                color: colorScheme.outline,
+                fontSize: AppFontSizes.lg,
+              ),
             ),
           ],
         ),
@@ -104,7 +109,7 @@ class CalendarSearchResultsView extends StatelessWidget {
           Text(
             DateFormat('d').format(event.startTime),
             style: TextStyle(
-              fontSize: 16,
+              fontSize: AppFontSizes.lg,
               fontWeight: FontWeight.bold,
               color: colorScheme.onPrimaryContainer,
               height: 1.1,
@@ -113,7 +118,7 @@ class CalendarSearchResultsView extends StatelessWidget {
           Text(
             DateFormat('MMM', 'it_IT').format(event.startTime),
             style: TextStyle(
-              fontSize: 10,
+              fontSize: AppFontSizes.xs,
               color: colorScheme.onPrimaryContainer,
               height: 1.1,
             ),

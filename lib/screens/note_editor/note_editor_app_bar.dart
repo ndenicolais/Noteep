@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/note_model.dart';
 import '../../providers/notes_undo_redo_provider.dart';
+import '../../theme/app_spacing.dart';
 
 /// App bar for [NoteEditorScreen]: undo/redo, markdown toggle, lock and the
 /// pin/archive/share overflow menu.
@@ -61,7 +62,7 @@ class NoteEditorAppBar extends ConsumerWidget implements PreferredSizeWidget {
         child:
             isSaving
                 ? const LinearProgressIndicator(minHeight: 2)
-                : const SizedBox(height: 2),
+                : const SizedBox(height: AppSpacing.xxs),
       ),
       actions: [
         IconButton(
@@ -105,7 +106,7 @@ class NoteEditorAppBar extends ConsumerWidget implements PreferredSizeWidget {
                   child: Row(
                     children: [
                       Icon(Icons.share_outlined),
-                      SizedBox(width: 12),
+                      SizedBox(width: AppSpacing.md),
                       Text('Condividi'),
                     ],
                   ),
@@ -119,7 +120,7 @@ class NoteEditorAppBar extends ConsumerWidget implements PreferredSizeWidget {
                             ? Icons.push_pin
                             : Icons.push_pin_outlined,
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: AppSpacing.md),
                       Text(note.isPinned ? 'Rimuovi pin' : 'Fissa'),
                     ],
                   ),
@@ -133,7 +134,7 @@ class NoteEditorAppBar extends ConsumerWidget implements PreferredSizeWidget {
                             ? Icons.unarchive
                             : Icons.archive_outlined,
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: AppSpacing.md),
                       Text(note.isArchived ? 'Ripristina' : 'Archivia'),
                     ],
                   ),

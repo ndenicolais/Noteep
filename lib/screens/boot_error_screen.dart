@@ -10,6 +10,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import '../theme/app_spacing.dart';
 import '../theme/app_theme.dart';
 
 /// Standalone app shown when startup fails, instead of a blank screen.
@@ -34,18 +35,18 @@ class BootErrorApp extends StatelessWidget {
             body: SafeArea(
               child: Center(
                 child: Padding(
-                  padding: const EdgeInsets.all(32),
+                  padding: const EdgeInsets.all(AppSpacing.xxl),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(Icons.error_outline, size: 56, color: cs.error),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: AppSpacing.lg),
                       Text(
                         'Impossibile avviare Noteep',
                         style: tt.titleLarge,
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: AppSpacing.sm),
                       Text(
                         'Si è verificato un problema durante l\'avvio. '
                         'Controlla la connessione e riprova.',
@@ -55,14 +56,14 @@ class BootErrorApp extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                       if (kDebugMode) ...[
-                        const SizedBox(height: 16),
+                        const SizedBox(height: AppSpacing.lg),
                         Text(
                           '$error',
                           style: tt.bodySmall?.copyWith(color: cs.error),
                           textAlign: TextAlign.center,
                         ),
                       ],
-                      const SizedBox(height: 24),
+                      const SizedBox(height: AppSpacing.xl),
                       FilledButton.icon(
                         onPressed: onRetry,
                         icon: const Icon(Icons.refresh),

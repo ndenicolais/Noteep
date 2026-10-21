@@ -11,6 +11,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
+import '../../theme/app_font_sizes.dart';
+import '../../theme/app_spacing.dart';
 import 'calendar_utils.dart';
 
 class CalendarMiniMonthView extends StatelessWidget {
@@ -50,17 +52,17 @@ class CalendarMiniMonthView extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(8),
         ),
-        padding: const EdgeInsets.all(4),
+        padding: const EdgeInsets.all(AppSpacing.xs),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 2),
+              padding: const EdgeInsets.only(bottom: AppSpacing.xxs),
               child: Text(
                 monthLabel,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: AppFontSizes.xs,
                   fontWeight: FontWeight.w700,
                   color: colorScheme.onSurface,
                 ),

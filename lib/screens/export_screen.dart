@@ -18,6 +18,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import '../models/note_model.dart';
 import '../providers/notes_provider.dart';
+import '../theme/app_spacing.dart';
 import '../utils/downloader.dart';
 
 class ExportScreen extends ConsumerWidget {
@@ -32,7 +33,12 @@ class ExportScreen extends ConsumerWidget {
       body: ListView(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.lg,
+              AppSpacing.lg,
+              AppSpacing.lg,
+              AppSpacing.sm,
+            ),
             child: Text(
               'Esporta tutte le note attive (escluse quelle nel cestino).',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
@@ -70,7 +76,7 @@ class ExportScreen extends ConsumerWidget {
             subtitle: 'Salva le note in un file .html',
             onTap: () => _exportHtml(context, activeNotes),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: AppSpacing.xxl),
         ],
       ),
     );
@@ -97,7 +103,7 @@ class ExportScreen extends ConsumerWidget {
                         fontSize: 18,
                       ),
                     ),
-                    pw.SizedBox(height: 8),
+                    pw.SizedBox(height: AppSpacing.sm),
                   ],
                   pw.Text(note.content.isEmpty ? '(nota vuota)' : note.content),
                   pw.SizedBox(height: 6),

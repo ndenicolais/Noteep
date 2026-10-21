@@ -10,6 +10,7 @@
 
 import 'package:flutter/material.dart';
 import '../../models/audio_note.dart';
+import '../../theme/app_spacing.dart';
 import '../../utils/audio_service.dart';
 
 /// Playback controls for a single attached [AudioNote].
@@ -50,7 +51,7 @@ class _AudioNotePlayerTileState extends State<AudioNotePlayerTile> {
   Widget build(BuildContext context) {
     return ListTile(
       dense: true,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+      contentPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
       leading: IconButton(
         icon: Icon(_isPlaying ? Icons.pause_circle : Icons.play_circle),
         onPressed: _togglePlay,

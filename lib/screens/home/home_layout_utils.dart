@@ -16,3 +16,10 @@ int gridColumns(double width) {
   if (width >= 600) return 3;
   return 2;
 }
+
+/// Number of items placed in masonry column [col] when [count] items are
+/// dealt round-robin across [cols] columns (item i → column i % cols).
+int masonryColumnLength(int count, int cols, int col) {
+  if (col >= count) return 0;
+  return (count - col + cols - 1) ~/ cols;
+}

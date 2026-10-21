@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/task_model.dart';
 import '../../providers/tasks_undo_redo_provider.dart';
+import '../../theme/app_spacing.dart';
 
 /// App bar for [TaskEditorScreen]: undo/redo, pin, archive and share menu.
 class TaskEditorAppBar extends ConsumerWidget implements PreferredSizeWidget {
@@ -76,7 +77,7 @@ class TaskEditorAppBar extends ConsumerWidget implements PreferredSizeWidget {
                   child: Row(
                     children: [
                       Icon(Icons.share_outlined),
-                      SizedBox(width: 12),
+                      SizedBox(width: AppSpacing.md),
                       Text('Condividi'),
                     ],
                   ),

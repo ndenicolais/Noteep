@@ -10,6 +10,8 @@
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import '../../theme/app_radius.dart';
+import '../../theme/app_spacing.dart';
 
 // ─── Section header ───────────────────────────────────────────────────────────
 
@@ -25,11 +27,14 @@ class StatsSectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12, left: 4),
+      padding: const EdgeInsets.only(
+        bottom: AppSpacing.md,
+        left: AppSpacing.xs,
+      ),
       child: Row(
         children: [
           Icon(icon, size: 20, color: Theme.of(context).colorScheme.primary),
-          const SizedBox(width: 8),
+          const SizedBox(width: AppSpacing.sm),
           Text(
             title,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
@@ -98,13 +103,18 @@ class StatCard extends StatelessWidget {
     return Card(
       elevation: 0,
       color: item.color.withAlpha(24),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.md),
+      ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+        padding: const EdgeInsets.symmetric(
+          vertical: AppSpacing.lg,
+          horizontal: AppSpacing.md,
+        ),
         child: Row(
           children: [
             Icon(item.icon, color: item.color, size: 28),
-            const SizedBox(width: 12),
+            const SizedBox(width: AppSpacing.md),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -203,14 +213,14 @@ class _StatsPieChartState extends State<StatsPieChart> {
             ),
           ),
         ),
-        const SizedBox(width: 16),
+        const SizedBox(width: AppSpacing.lg),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children:
               widget.sections.map((s) {
                 return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -232,7 +242,7 @@ class _StatsPieChartState extends State<StatsPieChart> {
                 );
               }).toList(),
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: AppSpacing.sm),
       ],
     );
   }
@@ -281,7 +291,7 @@ class TaskCompletionBar extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: AppSpacing.md),
         ClipRRect(
           borderRadius: BorderRadius.circular(8),
           child: LinearProgressIndicator(
@@ -291,7 +301,7 @@ class TaskCompletionBar extends StatelessWidget {
             valueColor: AlwaysStoppedAnimation<Color>(accent),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.lg),
         SizedBox(
           height: 100,
           child: BarChart(

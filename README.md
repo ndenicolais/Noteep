@@ -108,7 +108,7 @@ Export notes to **PDF** format (rendered with the `pdf` / `printing` packages); 
 | Option | Values |
 |---|---|
 | Theme | System / Light / Dark |
-| Home layout | Grid / List |
+| Home layout | Masonry grid (cards at natural height) / List |
 | Show completed tasks | Toggle |
 | Group tasks by priority | Toggle |
 | Backup frequency | Daily / Weekly / Monthly |

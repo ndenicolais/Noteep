@@ -10,6 +10,7 @@
 
 import 'package:flutter/material.dart';
 import '../../models/calendar_model.dart';
+import '../../theme/app_spacing.dart';
 import 'calendar_mini_month.dart';
 
 /// Full-year overview showing a mini calendar grid for each month.
@@ -37,7 +38,10 @@ class CalendarYearView extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.xs,
+            vertical: AppSpacing.xxs,
+          ),
           child: Row(
             children: [
               IconButton(
@@ -66,7 +70,10 @@ class CalendarYearView extends StatelessWidget {
         ),
         Expanded(
           child: GridView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.sm,
+              vertical: AppSpacing.xs,
+            ),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
               childAspectRatio: 0.85,

@@ -10,6 +10,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../theme/app_font_sizes.dart';
+import '../theme/app_spacing.dart';
 
 /// Banner shown at the top of the note/task editor when a reminder is set.
 class ReminderBanner extends StatelessWidget {
@@ -31,16 +33,19 @@ class ReminderBanner extends StatelessWidget {
       onTap: onTap,
       child: Container(
         color: colorScheme.primaryContainer.withAlpha(180),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.lg,
+          vertical: 6,
+        ),
         child: Row(
           children: [
             Icon(Icons.alarm, size: 16, color: colorScheme.onPrimaryContainer),
-            const SizedBox(width: 8),
+            const SizedBox(width: AppSpacing.sm),
             Expanded(
               child: Text(
                 DateFormat('dd MMM yyyy, HH:mm').format(reminder),
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: AppFontSizes.sm,
                   color: colorScheme.onPrimaryContainer,
                 ),
               ),

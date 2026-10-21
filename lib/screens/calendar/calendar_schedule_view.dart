@@ -12,6 +12,8 @@ import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
+import '../../theme/app_font_sizes.dart';
+import '../../theme/app_spacing.dart';
 import 'calendar_event_tile.dart';
 import 'calendar_utils.dart';
 
@@ -46,10 +48,13 @@ class CalendarScheduleView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.event_busy, size: 64, color: colorScheme.outlineVariant),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
             Text(
               'Nessun evento in programma',
-              style: TextStyle(color: colorScheme.outline, fontSize: 16),
+              style: TextStyle(
+                color: colorScheme.outline,
+                fontSize: AppFontSizes.lg,
+              ),
             ),
           ],
         ),
@@ -75,7 +80,12 @@ class CalendarScheduleView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.lg,
+                AppSpacing.md,
+                AppSpacing.lg,
+                AppSpacing.xs,
+              ),
               child: Text(
                 dayLabel,
                 style: TextStyle(

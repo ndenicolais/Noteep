@@ -68,15 +68,51 @@ class AppTheme {
     return _build(cs);
   }
 
+  // ─── Typography ─────────────────────────────────────────────────────────────
+
+  /// Material 3 type roles pinned to [AppFontSizes], so screens use
+  /// `Theme.of(context).textTheme.*` instead of literal font sizes.
+  /// Display and headlineLarge keep the M3 defaults (no screen uses them);
+  /// title roles are bolder than M3 to match the AppBar title weight.
+  static TextTheme _textTheme(ColorScheme cs) {
+    final base = ThemeData(brightness: cs.brightness).textTheme;
+    return base
+        .copyWith(
+          headlineMedium: base.headlineMedium?.copyWith(
+            fontSize: AppFontSizes.display,
+          ),
+          headlineSmall: base.headlineSmall?.copyWith(
+            fontSize: AppFontSizes.headline,
+          ),
+          titleLarge: base.titleLarge?.copyWith(
+            fontSize: AppFontSizes.xxl,
+            fontWeight: FontWeight.w600,
+          ),
+          titleMedium: base.titleMedium?.copyWith(
+            fontSize: AppFontSizes.lg,
+            fontWeight: FontWeight.w600,
+          ),
+          titleSmall: base.titleSmall?.copyWith(
+            fontSize: AppFontSizes.md,
+            fontWeight: FontWeight.w600,
+          ),
+          bodyLarge: base.bodyLarge?.copyWith(fontSize: AppFontSizes.lg),
+          bodyMedium: base.bodyMedium?.copyWith(fontSize: AppFontSizes.md),
+          bodySmall: base.bodySmall?.copyWith(fontSize: AppFontSizes.sm),
+          labelLarge: base.labelLarge?.copyWith(fontSize: AppFontSizes.md),
+          labelMedium: base.labelMedium?.copyWith(fontSize: AppFontSizes.sm),
+          labelSmall: base.labelSmall?.copyWith(fontSize: AppFontSizes.xs),
+        )
+        .apply(fontFamily: 'Exo 2');
+  }
+
   // ─── Shared builder ─────────────────────────────────────────────────────────
 
   static ThemeData _build(ColorScheme cs) {
     return ThemeData(
       colorScheme: cs,
       useMaterial3: true,
-      textTheme: ThemeData(
-        brightness: cs.brightness,
-      ).textTheme.apply(fontFamily: 'Exo 2'),
+      textTheme: _textTheme(cs),
 
       // AppBar
       appBarTheme: AppBarTheme(
@@ -119,6 +155,20 @@ class AppTheme {
         elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppRadius.md),
+        ),
+      ),
+
+      // Dialogs & bottom sheets: one shape app-wide, no per-call overrides
+      dialogTheme: DialogThemeData(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.xl),
+        ),
+      ),
+      bottomSheetTheme: const BottomSheetThemeData(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(AppRadius.xl),
+          ),
         ),
       ),
 

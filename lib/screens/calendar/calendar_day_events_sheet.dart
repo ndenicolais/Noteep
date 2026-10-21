@@ -12,6 +12,7 @@ import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
+import '../../theme/app_spacing.dart';
 import 'calendar_event_tile.dart';
 
 /// Shows the bottom sheet listing all events of a given [day], with a
@@ -27,9 +28,6 @@ void showDayEventsBottomSheet(
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-    ),
     builder: (ctx) {
       return DraggableScrollableSheet(
         expand: false,
@@ -40,7 +38,7 @@ void showDayEventsBottomSheet(
           return Column(
             children: [
               Container(
-                margin: const EdgeInsets.symmetric(vertical: 8),
+                margin: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
@@ -49,7 +47,12 @@ void showDayEventsBottomSheet(
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 8, 4),
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.lg,
+                  0,
+                  AppSpacing.sm,
+                  AppSpacing.xs,
+                ),
                 child: Row(
                   children: [
                     Expanded(

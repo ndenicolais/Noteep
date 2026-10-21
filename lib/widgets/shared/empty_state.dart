@@ -10,6 +10,7 @@
 
 import 'package:flutter/material.dart';
 import '../../theme/app_font_sizes.dart';
+import '../../theme/app_spacing.dart';
 
 /// Shared icon+message placeholder for empty/error list states.
 class EmptyState extends StatelessWidget {
@@ -42,7 +43,7 @@ class EmptyState extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(icon, size: iconSize, color: colorScheme.outlineVariant),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.lg),
           Text(
             message,
             textAlign: TextAlign.center,
@@ -52,7 +53,7 @@ class EmptyState extends StatelessWidget {
             ),
           ),
           if (actionLabel != null && onAction != null) ...[
-            const SizedBox(height: 24),
+            const SizedBox(height: AppSpacing.xl),
             FilledButton.tonalIcon(
               onPressed: onAction,
               icon: Icon(actionIcon ?? Icons.arrow_forward),

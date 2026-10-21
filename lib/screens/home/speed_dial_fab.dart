@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../theme/app_spacing.dart';
 
 class SpeedDialFab extends StatefulWidget {
   const SpeedDialFab({
@@ -155,7 +156,7 @@ class _SpeedDialFabState extends State<SpeedDialFab>
                       child: Transform.translate(
                         offset: Offset(0, 16 * (1 - curve)),
                         child: Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
+                          padding: const EdgeInsets.only(bottom: AppSpacing.md),
                           child: FloatingActionButton.extended(
                             heroTag: 'fab_item_$i',
                             onPressed: () {

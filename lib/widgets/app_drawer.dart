@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/routing/app_router.dart';
 import '../providers/auth_provider.dart';
+import '../theme/app_spacing.dart';
 
 // ─── Sections enum ────────────────────────────────────────────────────────────
 
@@ -97,7 +98,7 @@ class AppDrawer extends ConsumerWidget {
                             )
                             : null,
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: AppSpacing.sm),
                   if (user?.displayName != null &&
                       user!.displayName!.isNotEmpty)
                     Text(

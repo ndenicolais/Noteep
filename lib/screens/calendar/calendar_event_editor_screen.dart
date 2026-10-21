@@ -1,4 +1,4 @@
-﻿// Noteep — Copyright © 2026 Nicola De Nicolais — All Rights Reserved.
+// Noteep — Copyright © 2026 Nicola De Nicolais — All Rights Reserved.
 // Licensed under the GNU GPL v3 with Additional Commercial Restrictions.
 //
 // Commercial use, including publishing or monetizing on any app store,
@@ -13,8 +13,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
 import '../../providers/calendar_provider.dart';
+import '../../theme/app_font_sizes.dart';
+import '../../theme/app_spacing.dart';
 import '../../utils/notification_service.dart';
 import '../../utils/recurrence.dart';
+import '../../widgets/shared/app_dialogs.dart';
 import '../../widgets/shared/error_feedback.dart';
 
 class CalendarEventEditorScreen extends ConsumerStatefulWidget {
@@ -122,43 +125,28 @@ class _CalendarEventEditorScreenState
     }
   }
 
-  void _confirmDelete() {
-    showDialog(
-      context: context,
-      builder:
-          (ctx) => AlertDialog(
-            title: const Text('Elimina evento'),
-            content: const Text('Vuoi spostare questo evento nel cestino?'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(ctx),
-                child: const Text('Annulla'),
-              ),
-              TextButton(
-                onPressed: () {
-                  // A never-saved event is not in the provider: nothing to trash.
-                  if (!_isNew) {
-                    final notifier = ref.read(calendarProvider.notifier);
-                    final id = _event.id;
-                    notifyWithUndo(
-                      notifier.softDelete(id),
-                      context,
-                      message: 'Evento spostato nel cestino',
-                      onUndo: () => notifier.restoreFromTrash(id),
-                    );
-                  }
-                  _softDeleted = true;
-                  Navigator.pop(ctx);
-                  Navigator.pop(context);
-                },
-                child: const Text(
-                  'Elimina',
-                  style: TextStyle(color: Colors.red),
-                ),
-              ),
-            ],
-          ),
+  Future<void> _confirmDelete() async {
+    final confirmed = await showAppConfirmDialog(
+      context,
+      title: 'Elimina evento',
+      message: 'Vuoi spostare questo evento nel cestino?',
+      confirmLabel: 'Elimina',
+      destructive: true,
     );
+    if (!confirmed || !mounted) return;
+    // A never-saved event is not in the provider: nothing to trash.
+    if (!_isNew) {
+      final notifier = ref.read(calendarProvider.notifier);
+      final id = _event.id;
+      notifyWithUndo(
+        notifier.softDelete(id),
+        context,
+        message: 'Evento spostato nel cestino',
+        onUndo: () => notifier.restoreFromTrash(id),
+      );
+    }
+    _softDeleted = true;
+    Navigator.pop(context);
   }
 
   // ─── Reminder ─────────────────────────────────────────────────────────────
@@ -271,14 +259,14 @@ class _CalendarEventEditorScreenState
           ],
         ),
         body: ListView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(AppSpacing.lg),
           children: [
             // Reminder banner
             if (_event.reminder != null)
               GestureDetector(
                 onTap: _setReminder,
                 child: Container(
-                  margin: const EdgeInsets.only(bottom: 12),
+                  margin: const EdgeInsets.only(bottom: AppSpacing.md),
                   decoration: BoxDecoration(
                     color: Theme.of(
                       context,
@@ -286,7 +274,7 @@ class _CalendarEventEditorScreenState
                     borderRadius: BorderRadius.circular(8),
                   ),
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
+                    horizontal: AppSpacing.lg,
                     vertical: 6,
                   ),
                   child: Row(
@@ -296,14 +284,14 @@ class _CalendarEventEditorScreenState
                         size: 16,
                         color: Theme.of(context).colorScheme.onPrimaryContainer,
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: AppSpacing.sm),
                       Expanded(
                         child: Text(
                           DateFormat(
                             'dd MMM yyyy, HH:mm',
                           ).format(_event.reminder!),
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: AppFontSizes.sm,
                             color:
                                 Theme.of(
                                   context,
@@ -327,18 +315,21 @@ class _CalendarEventEditorScreenState
             // Titolo (Obbligatorio)
             TextField(
               controller: _titleController,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: AppFontSizes.headline,
+                fontWeight: FontWeight.bold,
+              ),
               maxLines: null,
               decoration: InputDecoration(
                 hintText: 'Titolo',
                 hintStyle: TextStyle(
-                  fontSize: 24,
+                  fontSize: AppFontSizes.headline,
                   color: colorScheme.onSurface.withAlpha(100),
                 ),
                 border: InputBorder.none,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
 
             // Data (Opzionale)
             ListTile(
@@ -359,7 +350,7 @@ class _CalendarEventEditorScreenState
                       ),
               onTap: _openDateTimePicker,
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacing.sm),
 
             // Toggle All Day
             CheckboxListTile(
@@ -372,7 +363,7 @@ class _CalendarEventEditorScreenState
                 }
               },
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: AppSpacing.sm),
 
             // Toggle Birthday
             CheckboxListTile(
@@ -399,7 +390,7 @@ class _CalendarEventEditorScreenState
                 }
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
 
             // Ricorrenza
             ListTile(
@@ -435,12 +426,12 @@ class _CalendarEventEditorScreenState
                 );
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
 
             // Descrizione (Opzionale)
             TextField(
               controller: _descriptionController,
-              style: const TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: AppFontSizes.lg),
               maxLines: null,
               minLines: 4,
               decoration: InputDecoration(
@@ -454,13 +445,13 @@ class _CalendarEventEditorScreenState
                 ),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppSpacing.lg),
 
             // Data ultima modifica
             Text(
               'Ultima modifica: ${DateFormat('dd MMM, HH:mm').format(_event.updatedAt)}',
               style: TextStyle(
-                fontSize: 12,
+                fontSize: AppFontSizes.sm,
                 color: colorScheme.onSurface.withAlpha(150),
               ),
             ),

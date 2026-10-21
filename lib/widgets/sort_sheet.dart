@@ -11,6 +11,7 @@
 import 'package:flutter/material.dart';
 import '../providers/settings/ui_provider.dart';
 import '../theme/app_radius.dart';
+import '../theme/app_spacing.dart';
 
 class SortSheet extends StatelessWidget {
   const SortSheet({super.key, required this.current, required this.onChanged});
@@ -20,7 +21,12 @@ class SortSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.lg,
+        AppSpacing.sm,
+        AppSpacing.lg,
+        AppSpacing.xl,
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,7 +35,7 @@ class SortSheet extends StatelessWidget {
             child: Container(
               width: 40,
               height: 4,
-              margin: const EdgeInsets.only(bottom: 16),
+              margin: const EdgeInsets.only(bottom: AppSpacing.lg),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.outlineVariant,
                 borderRadius: BorderRadius.circular(2),
@@ -42,7 +48,7 @@ class SortSheet extends StatelessWidget {
               context,
             ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: AppSpacing.md),
           Text(
             'Data di creazione',
             style: Theme.of(context).textTheme.labelLarge,
@@ -61,7 +67,7 @@ class SortSheet extends StatelessWidget {
             current: current,
             onTap: onChanged,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.sm),
           Text(
             'Data di modifica',
             style: Theme.of(context).textTheme.labelLarge,

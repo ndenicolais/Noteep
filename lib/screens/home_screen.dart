@@ -24,11 +24,13 @@ import '../utils/changelog_service.dart';
 import '../screens/note_template_screen.dart';
 import '../screens/home/speed_dial_fab.dart';
 import '../screens/home/reorderable_grid_view.dart';
+import '../screens/home/notes_skeleton.dart';
 import '../screens/home/reorderable_list_view.dart';
 import '../widgets/changelog_dialog.dart';
 import '../widgets/nav_scaffold.dart';
 import '../widgets/sort_sheet.dart';
 import '../widgets/shared/empty_state.dart';
+import '../widgets/shared/fade_switcher.dart';
 import '../widgets/shared/pull_to_refresh.dart';
 import '../widgets/shared/search_field.dart';
 
@@ -116,14 +118,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           tooltip: 'Ordina note',
         ),
       ],
-      body:
-          notes.isEmpty && isLoading && loadError == null
-              ? const Center(child: CircularProgressIndicator())
-              : PullToRefresh(
-                onRefresh: ref.read(notesProvider.notifier).reload,
-                childIsScrollable: notes.isNotEmpty,
-                child: _buildNotes(notes, layout, loadError),
-              ),
+      body: FadeSwitcher(
+        child:
+            notes.isEmpty && isLoading && loadError == null
+                ? NotesSkeleton(key: const ValueKey('loading'), layout: layout)
+                : PullToRefresh(
+                  key: ValueKey(_stateKey(notes, layout, loadError)),
+                  onRefresh: ref.read(notesProvider.notifier).reload,
+                  childIsScrollable: notes.isNotEmpty,
+                  child: _buildNotes(notes, layout, loadError),
+                ),
+      ),
       floatingActionButton: SpeedDialFab(
         onNoteTap: () => _openEditor(NoteType.note),
         onChecklistTap: () => _openEditor(NoteType.checklist),
@@ -134,6 +139,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         onTemplateTap: _openFromTemplate,
       ),
     );
+  }
+
+  /// Which body state is shown: [FadeSwitcher] fades only when it changes.
+  String _stateKey(List<NoteModel> notes, HomeLayout layout, Object? error) {
+    if (notes.isNotEmpty) return layout.name;
+    return error != null ? 'error' : 'empty';
   }
 
   Widget _buildNotes(
@@ -217,9 +228,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   void _showSortSheet(BuildContext context, SortOrder current) {
     showModalBottomSheet(
       context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
       builder:
           (_) => SortSheet(
             current: current,

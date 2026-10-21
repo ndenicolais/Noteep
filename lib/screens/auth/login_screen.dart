@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/auth_provider.dart';
 import '../../theme/app_colors.dart';
+import '../../theme/app_font_sizes.dart';
+import '../../theme/app_spacing.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -164,14 +166,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 24),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 28,
+              vertical: AppSpacing.xl,
+            ),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 420),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // ── Logo ─────────────────────────────────────────────────
-                  const SizedBox(height: 12),
+                  const SizedBox(height: AppSpacing.md),
                   Center(
                     child: Container(
                       width: 84,
@@ -204,7 +209,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                       color: colorScheme.outline,
                     ),
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: AppSpacing.xxl),
 
                   // ── Tabs ─────────────────────────────────────────────────
                   Container(
@@ -267,18 +272,20 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
 
                   // ── Loading indicator ─────────────────────────────────────
                   if (isLoading) ...[
-                    const SizedBox(height: 12),
+                    const SizedBox(height: AppSpacing.md),
                     const Center(child: LinearProgressIndicator()),
                   ],
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: AppSpacing.xl),
 
                   // ── Divider ───────────────────────────────────────────────
                   Row(
                     children: [
                       const Expanded(child: Divider()),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.md,
+                        ),
                         child: Text(
                           'oppure',
                           style: Theme.of(context).textTheme.bodySmall
@@ -294,7 +301,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                   _GoogleSignInButton(
                     onPressed: isLoading ? null : _signInWithGoogle,
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: AppSpacing.xl),
                 ],
               ),
             ),
@@ -382,7 +389,7 @@ class _LoginTabState extends State<_LoginTab> {
               child: const Text('Password dimenticata?'),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: AppSpacing.lg),
           FilledButton(
             onPressed: widget.onSubmit,
             style: FilledButton.styleFrom(
@@ -391,7 +398,10 @@ class _LoginTabState extends State<_LoginTab> {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: const Text('Accedi', style: TextStyle(fontSize: 16)),
+            child: const Text(
+              'Accedi',
+              style: TextStyle(fontSize: AppFontSizes.lg),
+            ),
           ),
         ],
       ),
@@ -497,7 +507,10 @@ class _RegisterTabState extends State<_RegisterTab> {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: const Text('Crea account', style: TextStyle(fontSize: 16)),
+            child: const Text(
+              'Crea account',
+              style: TextStyle(fontSize: AppFontSizes.lg),
+            ),
           ),
         ],
       ),

@@ -12,7 +12,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/notes_provider.dart';
 import '../providers/settings/ui_provider.dart';
+import '../theme/app_font_sizes.dart';
+import '../theme/app_spacing.dart';
 import '../widgets/nav_scaffold.dart';
+import '../widgets/shared/app_dialogs.dart';
 
 class LabelsScreen extends ConsumerWidget {
   const LabelsScreen({super.key});
@@ -74,15 +77,15 @@ class LabelsScreen extends ConsumerWidget {
                       size: 64,
                       color: colorScheme.outlineVariant,
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppSpacing.lg),
                     Text(
                       'Nessuna etichetta',
                       style: TextStyle(
                         color: colorScheme.outline,
-                        fontSize: 16,
+                        fontSize: AppFontSizes.lg,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: AppSpacing.sm),
                     Text(
                       'Crea una nuova etichetta o aggiungila da una nota.',
                       textAlign: TextAlign.center,
@@ -92,7 +95,7 @@ class LabelsScreen extends ConsumerWidget {
                 ),
               )
               : ListView.separated(
-                padding: const EdgeInsets.symmetric(vertical: 8),
+                padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
                 itemCount: tags.length,
                 separatorBuilder: (_, __) => const Divider(height: 1),
                 itemBuilder: (_, i) => _LabelTile(tag: tags[i]),
@@ -163,31 +166,16 @@ class _LabelTile extends ConsumerWidget {
     );
   }
 
-  void _confirmDelete(BuildContext context, WidgetRef ref) {
-    showDialog(
-      context: context,
-      builder:
-          (ctx) => AlertDialog(
-            title: const Text('Elimina etichetta'),
-            content: Text(
-              'L\'etichetta "$tag" verrà rimossa da tutte le note.',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(ctx),
-                child: const Text('Annulla'),
-              ),
-              FilledButton(
-                style: FilledButton.styleFrom(backgroundColor: Colors.red),
-                onPressed: () {
-                  ref.read(notesProvider.notifier).deleteTag(tag);
-                  ref.read(customLabelsProvider.notifier).deleteLabel(tag);
-                  Navigator.pop(ctx);
-                },
-                child: const Text('Elimina'),
-              ),
-            ],
-          ),
+  Future<void> _confirmDelete(BuildContext context, WidgetRef ref) async {
+    final confirmed = await showAppConfirmDialog(
+      context,
+      title: 'Elimina etichetta',
+      message: 'L\'etichetta "$tag" verrà rimossa da tutte le note.',
+      confirmLabel: 'Elimina',
+      destructive: true,
     );
+    if (!confirmed) return;
+    ref.read(notesProvider.notifier).deleteTag(tag);
+    ref.read(customLabelsProvider.notifier).deleteLabel(tag);
   }
 }

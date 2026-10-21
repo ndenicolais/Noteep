@@ -18,6 +18,13 @@ class ChangelogEntry {
 /// Newest version first.
 const List<ChangelogEntry> changelogEntries = [
   ChangelogEntry(
+    version: '2.0.1',
+    bullets: [
+      'Durante il primo caricamento di note e attività compare un\'anteprima della lista al posto della rotellina, con un passaggio più morbido tra caricamento, lista e schermata vuota.',
+      'Nuova griglia della Home "a mattoncini": ogni nota occupa solo lo spazio che le serve, senza vuoti tra le note corte e senza tagliare quelle lunghe.',
+    ],
+  ),
+  ChangelogEntry(
     version: '2.0.0',
     bullets: [
       'App completamente ridisegnata: note, attività e calendario in un unico posto, sincronizzati sul tuo account.',

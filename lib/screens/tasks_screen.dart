@@ -15,13 +15,17 @@ import '../models/task_model.dart';
 import '../models/task_list_model.dart';
 import '../providers/tasks_provider.dart';
 import '../providers/settings/ui_provider.dart';
+import '../theme/app_spacing.dart';
 import '../widgets/nav_scaffold.dart';
+import '../widgets/shared/app_dialogs.dart';
 import '../widgets/sort_sheet.dart';
 import '../widgets/shared/empty_state.dart';
+import '../widgets/shared/fade_switcher.dart';
 import '../widgets/shared/pull_to_refresh.dart';
 import '../widgets/shared/swipe_actions.dart';
 import '../widgets/shared/error_feedback.dart';
 import '../widgets/shared/search_field.dart';
+import '../widgets/shared/skeleton.dart';
 import '../utils/dialogs/move_to_list_dialog.dart';
 
 class TasksScreen extends ConsumerStatefulWidget {
@@ -111,9 +115,6 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
     final current = ref.read(taskSortOrderProvider);
     showModalBottomSheet(
       context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
       builder:
           (_) => SortSheet(
             current: current,
@@ -159,38 +160,26 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
     );
   }
 
-  void _deleteCurrentList(BuildContext screenContext) {
+  Future<void> _deleteCurrentList(BuildContext screenContext) async {
     final tabController = DefaultTabController.of(screenContext);
     final tabIndex = tabController.index;
     if (tabIndex <= 1) return;
     final taskLists = ref.read(taskListsProvider);
     if (tabIndex - 2 >= taskLists.length) return;
     final list = taskLists[tabIndex - 2];
-    showDialog(
-      context: screenContext,
-      builder:
-          (context) => AlertDialog(
-            title: const Text('Elimina Elenco'),
-            content: Text('Vuoi davvero eliminare l\'elenco "${list.name}"?'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Annulla'),
-              ),
-              TextButton(
-                onPressed: () {
-                  // Jump away from this tab first: deleting the list shrinks
-                  // the tab count, and leaving the controller on an index
-                  // that no longer exists throws a RangeError.
-                  tabController.animateTo(0);
-                  ref.read(taskListsProvider.notifier).deleteList(list.id);
-                  Navigator.pop(context);
-                },
-                child: const Text('Elimina'),
-              ),
-            ],
-          ),
+    final confirmed = await showAppConfirmDialog(
+      screenContext,
+      title: 'Elimina Elenco',
+      message: 'Vuoi davvero eliminare l\'elenco "${list.name}"?',
+      confirmLabel: 'Elimina',
+      destructive: true,
     );
+    if (!confirmed) return;
+    // Jump away from this tab first: deleting the list shrinks the tab
+    // count, and leaving the controller on an index that no longer exists
+    // throws a RangeError.
+    tabController.animateTo(0);
+    ref.read(taskListsProvider.notifier).deleteList(list.id);
   }
 
   @override
@@ -317,28 +306,36 @@ class _TaskList extends ConsumerWidget {
       final loadError = ref.watch(tasksLoadErrorProvider);
       final isLoading = ref.watch(tasksLoadingProvider);
       if (isLoading && loadError == null) {
-        return const Center(child: CircularProgressIndicator());
+        return const FadeSwitcher(
+          child: ListSkeleton(key: ValueKey('loading')),
+        );
       }
-      return PullToRefresh(
-        onRefresh: refresh,
-        // No "create" action: the quick-add field is always visible above.
-        child: EmptyState(
-          icon: loadError != null ? Icons.cloud_off : Icons.task_alt,
-          message:
-              loadError != null
-                  ? 'Errore di sincronizzazione. Verifica la connessione e riprova.'
-                  : 'Nessun task trovato',
-          actionLabel: loadError != null ? 'Riprova' : null,
-          actionIcon: Icons.refresh,
-          onAction: refresh,
+      return FadeSwitcher(
+        child: PullToRefresh(
+          key: ValueKey(loadError != null ? 'error' : 'empty'),
+          onRefresh: refresh,
+          // No "create" action: the quick-add field is always visible above.
+          child: EmptyState(
+            icon: loadError != null ? Icons.cloud_off : Icons.task_alt,
+            message:
+                loadError != null
+                    ? 'Errore di sincronizzazione. Verifica la connessione e riprova.'
+                    : 'Nessun task trovato',
+            actionLabel: loadError != null ? 'Riprova' : null,
+            actionIcon: Icons.refresh,
+            onAction: refresh,
+          ),
         ),
       );
     }
 
-    return PullToRefresh(
-      onRefresh: refresh,
-      childIsScrollable: true,
-      child: _buildList(activeTasks, completedTasks),
+    return FadeSwitcher(
+      child: PullToRefresh(
+        key: const ValueKey('list'),
+        onRefresh: refresh,
+        childIsScrollable: true,
+        child: _buildList(activeTasks, completedTasks),
+      ),
     );
   }
 
@@ -348,7 +345,7 @@ class _TaskList extends ConsumerWidget {
   ) {
     return ListView(
       physics: const AlwaysScrollableScrollPhysics(),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       children: [
         if (activeTasks.isNotEmpty) ...[
           ...activeTasks.map(
@@ -357,7 +354,7 @@ class _TaskList extends ConsumerWidget {
         ],
         if (completedTasks.isNotEmpty) ...[
           const Padding(
-            padding: EdgeInsets.symmetric(vertical: 8),
+            padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
             child: Divider(),
           ),
           const Text(
@@ -528,7 +525,7 @@ class _TaskItem extends ConsumerWidget {
                           Icons.delete_outline,
                           color: Theme.of(context).colorScheme.error,
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: AppSpacing.md),
                         Text(
                           'Elimina',
                           style: TextStyle(

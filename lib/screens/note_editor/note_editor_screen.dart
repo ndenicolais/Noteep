@@ -20,9 +20,12 @@ import '../../models/change_history.dart';
 import '../../providers/notes_provider.dart';
 import '../../providers/notes_undo_redo_provider.dart';
 import '../../theme/app_colors.dart';
+import '../../theme/app_font_sizes.dart';
+import '../../theme/app_spacing.dart';
 import '../../utils/audio_service.dart';
 import '../../utils/note_lock_service.dart';
 import '../../widgets/reminder_banner.dart';
+import '../../widgets/shared/app_dialogs.dart';
 import '../../widgets/shared/error_feedback.dart';
 import '../../widgets/style_editor/color_picker_widget.dart';
 import '../../widgets/style_editor/style_editor_sheet.dart';
@@ -315,9 +318,6 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
       builder:
           (ctx) => NoteLinkSheet(
             allNotes: allNotes,
@@ -391,7 +391,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
       context: context,
       builder:
           (ctx) => Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(AppSpacing.lg),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -399,7 +399,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
                   'Scegli Colore Sfondo',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: AppSpacing.lg),
                 ColorPickerWidget(
                   current:
                       _note.style.backgroundColor ??
@@ -440,40 +440,25 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
     AudioRecordingService().deleteAudioFile(audioNote.filepath);
   }
 
-  void _confirmDelete() {
-    showDialog(
-      context: context,
-      builder:
-          (ctx) => AlertDialog(
-            title: const Text('Elimina nota'),
-            content: const Text('Vuoi spostare questa nota nel cestino?'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(ctx),
-                child: const Text('Annulla'),
-              ),
-              TextButton(
-                onPressed: () {
-                  final pending = _controller.delete();
-                  if (pending != null) {
-                    notifyWithUndo(
-                      pending,
-                      context,
-                      message: 'Nota spostata nel cestino',
-                      onUndo: _controller.restore,
-                    );
-                  }
-                  Navigator.pop(ctx);
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  'Elimina',
-                  style: TextStyle(color: Theme.of(ctx).colorScheme.error),
-                ),
-              ),
-            ],
-          ),
+  Future<void> _confirmDelete() async {
+    final confirmed = await showAppConfirmDialog(
+      context,
+      title: 'Elimina nota',
+      message: 'Vuoi spostare questa nota nel cestino?',
+      confirmLabel: 'Elimina',
+      destructive: true,
     );
+    if (!confirmed || !mounted) return;
+    final pending = _controller.delete();
+    if (pending != null) {
+      notifyWithUndo(
+        pending,
+        context,
+        message: 'Nota spostata nel cestino',
+        onUndo: _controller.restore,
+      );
+    }
+    Navigator.pop(context);
   }
 
   @override
@@ -531,7 +516,12 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
               ),
             // Campo Titolo
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.lg,
+                AppSpacing.sm,
+                AppSpacing.lg,
+                0,
+              ),
               child: TextField(
                 controller: _titleController,
                 focusNode: _titleFocusNode,
@@ -549,7 +539,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
             // Area Contenuto (Nota o Checklist)
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.only(bottom: AppSpacing.sm),
                 children: [
                   if (_note.type == NoteType.checklist)
                     NoteChecklistEditor(
@@ -564,7 +554,9 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
                     )
                   else if (_markdownMode)
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.lg,
+                      ),
                       child: MarkdownBody(
                         data: _contentController.text,
                         styleSheet: MarkdownStyleSheet.fromTheme(
@@ -574,7 +566,9 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
                     )
                   else
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.lg,
+                      ),
                       child: TextField(
                         controller: _contentController,
                         focusNode: _contentFocusNode,
@@ -599,11 +593,14 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
             ),
             // Footer con data ultima modifica
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.lg,
+                vertical: 6,
+              ),
               child: Text(
                 'Ultima modifica: ${DateFormat('dd MMM, HH:mm').format(_note.updatedAt)}',
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: AppFontSizes.sm,
                   color: effectiveFg.withAlpha(150),
                 ),
               ),

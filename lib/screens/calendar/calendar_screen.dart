@@ -14,6 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/calendar_model.dart';
 import '../../providers/calendar_provider.dart';
+import '../../theme/app_font_sizes.dart';
+import '../../theme/app_spacing.dart';
 import '../../widgets/nav_scaffold.dart';
 import 'calendar_day_view.dart';
 import 'calendar_month_view.dart';
@@ -139,11 +141,11 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label),
-          const SizedBox(width: 24),
+          const SizedBox(width: AppSpacing.xl),
           Text(
             shortcut,
             style: TextStyle(
-              fontSize: 12,
+              fontSize: AppFontSizes.sm,
               color: Theme.of(context).colorScheme.outline,
             ),
           ),
@@ -187,7 +189,10 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
                   _viewMenuItem(_CalendarViewMode.sevenDays, '7 giorni', '7'),
                 ],
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.sm,
+                vertical: AppSpacing.xs,
+              ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

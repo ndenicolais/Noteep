@@ -11,6 +11,7 @@
 import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import '../../models/note_model.dart';
+import '../../theme/app_spacing.dart';
 
 /// "Note collegate" section: chips linking to the notes referenced by the
 /// current one, each opening its own editor on tap.
@@ -27,7 +28,7 @@ class NoteLinkedNotesSection extends StatelessWidget {
       children: [
         const Divider(height: 24),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
           child: Row(
             children: [
               Icon(Icons.link, size: 16, color: onSurfaceVariant),
@@ -41,9 +42,9 @@ class NoteLinkedNotesSection extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: AppSpacing.sm),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
           child: Wrap(
             spacing: 8,
             runSpacing: 4,

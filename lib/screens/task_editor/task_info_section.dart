@@ -14,6 +14,8 @@ import 'package:intl/intl.dart';
 import '../../models/task_list_model.dart';
 import '../../models/task_model.dart';
 import '../../providers/tasks_provider.dart';
+import '../../theme/app_font_sizes.dart';
+import '../../theme/app_spacing.dart';
 import '../../utils/recurrence.dart';
 
 String recurrenceLabel(RecurrenceType type) {
@@ -46,21 +48,21 @@ class TaskInfoSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final primary = Theme.of(context).colorScheme.primary;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
       child: Column(
         children: [
           if (task.dueDate != null)
             Padding(
-              padding: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.only(bottom: AppSpacing.sm),
               child: Row(
                 children: [
                   Icon(Icons.calendar_today, size: 16, color: primary),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: AppSpacing.sm),
                   Text(
                     DateFormat('d MMM yyyy').format(task.dueDate!),
-                    style: TextStyle(color: primary, fontSize: 12),
+                    style: TextStyle(color: primary, fontSize: AppFontSizes.sm),
                   ),
-                  const SizedBox(width: 4),
+                  const SizedBox(width: AppSpacing.xs),
                   GestureDetector(
                     onTap: onClearDueDate,
                     child: Icon(Icons.close, size: 16, color: primary),
@@ -70,21 +72,21 @@ class TaskInfoSection extends StatelessWidget {
             ),
           if (task.recurrence != RecurrenceType.none)
             Padding(
-              padding: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.only(bottom: AppSpacing.sm),
               child: Row(
                 children: [
                   Icon(Icons.repeat, size: 16, color: primary),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: AppSpacing.sm),
                   Text(
                     recurrenceLabel(task.recurrence),
-                    style: TextStyle(color: primary, fontSize: 12),
+                    style: TextStyle(color: primary, fontSize: AppFontSizes.sm),
                   ),
                 ],
               ),
             ),
           if (task.listId != null)
             Padding(
-              padding: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.only(bottom: AppSpacing.sm),
               child: Consumer(
                 builder: (context, ref, _) {
                   final lists = ref.watch(taskListsProvider);
@@ -100,10 +102,13 @@ class TaskInfoSection extends StatelessWidget {
                   return Row(
                     children: [
                       Icon(Icons.playlist_add_check, size: 16, color: primary),
-                      const SizedBox(width: 8),
+                      const SizedBox(width: AppSpacing.sm),
                       Text(
                         listName,
-                        style: TextStyle(color: primary, fontSize: 12),
+                        style: TextStyle(
+                          color: primary,
+                          fontSize: AppFontSizes.sm,
+                        ),
                       ),
                     ],
                   );

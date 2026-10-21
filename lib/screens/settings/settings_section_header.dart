@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../theme/app_spacing.dart';
 
 class SettingsSectionHeader extends StatelessWidget {
   const SettingsSectionHeader({super.key, required this.title});
@@ -17,7 +18,12 @@ class SettingsSectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 20, 16, 4),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.lg,
+        20,
+        AppSpacing.lg,
+        AppSpacing.xs,
+      ),
       child: Text(
         title,
         style: Theme.of(context).textTheme.labelLarge?.copyWith(

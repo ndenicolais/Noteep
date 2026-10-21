@@ -12,6 +12,8 @@ import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
+import '../../theme/app_font_sizes.dart';
+import '../../theme/app_spacing.dart';
 import 'calendar_utils.dart';
 
 /// Multi-day agenda view used for the "Settimana" and "7 giorni" modes.
@@ -46,7 +48,10 @@ class CalendarMultiDayView extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.xs,
+            vertical: AppSpacing.xxs,
+          ),
           child: Row(
             children: [
               IconButton(
@@ -58,7 +63,7 @@ class CalendarMultiDayView extends StatelessWidget {
                   rangeLabel,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: AppFontSizes.md,
                     fontWeight: FontWeight.bold,
                     color: colorScheme.onSurface,
                   ),
@@ -85,7 +90,7 @@ class CalendarMultiDayView extends StatelessWidget {
                       Text(
                         dayName,
                         style: TextStyle(
-                          fontSize: 10,
+                          fontSize: AppFontSizes.xs,
                           fontWeight: FontWeight.w600,
                           color: colorScheme.onSurfaceVariant,
                         ),
@@ -93,7 +98,9 @@ class CalendarMultiDayView extends StatelessWidget {
                       Container(
                         width: 26,
                         height: 26,
-                        margin: const EdgeInsets.symmetric(vertical: 2),
+                        margin: const EdgeInsets.symmetric(
+                          vertical: AppSpacing.xxs,
+                        ),
                         decoration:
                             isToday
                                 ? BoxDecoration(
@@ -147,17 +154,22 @@ class CalendarMultiDayView extends StatelessWidget {
                         ),
                       ),
                       child: ListView.builder(
-                        padding: const EdgeInsets.only(top: 4),
+                        padding: const EdgeInsets.only(top: AppSpacing.xs),
                         itemCount: dayEvents.length,
                         itemBuilder: (_, i) {
                           final event = dayEvents[i];
                           return GestureDetector(
                             onTap: () => AppNav.openEvent(context, event),
                             child: Container(
-                              margin: const EdgeInsets.fromLTRB(2, 0, 2, 2),
+                              margin: const EdgeInsets.fromLTRB(
+                                AppSpacing.xxs,
+                                0,
+                                AppSpacing.xxs,
+                                AppSpacing.xxs,
+                              ),
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 3,
-                                vertical: 2,
+                                vertical: AppSpacing.xxs,
                               ),
                               decoration: BoxDecoration(
                                 color:

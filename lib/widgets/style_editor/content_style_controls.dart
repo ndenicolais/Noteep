@@ -11,6 +11,7 @@
 import 'package:flutter/material.dart';
 import '../../models/note_model.dart';
 import '../../theme/app_font_sizes.dart';
+import '../../theme/app_spacing.dart';
 import 'color_picker_widget.dart';
 
 const _kFonts = [
@@ -37,7 +38,7 @@ class ContentStyleControls extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Font', style: Theme.of(context).textTheme.labelLarge),
-        const SizedBox(height: 8),
+        const SizedBox(height: AppSpacing.sm),
         SizedBox(
           height: 44,
           // An always-visible scrollbar hints that more fonts are
@@ -48,7 +49,7 @@ class ContentStyleControls extends StatelessWidget {
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: _kFonts.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 8),
+              separatorBuilder: (_, __) => const SizedBox(width: AppSpacing.sm),
               itemBuilder: (_, i) {
                 final f = _kFonts[i];
                 return ChoiceChip(
@@ -63,7 +64,7 @@ class ContentStyleControls extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.lg),
         Text(
           'Dimensione: ${style.fontSize.toStringAsFixed(0)}pt',
           style: Theme.of(context).textTheme.labelLarge,
@@ -96,9 +97,9 @@ class ContentStyleControls extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: AppSpacing.lg),
         Text('Colore testo', style: Theme.of(context).textTheme.labelLarge),
-        const SizedBox(height: 8),
+        const SizedBox(height: AppSpacing.sm),
         ColorPickerWidget(
           current: style.fontColor ?? Theme.of(context).colorScheme.onSurface,
           isDark: true,

@@ -11,6 +11,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../../models/note_model.dart';
+import '../../theme/app_radius.dart';
+import '../../theme/app_spacing.dart';
 import '../../widgets/note_card.dart';
 import 'home_layout_utils.dart';
 
@@ -37,12 +39,11 @@ class _ReorderableGridViewState extends State<ReorderableGridView> {
     return LayoutBuilder(
       builder: (ctx, constraints) {
         final cols = gridColumns(constraints.maxWidth);
-        const double spacing = 8;
-        const double pad = 12;
+        const double spacing = AppSpacing.sm;
+        const double pad = AppSpacing.md;
         final itemWidth =
             (constraints.maxWidth - pad * 2 - spacing * (cols - 1)) / cols;
-        final rowCount =
-            widget.notes.isEmpty ? 0 : ((widget.notes.length - 1) ~/ cols) + 1;
+        final count = widget.notes.length;
         return ScrollConfiguration(
           behavior: ScrollConfiguration.of(ctx).copyWith(
             dragDevices: {PointerDeviceKind.touch, PointerDeviceKind.mouse},
@@ -50,33 +51,41 @@ class _ReorderableGridViewState extends State<ReorderableGridView> {
           child: CustomScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
+              // Masonry: independent lazy columns, each card at its natural
+              // height. Note i goes to column i % cols, so reading order and
+              // the global indices used by drag & drop stay row-major.
               SliverPadding(
-                padding: const EdgeInsets.fromLTRB(12, 12, 12, 80),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate((_, row) {
-                    final start = row * cols;
-                    final end = (start + cols).clamp(0, widget.notes.length);
-                    final filled = end - start;
-                    return Padding(
-                      padding: EdgeInsets.only(
-                        bottom: row < rowCount - 1 ? spacing : 0,
+                padding: const EdgeInsets.fromLTRB(
+                  pad - spacing / 2,
+                  pad,
+                  pad - spacing / 2,
+                  80,
+                ),
+                sliver: SliverCrossAxisGroup(
+                  slivers: [
+                    for (int col = 0; col < cols; col++)
+                      SliverCrossAxisExpanded(
+                        flex: 1,
+                        sliver: SliverPadding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: spacing / 2,
+                          ),
+                          sliver: SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                              (_, row) => Padding(
+                                padding: const EdgeInsets.only(bottom: spacing),
+                                child: _buildItem(
+                                  ctx,
+                                  row * cols + col,
+                                  itemWidth,
+                                ),
+                              ),
+                              childCount: masonryColumnLength(count, cols, col),
+                            ),
+                          ),
+                        ),
                       ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          for (int i = start; i < end; i++) ...[
-                            if (i > start) SizedBox(width: spacing),
-                            Expanded(child: _buildItem(ctx, i, itemWidth)),
-                          ],
-                          // Fill remaining cells in last partial row
-                          for (int k = filled; k < cols; k++) ...[
-                            SizedBox(width: spacing),
-                            const Expanded(child: SizedBox()),
-                          ],
-                        ],
-                      ),
-                    );
-                  }, childCount: rowCount),
+                  ],
                 ),
               ),
             ],
@@ -117,19 +126,10 @@ class _ReorderableGridViewState extends State<ReorderableGridView> {
               }),
           feedback: Material(
             elevation: 8,
-            borderRadius: BorderRadius.circular(12),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: itemWidth, maxHeight: 350),
-              child: NoteCard(note: note),
-            ),
+            borderRadius: BorderRadius.circular(AppRadius.md),
+            child: SizedBox(width: itemWidth, child: NoteCard(note: note)),
           ),
-          childWhenDragging: Opacity(
-            opacity: 0.3,
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxHeight: 350),
-              child: NoteCard(note: note),
-            ),
-          ),
+          childWhenDragging: Opacity(opacity: 0.3, child: NoteCard(note: note)),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 150),
             decoration:
@@ -142,10 +142,7 @@ class _ReorderableGridViewState extends State<ReorderableGridView> {
                       ),
                     )
                     : const BoxDecoration(),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxHeight: 350),
-              child: NoteCard(note: note),
-            ),
+            child: NoteCard(note: note),
           ),
         );
       },

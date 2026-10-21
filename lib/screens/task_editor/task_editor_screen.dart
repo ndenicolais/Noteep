@@ -17,10 +17,13 @@ import '../../models/subtask_model.dart';
 import '../../models/task_change_history.dart';
 import '../../providers/tasks_provider.dart';
 import '../../providers/tasks_undo_redo_provider.dart';
+import '../../theme/app_font_sizes.dart';
+import '../../theme/app_spacing.dart';
 import '../../utils/notification_service.dart';
 import '../../utils/recurrence.dart';
 import '../../utils/dialogs/move_to_list_dialog.dart';
 import '../../widgets/reminder_banner.dart';
+import '../../widgets/shared/app_dialogs.dart';
 import '../../widgets/shared/error_feedback.dart';
 import 'task_editor_app_bar.dart';
 import 'task_editor_bottom_bar.dart';
@@ -176,43 +179,28 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
     setState(() => _task = updated);
   }
 
-  void _confirmDelete() {
-    showDialog(
-      context: context,
-      builder:
-          (ctx) => AlertDialog(
-            title: const Text('Elimina task'),
-            content: const Text('Vuoi spostare questo task nel cestino?'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(ctx),
-                child: const Text('Annulla'),
-              ),
-              TextButton(
-                onPressed: () {
-                  _softDeleted = true;
-                  // A never-saved task is not in the provider: nothing to trash.
-                  if (!_isNew) {
-                    final notifier = ref.read(tasksProvider.notifier);
-                    final id = _task.id;
-                    notifyWithUndo(
-                      notifier.softDelete(id),
-                      context,
-                      message: 'Task spostato nel cestino',
-                      onUndo: () => notifier.restoreFromTrash(id),
-                    );
-                  }
-                  Navigator.pop(ctx);
-                  Navigator.pop(context);
-                },
-                child: const Text(
-                  'Elimina',
-                  style: TextStyle(color: Colors.red),
-                ),
-              ),
-            ],
-          ),
+  Future<void> _confirmDelete() async {
+    final confirmed = await showAppConfirmDialog(
+      context,
+      title: 'Elimina task',
+      message: 'Vuoi spostare questo task nel cestino?',
+      confirmLabel: 'Elimina',
+      destructive: true,
     );
+    if (!confirmed || !mounted) return;
+    _softDeleted = true;
+    // A never-saved task is not in the provider: nothing to trash.
+    if (!_isNew) {
+      final notifier = ref.read(tasksProvider.notifier);
+      final id = _task.id;
+      notifyWithUndo(
+        notifier.softDelete(id),
+        context,
+        message: 'Task spostato nel cestino',
+        onUndo: () => notifier.restoreFromTrash(id),
+      );
+    }
+    Navigator.pop(context);
   }
 
   void _showMoveToListDialog() {
@@ -445,7 +433,12 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
               ),
             // Campo Titolo
             Padding(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.lg,
+                AppSpacing.md,
+                AppSpacing.lg,
+                AppSpacing.sm,
+              ),
               child: TextField(
                 controller: _titleController,
                 focusNode: _titleFocusNode,
@@ -476,7 +469,7 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
             // Campo Descrizione
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
                 child: TextField(
                   controller: _descriptionController,
                   focusNode: _descriptionFocusNode,
@@ -501,11 +494,11 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
             ),
             // Footer con data ultima modifica
             Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(AppSpacing.sm),
               child: Text(
                 'Ultima modifica: ${DateFormat('dd MMM, HH:mm').format(_task.updatedAt)}',
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: AppFontSizes.sm,
                   color: Theme.of(context).colorScheme.onSurface.withAlpha(150),
                 ),
               ),

@@ -1,4 +1,4 @@
-﻿// Noteep — Copyright © 2026 Nicola De Nicolais — All Rights Reserved.
+// Noteep — Copyright © 2026 Nicola De Nicolais — All Rights Reserved.
 // Licensed under the GNU GPL v3 with Additional Commercial Restrictions.
 //
 // Commercial use, including publishing or monetizing on any app store,
@@ -11,6 +11,7 @@
 import 'package:flutter/material.dart';
 import '../../models/note_model.dart';
 import '../../theme/app_radius.dart';
+import '../../theme/app_spacing.dart';
 import 'title_style_controls.dart';
 import 'content_style_controls.dart';
 
@@ -65,7 +66,12 @@ class _StyleEditorSheetState extends State<StyleEditorSheet> {
               top: Radius.circular(AppRadius.lg),
             ),
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.lg,
+                AppSpacing.sm,
+                AppSpacing.lg,
+                AppSpacing.xl,
+              ),
               child: ListView(
                 controller: scroll,
                 children: [
@@ -73,7 +79,7 @@ class _StyleEditorSheetState extends State<StyleEditorSheet> {
                     child: Container(
                       width: 40,
                       height: 4,
-                      margin: const EdgeInsets.only(bottom: 16),
+                      margin: const EdgeInsets.only(bottom: AppSpacing.lg),
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.outlineVariant,
                         borderRadius: BorderRadius.circular(2),
@@ -86,7 +92,7 @@ class _StyleEditorSheetState extends State<StyleEditorSheet> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: AppSpacing.md),
                   SegmentedButton<_StyleSection>(
                     segments: const [
                       ButtonSegment(
@@ -104,7 +110,7 @@ class _StyleEditorSheetState extends State<StyleEditorSheet> {
                     onSelectionChanged:
                         (s) => setState(() => _section = s.first),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: AppSpacing.lg),
                   if (_section == _StyleSection.title)
                     TitleStyleControls(style: _style, onChanged: _update)
                   else

@@ -13,6 +13,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/audio_provider.dart';
+import '../../theme/app_spacing.dart';
 
 /// Bottom sheet with record/stop controls. Pops with the resulting
 /// `AudioNote` once the user stops a recording, or `null` if cancelled.
@@ -67,7 +68,7 @@ class _AudioRecorderSheetState extends ConsumerState<AudioRecorderSheet> {
     final recording = ref.watch(recordingStateProvider);
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(AppSpacing.xl),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -77,7 +78,7 @@ class _AudioRecorderSheetState extends ConsumerState<AudioRecorderSheet> {
                 style: TextStyle(color: Theme.of(context).colorScheme.error),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppSpacing.lg),
               TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: const Text('Chiudi'),
@@ -88,7 +89,7 @@ class _AudioRecorderSheetState extends ConsumerState<AudioRecorderSheet> {
                 size: 48,
                 color: Theme.of(context).colorScheme.primary,
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: AppSpacing.md),
               Text(
                 _format(_elapsed),
                 style: Theme.of(context).textTheme.headlineSmall,
