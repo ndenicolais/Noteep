@@ -29,7 +29,7 @@ android {
 
     defaultConfig {
         applicationId = "com.ndn21.noteep"
-        minSdkVersion 23
+        minSdkVersion flutter.minSdkVersion
         compileSdkVersion 36
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
