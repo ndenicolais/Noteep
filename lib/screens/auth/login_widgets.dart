@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
+import '../../widgets/shared/app_logo.dart';
 
 /// App logo, name and tagline at the top of the login screen.
 class LoginHeader extends StatelessWidget {
@@ -16,21 +17,7 @@ class LoginHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Center(
-          child: Container(
-            width: 84,
-            height: 84,
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: AppColors.dark,
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: Image.asset(
-              'assets/images/app_logo_icon.png',
-              semanticLabel: 'Logo Noteep',
-            ),
-          ),
-        ),
+        const Center(child: AppLogo()),
         const SizedBox(height: 20),
         Text(
           'Noteep',

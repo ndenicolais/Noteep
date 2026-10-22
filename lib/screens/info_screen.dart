@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import '../core/constants/app_version.dart';
 import '../theme/app_spacing.dart';
 import '../widgets/changelog_dialog.dart';
+import '../widgets/shared/app_logo.dart';
 import '../widgets/shared/section_header.dart';
 import '../widgets/shared/tag_chip.dart';
 
@@ -33,21 +34,7 @@ class InfoScreen extends StatelessWidget {
         children: [
           // ── Logo + Nome ──────────────────────────────────────────────────
           const SizedBox(height: AppSpacing.lg),
-          Center(
-            child: Container(
-              width: 96,
-              height: 96,
-              decoration: BoxDecoration(
-                color: cs.primaryContainer,
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: Icon(
-                Icons.note_alt_outlined,
-                size: 56,
-                color: cs.onPrimaryContainer,
-              ),
-            ),
-          ),
+          const Center(child: AppLogo(size: 96)),
           const SizedBox(height: AppSpacing.lg),
           Center(
             child: Text(
@@ -146,13 +133,9 @@ class InfoScreen extends StatelessWidget {
                   context: context,
                   applicationName: 'Noteep',
                   applicationVersion: appVersion,
-                  applicationIcon: Padding(
-                    padding: const EdgeInsets.all(AppSpacing.sm),
-                    child: Icon(
-                      Icons.note_alt_outlined,
-                      size: 48,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                  applicationIcon: const Padding(
+                    padding: EdgeInsets.all(AppSpacing.sm),
+                    child: AppLogo(size: 48),
                   ),
                 ),
           ),

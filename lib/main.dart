@@ -26,6 +26,7 @@ import 'theme/app_spacing.dart';
 import 'theme/app_theme.dart';
 import 'utils/app_bootstrap.dart';
 import 'utils/widget_service.dart';
+import 'widgets/shared/app_logo.dart';
 import 'widgets/sync_status_listener.dart';
 
 void main() {
@@ -108,19 +109,7 @@ class _SplashScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: 84,
-              height: 84,
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primaryContainer,
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: Icon(
-                Icons.note_alt,
-                size: 46,
-                color: Theme.of(context).colorScheme.onPrimaryContainer,
-              ),
-            ),
+            const AppLogo(),
             const SizedBox(height: AppSpacing.xl),
             const CircularProgressIndicator(),
           ],
