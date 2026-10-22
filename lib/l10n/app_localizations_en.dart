@@ -335,4 +335,410 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get unknownRouteHome => 'Back to home';
+
+  @override
+  String get commonClose => 'Close';
+
+  @override
+  String get commonDelete => 'Delete';
+
+  @override
+  String get commonUndo => 'Undo';
+
+  @override
+  String get commonHide => 'Hide';
+
+  @override
+  String get commonOk => 'OK';
+
+  @override
+  String get commonPin => 'Pin';
+
+  @override
+  String get commonUnpin => 'Unpin';
+
+  @override
+  String get commonArchive => 'Archive';
+
+  @override
+  String get commonUnarchive => 'Unarchive';
+
+  @override
+  String get commonMoveToTrash => 'Move to trash';
+
+  @override
+  String get commonTrash => 'Trash';
+
+  @override
+  String get commonLoading => 'Loading…';
+
+  @override
+  String get commonClearSearch => 'Clear search';
+
+  @override
+  String get commonUntitled => 'Untitled';
+
+  @override
+  String get commonBold => 'Bold';
+
+  @override
+  String get commonItalic => 'Italic';
+
+  @override
+  String get commonFont => 'Font';
+
+  @override
+  String get commonMoveEarlier => 'Move earlier';
+
+  @override
+  String get commonMoveLater => 'Move later';
+
+  @override
+  String get commonRemoveReminder => 'Remove reminder';
+
+  @override
+  String get commonSyncError =>
+      'Sync error. Check your connection and try again.';
+
+  @override
+  String get commonLinkOpenFailed => 'Unable to open the link';
+
+  @override
+  String get appLogoLabel => 'Noteep logo';
+
+  @override
+  String get navNotes => 'Notes';
+
+  @override
+  String get navTasks => 'Tasks';
+
+  @override
+  String get navReminders => 'Reminders';
+
+  @override
+  String get navCalendar => 'Calendar';
+
+  @override
+  String get navLabels => 'Labels';
+
+  @override
+  String get navArchive => 'Archive';
+
+  @override
+  String get navTrash => 'Trash';
+
+  @override
+  String get navSettings => 'Settings';
+
+  @override
+  String get navSignOut => 'Sign out';
+
+  @override
+  String get navExpandMenu => 'Expand menu';
+
+  @override
+  String get navCollapseMenu => 'Collapse menu';
+
+  @override
+  String get navOpenMenu => 'Open menu';
+
+  @override
+  String get syncChangeRejected =>
+      'A change could not be synced and was undone.';
+
+  @override
+  String get syncPendingBanner =>
+      'Changes not synced yet: they will be sent as soon as you are back online.';
+
+  @override
+  String get sortTitle => 'Sort by';
+
+  @override
+  String get sortCreatedDate => 'Date created';
+
+  @override
+  String get sortModifiedDate => 'Date modified';
+
+  @override
+  String get sortNewestFirst => 'Newest first';
+
+  @override
+  String get sortOldestFirst => 'Oldest first';
+
+  @override
+  String get homeSearchHint => 'Search notes...';
+
+  @override
+  String get homeSortTooltip => 'Sort notes';
+
+  @override
+  String get homeNewNote => 'New note';
+
+  @override
+  String get homeNoResults => 'No notes found';
+
+  @override
+  String get homeEmpty => 'No notes yet';
+
+  @override
+  String get homeCreateFirst => 'Create your first note';
+
+  @override
+  String get homeFabTask => 'Task';
+
+  @override
+  String get homeFabChecklist => 'Checklist';
+
+  @override
+  String get homeFabNote => 'Note';
+
+  @override
+  String get homeFabAudio => 'Audio';
+
+  @override
+  String get homeFabTemplate => 'Template';
+
+  @override
+  String get homeFabCloseMenu => 'Close quick actions menu';
+
+  @override
+  String get homeFabOpenMenu => 'New quick action';
+
+  @override
+  String get homeFabCloseTooltip => 'Close';
+
+  @override
+  String get homeFabOpenTooltip => 'New';
+
+  @override
+  String get noteArchived => 'Note archived';
+
+  @override
+  String get noteUnarchived => 'Note removed from archive';
+
+  @override
+  String get noteTrashed => 'Note moved to trash';
+
+  @override
+  String get noteOpenHint => 'Open note';
+
+  @override
+  String get noteReminderSetLabel => 'Reminder set';
+
+  @override
+  String get notePinnedLabel => 'Pinned note';
+
+  @override
+  String noteChecklistMore(int count) {
+    return '+$count more';
+  }
+
+  @override
+  String get editorUndo => 'Undo';
+
+  @override
+  String get editorRedo => 'Redo';
+
+  @override
+  String get editorInsertLink => 'Insert link';
+
+  @override
+  String get editorEdit => 'Edit';
+
+  @override
+  String get editorMarkdownPreview => 'Markdown preview';
+
+  @override
+  String get editorShare => 'Share';
+
+  @override
+  String get editorBackgroundColor => 'Background color';
+
+  @override
+  String get editorEditStyle => 'Edit style';
+
+  @override
+  String get editorReminder => 'Reminder';
+
+  @override
+  String get editorLinkNote => 'Link note';
+
+  @override
+  String get editorRecordAudio => 'Record audio';
+
+  @override
+  String get editorAddItem => 'Add item';
+
+  @override
+  String get editorDeleteNote => 'Delete note';
+
+  @override
+  String get editorDeleteConfirm => 'Move this note to the trash?';
+
+  @override
+  String get editorTitleHint => 'Title';
+
+  @override
+  String get editorContentHint => 'Note';
+
+  @override
+  String get editorItemHint => 'Item...';
+
+  @override
+  String editorLastModified(String date) {
+    return 'Last modified: $date';
+  }
+
+  @override
+  String get editorChooseBackground => 'Choose background color';
+
+  @override
+  String editorReminderScheduled(String date) {
+    return 'Reminder: $date';
+  }
+
+  @override
+  String get editorReminderFailed => 'Unable to schedule the reminder.';
+
+  @override
+  String get editorReminderRemoved => 'Reminder removed';
+
+  @override
+  String get editorReminderNotificationTitle => 'Note reminder';
+
+  @override
+  String get editorReminderNotificationBody =>
+      'You have a reminder for this note';
+
+  @override
+  String get editorAudioSection => 'Audio';
+
+  @override
+  String get editorLinkedNotes => 'Linked notes';
+
+  @override
+  String get editorRecordingError =>
+      'Unable to record audio. Check the microphone permission.';
+
+  @override
+  String get editorStopAndAttach => 'Stop and attach';
+
+  @override
+  String get editorLinkText => 'Text (optional)';
+
+  @override
+  String get editorLinkAddress => 'Address';
+
+  @override
+  String get editorLinkInvalid => 'Enter a valid address';
+
+  @override
+  String get editorLinkInsert => 'Insert';
+
+  @override
+  String get editorSearchNoteHint => 'Search note...';
+
+  @override
+  String get editorUntitledNote => 'Untitled note';
+
+  @override
+  String get styleTitle => 'Text style';
+
+  @override
+  String get styleSectionTitle => 'Title';
+
+  @override
+  String get styleSectionBody => 'Body';
+
+  @override
+  String styleSize(String size) {
+    return 'Size: ${size}pt';
+  }
+
+  @override
+  String get styleStrikethrough => 'Strikethrough';
+
+  @override
+  String get styleTextColor => 'Text color';
+
+  @override
+  String get styleTitleColor => 'Title color';
+
+  @override
+  String get styleResetTitle => 'Reset title style';
+
+  @override
+  String get styleMaterialColors => 'Material colors';
+
+  @override
+  String get templateChoose => 'Choose a template';
+
+  @override
+  String get templateSectionNotes => 'Notes';
+
+  @override
+  String get templateSectionChecklists => 'Checklists';
+
+  @override
+  String get templateMeetingName => 'Meeting notes';
+
+  @override
+  String get templateMeetingDescription =>
+      'A structure for taking notes during a meeting';
+
+  @override
+  String get templateMeetingContent =>
+      '## Meeting of [DATE]\n\n**Attendees:**\n- \n\n**Agenda:**\n1. \n\n**Topics discussed:**\n\n**Decisions made:**\n\n**Action items:**\n- \n\n**Next meeting:** ';
+
+  @override
+  String get templateJournalName => 'Daily journal';
+
+  @override
+  String get templateJournalDescription =>
+      'Track your thoughts and goals for the day';
+
+  @override
+  String get templateJournalContent =>
+      '## [DATE]\n\n**How I feel today:**\n\n**Three things I\'m grateful for:**\n1. \n2. \n3. \n\n**Today\'s goals:**\n\n**Reflections on the day:**\n';
+
+  @override
+  String get templateProjectName => 'Project plan';
+
+  @override
+  String get templateProjectDescription =>
+      'Organize a project\'s goals, milestones and resources';
+
+  @override
+  String get templateProjectContent =>
+      '## Project: [NAME]\n\n**Goal:**\n\n**Deadline:**\n\n**Milestones:**\n- [ ] \n- [ ] \n\n**Resources needed:**\n\n**Notes:**\n';
+
+  @override
+  String get templateShoppingName => 'Shopping list';
+
+  @override
+  String get templateShoppingDescription => 'A shopping list with checkboxes';
+
+  @override
+  String get templateShoppingItems => 'Fruit and vegetables\nMilk\nBread\nEggs';
+
+  @override
+  String get templateTravelName => 'Packing list';
+
+  @override
+  String get templateTravelDescription =>
+      'Don\'t forget anything for your trip';
+
+  @override
+  String get templateTravelItems =>
+      'Passport / Documents\nChargers\nClothes\nToiletries\nMedicines\nCash / Cards';
+
+  @override
+  String get templateIdeasName => 'Idea brainstorming';
+
+  @override
+  String get templateIdeasDescription => 'Free space to collect ideas';
+
+  @override
+  String get templateIdeasContent =>
+      '## Idea: [TITLE]\n\n**Description:**\n\n**Pros:**\n- \n\n**Cons:**\n- \n\n**Next steps:**\n';
 }

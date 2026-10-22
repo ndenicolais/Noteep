@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import '../../models/note_model.dart';
 import '../../theme/app_spacing.dart';
 import 'color_picker_widget.dart';
@@ -35,11 +36,12 @@ class TitleStyleControls extends StatelessWidget {
     final effectiveBold = style.titleIsBold ?? true;
     final effectiveItalic = style.titleIsItalic ?? false;
 
+    final l10n = context.l10n;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Font family
-        Text('Font', style: Theme.of(context).textTheme.labelLarge),
+        Text(l10n.commonFont, style: Theme.of(context).textTheme.labelLarge),
         const SizedBox(height: AppSpacing.sm),
         FontFamilyPicker(
           selected: effectiveFamily,
@@ -49,7 +51,7 @@ class TitleStyleControls extends StatelessWidget {
 
         // Font size
         Text(
-          'Dimensione: ${effectiveSize.toStringAsFixed(0)}pt',
+          l10n.styleSize(effectiveSize.toStringAsFixed(0)),
           style: Theme.of(context).textTheme.labelLarge,
         ),
         Slider(
@@ -65,13 +67,13 @@ class TitleStyleControls extends StatelessWidget {
         Row(
           children: [
             FilterChip(
-              label: const Text('Grassetto'),
+              label: Text(l10n.commonBold),
               selected: effectiveBold,
               onSelected: (v) => onChanged(style.copyWith(titleIsBold: v)),
             ),
             const SizedBox(width: AppSpacing.sm),
             FilterChip(
-              label: const Text('Corsivo'),
+              label: Text(l10n.commonItalic),
               selected: effectiveItalic,
               onSelected: (v) => onChanged(style.copyWith(titleIsItalic: v)),
             ),
@@ -80,7 +82,10 @@ class TitleStyleControls extends StatelessWidget {
         const SizedBox(height: AppSpacing.lg),
 
         // Title font color
-        Text('Colore titolo', style: Theme.of(context).textTheme.labelLarge),
+        Text(
+          l10n.styleTitleColor,
+          style: Theme.of(context).textTheme.labelLarge,
+        ),
         const SizedBox(height: AppSpacing.sm),
         ColorPickerWidget(
           current: effectiveColor,
@@ -102,7 +107,7 @@ class TitleStyleControls extends StatelessWidget {
                 ),
               ),
           icon: const Icon(Icons.refresh, size: 18),
-          label: const Text('Ripristina stile titolo'),
+          label: Text(l10n.styleResetTitle),
         ),
       ],
     );

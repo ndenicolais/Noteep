@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import '../../theme/app_radius.dart';
 import '../../theme/app_spacing.dart';
 
@@ -57,7 +58,7 @@ class _SkeletonPulseState extends State<SkeletonPulse>
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      label: 'Caricamento…',
+      label: context.l10n.commonLoading,
       liveRegion: true,
       child: ExcludeSemantics(
         child: FadeTransition(opacity: _opacity, child: widget.child),

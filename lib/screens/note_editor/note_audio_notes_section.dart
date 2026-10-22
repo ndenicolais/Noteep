@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import '../../models/audio_note.dart';
 import '../../theme/app_spacing.dart';
 import 'note_audio_player_tile.dart';
@@ -38,7 +39,7 @@ class NoteAudioNotesSection extends StatelessWidget {
               Icon(Icons.mic_none_outlined, size: 16, color: onSurfaceVariant),
               const SizedBox(width: 6),
               Text(
-                'Audio',
+                context.l10n.editorAudioSection,
                 style: Theme.of(
                   context,
                 ).textTheme.labelMedium?.copyWith(color: onSurfaceVariant),

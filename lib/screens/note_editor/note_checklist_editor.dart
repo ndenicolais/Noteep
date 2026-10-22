@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import '../../models/note_model.dart';
 import '../../theme/app_spacing.dart';
 
@@ -57,9 +58,9 @@ class NoteChecklistEditor extends StatelessWidget {
                             ? textStyle.color?.withAlpha(100)
                             : textStyle.color,
                   ),
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: 'Elemento...',
+                    hintText: context.l10n.editorItemHint,
                   ),
                   onChanged: (v) {
                     item.text = v;

@@ -14,6 +14,8 @@ import 'package:noteep/providers/tasks_provider.dart';
 import '../helpers/test_container.dart';
 import 'package:noteep/providers/core_providers.dart';
 
+import '../helpers/l10n.dart';
+
 /// A loading flag that keeps its initial value, so the test decides whether
 /// loading is still in progress regardless of the fake Firestore fetch.
 class _PinnedFlag extends ValueStateNotifier<bool> {
@@ -62,6 +64,9 @@ void main() {
       UncontrolledProviderScope(
         container: container,
         child: MaterialApp(
+          locale: testLocale,
+          supportedLocales: testSupportedLocales,
+          localizationsDelegates: testLocalizationsDelegates,
           onGenerateRoute: fakeRoute,
           home: NotificationLaunchHandler(
             targets: targets,

@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/routing/app_router.dart';
 import '../providers/auth_provider.dart';
@@ -124,13 +125,13 @@ class AppDrawer extends ConsumerWidget {
             ),
             _DrawerItem(
               icon: Icons.lightbulb_outline,
-              label: 'Note',
+              label: context.l10n.navNotes,
               selected: currentSection == DrawerSection.home,
               onTap: () => _navigateTo(context, DrawerSection.home, null),
             ),
             _DrawerItem(
               icon: Icons.check_circle_outline,
-              label: 'Task',
+              label: context.l10n.navTasks,
               selected: currentSection == DrawerSection.tasks,
               onTap:
                   () => _navigateTo(
@@ -141,7 +142,7 @@ class AppDrawer extends ConsumerWidget {
             ),
             _DrawerItem(
               icon: Icons.notifications_outlined,
-              label: 'Promemoria',
+              label: context.l10n.navReminders,
               selected: currentSection == DrawerSection.reminders,
               onTap:
                   () => _navigateTo(
@@ -152,7 +153,7 @@ class AppDrawer extends ConsumerWidget {
             ),
             _DrawerItem(
               icon: Icons.calendar_today_outlined,
-              label: 'Calendario',
+              label: context.l10n.navCalendar,
               selected: currentSection == DrawerSection.calendar,
               onTap:
                   () => _navigateTo(
@@ -163,7 +164,7 @@ class AppDrawer extends ConsumerWidget {
             ),
             _DrawerItem(
               icon: Icons.label_outline,
-              label: 'Etichette',
+              label: context.l10n.navLabels,
               selected: currentSection == DrawerSection.labels,
               onTap:
                   () => _navigateTo(
@@ -174,7 +175,7 @@ class AppDrawer extends ConsumerWidget {
             ),
             _DrawerItem(
               icon: Icons.archive_outlined,
-              label: 'Archivio',
+              label: context.l10n.navArchive,
               selected: currentSection == DrawerSection.archive,
               onTap:
                   () => _navigateTo(
@@ -185,7 +186,7 @@ class AppDrawer extends ConsumerWidget {
             ),
             _DrawerItem(
               icon: Icons.delete_outline,
-              label: 'Cestino',
+              label: context.l10n.navTrash,
               selected: currentSection == DrawerSection.trash,
               onTap:
                   () => _navigateTo(
@@ -196,7 +197,7 @@ class AppDrawer extends ConsumerWidget {
             ),
             _DrawerItem(
               icon: Icons.settings_outlined,
-              label: 'Impostazioni',
+              label: context.l10n.navSettings,
               selected: currentSection == DrawerSection.settings,
               onTap:
                   () => _navigateTo(
@@ -208,7 +209,7 @@ class AppDrawer extends ConsumerWidget {
             const Divider(),
             _DrawerItem(
               icon: Icons.logout,
-              label: 'Esci',
+              label: context.l10n.navSignOut,
               onTap: () async {
                 Navigator.pop(context);
                 await ref.read(authNotifierProvider.notifier).signOut();

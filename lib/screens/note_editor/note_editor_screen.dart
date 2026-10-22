@@ -14,6 +14,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 // NoteEditorScreen now only handles Notes and Checklists
+import '../../l10n/l10n.dart';
 import '../../models/audio_note.dart';
 import '../../models/note_model.dart';
 import '../../models/change_history.dart';
@@ -229,13 +230,11 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
     _save();
 
     try {
-      await _controller.scheduleReminderNotification(scheduled);
+      await _controller.scheduleReminderNotification(context.l10n, scheduled);
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Impossibile pianificare il promemoria.'),
-          ),
+          SnackBar(content: Text(context.l10n.editorReminderFailed)),
         );
       }
       return;
@@ -245,7 +244,9 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Promemoria: ${DateFormat('dd MMM, HH:mm').format(scheduled)}',
+            context.l10n.editorReminderScheduled(
+              DateFormat('dd MMM, HH:mm').format(scheduled),
+            ),
           ),
         ),
       );
@@ -257,9 +258,9 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
     _controller.updateNote((n) => n.copyWith(clearReminder: true));
     _save();
     if (mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Promemoria rimosso')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.editorReminderRemoved)),
+      );
     }
   }
 
@@ -349,7 +350,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
     final opened = await openExternalLink(href);
     if (!opened && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Impossibile aprire il link')),
+        SnackBar(content: Text(context.l10n.commonLinkOpenFailed)),
       );
     }
   }
@@ -411,9 +412,9 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  'Scegli Colore Sfondo',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                Text(
+                  context.l10n.editorChooseBackground,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: AppSpacing.lg),
                 ColorPickerWidget(
@@ -459,9 +460,9 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
   Future<void> _confirmDelete() async {
     final confirmed = await showAppConfirmDialog(
       context,
-      title: 'Elimina nota',
-      message: 'Vuoi spostare questa nota nel cestino?',
-      confirmLabel: 'Elimina',
+      title: context.l10n.editorDeleteNote,
+      message: context.l10n.editorDeleteConfirm,
+      confirmLabel: context.l10n.commonDelete,
       destructive: true,
     );
     if (!confirmed || !mounted) return;
@@ -470,7 +471,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
       notifyWithUndo(
         pending,
         context,
-        message: 'Nota spostata nel cestino',
+        message: context.l10n.noteTrashed,
         onUndo: _controller.restore,
       );
     }
@@ -548,7 +549,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
                   style: _titleStyle(context),
                   maxLines: null,
                   decoration: InputDecoration(
-                    hintText: 'Titolo',
+                    hintText: context.l10n.editorTitleHint,
                     hintStyle: _titleStyle(context).copyWith(
                       color: (s.titleFontColor ?? effectiveFg).withAlpha(80),
                     ),
@@ -596,8 +597,8 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
                           style: _contentStyle(context),
                           maxLines: null,
                           textAlignVertical: TextAlignVertical.top,
-                          decoration: const InputDecoration(
-                            hintText: 'Nota',
+                          decoration: InputDecoration(
+                            hintText: context.l10n.editorContentHint,
                             border: InputBorder.none,
                           ),
                         ),
@@ -619,7 +620,9 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
                   vertical: 6,
                 ),
                 child: Text(
-                  'Ultima modifica: ${DateFormat('dd MMM, HH:mm').format(_note.updatedAt)}',
+                  context.l10n.editorLastModified(
+                    DateFormat('dd MMM, HH:mm').format(_note.updatedAt),
+                  ),
                   style: TextStyle(
                     fontSize: AppFontSizes.sm,
                     color: effectiveFg.withAlpha(150),

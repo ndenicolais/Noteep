@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 
 /// [showModalBottomSheet] whose content stays clear of the system
 /// navigation bar: with edge-to-edge (enforced from Android 15) the sheet
@@ -109,7 +110,7 @@ class _TextInputDialogState extends State<_TextInputDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Annulla'),
+          child: Text(context.l10n.commonCancel),
         ),
         TextButton(onPressed: _submit, child: Text(widget.confirmLabel)),
       ],
@@ -128,7 +129,7 @@ Future<bool> showAppConfirmDialog(
   required String title,
   required String message,
   required String confirmLabel,
-  String cancelLabel = 'Annulla',
+  String? cancelLabel,
   bool destructive = false,
 }) async {
   final confirmed = await showDialog<bool>(
@@ -141,7 +142,7 @@ Future<bool> showAppConfirmDialog(
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: Text(cancelLabel),
+            child: Text(cancelLabel ?? ctx.l10n.commonCancel),
           ),
           if (destructive)
             FilledButton(
@@ -170,7 +171,7 @@ Future<void> showAppMessageDialog(
   BuildContext context, {
   required String title,
   required String message,
-  String okLabel = 'OK',
+  String? okLabel,
 }) {
   return showDialog<void>(
     context: context,
@@ -181,7 +182,7 @@ Future<void> showAppMessageDialog(
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: Text(okLabel),
+              child: Text(okLabel ?? ctx.l10n.commonOk),
             ),
           ],
         ),

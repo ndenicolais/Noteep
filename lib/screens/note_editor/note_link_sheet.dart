@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import '../../models/note_model.dart';
 import '../../theme/app_font_sizes.dart';
 import '../../theme/app_spacing.dart';
@@ -58,7 +59,7 @@ class _NoteLinkSheetState extends State<NoteLinkSheet> {
                 child: TextField(
                   autofocus: true,
                   decoration: InputDecoration(
-                    hintText: 'Cerca nota...',
+                    hintText: context.l10n.editorSearchNoteHint,
                     prefixIcon: const Icon(Icons.search),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -78,7 +79,9 @@ class _NoteLinkSheetState extends State<NoteLinkSheet> {
                     return CheckboxListTile(
                       value: isLinked,
                       title: Text(
-                        note.title.isEmpty ? 'Nota senza titolo' : note.title,
+                        note.title.isEmpty
+                            ? context.l10n.editorUntitledNote
+                            : note.title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),

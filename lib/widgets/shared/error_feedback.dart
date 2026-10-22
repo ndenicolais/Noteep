@@ -9,8 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
-
-const _kErrorMessage = 'Si è verificato un errore. Riprova.';
+import '../../l10n/l10n.dart';
 
 /// Shows [message] with an "Annulla" action that runs [onUndo], for
 /// reversible fire-and-forget mutations (trash, archive). If [future] fails
@@ -27,10 +26,11 @@ void notifyWithUndo(
   required Future<void> Function() onUndo,
 }) {
   final messenger = ScaffoldMessenger.of(context);
+  final l10n = context.l10n;
   void showError() {
     messenger
       ..hideCurrentSnackBar()
-      ..showSnackBar(const SnackBar(content: Text(_kErrorMessage)));
+      ..showSnackBar(SnackBar(content: Text(l10n.commonGenericError)));
   }
 
   messenger
@@ -40,7 +40,7 @@ void notifyWithUndo(
         content: Text(message),
         persist: false,
         action: SnackBarAction(
-          label: 'Annulla',
+          label: l10n.commonUndo,
           onPressed: () => onUndo().catchError((_) => showError()),
         ),
       ),
@@ -56,13 +56,13 @@ void notifyWithUndo(
 void notifyOnError(
   Future<void> future,
   BuildContext context, {
-  String message = _kErrorMessage,
+  String? message,
 }) {
   future.catchError((_) {
     if (context.mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(message)));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message ?? context.l10n.commonGenericError)),
+      );
     }
   });
 }

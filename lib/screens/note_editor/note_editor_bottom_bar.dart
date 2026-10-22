@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 
 /// Bottom action bar for [NoteEditorScreen]: background, style, reminder,
 /// linked notes, audio recorder, checklist item and delete actions.
@@ -52,12 +53,12 @@ class NoteEditorBottomBar extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.palette_outlined),
               onPressed: onBackgroundPicker,
-              tooltip: 'Colore sfondo',
+              tooltip: context.l10n.editorBackgroundColor,
             ),
             IconButton(
               icon: const Icon(Icons.text_format),
               onPressed: onStyleEditor,
-              tooltip: 'Modifica stile',
+              tooltip: context.l10n.editorEditStyle,
             ),
             IconButton(
               icon: Icon(
@@ -66,29 +67,29 @@ class NoteEditorBottomBar extends StatelessWidget {
                     hasReminder ? Theme.of(context).colorScheme.primary : null,
               ),
               onPressed: onReminder,
-              tooltip: 'Promemoria',
+              tooltip: context.l10n.editorReminder,
             ),
             IconButton(
               icon: const Icon(Icons.link),
               onPressed: onLinkNote,
-              tooltip: 'Collega nota',
+              tooltip: context.l10n.editorLinkNote,
             ),
             IconButton(
               icon: const Icon(Icons.mic_none_outlined),
               onPressed: onRecordAudio,
-              tooltip: 'Registra audio',
+              tooltip: context.l10n.editorRecordAudio,
             ),
             if (isChecklist)
               IconButton(
                 icon: const Icon(Icons.add_box_outlined),
                 onPressed: onAddChecklistItem,
-                tooltip: 'Aggiungi elemento',
+                tooltip: context.l10n.editorAddItem,
               ),
             const Spacer(),
             IconButton(
               icon: const Icon(Icons.delete_outline),
               onPressed: onDelete,
-              tooltip: 'Elimina nota',
+              tooltip: context.l10n.editorDeleteNote,
             ),
           ],
         ),

@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/note_model.dart';
 import '../../providers/notes_undo_redo_provider.dart';
@@ -68,17 +69,17 @@ class NoteEditorAppBar extends ConsumerWidget implements PreferredSizeWidget {
         IconButton(
           icon: const Icon(Icons.undo),
           onPressed: history.canUndo ? onUndo : null,
-          tooltip: 'Annulla',
+          tooltip: context.l10n.editorUndo,
         ),
         IconButton(
           icon: const Icon(Icons.redo),
           onPressed: history.canRedo ? onRedo : null,
-          tooltip: 'Ripeti',
+          tooltip: context.l10n.editorRedo,
         ),
         if (note.type == NoteType.note)
           IconButton(
             icon: const Icon(Icons.add_link),
-            tooltip: 'Inserisci link',
+            tooltip: context.l10n.editorInsertLink,
             onPressed: onInsertLink,
           ),
         if (note.type == NoteType.note)
@@ -86,7 +87,10 @@ class NoteEditorAppBar extends ConsumerWidget implements PreferredSizeWidget {
             icon: Icon(
               markdownMode ? Icons.edit_outlined : Icons.preview_outlined,
             ),
-            tooltip: markdownMode ? 'Modifica' : 'Anteprima Markdown',
+            tooltip:
+                markdownMode
+                    ? context.l10n.editorEdit
+                    : context.l10n.editorMarkdownPreview,
             onPressed: onToggleMarkdown,
           ),
         PopupMenuButton<String>(
@@ -102,13 +106,13 @@ class NoteEditorAppBar extends ConsumerWidget implements PreferredSizeWidget {
           },
           itemBuilder:
               (_) => [
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 'share',
                   child: Row(
                     children: [
-                      Icon(Icons.share_outlined),
-                      SizedBox(width: AppSpacing.md),
-                      Text('Condividi'),
+                      const Icon(Icons.share_outlined),
+                      const SizedBox(width: AppSpacing.md),
+                      Text(context.l10n.editorShare),
                     ],
                   ),
                 ),
@@ -122,7 +126,11 @@ class NoteEditorAppBar extends ConsumerWidget implements PreferredSizeWidget {
                             : Icons.push_pin_outlined,
                       ),
                       const SizedBox(width: AppSpacing.md),
-                      Text(note.isPinned ? 'Rimuovi pin' : 'Fissa'),
+                      Text(
+                        note.isPinned
+                            ? context.l10n.commonUnpin
+                            : context.l10n.commonPin,
+                      ),
                     ],
                   ),
                 ),
@@ -136,7 +144,11 @@ class NoteEditorAppBar extends ConsumerWidget implements PreferredSizeWidget {
                             : Icons.archive_outlined,
                       ),
                       const SizedBox(width: AppSpacing.md),
-                      Text(note.isArchived ? 'Ripristina' : 'Archivia'),
+                      Text(
+                        note.isArchived
+                            ? context.l10n.commonUnarchive
+                            : context.l10n.commonArchive,
+                      ),
                     ],
                   ),
                 ),

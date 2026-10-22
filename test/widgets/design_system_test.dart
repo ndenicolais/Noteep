@@ -17,11 +17,19 @@ import 'package:noteep/widgets/shared/item_card.dart';
 import 'package:noteep/widgets/shared/section_header.dart';
 import 'package:noteep/widgets/shared/tag_chip.dart';
 
+import '../helpers/l10n.dart';
+
 void main() {
   final cs = AppTheme.light.colorScheme;
 
   Future<void> pump(WidgetTester tester, Widget child) => tester.pumpWidget(
-    MaterialApp(theme: AppTheme.light, home: Scaffold(body: child)),
+    MaterialApp(
+      locale: testLocale,
+      supportedLocales: testSupportedLocales,
+      localizationsDelegates: testLocalizationsDelegates,
+      theme: AppTheme.light,
+      home: Scaffold(body: child),
+    ),
   );
 
   group('SectionHeader', () {

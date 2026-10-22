@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../l10n/l10n.dart';
 import '../providers/settings/ui_provider.dart';
 import '../theme/app_radius.dart';
 import '../theme/app_spacing.dart';
@@ -20,6 +21,7 @@ class SortSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Padding(
       padding: const EdgeInsets.fromLTRB(
         AppSpacing.lg,
@@ -43,45 +45,45 @@ class SortSheet extends StatelessWidget {
             ),
           ),
           Text(
-            'Ordina per',
+            l10n.sortTitle,
             style: Theme.of(
               context,
             ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: AppSpacing.md),
           Text(
-            'Data di creazione',
+            l10n.sortCreatedDate,
             style: Theme.of(context).textTheme.labelLarge,
           ),
           SortTile(
             icon: Icons.arrow_downward,
-            label: 'Più recenti prima',
+            label: l10n.sortNewestFirst,
             value: SortOrder.createdNewest,
             current: current,
             onTap: onChanged,
           ),
           SortTile(
             icon: Icons.arrow_upward,
-            label: 'Più vecchie prima',
+            label: l10n.sortOldestFirst,
             value: SortOrder.createdOldest,
             current: current,
             onTap: onChanged,
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Data di modifica',
+            l10n.sortModifiedDate,
             style: Theme.of(context).textTheme.labelLarge,
           ),
           SortTile(
             icon: Icons.arrow_downward,
-            label: 'Più recenti prima',
+            label: l10n.sortNewestFirst,
             value: SortOrder.modifiedNewest,
             current: current,
             onTap: onChanged,
           ),
           SortTile(
             icon: Icons.arrow_upward,
-            label: 'Più vecchie prima',
+            label: l10n.sortOldestFirst,
             value: SortOrder.modifiedOldest,
             current: current,
             onTap: onChanged,

@@ -76,6 +76,9 @@ void main() {
       result = 'unset';
       await tester.pumpWidget(
         MaterialApp(
+          locale: testLocale,
+          supportedLocales: testSupportedLocales,
+          localizationsDelegates: testLocalizationsDelegates,
           home: Builder(
             builder:
                 (context) => TextButton(
@@ -138,6 +141,9 @@ void main() {
       );
       await tester.pumpWidget(
         MaterialApp(
+          locale: testLocale,
+          supportedLocales: testSupportedLocales,
+          localizationsDelegates: testLocalizationsDelegates,
           home: Scaffold(
             body: StatefulBuilder(
               builder:

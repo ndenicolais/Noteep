@@ -16,6 +16,7 @@ import '../../providers/notes_provider.dart';
 import '../../providers/notes_undo_redo_provider.dart';
 import '../../core/routing/notification_target.dart';
 import '../../utils/notification_service.dart';
+import '../../l10n/app_localizations.dart';
 
 /// Owns [NoteEditorScreen]'s note state and every Firestore/notification
 /// mutation, so the widget only holds text/focus controllers and UI. Callers
@@ -88,14 +89,20 @@ class NoteEditorController extends ChangeNotifier {
 
   // ─── Reminder ─────────────────────────────────────────────────────────────
 
-  Future<void> scheduleReminderNotification(DateTime scheduled) {
+  Future<void> scheduleReminderNotification(
+    AppLocalizations l10n,
+    DateTime scheduled,
+  ) {
     final content = _note.content;
     return NotificationService.instance.scheduleNotification(
       id: NotificationService.idForNote(_note.id),
-      title: _note.title.isEmpty ? 'Promemoria nota' : _note.title,
+      title:
+          _note.title.isEmpty
+              ? l10n.editorReminderNotificationTitle
+              : _note.title,
       body:
           content.isEmpty
-              ? 'Hai un promemoria per questa nota'
+              ? l10n.editorReminderNotificationBody
               : content.substring(0, content.length > 80 ? 80 : content.length),
       scheduledAt: scheduled,
       target: NotificationTarget.note(_note.id),

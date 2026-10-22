@@ -13,6 +13,8 @@ import 'package:noteep/widgets/note_card.dart';
 import 'package:noteep/widgets/shared/app_dialogs.dart';
 import '../helpers/test_container.dart';
 
+import '../helpers/l10n.dart';
+
 void main() {
   late ProviderContainer container;
   late NotesNotifier notes;
@@ -24,7 +26,12 @@ void main() {
 
   Widget app(Widget body) => UncontrolledProviderScope(
     container: container,
-    child: MaterialApp(home: Scaffold(body: body)),
+    child: MaterialApp(
+      locale: testLocale,
+      supportedLocales: testSupportedLocales,
+      localizationsDelegates: testLocalizationsDelegates,
+      home: Scaffold(body: body),
+    ),
   );
 
   SemanticsNode nodeOf(WidgetTester tester, String text) =>
@@ -106,6 +113,9 @@ void main() {
   ) async {
     await tester.pumpWidget(
       MaterialApp(
+        locale: testLocale,
+        supportedLocales: testSupportedLocales,
+        localizationsDelegates: testLocalizationsDelegates,
         builder:
             (context, child) => MediaQuery(
               data: MediaQuery.of(context).copyWith(

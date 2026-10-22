@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import '../../theme/app_colors.dart';
 
 /// App logo on a dark rounded tile, matching the launcher icon.
@@ -29,7 +30,7 @@ class AppLogo extends StatelessWidget {
       ),
       child: Image.asset(
         'assets/images/app_logo_icon.png',
-        semanticLabel: 'Logo Noteep',
+        semanticLabel: context.l10n.appLogoLabel,
       ),
     );
   }

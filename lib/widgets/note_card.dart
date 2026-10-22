@@ -10,6 +10,7 @@
 
 import '../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
+import '../l10n/l10n.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/note_model.dart';
@@ -60,7 +61,11 @@ class NoteCard extends ConsumerWidget {
             children: [
               Icon(note.isPinned ? Icons.push_pin : Icons.push_pin_outlined),
               const SizedBox(width: AppSpacing.md),
-              Text(note.isPinned ? 'Rimuovi pin' : 'Fissa'),
+              Text(
+                note.isPinned
+                    ? context.l10n.commonUnpin
+                    : context.l10n.commonPin,
+              ),
             ],
           ),
         ),
@@ -70,7 +75,11 @@ class NoteCard extends ConsumerWidget {
             children: [
               Icon(note.isArchived ? Icons.unarchive : Icons.archive_outlined),
               const SizedBox(width: AppSpacing.md),
-              Text(note.isArchived ? 'Ripristina' : 'Archivia'),
+              Text(
+                note.isArchived
+                    ? context.l10n.commonUnarchive
+                    : context.l10n.commonArchive,
+              ),
             ],
           ),
         ),
@@ -85,7 +94,7 @@ class NoteCard extends ConsumerWidget {
               ),
               const SizedBox(width: AppSpacing.md),
               Text(
-                'Sposta nel cestino',
+                context.l10n.commonMoveToTrash,
                 style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
             ],
@@ -119,8 +128,8 @@ class NoteCard extends ConsumerWidget {
           context,
           message:
               note.isArchived
-                  ? 'Nota rimossa dall\'archivio'
-                  : 'Nota archiviata',
+                  ? context.l10n.noteUnarchived
+                  : context.l10n.noteArchived,
           onUndo: () => notifier.toggleArchive(note.id),
         );
         break;
@@ -129,7 +138,7 @@ class NoteCard extends ConsumerWidget {
         notifyWithUndo(
           notifier.softDelete(note.id),
           context,
-          message: 'Nota spostata nel cestino',
+          message: context.l10n.noteTrashed,
           onUndo: () => notifier.restoreFromTrash(note.id),
         );
         break;
@@ -165,17 +174,19 @@ class NoteCard extends ConsumerWidget {
     // One screen-reader node per card: its text, tap to open, and the
     // long-press menu entries as custom actions (TalkBack "Azioni"), so
     // they don't depend on a long press at an arbitrary position.
+    final l10n = context.l10n;
     return MergeSemantics(
       child: Semantics(
-        onTapHint: 'Apri nota',
+        onTapHint: l10n.noteOpenHint,
         customSemanticsActions: {
-          CustomSemanticsAction(label: note.isPinned ? 'Rimuovi pin' : 'Fissa'):
+          CustomSemanticsAction(
+                label: note.isPinned ? l10n.commonUnpin : l10n.commonPin,
+              ):
               () => _runAction(context, ref, 'pin'),
           CustomSemanticsAction(
-                label: note.isArchived ? 'Ripristina' : 'Archivia',
-              ):
-              () => _runAction(context, ref, 'archive'),
-          const CustomSemanticsAction(label: 'Sposta nel cestino'):
+            label: note.isArchived ? l10n.commonUnarchive : l10n.commonArchive,
+          ): () => _runAction(context, ref, 'archive'),
+          CustomSemanticsAction(label: l10n.commonMoveToTrash):
               () => _runAction(context, ref, 'delete'),
           ...extraSemanticsActions,
         },
@@ -209,7 +220,7 @@ class NoteCard extends ConsumerWidget {
                               Icons.alarm,
                               size: 14,
                               color: s.fontColor?.withAlpha(153),
-                              semanticLabel: 'Promemoria impostato',
+                              semanticLabel: l10n.noteReminderSetLabel,
                             ),
                           if (note.isPinned)
                             Padding(
@@ -220,7 +231,7 @@ class NoteCard extends ConsumerWidget {
                                 Icons.push_pin,
                                 size: 14,
                                 color: s.fontColor?.withAlpha(153),
-                                semanticLabel: 'Nota fissata',
+                                semanticLabel: l10n.notePinnedLabel,
                               ),
                             ),
                         ],
@@ -306,7 +317,7 @@ class _ChecklistPreview extends StatelessWidget {
         ),
         if (note.checklistItems.length > 5)
           Text(
-            '+${note.checklistItems.length - 5} altri',
+            context.l10n.noteChecklistMore(note.checklistItems.length - 5),
             style: textStyle.copyWith(fontSize: AppFontSizes.xs),
           ),
       ],

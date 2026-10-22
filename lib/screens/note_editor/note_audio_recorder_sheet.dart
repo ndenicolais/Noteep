@@ -11,6 +11,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/audio_provider.dart';
 import '../../theme/app_spacing.dart';
@@ -74,14 +75,14 @@ class _AudioRecorderSheetState extends ConsumerState<AudioRecorderSheet> {
           children: [
             if (recording.errorMessage != null) ...[
               Text(
-                recording.errorMessage!,
+                context.l10n.editorRecordingError,
                 style: TextStyle(color: Theme.of(context).colorScheme.error),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: AppSpacing.lg),
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Chiudi'),
+                child: Text(context.l10n.commonClose),
               ),
             ] else ...[
               Icon(
@@ -98,7 +99,7 @@ class _AudioRecorderSheetState extends ConsumerState<AudioRecorderSheet> {
               FilledButton.icon(
                 onPressed: _stop,
                 icon: const Icon(Icons.stop),
-                label: const Text('Ferma e allega'),
+                label: Text(context.l10n.editorStopAndAttach),
               ),
             ],
           ],

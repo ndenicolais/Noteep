@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import '../../theme/app_spacing.dart';
 import '../../utils/link_utils.dart';
 
@@ -49,7 +50,7 @@ class _InsertLinkDialogState extends State<_InsertLinkDialog> {
   void _submit() {
     final url = normalizeUrl(_urlController.text);
     if (url == null) {
-      setState(() => _urlError = 'Inserisci un indirizzo valido');
+      setState(() => _urlError = context.l10n.editorLinkInvalid);
       return;
     }
     Navigator.pop(context, buildMarkdownLink(_textController.text, url));
@@ -57,8 +58,9 @@ class _InsertLinkDialogState extends State<_InsertLinkDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return AlertDialog(
-      title: const Text('Inserisci link'),
+      title: Text(l10n.editorInsertLink),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -66,7 +68,7 @@ class _InsertLinkDialogState extends State<_InsertLinkDialog> {
             controller: _textController,
             autofocus: widget.initialText.isEmpty,
             textInputAction: TextInputAction.next,
-            decoration: const InputDecoration(labelText: 'Testo (facoltativo)'),
+            decoration: InputDecoration(labelText: l10n.editorLinkText),
           ),
           const SizedBox(height: AppSpacing.md),
           TextField(
@@ -75,7 +77,7 @@ class _InsertLinkDialogState extends State<_InsertLinkDialog> {
             keyboardType: TextInputType.url,
             autocorrect: false,
             decoration: InputDecoration(
-              labelText: 'Indirizzo',
+              labelText: l10n.editorLinkAddress,
               hintText: 'https://...',
               errorText: _urlError,
             ),
@@ -89,9 +91,9 @@ class _InsertLinkDialogState extends State<_InsertLinkDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Annulla'),
+          child: Text(l10n.commonCancel),
         ),
-        TextButton(onPressed: _submit, child: const Text('Inserisci')),
+        TextButton(onPressed: _submit, child: Text(l10n.editorLinkInsert)),
       ],
     );
   }

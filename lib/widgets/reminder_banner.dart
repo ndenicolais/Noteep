@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../l10n/l10n.dart';
 import 'package:intl/intl.dart';
 import '../theme/app_font_sizes.dart';
 import '../theme/app_spacing.dart';
@@ -53,7 +54,7 @@ class ReminderBanner extends StatelessWidget {
             ),
             Semantics(
               button: true,
-              label: 'Rimuovi promemoria',
+              label: context.l10n.commonRemoveReminder,
               excludeSemantics: true,
               child: GestureDetector(
                 onTap: onRemove,

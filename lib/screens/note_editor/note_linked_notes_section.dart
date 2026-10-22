@@ -10,6 +10,7 @@
 
 import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import '../../models/note_model.dart';
 import '../../theme/app_spacing.dart';
 
@@ -34,7 +35,7 @@ class NoteLinkedNotesSection extends StatelessWidget {
               Icon(Icons.link, size: 16, color: onSurfaceVariant),
               const SizedBox(width: 6),
               Text(
-                'Note collegate',
+                context.l10n.editorLinkedNotes,
                 style: Theme.of(
                   context,
                 ).textTheme.labelMedium?.copyWith(color: onSurfaceVariant),
@@ -53,7 +54,7 @@ class NoteLinkedNotesSection extends StatelessWidget {
                   return ActionChip(
                     avatar: const Icon(Icons.note_alt_outlined, size: 16),
                     label: Text(
-                      ln.title.isEmpty ? 'Senza titolo' : ln.title,
+                      ln.title.isEmpty ? context.l10n.commonUntitled : ln.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),

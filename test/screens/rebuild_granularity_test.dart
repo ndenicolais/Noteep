@@ -25,6 +25,8 @@ import 'package:noteep/widgets/note_card.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../helpers/test_container.dart';
 
+import '../helpers/l10n.dart';
+
 void main() {
   late ProviderContainer container;
 
@@ -97,7 +99,12 @@ void main() {
   group('rebuilds', () {
     Widget app(Widget body) => UncontrolledProviderScope(
       container: container,
-      child: MaterialApp(home: Scaffold(body: body)),
+      child: MaterialApp(
+        locale: testLocale,
+        supportedLocales: testSupportedLocales,
+        localizationsDelegates: testLocalizationsDelegates,
+        home: Scaffold(body: body),
+      ),
     );
 
     NoteCard cardOf(WidgetTester tester, String title) => tester.widget(

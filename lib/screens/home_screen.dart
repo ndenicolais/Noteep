@@ -23,6 +23,7 @@ import '../providers/settings/backup_provider.dart';
 import '../providers/settings/ui_provider.dart';
 import '../utils/backup_service.dart';
 import '../utils/changelog_service.dart';
+import '../l10n/l10n.dart';
 import '../screens/note_template_screen.dart';
 import '../screens/home/speed_dial_fab.dart';
 import '../screens/home/reorderable_grid_view.dart';
@@ -114,13 +115,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       titleWidget: SearchField(
         controller: _searchController,
         provider: searchQueryProvider,
-        hintText: 'Cerca nelle note...',
+        hintText: context.l10n.homeSearchHint,
       ),
       appBarActions: [
         IconButton(
           icon: const Icon(Icons.sort),
           onPressed: () => _showSortSheet(context, sortOrder),
-          tooltip: 'Ordina note',
+          tooltip: context.l10n.homeSortTooltip,
         ),
       ],
       body: FadeSwitcher(
@@ -146,7 +147,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               : FloatingActionButton(
                 heroTag: 'fab_main',
                 onPressed: () => _openEditor(NoteType.note),
-                tooltip: 'Nuova nota',
+                tooltip: context.l10n.homeNewNote,
                 child: const Icon(Icons.add),
               ),
     );
@@ -163,9 +164,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       if (loadError != null) {
         return EmptyState(
           icon: Icons.cloud_off,
-          message:
-              'Errore di sincronizzazione. Verifica la connessione e riprova.',
-          actionLabel: 'Riprova',
+          message: context.l10n.commonSyncError,
+          actionLabel: context.l10n.commonRetry,
           actionIcon: Icons.refresh,
           onAction: ref.read(notesProvider.notifier).reload,
         );
@@ -174,8 +174,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       final hasNotes = ref.read(activeNotesProvider).isNotEmpty;
       return EmptyState(
         icon: Icons.note_alt_outlined,
-        message: hasNotes ? 'Nessuna nota trovata' : 'Ancora nessuna nota',
-        actionLabel: hasNotes ? null : 'Crea la prima nota',
+        message: hasNotes ? context.l10n.homeNoResults : context.l10n.homeEmpty,
+        actionLabel: hasNotes ? null : context.l10n.homeCreateFirst,
         actionIcon: Icons.add,
         onAction: () => _openEditor(NoteType.note),
       );

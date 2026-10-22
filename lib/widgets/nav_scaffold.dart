@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../l10n/l10n.dart';
 import '../core/routing/app_router.dart';
 import '../theme/app_spacing.dart';
 import 'app_drawer.dart';
@@ -99,7 +100,10 @@ class _NavScaffoldState extends State<NavScaffold> {
             padding: const EdgeInsets.only(left: AppSpacing.xxl),
             icon: const Icon(Icons.menu),
             onPressed: _toggleCollapse,
-            tooltip: _collapsed ? 'Espandi menu' : 'Comprimi menu',
+            tooltip:
+                _collapsed
+                    ? context.l10n.navExpandMenu
+                    : context.l10n.navCollapseMenu,
           ),
           isWide: true,
         ),
@@ -128,7 +132,7 @@ class _NavScaffoldState extends State<NavScaffold> {
               (ctx) => IconButton(
                 icon: const Icon(Icons.menu),
                 onPressed: () => Scaffold.of(ctx).openDrawer(),
-                tooltip: 'Apri menu',
+                tooltip: ctx.l10n.navOpenMenu,
               ),
         ),
         isWide: false,
@@ -209,46 +213,46 @@ class _AppNavRail extends StatelessWidget {
           collapsed
               ? NavigationRailLabelType.none
               : NavigationRailLabelType.all,
-      destinations: const [
+      destinations: [
         NavigationRailDestination(
-          icon: Icon(Icons.lightbulb_outline),
-          selectedIcon: Icon(Icons.lightbulb),
-          label: Text('Note'),
+          icon: const Icon(Icons.lightbulb_outline),
+          selectedIcon: const Icon(Icons.lightbulb),
+          label: Text(context.l10n.navNotes),
         ),
         NavigationRailDestination(
-          icon: Icon(Icons.check_circle_outline),
-          selectedIcon: Icon(Icons.check_circle),
-          label: Text('Task'),
+          icon: const Icon(Icons.check_circle_outline),
+          selectedIcon: const Icon(Icons.check_circle),
+          label: Text(context.l10n.navTasks),
         ),
         NavigationRailDestination(
-          icon: Icon(Icons.calendar_today_outlined),
-          selectedIcon: Icon(Icons.calendar_today),
-          label: Text('Calendario'),
+          icon: const Icon(Icons.calendar_today_outlined),
+          selectedIcon: const Icon(Icons.calendar_today),
+          label: Text(context.l10n.navCalendar),
         ),
         NavigationRailDestination(
-          icon: Icon(Icons.notifications_outlined),
-          selectedIcon: Icon(Icons.notifications),
-          label: Text('Promemoria'),
+          icon: const Icon(Icons.notifications_outlined),
+          selectedIcon: const Icon(Icons.notifications),
+          label: Text(context.l10n.navReminders),
         ),
         NavigationRailDestination(
-          icon: Icon(Icons.label_outline),
-          selectedIcon: Icon(Icons.label),
-          label: Text('Etichette'),
+          icon: const Icon(Icons.label_outline),
+          selectedIcon: const Icon(Icons.label),
+          label: Text(context.l10n.navLabels),
         ),
         NavigationRailDestination(
-          icon: Icon(Icons.archive_outlined),
-          selectedIcon: Icon(Icons.archive),
-          label: Text('Archivio'),
+          icon: const Icon(Icons.archive_outlined),
+          selectedIcon: const Icon(Icons.archive),
+          label: Text(context.l10n.navArchive),
         ),
         NavigationRailDestination(
-          icon: Icon(Icons.delete_outline),
-          selectedIcon: Icon(Icons.delete),
-          label: Text('Cestino'),
+          icon: const Icon(Icons.delete_outline),
+          selectedIcon: const Icon(Icons.delete),
+          label: Text(context.l10n.navTrash),
         ),
         NavigationRailDestination(
-          icon: Icon(Icons.settings_outlined),
-          selectedIcon: Icon(Icons.settings),
-          label: Text('Impostazioni'),
+          icon: const Icon(Icons.settings_outlined),
+          selectedIcon: const Icon(Icons.settings),
+          label: Text(context.l10n.navSettings),
         ),
       ],
     );

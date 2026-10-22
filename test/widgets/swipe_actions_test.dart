@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noteep/widgets/shared/swipe_actions.dart';
 
+import '../helpers/l10n.dart';
+
 void main() {
   late List<String> triggered;
   late bool visible;
@@ -13,6 +15,9 @@ void main() {
 
   Widget build() {
     return MaterialApp(
+      locale: testLocale,
+      supportedLocales: testSupportedLocales,
+      localizationsDelegates: testLocalizationsDelegates,
       home: Scaffold(
         body: StatefulBuilder(
           builder:

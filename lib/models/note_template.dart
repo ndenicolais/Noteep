@@ -8,6 +8,7 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
+import '../l10n/app_localizations.dart';
 import 'note_model.dart';
 
 class NoteTemplate {
@@ -30,87 +31,54 @@ class NoteTemplate {
   final List<String> checklistItems;
 }
 
-/// Built-in templates
-const kNoteTemplates = <NoteTemplate>[
+/// Built-in templates, in the current UI language.
+List<NoteTemplate> noteTemplates(AppLocalizations l) => [
   NoteTemplate(
     id: 'meeting_notes',
-    name: 'Note riunione',
-    description: 'Struttura per prendere appunti durante una riunione',
+    name: l.templateMeetingName,
+    description: l.templateMeetingDescription,
     icon: '📋',
     type: NoteType.note,
-    content:
-        '## Riunione del [DATA]\n\n'
-        '**Partecipanti:**\n- \n\n'
-        '**Ordine del giorno:**\n1. \n\n'
-        '**Punti discussi:**\n\n'
-        '**Decisioni prese:**\n\n'
-        '**Azioni da fare:**\n- \n\n'
-        '**Prossima riunione:** ',
+    content: l.templateMeetingContent,
   ),
   NoteTemplate(
     id: 'daily_journal',
-    name: 'Diario giornaliero',
-    description: 'Traccia i tuoi pensieri e obiettivi del giorno',
+    name: l.templateJournalName,
+    description: l.templateJournalDescription,
     icon: '📔',
     type: NoteType.note,
-    content:
-        '## [DATA]\n\n'
-        '**Come mi sento oggi:**\n\n'
-        '**Tre cose per cui sono grato:**\n'
-        '1. \n2. \n3. \n\n'
-        '**Obiettivi di oggi:**\n\n'
-        '**Riflessioni della giornata:**\n',
+    content: l.templateJournalContent,
   ),
   NoteTemplate(
     id: 'project_plan',
-    name: 'Piano di progetto',
-    description: 'Organizza obiettivi, milestones e risorse di un progetto',
+    name: l.templateProjectName,
+    description: l.templateProjectDescription,
     icon: '🚀',
     type: NoteType.note,
-    content:
-        '## Progetto: [NOME]\n\n'
-        '**Obiettivo:**\n\n'
-        '**Scadenza:**\n\n'
-        '**Milestones:**\n'
-        '- [ ] \n'
-        '- [ ] \n\n'
-        '**Risorse necessarie:**\n\n'
-        '**Note:**\n',
+    content: l.templateProjectContent,
   ),
   NoteTemplate(
     id: 'shopping_list',
-    name: 'Lista spesa',
-    description: 'Lista della spesa con caselle di controllo',
+    name: l.templateShoppingName,
+    description: l.templateShoppingDescription,
     icon: '🛒',
     type: NoteType.checklist,
-    checklistItems: ['Frutta e verdura', 'Latte', 'Pane', 'Uova'],
+    checklistItems: l.templateShoppingItems.split('\n'),
   ),
   NoteTemplate(
     id: 'travel_packing',
-    name: 'Lista viaggio',
-    description: 'Non dimenticare nulla per il tuo viaggio',
+    name: l.templateTravelName,
+    description: l.templateTravelDescription,
     icon: '✈️',
     type: NoteType.checklist,
-    checklistItems: [
-      'Passaporto / Documenti',
-      'Caricabatterie',
-      'Vestiti',
-      'Prodotti da toilette',
-      'Medicinali',
-      'Contanti / Carte',
-    ],
+    checklistItems: l.templateTravelItems.split('\n'),
   ),
   NoteTemplate(
     id: 'ideas',
-    name: 'Brainstorming idee',
-    description: 'Spazio libero per raccogliere idee',
+    name: l.templateIdeasName,
+    description: l.templateIdeasDescription,
     icon: '💡',
     type: NoteType.note,
-    content:
-        '## Idea: [TITOLO]\n\n'
-        '**Descrizione:**\n\n'
-        '**Pro:**\n- \n\n'
-        '**Contro:**\n- \n\n'
-        '**Prossimi passi:**\n',
+    content: l.templateIdeasContent,
   ),
 ];

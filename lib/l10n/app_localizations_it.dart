@@ -336,4 +336,411 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get unknownRouteHome => 'Torna alla home';
+
+  @override
+  String get commonClose => 'Chiudi';
+
+  @override
+  String get commonDelete => 'Elimina';
+
+  @override
+  String get commonUndo => 'Annulla';
+
+  @override
+  String get commonHide => 'Nascondi';
+
+  @override
+  String get commonOk => 'OK';
+
+  @override
+  String get commonPin => 'Fissa';
+
+  @override
+  String get commonUnpin => 'Rimuovi pin';
+
+  @override
+  String get commonArchive => 'Archivia';
+
+  @override
+  String get commonUnarchive => 'Ripristina';
+
+  @override
+  String get commonMoveToTrash => 'Sposta nel cestino';
+
+  @override
+  String get commonTrash => 'Cestino';
+
+  @override
+  String get commonLoading => 'Caricamento…';
+
+  @override
+  String get commonClearSearch => 'Cancella ricerca';
+
+  @override
+  String get commonUntitled => 'Senza titolo';
+
+  @override
+  String get commonBold => 'Grassetto';
+
+  @override
+  String get commonItalic => 'Corsivo';
+
+  @override
+  String get commonFont => 'Font';
+
+  @override
+  String get commonMoveEarlier => 'Sposta prima';
+
+  @override
+  String get commonMoveLater => 'Sposta dopo';
+
+  @override
+  String get commonRemoveReminder => 'Rimuovi promemoria';
+
+  @override
+  String get commonSyncError =>
+      'Errore di sincronizzazione. Verifica la connessione e riprova.';
+
+  @override
+  String get commonLinkOpenFailed => 'Impossibile aprire il link';
+
+  @override
+  String get appLogoLabel => 'Logo Noteep';
+
+  @override
+  String get navNotes => 'Note';
+
+  @override
+  String get navTasks => 'Task';
+
+  @override
+  String get navReminders => 'Promemoria';
+
+  @override
+  String get navCalendar => 'Calendario';
+
+  @override
+  String get navLabels => 'Etichette';
+
+  @override
+  String get navArchive => 'Archivio';
+
+  @override
+  String get navTrash => 'Cestino';
+
+  @override
+  String get navSettings => 'Impostazioni';
+
+  @override
+  String get navSignOut => 'Esci';
+
+  @override
+  String get navExpandMenu => 'Espandi menu';
+
+  @override
+  String get navCollapseMenu => 'Comprimi menu';
+
+  @override
+  String get navOpenMenu => 'Apri menu';
+
+  @override
+  String get syncChangeRejected =>
+      'Una modifica non è stata sincronizzata ed è stata annullata.';
+
+  @override
+  String get syncPendingBanner =>
+      'Modifiche non ancora sincronizzate: verranno inviate appena torni online.';
+
+  @override
+  String get sortTitle => 'Ordina per';
+
+  @override
+  String get sortCreatedDate => 'Data di creazione';
+
+  @override
+  String get sortModifiedDate => 'Data di modifica';
+
+  @override
+  String get sortNewestFirst => 'Più recenti prima';
+
+  @override
+  String get sortOldestFirst => 'Più vecchie prima';
+
+  @override
+  String get homeSearchHint => 'Cerca nelle note...';
+
+  @override
+  String get homeSortTooltip => 'Ordina note';
+
+  @override
+  String get homeNewNote => 'Nuova nota';
+
+  @override
+  String get homeNoResults => 'Nessuna nota trovata';
+
+  @override
+  String get homeEmpty => 'Ancora nessuna nota';
+
+  @override
+  String get homeCreateFirst => 'Crea la prima nota';
+
+  @override
+  String get homeFabTask => 'Task';
+
+  @override
+  String get homeFabChecklist => 'Lista';
+
+  @override
+  String get homeFabNote => 'Nota';
+
+  @override
+  String get homeFabAudio => 'Audio';
+
+  @override
+  String get homeFabTemplate => 'Modello';
+
+  @override
+  String get homeFabCloseMenu => 'Chiudi menu azioni rapide';
+
+  @override
+  String get homeFabOpenMenu => 'Nuova azione rapida';
+
+  @override
+  String get homeFabCloseTooltip => 'Chiudi';
+
+  @override
+  String get homeFabOpenTooltip => 'Nuovo';
+
+  @override
+  String get noteArchived => 'Nota archiviata';
+
+  @override
+  String get noteUnarchived => 'Nota rimossa dall\'archivio';
+
+  @override
+  String get noteTrashed => 'Nota spostata nel cestino';
+
+  @override
+  String get noteOpenHint => 'Apri nota';
+
+  @override
+  String get noteReminderSetLabel => 'Promemoria impostato';
+
+  @override
+  String get notePinnedLabel => 'Nota fissata';
+
+  @override
+  String noteChecklistMore(int count) {
+    return '+$count altri';
+  }
+
+  @override
+  String get editorUndo => 'Annulla';
+
+  @override
+  String get editorRedo => 'Ripeti';
+
+  @override
+  String get editorInsertLink => 'Inserisci link';
+
+  @override
+  String get editorEdit => 'Modifica';
+
+  @override
+  String get editorMarkdownPreview => 'Anteprima Markdown';
+
+  @override
+  String get editorShare => 'Condividi';
+
+  @override
+  String get editorBackgroundColor => 'Colore sfondo';
+
+  @override
+  String get editorEditStyle => 'Modifica stile';
+
+  @override
+  String get editorReminder => 'Promemoria';
+
+  @override
+  String get editorLinkNote => 'Collega nota';
+
+  @override
+  String get editorRecordAudio => 'Registra audio';
+
+  @override
+  String get editorAddItem => 'Aggiungi elemento';
+
+  @override
+  String get editorDeleteNote => 'Elimina nota';
+
+  @override
+  String get editorDeleteConfirm => 'Vuoi spostare questa nota nel cestino?';
+
+  @override
+  String get editorTitleHint => 'Titolo';
+
+  @override
+  String get editorContentHint => 'Nota';
+
+  @override
+  String get editorItemHint => 'Elemento...';
+
+  @override
+  String editorLastModified(String date) {
+    return 'Ultima modifica: $date';
+  }
+
+  @override
+  String get editorChooseBackground => 'Scegli colore sfondo';
+
+  @override
+  String editorReminderScheduled(String date) {
+    return 'Promemoria: $date';
+  }
+
+  @override
+  String get editorReminderFailed => 'Impossibile pianificare il promemoria.';
+
+  @override
+  String get editorReminderRemoved => 'Promemoria rimosso';
+
+  @override
+  String get editorReminderNotificationTitle => 'Promemoria nota';
+
+  @override
+  String get editorReminderNotificationBody =>
+      'Hai un promemoria per questa nota';
+
+  @override
+  String get editorAudioSection => 'Audio';
+
+  @override
+  String get editorLinkedNotes => 'Note collegate';
+
+  @override
+  String get editorRecordingError =>
+      'Impossibile registrare l\'audio. Controlla il permesso del microfono.';
+
+  @override
+  String get editorStopAndAttach => 'Ferma e allega';
+
+  @override
+  String get editorLinkText => 'Testo (facoltativo)';
+
+  @override
+  String get editorLinkAddress => 'Indirizzo';
+
+  @override
+  String get editorLinkInvalid => 'Inserisci un indirizzo valido';
+
+  @override
+  String get editorLinkInsert => 'Inserisci';
+
+  @override
+  String get editorSearchNoteHint => 'Cerca nota...';
+
+  @override
+  String get editorUntitledNote => 'Nota senza titolo';
+
+  @override
+  String get styleTitle => 'Stile testo';
+
+  @override
+  String get styleSectionTitle => 'Titolo';
+
+  @override
+  String get styleSectionBody => 'Corpo';
+
+  @override
+  String styleSize(String size) {
+    return 'Dimensione: ${size}pt';
+  }
+
+  @override
+  String get styleStrikethrough => 'Sbarrato';
+
+  @override
+  String get styleTextColor => 'Colore testo';
+
+  @override
+  String get styleTitleColor => 'Colore titolo';
+
+  @override
+  String get styleResetTitle => 'Ripristina stile titolo';
+
+  @override
+  String get styleMaterialColors => 'Colori Material';
+
+  @override
+  String get templateChoose => 'Scegli un modello';
+
+  @override
+  String get templateSectionNotes => 'Note';
+
+  @override
+  String get templateSectionChecklists => 'Checklist';
+
+  @override
+  String get templateMeetingName => 'Note riunione';
+
+  @override
+  String get templateMeetingDescription =>
+      'Struttura per prendere appunti durante una riunione';
+
+  @override
+  String get templateMeetingContent =>
+      '## Riunione del [DATA]\n\n**Partecipanti:**\n- \n\n**Ordine del giorno:**\n1. \n\n**Punti discussi:**\n\n**Decisioni prese:**\n\n**Azioni da fare:**\n- \n\n**Prossima riunione:** ';
+
+  @override
+  String get templateJournalName => 'Diario giornaliero';
+
+  @override
+  String get templateJournalDescription =>
+      'Traccia i tuoi pensieri e obiettivi del giorno';
+
+  @override
+  String get templateJournalContent =>
+      '## [DATA]\n\n**Come mi sento oggi:**\n\n**Tre cose per cui sono grato:**\n1. \n2. \n3. \n\n**Obiettivi di oggi:**\n\n**Riflessioni della giornata:**\n';
+
+  @override
+  String get templateProjectName => 'Piano di progetto';
+
+  @override
+  String get templateProjectDescription =>
+      'Organizza obiettivi, milestones e risorse di un progetto';
+
+  @override
+  String get templateProjectContent =>
+      '## Progetto: [NOME]\n\n**Obiettivo:**\n\n**Scadenza:**\n\n**Milestones:**\n- [ ] \n- [ ] \n\n**Risorse necessarie:**\n\n**Note:**\n';
+
+  @override
+  String get templateShoppingName => 'Lista spesa';
+
+  @override
+  String get templateShoppingDescription =>
+      'Lista della spesa con caselle di controllo';
+
+  @override
+  String get templateShoppingItems => 'Frutta e verdura\nLatte\nPane\nUova';
+
+  @override
+  String get templateTravelName => 'Lista viaggio';
+
+  @override
+  String get templateTravelDescription =>
+      'Non dimenticare nulla per il tuo viaggio';
+
+  @override
+  String get templateTravelItems =>
+      'Passaporto / Documenti\nCaricabatterie\nVestiti\nProdotti da toilette\nMedicinali\nContanti / Carte';
+
+  @override
+  String get templateIdeasName => 'Brainstorming idee';
+
+  @override
+  String get templateIdeasDescription => 'Spazio libero per raccogliere idee';
+
+  @override
+  String get templateIdeasContent =>
+      '## Idea: [TITOLO]\n\n**Descrizione:**\n\n**Pro:**\n- \n\n**Contro:**\n- \n\n**Prossimi passi:**\n';
 }

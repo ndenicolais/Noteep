@@ -23,6 +23,8 @@ import 'package:noteep/widgets/style_editor/style_editor_sheet.dart';
 import '../helpers/test_container.dart';
 import 'package:noteep/providers/core_providers.dart';
 
+import '../helpers/l10n.dart';
+
 /// Renders key widgets on a small phone (360×690 dp) with the system text
 /// size at 200% and fails on any layout overflow.
 void main() {
@@ -49,6 +51,9 @@ void main() {
       UncontrolledProviderScope(
         container: container,
         child: MaterialApp(
+          locale: testLocale,
+          supportedLocales: testSupportedLocales,
+          localizationsDelegates: testLocalizationsDelegates,
           theme: AppTheme.light,
           builder:
               (context, child) => MediaQuery(

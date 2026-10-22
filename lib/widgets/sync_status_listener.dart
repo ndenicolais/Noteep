@@ -10,6 +10,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../l10n/l10n.dart';
 import '../providers/sync_provider.dart';
 
 /// Shows a [MaterialBanner] while Firestore writes are queued offline and a
@@ -24,13 +25,10 @@ class SyncStatusListener extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ref.listen<SyncStatus>(syncStatusProvider, (previous, next) {
       final messenger = ScaffoldMessenger.of(context);
+      final l10n = context.l10n;
       if (next.failures > (previous?.failures ?? 0)) {
         messenger.showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Una modifica non è stata sincronizzata ed è stata annullata.',
-            ),
-          ),
+          SnackBar(content: Text(l10n.syncChangeRejected)),
         );
       }
       // Only on the empty ↔ non-empty transitions, so a dismissed banner
@@ -42,13 +40,11 @@ class SyncStatusListener extends ConsumerWidget {
       messenger.showMaterialBanner(
         MaterialBanner(
           leading: const Icon(Icons.cloud_off),
-          content: const Text(
-            'Modifiche non ancora sincronizzate: verranno inviate appena torni online.',
-          ),
+          content: Text(l10n.syncPendingBanner),
           actions: [
             TextButton(
               onPressed: messenger.hideCurrentMaterialBanner,
-              child: const Text('Nascondi'),
+              child: Text(l10n.commonHide),
             ),
           ],
         ),

@@ -19,6 +19,8 @@ import 'package:noteep/providers/sync_provider.dart';
 import 'package:noteep/widgets/sync_status_listener.dart';
 import '../helpers/test_container.dart';
 
+import '../helpers/l10n.dart';
+
 class _ListNotifier extends Notifier<List<int>>
     with FirestoreListMutations<int> {
   int reloads = 0;
@@ -109,6 +111,9 @@ void main() {
         UncontrolledProviderScope(
           container: container,
           child: MaterialApp(
+            locale: testLocale,
+            supportedLocales: testSupportedLocales,
+            localizationsDelegates: testLocalizationsDelegates,
             builder: (context, child) => SyncStatusListener(child: child!),
             home: const Scaffold(body: SizedBox()),
           ),

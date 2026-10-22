@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noteep/widgets/shared/empty_state.dart';
 
+import '../helpers/l10n.dart';
+
 void main() {
-  Widget wrap(Widget child) => MaterialApp(home: Scaffold(body: child));
+  Widget wrap(Widget child) => MaterialApp(
+    locale: testLocale,
+    supportedLocales: testSupportedLocales,
+    localizationsDelegates: testLocalizationsDelegates,
+    home: Scaffold(body: child),
+  );
 
   testWidgets('shows the action button and runs onAction', (tester) async {
     var taps = 0;

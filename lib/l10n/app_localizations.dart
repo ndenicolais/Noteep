@@ -667,6 +667,774 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Torna alla home'**
   String get unknownRouteHome;
+
+  /// No description provided for @commonClose.
+  ///
+  /// In it, this message translates to:
+  /// **'Chiudi'**
+  String get commonClose;
+
+  /// No description provided for @commonDelete.
+  ///
+  /// In it, this message translates to:
+  /// **'Elimina'**
+  String get commonDelete;
+
+  /// No description provided for @commonUndo.
+  ///
+  /// In it, this message translates to:
+  /// **'Annulla'**
+  String get commonUndo;
+
+  /// No description provided for @commonHide.
+  ///
+  /// In it, this message translates to:
+  /// **'Nascondi'**
+  String get commonHide;
+
+  /// No description provided for @commonOk.
+  ///
+  /// In it, this message translates to:
+  /// **'OK'**
+  String get commonOk;
+
+  /// No description provided for @commonPin.
+  ///
+  /// In it, this message translates to:
+  /// **'Fissa'**
+  String get commonPin;
+
+  /// No description provided for @commonUnpin.
+  ///
+  /// In it, this message translates to:
+  /// **'Rimuovi pin'**
+  String get commonUnpin;
+
+  /// No description provided for @commonArchive.
+  ///
+  /// In it, this message translates to:
+  /// **'Archivia'**
+  String get commonArchive;
+
+  /// No description provided for @commonUnarchive.
+  ///
+  /// In it, this message translates to:
+  /// **'Ripristina'**
+  String get commonUnarchive;
+
+  /// No description provided for @commonMoveToTrash.
+  ///
+  /// In it, this message translates to:
+  /// **'Sposta nel cestino'**
+  String get commonMoveToTrash;
+
+  /// No description provided for @commonTrash.
+  ///
+  /// In it, this message translates to:
+  /// **'Cestino'**
+  String get commonTrash;
+
+  /// No description provided for @commonLoading.
+  ///
+  /// In it, this message translates to:
+  /// **'Caricamento…'**
+  String get commonLoading;
+
+  /// No description provided for @commonClearSearch.
+  ///
+  /// In it, this message translates to:
+  /// **'Cancella ricerca'**
+  String get commonClearSearch;
+
+  /// No description provided for @commonUntitled.
+  ///
+  /// In it, this message translates to:
+  /// **'Senza titolo'**
+  String get commonUntitled;
+
+  /// No description provided for @commonBold.
+  ///
+  /// In it, this message translates to:
+  /// **'Grassetto'**
+  String get commonBold;
+
+  /// No description provided for @commonItalic.
+  ///
+  /// In it, this message translates to:
+  /// **'Corsivo'**
+  String get commonItalic;
+
+  /// No description provided for @commonFont.
+  ///
+  /// In it, this message translates to:
+  /// **'Font'**
+  String get commonFont;
+
+  /// No description provided for @commonMoveEarlier.
+  ///
+  /// In it, this message translates to:
+  /// **'Sposta prima'**
+  String get commonMoveEarlier;
+
+  /// No description provided for @commonMoveLater.
+  ///
+  /// In it, this message translates to:
+  /// **'Sposta dopo'**
+  String get commonMoveLater;
+
+  /// No description provided for @commonRemoveReminder.
+  ///
+  /// In it, this message translates to:
+  /// **'Rimuovi promemoria'**
+  String get commonRemoveReminder;
+
+  /// No description provided for @commonSyncError.
+  ///
+  /// In it, this message translates to:
+  /// **'Errore di sincronizzazione. Verifica la connessione e riprova.'**
+  String get commonSyncError;
+
+  /// No description provided for @commonLinkOpenFailed.
+  ///
+  /// In it, this message translates to:
+  /// **'Impossibile aprire il link'**
+  String get commonLinkOpenFailed;
+
+  /// No description provided for @appLogoLabel.
+  ///
+  /// In it, this message translates to:
+  /// **'Logo Noteep'**
+  String get appLogoLabel;
+
+  /// No description provided for @navNotes.
+  ///
+  /// In it, this message translates to:
+  /// **'Note'**
+  String get navNotes;
+
+  /// No description provided for @navTasks.
+  ///
+  /// In it, this message translates to:
+  /// **'Task'**
+  String get navTasks;
+
+  /// No description provided for @navReminders.
+  ///
+  /// In it, this message translates to:
+  /// **'Promemoria'**
+  String get navReminders;
+
+  /// No description provided for @navCalendar.
+  ///
+  /// In it, this message translates to:
+  /// **'Calendario'**
+  String get navCalendar;
+
+  /// No description provided for @navLabels.
+  ///
+  /// In it, this message translates to:
+  /// **'Etichette'**
+  String get navLabels;
+
+  /// No description provided for @navArchive.
+  ///
+  /// In it, this message translates to:
+  /// **'Archivio'**
+  String get navArchive;
+
+  /// No description provided for @navTrash.
+  ///
+  /// In it, this message translates to:
+  /// **'Cestino'**
+  String get navTrash;
+
+  /// No description provided for @navSettings.
+  ///
+  /// In it, this message translates to:
+  /// **'Impostazioni'**
+  String get navSettings;
+
+  /// No description provided for @navSignOut.
+  ///
+  /// In it, this message translates to:
+  /// **'Esci'**
+  String get navSignOut;
+
+  /// No description provided for @navExpandMenu.
+  ///
+  /// In it, this message translates to:
+  /// **'Espandi menu'**
+  String get navExpandMenu;
+
+  /// No description provided for @navCollapseMenu.
+  ///
+  /// In it, this message translates to:
+  /// **'Comprimi menu'**
+  String get navCollapseMenu;
+
+  /// No description provided for @navOpenMenu.
+  ///
+  /// In it, this message translates to:
+  /// **'Apri menu'**
+  String get navOpenMenu;
+
+  /// No description provided for @syncChangeRejected.
+  ///
+  /// In it, this message translates to:
+  /// **'Una modifica non è stata sincronizzata ed è stata annullata.'**
+  String get syncChangeRejected;
+
+  /// No description provided for @syncPendingBanner.
+  ///
+  /// In it, this message translates to:
+  /// **'Modifiche non ancora sincronizzate: verranno inviate appena torni online.'**
+  String get syncPendingBanner;
+
+  /// No description provided for @sortTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Ordina per'**
+  String get sortTitle;
+
+  /// No description provided for @sortCreatedDate.
+  ///
+  /// In it, this message translates to:
+  /// **'Data di creazione'**
+  String get sortCreatedDate;
+
+  /// No description provided for @sortModifiedDate.
+  ///
+  /// In it, this message translates to:
+  /// **'Data di modifica'**
+  String get sortModifiedDate;
+
+  /// No description provided for @sortNewestFirst.
+  ///
+  /// In it, this message translates to:
+  /// **'Più recenti prima'**
+  String get sortNewestFirst;
+
+  /// No description provided for @sortOldestFirst.
+  ///
+  /// In it, this message translates to:
+  /// **'Più vecchie prima'**
+  String get sortOldestFirst;
+
+  /// No description provided for @homeSearchHint.
+  ///
+  /// In it, this message translates to:
+  /// **'Cerca nelle note...'**
+  String get homeSearchHint;
+
+  /// No description provided for @homeSortTooltip.
+  ///
+  /// In it, this message translates to:
+  /// **'Ordina note'**
+  String get homeSortTooltip;
+
+  /// No description provided for @homeNewNote.
+  ///
+  /// In it, this message translates to:
+  /// **'Nuova nota'**
+  String get homeNewNote;
+
+  /// No description provided for @homeNoResults.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessuna nota trovata'**
+  String get homeNoResults;
+
+  /// No description provided for @homeEmpty.
+  ///
+  /// In it, this message translates to:
+  /// **'Ancora nessuna nota'**
+  String get homeEmpty;
+
+  /// No description provided for @homeCreateFirst.
+  ///
+  /// In it, this message translates to:
+  /// **'Crea la prima nota'**
+  String get homeCreateFirst;
+
+  /// No description provided for @homeFabTask.
+  ///
+  /// In it, this message translates to:
+  /// **'Task'**
+  String get homeFabTask;
+
+  /// No description provided for @homeFabChecklist.
+  ///
+  /// In it, this message translates to:
+  /// **'Lista'**
+  String get homeFabChecklist;
+
+  /// No description provided for @homeFabNote.
+  ///
+  /// In it, this message translates to:
+  /// **'Nota'**
+  String get homeFabNote;
+
+  /// No description provided for @homeFabAudio.
+  ///
+  /// In it, this message translates to:
+  /// **'Audio'**
+  String get homeFabAudio;
+
+  /// No description provided for @homeFabTemplate.
+  ///
+  /// In it, this message translates to:
+  /// **'Modello'**
+  String get homeFabTemplate;
+
+  /// No description provided for @homeFabCloseMenu.
+  ///
+  /// In it, this message translates to:
+  /// **'Chiudi menu azioni rapide'**
+  String get homeFabCloseMenu;
+
+  /// No description provided for @homeFabOpenMenu.
+  ///
+  /// In it, this message translates to:
+  /// **'Nuova azione rapida'**
+  String get homeFabOpenMenu;
+
+  /// No description provided for @homeFabCloseTooltip.
+  ///
+  /// In it, this message translates to:
+  /// **'Chiudi'**
+  String get homeFabCloseTooltip;
+
+  /// No description provided for @homeFabOpenTooltip.
+  ///
+  /// In it, this message translates to:
+  /// **'Nuovo'**
+  String get homeFabOpenTooltip;
+
+  /// No description provided for @noteArchived.
+  ///
+  /// In it, this message translates to:
+  /// **'Nota archiviata'**
+  String get noteArchived;
+
+  /// No description provided for @noteUnarchived.
+  ///
+  /// In it, this message translates to:
+  /// **'Nota rimossa dall\'archivio'**
+  String get noteUnarchived;
+
+  /// No description provided for @noteTrashed.
+  ///
+  /// In it, this message translates to:
+  /// **'Nota spostata nel cestino'**
+  String get noteTrashed;
+
+  /// No description provided for @noteOpenHint.
+  ///
+  /// In it, this message translates to:
+  /// **'Apri nota'**
+  String get noteOpenHint;
+
+  /// No description provided for @noteReminderSetLabel.
+  ///
+  /// In it, this message translates to:
+  /// **'Promemoria impostato'**
+  String get noteReminderSetLabel;
+
+  /// No description provided for @notePinnedLabel.
+  ///
+  /// In it, this message translates to:
+  /// **'Nota fissata'**
+  String get notePinnedLabel;
+
+  /// No description provided for @noteChecklistMore.
+  ///
+  /// In it, this message translates to:
+  /// **'+{count} altri'**
+  String noteChecklistMore(int count);
+
+  /// No description provided for @editorUndo.
+  ///
+  /// In it, this message translates to:
+  /// **'Annulla'**
+  String get editorUndo;
+
+  /// No description provided for @editorRedo.
+  ///
+  /// In it, this message translates to:
+  /// **'Ripeti'**
+  String get editorRedo;
+
+  /// No description provided for @editorInsertLink.
+  ///
+  /// In it, this message translates to:
+  /// **'Inserisci link'**
+  String get editorInsertLink;
+
+  /// No description provided for @editorEdit.
+  ///
+  /// In it, this message translates to:
+  /// **'Modifica'**
+  String get editorEdit;
+
+  /// No description provided for @editorMarkdownPreview.
+  ///
+  /// In it, this message translates to:
+  /// **'Anteprima Markdown'**
+  String get editorMarkdownPreview;
+
+  /// No description provided for @editorShare.
+  ///
+  /// In it, this message translates to:
+  /// **'Condividi'**
+  String get editorShare;
+
+  /// No description provided for @editorBackgroundColor.
+  ///
+  /// In it, this message translates to:
+  /// **'Colore sfondo'**
+  String get editorBackgroundColor;
+
+  /// No description provided for @editorEditStyle.
+  ///
+  /// In it, this message translates to:
+  /// **'Modifica stile'**
+  String get editorEditStyle;
+
+  /// No description provided for @editorReminder.
+  ///
+  /// In it, this message translates to:
+  /// **'Promemoria'**
+  String get editorReminder;
+
+  /// No description provided for @editorLinkNote.
+  ///
+  /// In it, this message translates to:
+  /// **'Collega nota'**
+  String get editorLinkNote;
+
+  /// No description provided for @editorRecordAudio.
+  ///
+  /// In it, this message translates to:
+  /// **'Registra audio'**
+  String get editorRecordAudio;
+
+  /// No description provided for @editorAddItem.
+  ///
+  /// In it, this message translates to:
+  /// **'Aggiungi elemento'**
+  String get editorAddItem;
+
+  /// No description provided for @editorDeleteNote.
+  ///
+  /// In it, this message translates to:
+  /// **'Elimina nota'**
+  String get editorDeleteNote;
+
+  /// No description provided for @editorDeleteConfirm.
+  ///
+  /// In it, this message translates to:
+  /// **'Vuoi spostare questa nota nel cestino?'**
+  String get editorDeleteConfirm;
+
+  /// No description provided for @editorTitleHint.
+  ///
+  /// In it, this message translates to:
+  /// **'Titolo'**
+  String get editorTitleHint;
+
+  /// No description provided for @editorContentHint.
+  ///
+  /// In it, this message translates to:
+  /// **'Nota'**
+  String get editorContentHint;
+
+  /// No description provided for @editorItemHint.
+  ///
+  /// In it, this message translates to:
+  /// **'Elemento...'**
+  String get editorItemHint;
+
+  /// No description provided for @editorLastModified.
+  ///
+  /// In it, this message translates to:
+  /// **'Ultima modifica: {date}'**
+  String editorLastModified(String date);
+
+  /// No description provided for @editorChooseBackground.
+  ///
+  /// In it, this message translates to:
+  /// **'Scegli colore sfondo'**
+  String get editorChooseBackground;
+
+  /// No description provided for @editorReminderScheduled.
+  ///
+  /// In it, this message translates to:
+  /// **'Promemoria: {date}'**
+  String editorReminderScheduled(String date);
+
+  /// No description provided for @editorReminderFailed.
+  ///
+  /// In it, this message translates to:
+  /// **'Impossibile pianificare il promemoria.'**
+  String get editorReminderFailed;
+
+  /// No description provided for @editorReminderRemoved.
+  ///
+  /// In it, this message translates to:
+  /// **'Promemoria rimosso'**
+  String get editorReminderRemoved;
+
+  /// No description provided for @editorReminderNotificationTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Promemoria nota'**
+  String get editorReminderNotificationTitle;
+
+  /// No description provided for @editorReminderNotificationBody.
+  ///
+  /// In it, this message translates to:
+  /// **'Hai un promemoria per questa nota'**
+  String get editorReminderNotificationBody;
+
+  /// No description provided for @editorAudioSection.
+  ///
+  /// In it, this message translates to:
+  /// **'Audio'**
+  String get editorAudioSection;
+
+  /// No description provided for @editorLinkedNotes.
+  ///
+  /// In it, this message translates to:
+  /// **'Note collegate'**
+  String get editorLinkedNotes;
+
+  /// No description provided for @editorRecordingError.
+  ///
+  /// In it, this message translates to:
+  /// **'Impossibile registrare l\'audio. Controlla il permesso del microfono.'**
+  String get editorRecordingError;
+
+  /// No description provided for @editorStopAndAttach.
+  ///
+  /// In it, this message translates to:
+  /// **'Ferma e allega'**
+  String get editorStopAndAttach;
+
+  /// No description provided for @editorLinkText.
+  ///
+  /// In it, this message translates to:
+  /// **'Testo (facoltativo)'**
+  String get editorLinkText;
+
+  /// No description provided for @editorLinkAddress.
+  ///
+  /// In it, this message translates to:
+  /// **'Indirizzo'**
+  String get editorLinkAddress;
+
+  /// No description provided for @editorLinkInvalid.
+  ///
+  /// In it, this message translates to:
+  /// **'Inserisci un indirizzo valido'**
+  String get editorLinkInvalid;
+
+  /// No description provided for @editorLinkInsert.
+  ///
+  /// In it, this message translates to:
+  /// **'Inserisci'**
+  String get editorLinkInsert;
+
+  /// No description provided for @editorSearchNoteHint.
+  ///
+  /// In it, this message translates to:
+  /// **'Cerca nota...'**
+  String get editorSearchNoteHint;
+
+  /// No description provided for @editorUntitledNote.
+  ///
+  /// In it, this message translates to:
+  /// **'Nota senza titolo'**
+  String get editorUntitledNote;
+
+  /// No description provided for @styleTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Stile testo'**
+  String get styleTitle;
+
+  /// No description provided for @styleSectionTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Titolo'**
+  String get styleSectionTitle;
+
+  /// No description provided for @styleSectionBody.
+  ///
+  /// In it, this message translates to:
+  /// **'Corpo'**
+  String get styleSectionBody;
+
+  /// No description provided for @styleSize.
+  ///
+  /// In it, this message translates to:
+  /// **'Dimensione: {size}pt'**
+  String styleSize(String size);
+
+  /// No description provided for @styleStrikethrough.
+  ///
+  /// In it, this message translates to:
+  /// **'Sbarrato'**
+  String get styleStrikethrough;
+
+  /// No description provided for @styleTextColor.
+  ///
+  /// In it, this message translates to:
+  /// **'Colore testo'**
+  String get styleTextColor;
+
+  /// No description provided for @styleTitleColor.
+  ///
+  /// In it, this message translates to:
+  /// **'Colore titolo'**
+  String get styleTitleColor;
+
+  /// No description provided for @styleResetTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Ripristina stile titolo'**
+  String get styleResetTitle;
+
+  /// No description provided for @styleMaterialColors.
+  ///
+  /// In it, this message translates to:
+  /// **'Colori Material'**
+  String get styleMaterialColors;
+
+  /// No description provided for @templateChoose.
+  ///
+  /// In it, this message translates to:
+  /// **'Scegli un modello'**
+  String get templateChoose;
+
+  /// No description provided for @templateSectionNotes.
+  ///
+  /// In it, this message translates to:
+  /// **'Note'**
+  String get templateSectionNotes;
+
+  /// No description provided for @templateSectionChecklists.
+  ///
+  /// In it, this message translates to:
+  /// **'Checklist'**
+  String get templateSectionChecklists;
+
+  /// No description provided for @templateMeetingName.
+  ///
+  /// In it, this message translates to:
+  /// **'Note riunione'**
+  String get templateMeetingName;
+
+  /// No description provided for @templateMeetingDescription.
+  ///
+  /// In it, this message translates to:
+  /// **'Struttura per prendere appunti durante una riunione'**
+  String get templateMeetingDescription;
+
+  /// No description provided for @templateMeetingContent.
+  ///
+  /// In it, this message translates to:
+  /// **'## Riunione del [DATA]\n\n**Partecipanti:**\n- \n\n**Ordine del giorno:**\n1. \n\n**Punti discussi:**\n\n**Decisioni prese:**\n\n**Azioni da fare:**\n- \n\n**Prossima riunione:** '**
+  String get templateMeetingContent;
+
+  /// No description provided for @templateJournalName.
+  ///
+  /// In it, this message translates to:
+  /// **'Diario giornaliero'**
+  String get templateJournalName;
+
+  /// No description provided for @templateJournalDescription.
+  ///
+  /// In it, this message translates to:
+  /// **'Traccia i tuoi pensieri e obiettivi del giorno'**
+  String get templateJournalDescription;
+
+  /// No description provided for @templateJournalContent.
+  ///
+  /// In it, this message translates to:
+  /// **'## [DATA]\n\n**Come mi sento oggi:**\n\n**Tre cose per cui sono grato:**\n1. \n2. \n3. \n\n**Obiettivi di oggi:**\n\n**Riflessioni della giornata:**\n'**
+  String get templateJournalContent;
+
+  /// No description provided for @templateProjectName.
+  ///
+  /// In it, this message translates to:
+  /// **'Piano di progetto'**
+  String get templateProjectName;
+
+  /// No description provided for @templateProjectDescription.
+  ///
+  /// In it, this message translates to:
+  /// **'Organizza obiettivi, milestones e risorse di un progetto'**
+  String get templateProjectDescription;
+
+  /// No description provided for @templateProjectContent.
+  ///
+  /// In it, this message translates to:
+  /// **'## Progetto: [NOME]\n\n**Obiettivo:**\n\n**Scadenza:**\n\n**Milestones:**\n- [ ] \n- [ ] \n\n**Risorse necessarie:**\n\n**Note:**\n'**
+  String get templateProjectContent;
+
+  /// No description provided for @templateShoppingName.
+  ///
+  /// In it, this message translates to:
+  /// **'Lista spesa'**
+  String get templateShoppingName;
+
+  /// No description provided for @templateShoppingDescription.
+  ///
+  /// In it, this message translates to:
+  /// **'Lista della spesa con caselle di controllo'**
+  String get templateShoppingDescription;
+
+  /// No description provided for @templateShoppingItems.
+  ///
+  /// In it, this message translates to:
+  /// **'Frutta e verdura\nLatte\nPane\nUova'**
+  String get templateShoppingItems;
+
+  /// No description provided for @templateTravelName.
+  ///
+  /// In it, this message translates to:
+  /// **'Lista viaggio'**
+  String get templateTravelName;
+
+  /// No description provided for @templateTravelDescription.
+  ///
+  /// In it, this message translates to:
+  /// **'Non dimenticare nulla per il tuo viaggio'**
+  String get templateTravelDescription;
+
+  /// No description provided for @templateTravelItems.
+  ///
+  /// In it, this message translates to:
+  /// **'Passaporto / Documenti\nCaricabatterie\nVestiti\nProdotti da toilette\nMedicinali\nContanti / Carte'**
+  String get templateTravelItems;
+
+  /// No description provided for @templateIdeasName.
+  ///
+  /// In it, this message translates to:
+  /// **'Brainstorming idee'**
+  String get templateIdeasName;
+
+  /// No description provided for @templateIdeasDescription.
+  ///
+  /// In it, this message translates to:
+  /// **'Spazio libero per raccogliere idee'**
+  String get templateIdeasDescription;
+
+  /// No description provided for @templateIdeasContent.
+  ///
+  /// In it, this message translates to:
+  /// **'## Idea: [TITOLO]\n\n**Descrizione:**\n\n**Pro:**\n- \n\n**Contro:**\n- \n\n**Prossimi passi:**\n'**
+  String get templateIdeasContent;
 }
 
 class _AppLocalizationsDelegate

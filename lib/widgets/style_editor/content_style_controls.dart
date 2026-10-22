@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import '../../models/note_model.dart';
 import '../../theme/app_spacing.dart';
 import 'color_picker_widget.dart';
@@ -25,10 +26,11 @@ class ContentStyleControls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Font', style: Theme.of(context).textTheme.labelLarge),
+        Text(l10n.commonFont, style: Theme.of(context).textTheme.labelLarge),
         const SizedBox(height: AppSpacing.sm),
         FontFamilyPicker(
           selected: style.fontFamily,
@@ -36,7 +38,7 @@ class ContentStyleControls extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.lg),
         Text(
-          'Dimensione: ${style.fontSize.toStringAsFixed(0)}pt',
+          l10n.styleSize(style.fontSize.toStringAsFixed(0)),
           style: Theme.of(context).textTheme.labelLarge,
         ),
         Slider(
@@ -51,24 +53,27 @@ class ContentStyleControls extends StatelessWidget {
           runSpacing: 8,
           children: [
             FilterChip(
-              label: const Text('Grassetto'),
+              label: Text(l10n.commonBold),
               selected: style.isBold,
               onSelected: (v) => onChanged(style.copyWith(isBold: v)),
             ),
             FilterChip(
-              label: const Text('Corsivo'),
+              label: Text(l10n.commonItalic),
               selected: style.isItalic,
               onSelected: (v) => onChanged(style.copyWith(isItalic: v)),
             ),
             FilterChip(
-              label: const Text('Sbarrato'),
+              label: Text(l10n.styleStrikethrough),
               selected: style.isStrikethrough,
               onSelected: (v) => onChanged(style.copyWith(isStrikethrough: v)),
             ),
           ],
         ),
         const SizedBox(height: AppSpacing.lg),
-        Text('Colore testo', style: Theme.of(context).textTheme.labelLarge),
+        Text(
+          l10n.styleTextColor,
+          style: Theme.of(context).textTheme.labelLarge,
+        ),
         const SizedBox(height: AppSpacing.sm),
         ColorPickerWidget(
           current: style.fontColor ?? Theme.of(context).colorScheme.onSurface,

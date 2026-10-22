@@ -5,7 +5,12 @@ import 'package:noteep/screens/home/notes_skeleton.dart';
 import 'package:noteep/widgets/shared/fade_switcher.dart';
 import 'package:noteep/widgets/shared/skeleton.dart';
 
+import '../helpers/l10n.dart';
+
 Widget _app(Widget child, {bool disableAnimations = false}) => MaterialApp(
+  locale: testLocale,
+  supportedLocales: testSupportedLocales,
+  localizationsDelegates: testLocalizationsDelegates,
   home: MediaQuery(
     data: MediaQueryData(disableAnimations: disableAnimations),
     child: Scaffold(body: child),

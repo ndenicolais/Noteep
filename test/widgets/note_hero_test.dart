@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noteep/widgets/shared/note_hero.dart';
 
+import '../helpers/l10n.dart';
+
 void main() {
   Widget app({bool disableAnimations = false}) {
     return MaterialApp(
+      locale: testLocale,
+      supportedLocales: testSupportedLocales,
+      localizationsDelegates: testLocalizationsDelegates,
       builder:
           (context, child) => MediaQuery(
             data: MediaQuery.of(

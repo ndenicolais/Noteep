@@ -17,6 +17,8 @@ import 'package:noteep/providers/notes_provider.dart';
 import 'package:noteep/screens/note_editor/note_editor_screen.dart';
 import '../helpers/test_container.dart';
 
+import '../helpers/l10n.dart';
+
 void main() {
   late FakeFirebaseFirestore firestore;
   late ProviderContainer container;
@@ -32,6 +34,9 @@ void main() {
     return UncontrolledProviderScope(
       container: container,
       child: MaterialApp(
+        locale: testLocale,
+        supportedLocales: testSupportedLocales,
+        localizationsDelegates: testLocalizationsDelegates,
         home: Builder(
           builder:
               (context) => ElevatedButton(

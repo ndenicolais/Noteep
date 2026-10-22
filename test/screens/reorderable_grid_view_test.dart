@@ -7,6 +7,8 @@ import 'package:noteep/screens/home/home_layout_utils.dart';
 import 'package:noteep/screens/home/reorderable_grid_view.dart';
 import 'package:noteep/widgets/note_card.dart';
 
+import '../helpers/l10n.dart';
+
 void main() {
   group('masonryColumnLength', () {
     test('deals items round-robin across columns', () {
@@ -44,6 +46,9 @@ void main() {
             }),
           ],
           child: MaterialApp(
+            locale: testLocale,
+            supportedLocales: testSupportedLocales,
+            localizationsDelegates: testLocalizationsDelegates,
             home: Scaffold(
               body: ReorderableGridView(
                 noteIds: [for (final n in notes) n.id],

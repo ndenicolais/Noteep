@@ -10,6 +10,7 @@
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import 'package:flutter/semantics.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/note_model.dart';
@@ -170,10 +171,10 @@ class _ReorderableGridViewState extends State<ReorderableGridView> {
           // Screen-reader alternative to drag & drop, same indices.
           extraSemanticsActions: {
             if (i > 0)
-              const CustomSemanticsAction(label: 'Sposta prima'):
+              CustomSemanticsAction(label: ctx.l10n.commonMoveEarlier):
                   () => widget.onReorder(i, i - 1),
             if (i < widget.noteIds.length - 1)
-              const CustomSemanticsAction(label: 'Sposta dopo'):
+              CustomSemanticsAction(label: ctx.l10n.commonMoveLater):
                   () => widget.onReorder(i, i + 1),
           },
         ),

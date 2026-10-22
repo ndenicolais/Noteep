@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import '../../models/note_model.dart';
 import '../../theme/app_radius.dart';
 import '../../theme/app_spacing.dart';
@@ -87,23 +88,23 @@ class _StyleEditorSheetState extends State<StyleEditorSheet> {
                     ),
                   ),
                   Text(
-                    'Stile Testo',
+                    context.l10n.styleTitle,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: AppSpacing.md),
                   SegmentedButton<_StyleSection>(
-                    segments: const [
+                    segments: [
                       ButtonSegment(
                         value: _StyleSection.title,
-                        label: Text('Titolo'),
-                        icon: Icon(Icons.title),
+                        label: Text(context.l10n.styleSectionTitle),
+                        icon: const Icon(Icons.title),
                       ),
                       ButtonSegment(
                         value: _StyleSection.content,
-                        label: Text('Corpo'),
-                        icon: Icon(Icons.notes),
+                        label: Text(context.l10n.styleSectionBody),
+                        icon: const Icon(Icons.notes),
                       ),
                     ],
                     selected: {_section},

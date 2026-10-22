@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../l10n/l10n.dart';
 import '../models/note_model.dart';
 import '../models/note_template.dart';
 import '../theme/app_font_sizes.dart';
@@ -31,10 +32,11 @@ class _NoteTemplateSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final templates = noteTemplates(context.l10n);
     final textTemplates =
-        kNoteTemplates.where((t) => t.type == NoteType.note).toList();
+        templates.where((t) => t.type == NoteType.note).toList();
     final checklistTemplates =
-        kNoteTemplates.where((t) => t.type == NoteType.checklist).toList();
+        templates.where((t) => t.type == NoteType.checklist).toList();
 
     return DraggableScrollableSheet(
       initialChildSize: 0.7,
@@ -57,7 +59,7 @@ class _NoteTemplateSheet extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
               child: Text(
-                'Scegli un modello',
+                context.l10n.templateChoose,
                 style: Theme.of(
                   context,
                 ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
@@ -74,10 +76,13 @@ class _NoteTemplateSheet extends StatelessWidget {
                   AppSpacing.xxl,
                 ),
                 children: [
-                  _TemplateSection(title: 'Note', templates: textTemplates),
+                  _TemplateSection(
+                    title: context.l10n.templateSectionNotes,
+                    templates: textTemplates,
+                  ),
                   const SizedBox(height: AppSpacing.sm),
                   _TemplateSection(
-                    title: 'Checklist',
+                    title: context.l10n.templateSectionChecklists,
                     templates: checklistTemplates,
                   ),
                 ],

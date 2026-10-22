@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noteep/widgets/shared/app_dialogs.dart';
 
+import '../helpers/l10n.dart';
+
 void main() {
   late bool? result;
 
@@ -9,6 +11,9 @@ void main() {
 
   Widget build({bool destructive = false}) {
     return MaterialApp(
+      locale: testLocale,
+      supportedLocales: testSupportedLocales,
+      localizationsDelegates: testLocalizationsDelegates,
       home: Scaffold(
         body: Builder(
           builder:

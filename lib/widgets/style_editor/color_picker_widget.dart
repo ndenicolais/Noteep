@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 
 import '../../theme/app_colors.dart';
 
@@ -90,7 +91,7 @@ class ColorPickerWidget extends StatelessWidget {
       context: context,
       builder:
           (ctx) => AlertDialog(
-            title: const Text('Colori Material'),
+            title: Text(ctx.l10n.styleMaterialColors),
             content: SizedBox(
               width: double.maxFinite,
               child: GridView.builder(
@@ -128,7 +129,7 @@ class ColorPickerWidget extends StatelessWidget {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(ctx),
-                child: const Text('Chiudi'),
+                child: Text(ctx.l10n.commonClose),
               ),
             ],
           ),
