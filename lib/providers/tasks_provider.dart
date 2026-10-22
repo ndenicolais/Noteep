@@ -356,6 +356,20 @@ final taskListsProvider =
 
 // ─── Filtered & Sorted Providers ─────────────────────────────────────────────
 
+/// Every task by id, rebuilt once per change of [tasksProvider].
+final tasksByIdProvider = Provider<Map<String, TaskModel>>((ref) {
+  return {for (final t in ref.watch(tasksProvider)) t.id: t};
+});
+
+/// A single task, notifying only when that task changes (see
+/// `noteByIdProvider`).
+final taskByIdProvider = Provider.autoDispose.family<TaskModel?, String>((
+  ref,
+  id,
+) {
+  return ref.watch(tasksByIdProvider.select((tasks) => tasks[id]));
+});
+
 final activeTasksProvider = Provider<List<TaskModel>>((ref) {
   final tasks = ref.watch(tasksProvider);
   final sort = ref.watch(taskSortOrderProvider);

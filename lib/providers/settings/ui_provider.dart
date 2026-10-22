@@ -136,6 +136,13 @@ final filteredNotesProvider = Provider<List<NoteModel>>((ref) {
   return filtered;
 });
 
+/// Ids of [filteredNotesProvider], in display order: the Home screen watches
+/// this, so editing a note's content (without changing which notes match or
+/// their order) only rebuilds that note's card.
+final filteredNoteIdsProvider = Provider<IdList>((ref) {
+  return IdList(ref.watch(filteredNotesProvider).map((n) => n.id));
+});
+
 final filteredTasksProvider = Provider<List<TaskModel>>((ref) {
   final tasks = ref.watch(activeTasksProvider);
   final query = ref.watch(taskSearchQueryProvider).toLowerCase();

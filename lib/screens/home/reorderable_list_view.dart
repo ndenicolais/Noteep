@@ -10,19 +10,22 @@
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import '../../models/note_model.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../providers/notes_provider.dart';
 import '../../theme/app_spacing.dart';
 import '../../widgets/note_card.dart';
 import 'note_swipe_actions.dart';
 
+/// Home list layout of the notes in [noteIds]; like `ReorderableGridView`,
+/// each row watches its own note.
 class ReorderableListViewWidget extends StatelessWidget {
   const ReorderableListViewWidget({
     super.key,
-    required this.notes,
+    required this.noteIds,
     required this.onReorder,
   });
 
-  final List<NoteModel> notes;
+  final List<String> noteIds;
   final void Function(int oldIndex, int newIndex) onReorder;
 
   @override
@@ -43,21 +46,27 @@ class ReorderableListViewWidget extends StatelessWidget {
         // onReorderItem gives the post-removal index; onReorder (and
         // NotesNotifier.reorderNotes) expect the legacy pre-removal one.
         onReorderItem: (o, n) => onReorder(o, n > o ? n + 1 : n),
-        itemCount: notes.length,
+        itemCount: noteIds.length,
         itemBuilder: (_, i) {
-          final note = notes[i];
+          final id = noteIds[i];
           return ReorderableDelayedDragStartListener(
-            key: ValueKey(note.id),
+            key: ValueKey(id),
             index: i,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-              child: NoteSwipeActions(
-                note: note,
-                child: MouseRegion(
-                  cursor: SystemMouseCursors.grab,
-                  child: NoteCard(note: note),
-                ),
-              ),
+            child: Consumer(
+              builder: (_, ref, _) {
+                final note = ref.watch(noteByIdProvider(id));
+                if (note == null) return const SizedBox.shrink();
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+                  child: NoteSwipeActions(
+                    note: note,
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.grab,
+                      child: NoteCard(note: note),
+                    ),
+                  ),
+                );
+              },
             ),
           );
         },

@@ -11,6 +11,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/task_model.dart';
+import '../../providers/core_providers.dart';
 import '../../providers/settings/ui_provider.dart';
 import '../../providers/tasks_provider.dart';
 import '../../theme/app_spacing.dart';
@@ -30,8 +31,18 @@ class TaskListView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tasks = ref.watch(source);
     final sort = ref.watch(taskSortOrderProvider);
+    // Only the ids of each section: editing a task without moving it (e.g.
+    // its title) rebuilds that row alone, not the whole list.
+    final (:active, :completed) = ref.watch(
+      source.select((tasks) {
+        final sorted = sortTasksForDisplay(tasks, sort);
+        return (
+          active: IdList(sorted.active.map((t) => t.id)),
+          completed: IdList(sorted.completed.map((t) => t.id)),
+        );
+      }),
+    );
 
     // Task-list failures surface through tasksLoadErrorProvider on the tasks
     // reload, which hits the same backend, so they are not reported twice.
@@ -40,7 +51,7 @@ class TaskListView extends ConsumerWidget {
       ref.read(taskListsProvider.notifier).reload().catchError((_) {}),
     ]);
 
-    if (tasks.isEmpty) {
+    if (active.isEmpty && completed.isEmpty) {
       final loadError = ref.watch(tasksLoadErrorProvider);
       final isLoading = ref.watch(tasksLoadingProvider);
       if (isLoading && loadError == null) {
@@ -67,7 +78,6 @@ class TaskListView extends ConsumerWidget {
       );
     }
 
-    final (:active, :completed) = sortTasksForDisplay(tasks, sort);
     return FadeSwitcher(
       child: PullToRefresh(
         key: const ValueKey('list'),
@@ -77,8 +87,7 @@ class TaskListView extends ConsumerWidget {
           physics: const AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.all(AppSpacing.lg),
           children: [
-            for (final task in active)
-              TaskItem(key: ValueKey(task.id), task: task),
+            for (final id in active.ids) _TaskRow(key: ValueKey(id), id: id),
             if (completed.isNotEmpty) ...[
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
@@ -88,12 +97,27 @@ class TaskListView extends ConsumerWidget {
                 'Completati',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              for (final task in completed)
-                TaskItem(key: ValueKey(task.id), task: task),
+              for (final id in completed.ids)
+                _TaskRow(key: ValueKey(id), id: id),
             ],
           ],
         ),
       ),
     );
+  }
+}
+
+/// A [TaskItem] that watches its own task, so it rebuilds only when that
+/// task changes.
+class _TaskRow extends ConsumerWidget {
+  const _TaskRow({super.key, required this.id});
+
+  final String id;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final task = ref.watch(taskByIdProvider(id));
+    if (task == null) return const SizedBox.shrink();
+    return TaskItem(task: task);
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noteep/models/note_model.dart';
+import 'package:noteep/providers/notes_provider.dart';
 import 'package:noteep/screens/home/home_layout_utils.dart';
 import 'package:noteep/screens/home/reorderable_grid_view.dart';
 import 'package:noteep/widgets/note_card.dart';
@@ -37,10 +38,15 @@ void main() {
       addTearDown(tester.view.reset);
       await tester.pumpWidget(
         ProviderScope(
+          overrides: [
+            notesByIdProvider.overrideWithValue({
+              for (final n in notes) n.id: n,
+            }),
+          ],
           child: MaterialApp(
             home: Scaffold(
               body: ReorderableGridView(
-                notes: notes,
+                noteIds: [for (final n in notes) n.id],
                 onReorder: onReorder ?? (_, __) {},
               ),
             ),

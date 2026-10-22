@@ -101,7 +101,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final layout = ref.watch(homeLayoutProvider);
-    final notes = ref.watch(filteredNotesProvider);
+    // Ids only: editing a note's content rebuilds its card, not the screen.
+    final noteIds = ref.watch(filteredNoteIdsProvider);
     final sortOrder = ref.watch(sortOrderProvider);
     final loadError = ref.watch(notesLoadErrorProvider);
     final isLoading = ref.watch(notesLoadingProvider);
@@ -122,13 +123,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ],
       body: FadeSwitcher(
         child:
-            notes.isEmpty && isLoading && loadError == null
+            noteIds.isEmpty && isLoading && loadError == null
                 ? NotesSkeleton(key: const ValueKey('loading'), layout: layout)
                 : PullToRefresh(
-                  key: ValueKey(_stateKey(notes, layout, loadError)),
+                  key: ValueKey(_stateKey(noteIds, layout, loadError)),
                   onRefresh: ref.read(notesProvider.notifier).reload,
-                  childIsScrollable: notes.isNotEmpty,
-                  child: _buildNotes(notes, layout, loadError),
+                  childIsScrollable: noteIds.isNotEmpty,
+                  child: _buildNotes(noteIds, layout, loadError),
                 ),
       ),
       floatingActionButton: SpeedDialFab(
@@ -144,17 +145,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   /// Which body state is shown: [FadeSwitcher] fades only when it changes.
-  String _stateKey(List<NoteModel> notes, HomeLayout layout, Object? error) {
-    if (notes.isNotEmpty) return layout.name;
+  String _stateKey(IdList noteIds, HomeLayout layout, Object? error) {
+    if (noteIds.isNotEmpty) return layout.name;
     return error != null ? 'error' : 'empty';
   }
 
-  Widget _buildNotes(
-    List<NoteModel> notes,
-    HomeLayout layout,
-    Object? loadError,
-  ) {
-    if (notes.isEmpty) {
+  Widget _buildNotes(IdList noteIds, HomeLayout layout, Object? loadError) {
+    if (noteIds.isEmpty) {
       if (loadError != null) {
         return EmptyState(
           icon: Icons.cloud_off,
@@ -177,23 +174,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
     return layout == HomeLayout.grid
         ? ReorderableGridView(
-          notes: notes,
-          onReorder: (from, to) {
-            ref.read(sortOrderProvider.notifier).set(SortOrder.custom);
-            ref
-                .read(notesProvider.notifier)
-                .reorderNotes(notes, from, from < to ? to + 1 : to);
-          },
+          noteIds: noteIds.ids,
+          onReorder: (from, to) => _reorder(from, from < to ? to + 1 : to),
         )
-        : ReorderableListViewWidget(
-          notes: notes,
-          onReorder: (oldIndex, newIndex) {
-            ref.read(sortOrderProvider.notifier).set(SortOrder.custom);
-            ref
-                .read(notesProvider.notifier)
-                .reorderNotes(notes, oldIndex, newIndex);
-          },
-        );
+        : ReorderableListViewWidget(noteIds: noteIds.ids, onReorder: _reorder);
+  }
+
+  void _reorder(int oldIndex, int newIndex) {
+    // Read the notes only now: the screen doesn't watch their content.
+    final notes = ref.read(filteredNotesProvider);
+    ref.read(sortOrderProvider.notifier).set(SortOrder.custom);
+    ref.read(notesProvider.notifier).reorderNotes(notes, oldIndex, newIndex);
   }
 
   void _openEditor(NoteType type) {

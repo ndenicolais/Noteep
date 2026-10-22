@@ -80,10 +80,13 @@ void main() {
       NoteModel(title: 'Due'),
       NoteModel(title: 'Tre'),
     ];
+    for (final n in list) {
+      await notes.addNote(n);
+    }
     await tester.pumpWidget(
       app(
         ReorderableGridView(
-          notes: list,
+          noteIds: [for (final n in list) n.id],
           onReorder: (f, t) => calls.add((f, t)),
         ),
       ),

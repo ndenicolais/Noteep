@@ -11,20 +11,25 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/semantics.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/note_model.dart';
+import '../../providers/notes_provider.dart';
 import '../../theme/app_radius.dart';
 import '../../theme/app_spacing.dart';
 import '../../widgets/note_card.dart';
 import 'home_layout_utils.dart';
 
+/// Masonry grid of the notes in [noteIds], with drag & drop reordering.
+/// Each card watches its own note (`noteByIdProvider`), so editing one note
+/// rebuilds only its card while [noteIds] stays the same.
 class ReorderableGridView extends StatefulWidget {
   const ReorderableGridView({
     super.key,
-    required this.notes,
+    required this.noteIds,
     required this.onReorder,
   });
 
-  final List<NoteModel> notes;
+  final List<String> noteIds;
   final void Function(int from, int to) onReorder;
 
   @override
@@ -44,7 +49,7 @@ class _ReorderableGridViewState extends State<ReorderableGridView> {
         const double pad = AppSpacing.md;
         final itemWidth =
             (constraints.maxWidth - pad * 2 - spacing * (cols - 1)) / cols;
-        final count = widget.notes.length;
+        final count = widget.noteIds.length;
         return ScrollConfiguration(
           behavior: ScrollConfiguration.of(ctx).copyWith(
             dragDevices: {PointerDeviceKind.touch, PointerDeviceKind.mouse},
@@ -97,11 +102,11 @@ class _ReorderableGridViewState extends State<ReorderableGridView> {
   }
 
   Widget _buildItem(BuildContext ctx, int i, double itemWidth) {
-    final note = widget.notes[i];
+    final id = widget.noteIds[i];
     final isDragging = _dragging == i;
     final isTarget = _hovered == i && !isDragging;
     return DragTarget<int>(
-      key: ValueKey(note.id),
+      key: ValueKey(id),
       onWillAcceptWithDetails: (d) => d.data != i,
       onAcceptWithDetails: (d) {
         widget.onReorder(d.data, i);
@@ -116,48 +121,63 @@ class _ReorderableGridViewState extends State<ReorderableGridView> {
       onLeave: (_) {
         if (_hovered == i) setState(() => _hovered = null);
       },
-      builder: (_, __, ___) {
-        return Draggable<int>(
-          data: i,
-          onDragStarted: () => setState(() => _dragging = i),
-          onDragEnd:
-              (_) => setState(() {
-                _dragging = null;
-                _hovered = null;
-              }),
-          feedback: Material(
-            elevation: 8,
-            borderRadius: BorderRadius.circular(AppRadius.md),
-            child: SizedBox(width: itemWidth, child: NoteCard(note: note)),
+      builder:
+          (_, __, ___) => Consumer(
+            builder: (_, ref, _) {
+              final note = ref.watch(noteByIdProvider(id));
+              if (note == null) return const SizedBox.shrink();
+              return _buildDraggable(ctx, i, itemWidth, note, isTarget);
+            },
           ),
-          childWhenDragging: Opacity(opacity: 0.3, child: NoteCard(note: note)),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 150),
-            decoration:
-                isTarget
-                    ? BoxDecoration(
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(
-                        color: Theme.of(ctx).colorScheme.primary,
-                        width: 2,
-                      ),
-                    )
-                    : const BoxDecoration(),
-            child: NoteCard(
-              note: note,
-              // Screen-reader alternative to drag & drop, same indices.
-              extraSemanticsActions: {
-                if (i > 0)
-                  const CustomSemanticsAction(label: 'Sposta prima'):
-                      () => widget.onReorder(i, i - 1),
-                if (i < widget.notes.length - 1)
-                  const CustomSemanticsAction(label: 'Sposta dopo'):
-                      () => widget.onReorder(i, i + 1),
-              },
-            ),
-          ),
-        );
-      },
+    );
+  }
+
+  Widget _buildDraggable(
+    BuildContext ctx,
+    int i,
+    double itemWidth,
+    NoteModel note,
+    bool isTarget,
+  ) {
+    return Draggable<int>(
+      data: i,
+      onDragStarted: () => setState(() => _dragging = i),
+      onDragEnd:
+          (_) => setState(() {
+            _dragging = null;
+            _hovered = null;
+          }),
+      feedback: Material(
+        elevation: 8,
+        borderRadius: BorderRadius.circular(AppRadius.md),
+        child: SizedBox(width: itemWidth, child: NoteCard(note: note)),
+      ),
+      childWhenDragging: Opacity(opacity: 0.3, child: NoteCard(note: note)),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 150),
+        decoration:
+            isTarget
+                ? BoxDecoration(
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: Theme.of(ctx).colorScheme.primary,
+                    width: 2,
+                  ),
+                )
+                : const BoxDecoration(),
+        child: NoteCard(
+          note: note,
+          // Screen-reader alternative to drag & drop, same indices.
+          extraSemanticsActions: {
+            if (i > 0)
+              const CustomSemanticsAction(label: 'Sposta prima'):
+                  () => widget.onReorder(i, i - 1),
+            if (i < widget.noteIds.length - 1)
+              const CustomSemanticsAction(label: 'Sposta dopo'):
+                  () => widget.onReorder(i, i + 1),
+          },
+        ),
+      ),
     );
   }
 }

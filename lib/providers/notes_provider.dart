@@ -300,6 +300,21 @@ final notesProvider = NotifierProvider<NotesNotifier, List<NoteModel>>(
   NotesNotifier.new,
 );
 
+/// Every note by id, rebuilt once per change of [notesProvider].
+final notesByIdProvider = Provider<Map<String, NoteModel>>((ref) {
+  return {for (final n in ref.watch(notesProvider)) n.id: n};
+});
+
+/// A single note: notifies only when that note changes (unchanged notes
+/// keep the same instance across mutations), so a card watching it is not
+/// rebuilt by edits to other notes.
+final noteByIdProvider = Provider.autoDispose.family<NoteModel?, String>((
+  ref,
+  id,
+) {
+  return ref.watch(notesByIdProvider.select((notes) => notes[id]));
+});
+
 final activeNotesProvider = Provider<List<NoteModel>>((ref) {
   final notes = ref.watch(notesProvider);
   return notes.where((n) => !n.isArchived && n.deletedAt == null).toList();

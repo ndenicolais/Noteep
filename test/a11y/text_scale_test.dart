@@ -127,21 +127,25 @@ void main() {
   });
 
   testWidgets('home grid with long and tagged notes', (tester) async {
+    final list = [
+      NoteModel(
+        title: 'Una nota con un titolo piuttosto lungo',
+        content: List.filled(8, 'riga di testo').join('\n'),
+        tags: ['lavoro', 'personale', 'urgente'],
+        isPinned: true,
+        reminder: DateTime(2026, 12, 24),
+      ),
+      NoteModel(title: 'Corta', content: 'ok'),
+      NoteModel(title: 'Protetta', isLocked: true),
+    ];
+    for (final n in list) {
+      await notes.addNote(n);
+    }
     await pumpScaled(
       tester,
       Scaffold(
         body: ReorderableGridView(
-          notes: [
-            NoteModel(
-              title: 'Una nota con un titolo piuttosto lungo',
-              content: List.filled(8, 'riga di testo').join('\n'),
-              tags: ['lavoro', 'personale', 'urgente'],
-              isPinned: true,
-              reminder: DateTime(2026, 12, 24),
-            ),
-            NoteModel(title: 'Corta', content: 'ok'),
-            NoteModel(title: 'Protetta', isLocked: true),
-          ],
+          noteIds: [for (final n in list) n.id],
           onReorder: (_, __) {},
         ),
       ),
