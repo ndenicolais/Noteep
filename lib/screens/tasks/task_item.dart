@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/routing/app_router.dart';
 import '../../models/task_model.dart';
@@ -30,11 +31,12 @@ class TaskItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.read(tasksProvider.notifier);
     final cs = Theme.of(context).colorScheme;
+    final l10n = context.l10n;
     return SwipeActions(
       id: task.id,
       start: SwipeAction(
         icon: task.isCompleted ? Icons.undo : Icons.check,
-        label: task.isCompleted ? 'Riapri' : 'Completa',
+        label: task.isCompleted ? l10n.tasksReopen : l10n.tasksComplete,
         color: Colors.green,
         // A completed task stays in the list (or is hidden by the
         // "show completed" setting), so the row snaps back.
@@ -43,13 +45,14 @@ class TaskItem extends ConsumerWidget {
             () => notifyWithUndo(
               notifier.toggleComplete(task.id),
               context,
-              message: task.isCompleted ? 'Task riaperto' : 'Task completato',
+              message:
+                  task.isCompleted ? l10n.tasksReopened : l10n.tasksCompleted,
               onUndo: () => notifier.toggleComplete(task.id),
             ),
       ),
       end: SwipeAction(
         icon: Icons.delete_outline,
-        label: 'Cestino',
+        label: l10n.commonTrash,
         color: cs.error,
         onTriggered: () => _trash(context, ref),
       ),
@@ -88,9 +91,7 @@ class TaskItem extends ConsumerWidget {
               ),
               onPressed: () => notifier.toggleSpecial(task.id),
               tooltip:
-                  task.isSpecial
-                      ? 'Rimuovi dagli speciali'
-                      : 'Aggiungi agli speciali',
+                  task.isSpecial ? l10n.tasksRemoveStar : l10n.tasksAddStar,
             ),
             _TaskMenu(
               onEdit: () => AppNav.openTask(context, task),
@@ -115,7 +116,7 @@ class TaskItem extends ConsumerWidget {
     notifyWithUndo(
       notifier.softDelete(task.id),
       context,
-      message: 'Task spostato nel cestino',
+      message: context.l10n.tasksTrashed,
       onUndo: () => notifier.restoreFromTrash(task.id),
     );
   }
@@ -123,9 +124,9 @@ class TaskItem extends ConsumerWidget {
   Future<void> _confirmTrash(BuildContext context, WidgetRef ref) async {
     final confirmed = await showAppConfirmDialog(
       context,
-      title: 'Elimina task',
-      message: 'Vuoi spostare "${task.title}" nel cestino?',
-      confirmLabel: 'Elimina',
+      title: context.l10n.tasksDeleteTask,
+      message: context.l10n.tasksDeleteTaskNamedConfirm(task.title),
+      confirmLabel: context.l10n.commonDelete,
       destructive: true,
     );
     if (!confirmed || !context.mounted) return;
@@ -152,15 +153,21 @@ class _TaskMenu extends StatelessWidget {
       onSelected: (action) => action(),
       itemBuilder:
           (_) => [
-            PopupMenuItem(value: onEdit, child: const Text('Modifica')),
-            PopupMenuItem(value: onMove, child: const Text('Sposta in elenco')),
+            PopupMenuItem(value: onEdit, child: Text(context.l10n.commonEdit)),
+            PopupMenuItem(
+              value: onMove,
+              child: Text(context.l10n.tasksMoveToList),
+            ),
             PopupMenuItem(
               value: onDelete,
               child: Row(
                 children: [
                   Icon(Icons.delete_outline, color: error),
                   const SizedBox(width: AppSpacing.md),
-                  Text('Elimina', style: TextStyle(color: error)),
+                  Text(
+                    context.l10n.commonDelete,
+                    style: TextStyle(color: error),
+                  ),
                 ],
               ),
             ),

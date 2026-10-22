@@ -1154,35 +1154,17 @@ abstract class AppLocalizations {
   /// **'Elemento...'**
   String get editorItemHint;
 
-  /// No description provided for @editorLastModified.
-  ///
-  /// In it, this message translates to:
-  /// **'Ultima modifica: {date}'**
-  String editorLastModified(String date);
-
   /// No description provided for @editorChooseBackground.
   ///
   /// In it, this message translates to:
   /// **'Scegli colore sfondo'**
   String get editorChooseBackground;
 
-  /// No description provided for @editorReminderScheduled.
-  ///
-  /// In it, this message translates to:
-  /// **'Promemoria: {date}'**
-  String editorReminderScheduled(String date);
-
   /// No description provided for @editorReminderFailed.
   ///
   /// In it, this message translates to:
   /// **'Impossibile pianificare il promemoria.'**
   String get editorReminderFailed;
-
-  /// No description provided for @editorReminderRemoved.
-  ///
-  /// In it, this message translates to:
-  /// **'Promemoria rimosso'**
-  String get editorReminderRemoved;
 
   /// No description provided for @editorReminderNotificationTitle.
   ///
@@ -1435,6 +1417,324 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'## Idea: [TITOLO]\n\n**Descrizione:**\n\n**Pro:**\n- \n\n**Contro:**\n- \n\n**Prossimi passi:**\n'**
   String get templateIdeasContent;
+
+  /// No description provided for @commonEdit.
+  ///
+  /// In it, this message translates to:
+  /// **'Modifica'**
+  String get commonEdit;
+
+  /// No description provided for @commonShare.
+  ///
+  /// In it, this message translates to:
+  /// **'Condividi'**
+  String get commonShare;
+
+  /// No description provided for @commonReminderScheduled.
+  ///
+  /// In it, this message translates to:
+  /// **'Promemoria: {date}'**
+  String commonReminderScheduled(String date);
+
+  /// No description provided for @commonReminderRemoved.
+  ///
+  /// In it, this message translates to:
+  /// **'Promemoria rimosso'**
+  String get commonReminderRemoved;
+
+  /// No description provided for @commonLastModified.
+  ///
+  /// In it, this message translates to:
+  /// **'Ultima modifica: {date}'**
+  String commonLastModified(String date);
+
+  /// No description provided for @tasksSearchHint.
+  ///
+  /// In it, this message translates to:
+  /// **'Cerca tra i task...'**
+  String get tasksSearchHint;
+
+  /// No description provided for @tasksSortTooltip.
+  ///
+  /// In it, this message translates to:
+  /// **'Ordina task'**
+  String get tasksSortTooltip;
+
+  /// No description provided for @tasksNewTask.
+  ///
+  /// In it, this message translates to:
+  /// **'Nuovo task'**
+  String get tasksNewTask;
+
+  /// No description provided for @tasksNewTaskHint.
+  ///
+  /// In it, this message translates to:
+  /// **'Cosa devi fare?'**
+  String get tasksNewTaskHint;
+
+  /// No description provided for @tasksAdd.
+  ///
+  /// In it, this message translates to:
+  /// **'Aggiungi'**
+  String get tasksAdd;
+
+  /// No description provided for @tasksNewList.
+  ///
+  /// In it, this message translates to:
+  /// **'Nuovo elenco'**
+  String get tasksNewList;
+
+  /// No description provided for @tasksListNameHint.
+  ///
+  /// In it, this message translates to:
+  /// **'Nome elenco'**
+  String get tasksListNameHint;
+
+  /// No description provided for @tasksCreate.
+  ///
+  /// In it, this message translates to:
+  /// **'Crea'**
+  String get tasksCreate;
+
+  /// No description provided for @tasksDeleteList.
+  ///
+  /// In it, this message translates to:
+  /// **'Elimina elenco'**
+  String get tasksDeleteList;
+
+  /// No description provided for @tasksDeleteListConfirm.
+  ///
+  /// In it, this message translates to:
+  /// **'Vuoi davvero eliminare l\'elenco \"{name}\"?'**
+  String tasksDeleteListConfirm(String name);
+
+  /// No description provided for @tasksTabAll.
+  ///
+  /// In it, this message translates to:
+  /// **'Tutte'**
+  String get tasksTabAll;
+
+  /// No description provided for @tasksTabStarred.
+  ///
+  /// In it, this message translates to:
+  /// **'Speciali'**
+  String get tasksTabStarred;
+
+  /// No description provided for @tasksEmpty.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessun task trovato'**
+  String get tasksEmpty;
+
+  /// No description provided for @tasksCompletedSection.
+  ///
+  /// In it, this message translates to:
+  /// **'Completati'**
+  String get tasksCompletedSection;
+
+  /// No description provided for @tasksComplete.
+  ///
+  /// In it, this message translates to:
+  /// **'Completa'**
+  String get tasksComplete;
+
+  /// No description provided for @tasksReopen.
+  ///
+  /// In it, this message translates to:
+  /// **'Riapri'**
+  String get tasksReopen;
+
+  /// No description provided for @tasksCompleted.
+  ///
+  /// In it, this message translates to:
+  /// **'Task completato'**
+  String get tasksCompleted;
+
+  /// No description provided for @tasksReopened.
+  ///
+  /// In it, this message translates to:
+  /// **'Task riaperto'**
+  String get tasksReopened;
+
+  /// No description provided for @tasksTrashed.
+  ///
+  /// In it, this message translates to:
+  /// **'Task spostato nel cestino'**
+  String get tasksTrashed;
+
+  /// No description provided for @tasksAddStar.
+  ///
+  /// In it, this message translates to:
+  /// **'Aggiungi agli speciali'**
+  String get tasksAddStar;
+
+  /// No description provided for @tasksRemoveStar.
+  ///
+  /// In it, this message translates to:
+  /// **'Rimuovi dagli speciali'**
+  String get tasksRemoveStar;
+
+  /// No description provided for @tasksMoveToList.
+  ///
+  /// In it, this message translates to:
+  /// **'Sposta in elenco'**
+  String get tasksMoveToList;
+
+  /// No description provided for @tasksDeleteTask.
+  ///
+  /// In it, this message translates to:
+  /// **'Elimina task'**
+  String get tasksDeleteTask;
+
+  /// No description provided for @tasksDeleteTaskNamedConfirm.
+  ///
+  /// In it, this message translates to:
+  /// **'Vuoi spostare \"{title}\" nel cestino?'**
+  String tasksDeleteTaskNamedConfirm(String title);
+
+  /// No description provided for @tasksDeleteTaskConfirm.
+  ///
+  /// In it, this message translates to:
+  /// **'Vuoi spostare questo task nel cestino?'**
+  String get tasksDeleteTaskConfirm;
+
+  /// No description provided for @tasksMoveToListTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Sposta in un elenco'**
+  String get tasksMoveToListTitle;
+
+  /// No description provided for @tasksNoList.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessun elenco'**
+  String get tasksNoList;
+
+  /// No description provided for @tasksUnknownList.
+  ///
+  /// In it, this message translates to:
+  /// **'Sconosciuto'**
+  String get tasksUnknownList;
+
+  /// No description provided for @taskEditorTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Task'**
+  String get taskEditorTitle;
+
+  /// No description provided for @taskEditorUndo.
+  ///
+  /// In it, this message translates to:
+  /// **'Annulla (Ctrl+Z)'**
+  String get taskEditorUndo;
+
+  /// No description provided for @taskEditorRedo.
+  ///
+  /// In it, this message translates to:
+  /// **'Ripeti (Ctrl+Y)'**
+  String get taskEditorRedo;
+
+  /// No description provided for @taskEditorUnpin.
+  ///
+  /// In it, this message translates to:
+  /// **'Sposta in alto'**
+  String get taskEditorUnpin;
+
+  /// No description provided for @taskEditorPin.
+  ///
+  /// In it, this message translates to:
+  /// **'Fissa in alto'**
+  String get taskEditorPin;
+
+  /// No description provided for @taskEditorDueDate.
+  ///
+  /// In it, this message translates to:
+  /// **'Imposta data scadenza'**
+  String get taskEditorDueDate;
+
+  /// No description provided for @taskEditorReminder.
+  ///
+  /// In it, this message translates to:
+  /// **'Promemoria'**
+  String get taskEditorReminder;
+
+  /// No description provided for @taskEditorRecurrence.
+  ///
+  /// In it, this message translates to:
+  /// **'Imposta ripetizione'**
+  String get taskEditorRecurrence;
+
+  /// No description provided for @taskEditorRecurrenceTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Ripetizione'**
+  String get taskEditorRecurrenceTitle;
+
+  /// No description provided for @taskEditorTitleHint.
+  ///
+  /// In it, this message translates to:
+  /// **'Titolo task'**
+  String get taskEditorTitleHint;
+
+  /// No description provided for @taskEditorDescriptionHint.
+  ///
+  /// In it, this message translates to:
+  /// **'Descrizione...'**
+  String get taskEditorDescriptionHint;
+
+  /// No description provided for @taskEditorSubtasks.
+  ///
+  /// In it, this message translates to:
+  /// **'Sottoattività ({completed}/{total})'**
+  String taskEditorSubtasks(int completed, int total);
+
+  /// No description provided for @taskEditorAddSubtaskHint.
+  ///
+  /// In it, this message translates to:
+  /// **'Aggiungi sottoattività...'**
+  String get taskEditorAddSubtaskHint;
+
+  /// No description provided for @taskEditorReminderNotificationTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Promemoria task'**
+  String get taskEditorReminderNotificationTitle;
+
+  /// No description provided for @taskEditorReminderNotificationBody.
+  ///
+  /// In it, this message translates to:
+  /// **'Hai un promemoria per questo task'**
+  String get taskEditorReminderNotificationBody;
+
+  /// No description provided for @recurrenceNone.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessuna'**
+  String get recurrenceNone;
+
+  /// No description provided for @recurrenceDaily.
+  ///
+  /// In it, this message translates to:
+  /// **'Giornaliero'**
+  String get recurrenceDaily;
+
+  /// No description provided for @recurrenceWeekly.
+  ///
+  /// In it, this message translates to:
+  /// **'Settimanale'**
+  String get recurrenceWeekly;
+
+  /// No description provided for @recurrenceMonthly.
+  ///
+  /// In it, this message translates to:
+  /// **'Mensile'**
+  String get recurrenceMonthly;
+
+  /// No description provided for @recurrenceYearly.
+  ///
+  /// In it, this message translates to:
+  /// **'Annuale'**
+  String get recurrenceYearly;
 }
 
 class _AppLocalizationsDelegate

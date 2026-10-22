@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
@@ -183,9 +184,9 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
   Future<void> _confirmDelete() async {
     final confirmed = await showAppConfirmDialog(
       context,
-      title: 'Elimina task',
-      message: 'Vuoi spostare questo task nel cestino?',
-      confirmLabel: 'Elimina',
+      title: context.l10n.tasksDeleteTask,
+      message: context.l10n.tasksDeleteTaskConfirm,
+      confirmLabel: context.l10n.commonDelete,
       destructive: true,
     );
     if (!confirmed || !mounted) return;
@@ -197,7 +198,7 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
       notifyWithUndo(
         notifier.softDelete(id),
         context,
-        message: 'Task spostato nel cestino',
+        message: context.l10n.tasksTrashed,
         onUndo: () => notifier.restoreFromTrash(id),
       );
     }
@@ -232,7 +233,7 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
       context: context,
       builder:
           (context) => AlertDialog(
-            title: const Text('Ripetizione'),
+            title: Text(context.l10n.taskEditorRecurrenceTitle),
             content: SingleChildScrollView(
               child: RadioGroup<RecurrenceType>(
                 groupValue: _task.recurrence,
@@ -247,7 +248,7 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
                   children: [
                     for (final type in RecurrenceType.values)
                       RadioListTile<RecurrenceType>(
-                        title: Text(recurrenceLabel(type)),
+                        title: Text(recurrenceLabel(context.l10n, type)),
                         value: type,
                       ),
                   ],
@@ -321,12 +322,16 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
     setState(() => _task = updated);
     _save();
 
+    final l10n = context.l10n;
     await NotificationService.instance.scheduleNotification(
       id: NotificationService.idForTask(_task.id),
-      title: _task.title.isEmpty ? 'Promemoria task' : _task.title,
+      title:
+          _task.title.isEmpty
+              ? l10n.taskEditorReminderNotificationTitle
+              : _task.title,
       body:
           _task.description.isEmpty
-              ? 'Hai un promemoria per questo task'
+              ? l10n.taskEditorReminderNotificationBody
               : _task.description.substring(
                 0,
                 _task.description.length > 80 ? 80 : _task.description.length,
@@ -339,7 +344,9 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Promemoria: ${DateFormat('dd MMM, HH:mm').format(scheduled)}',
+            context.l10n.commonReminderScheduled(
+              DateFormat('dd MMM, HH:mm').format(scheduled),
+            ),
           ),
         ),
       );
@@ -354,9 +361,9 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
     setState(() => _task = updated);
     _save();
     if (mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Promemoria rimosso')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.commonReminderRemoved)),
+      );
     }
   }
 
@@ -450,7 +457,7 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
                 ),
                 maxLines: null,
                 decoration: InputDecoration(
-                  hintText: 'Titolo task',
+                  hintText: context.l10n.taskEditorTitleHint,
                   hintStyle: TextStyle(
                     fontSize: 20,
                     color: Theme.of(
@@ -477,8 +484,8 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
                   focusNode: _descriptionFocusNode,
                   maxLines: null,
                   textAlignVertical: TextAlignVertical.top,
-                  decoration: const InputDecoration(
-                    hintText: 'Descrizione...',
+                  decoration: InputDecoration(
+                    hintText: context.l10n.taskEditorDescriptionHint,
                     border: InputBorder.none,
                   ),
                 ),
@@ -498,7 +505,9 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
             Padding(
               padding: const EdgeInsets.all(AppSpacing.sm),
               child: Text(
-                'Ultima modifica: ${DateFormat('dd MMM, HH:mm').format(_task.updatedAt)}',
+                context.l10n.commonLastModified(
+                  DateFormat('dd MMM, HH:mm').format(_task.updatedAt),
+                ),
                 style: TextStyle(
                   fontSize: AppFontSizes.sm,
                   color: Theme.of(context).colorScheme.onSurface.withAlpha(150),

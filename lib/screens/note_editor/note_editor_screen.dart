@@ -244,7 +244,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            context.l10n.editorReminderScheduled(
+            context.l10n.commonReminderScheduled(
               DateFormat('dd MMM, HH:mm').format(scheduled),
             ),
           ),
@@ -259,7 +259,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
     _save();
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.editorReminderRemoved)),
+        SnackBar(content: Text(context.l10n.commonReminderRemoved)),
       );
     }
   }
@@ -620,7 +620,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
                   vertical: 6,
                 ),
                 child: Text(
-                  context.l10n.editorLastModified(
+                  context.l10n.commonLastModified(
                     DateFormat('dd MMM, HH:mm').format(_note.updatedAt),
                   ),
                   style: TextStyle(

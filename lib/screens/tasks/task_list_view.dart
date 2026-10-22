@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/task_model.dart';
 import '../../providers/core_providers.dart';
@@ -69,9 +70,9 @@ class TaskListView extends ConsumerWidget {
             icon: loadError != null ? Icons.cloud_off : Icons.task_alt,
             message:
                 loadError != null
-                    ? 'Errore di sincronizzazione. Verifica la connessione e riprova.'
-                    : 'Nessun task trovato',
-            actionLabel: loadError != null ? 'Riprova' : null,
+                    ? context.l10n.commonSyncError
+                    : context.l10n.tasksEmpty,
+            actionLabel: loadError != null ? context.l10n.commonRetry : null,
             actionIcon: Icons.refresh,
             onAction: refresh,
           ),
@@ -94,8 +95,8 @@ class TaskListView extends ConsumerWidget {
                 padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
                 child: Divider(),
               ),
-              const SectionHeader(
-                'Completati',
+              SectionHeader(
+                context.l10n.tasksCompletedSection,
                 padding: SectionHeader.inlinePadding,
               ),
               for (final id in completed.ids)

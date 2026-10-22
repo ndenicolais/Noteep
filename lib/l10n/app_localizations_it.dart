@@ -586,23 +586,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get editorItemHint => 'Elemento...';
 
   @override
-  String editorLastModified(String date) {
-    return 'Ultima modifica: $date';
-  }
-
-  @override
   String get editorChooseBackground => 'Scegli colore sfondo';
 
   @override
-  String editorReminderScheduled(String date) {
-    return 'Promemoria: $date';
-  }
-
-  @override
   String get editorReminderFailed => 'Impossibile pianificare il promemoria.';
-
-  @override
-  String get editorReminderRemoved => 'Promemoria rimosso';
 
   @override
   String get editorReminderNotificationTitle => 'Promemoria nota';
@@ -743,4 +730,174 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get templateIdeasContent =>
       '## Idea: [TITOLO]\n\n**Descrizione:**\n\n**Pro:**\n- \n\n**Contro:**\n- \n\n**Prossimi passi:**\n';
+
+  @override
+  String get commonEdit => 'Modifica';
+
+  @override
+  String get commonShare => 'Condividi';
+
+  @override
+  String commonReminderScheduled(String date) {
+    return 'Promemoria: $date';
+  }
+
+  @override
+  String get commonReminderRemoved => 'Promemoria rimosso';
+
+  @override
+  String commonLastModified(String date) {
+    return 'Ultima modifica: $date';
+  }
+
+  @override
+  String get tasksSearchHint => 'Cerca tra i task...';
+
+  @override
+  String get tasksSortTooltip => 'Ordina task';
+
+  @override
+  String get tasksNewTask => 'Nuovo task';
+
+  @override
+  String get tasksNewTaskHint => 'Cosa devi fare?';
+
+  @override
+  String get tasksAdd => 'Aggiungi';
+
+  @override
+  String get tasksNewList => 'Nuovo elenco';
+
+  @override
+  String get tasksListNameHint => 'Nome elenco';
+
+  @override
+  String get tasksCreate => 'Crea';
+
+  @override
+  String get tasksDeleteList => 'Elimina elenco';
+
+  @override
+  String tasksDeleteListConfirm(String name) {
+    return 'Vuoi davvero eliminare l\'elenco \"$name\"?';
+  }
+
+  @override
+  String get tasksTabAll => 'Tutte';
+
+  @override
+  String get tasksTabStarred => 'Speciali';
+
+  @override
+  String get tasksEmpty => 'Nessun task trovato';
+
+  @override
+  String get tasksCompletedSection => 'Completati';
+
+  @override
+  String get tasksComplete => 'Completa';
+
+  @override
+  String get tasksReopen => 'Riapri';
+
+  @override
+  String get tasksCompleted => 'Task completato';
+
+  @override
+  String get tasksReopened => 'Task riaperto';
+
+  @override
+  String get tasksTrashed => 'Task spostato nel cestino';
+
+  @override
+  String get tasksAddStar => 'Aggiungi agli speciali';
+
+  @override
+  String get tasksRemoveStar => 'Rimuovi dagli speciali';
+
+  @override
+  String get tasksMoveToList => 'Sposta in elenco';
+
+  @override
+  String get tasksDeleteTask => 'Elimina task';
+
+  @override
+  String tasksDeleteTaskNamedConfirm(String title) {
+    return 'Vuoi spostare \"$title\" nel cestino?';
+  }
+
+  @override
+  String get tasksDeleteTaskConfirm => 'Vuoi spostare questo task nel cestino?';
+
+  @override
+  String get tasksMoveToListTitle => 'Sposta in un elenco';
+
+  @override
+  String get tasksNoList => 'Nessun elenco';
+
+  @override
+  String get tasksUnknownList => 'Sconosciuto';
+
+  @override
+  String get taskEditorTitle => 'Task';
+
+  @override
+  String get taskEditorUndo => 'Annulla (Ctrl+Z)';
+
+  @override
+  String get taskEditorRedo => 'Ripeti (Ctrl+Y)';
+
+  @override
+  String get taskEditorUnpin => 'Sposta in alto';
+
+  @override
+  String get taskEditorPin => 'Fissa in alto';
+
+  @override
+  String get taskEditorDueDate => 'Imposta data scadenza';
+
+  @override
+  String get taskEditorReminder => 'Promemoria';
+
+  @override
+  String get taskEditorRecurrence => 'Imposta ripetizione';
+
+  @override
+  String get taskEditorRecurrenceTitle => 'Ripetizione';
+
+  @override
+  String get taskEditorTitleHint => 'Titolo task';
+
+  @override
+  String get taskEditorDescriptionHint => 'Descrizione...';
+
+  @override
+  String taskEditorSubtasks(int completed, int total) {
+    return 'Sottoattività ($completed/$total)';
+  }
+
+  @override
+  String get taskEditorAddSubtaskHint => 'Aggiungi sottoattività...';
+
+  @override
+  String get taskEditorReminderNotificationTitle => 'Promemoria task';
+
+  @override
+  String get taskEditorReminderNotificationBody =>
+      'Hai un promemoria per questo task';
+
+  @override
+  String get recurrenceNone => 'Nessuna';
+
+  @override
+  String get recurrenceDaily => 'Giornaliero';
+
+  @override
+  String get recurrenceWeekly => 'Settimanale';
+
+  @override
+  String get recurrenceMonthly => 'Mensile';
+
+  @override
+  String get recurrenceYearly => 'Annuale';
 }

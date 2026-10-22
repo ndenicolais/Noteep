@@ -585,23 +585,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get editorItemHint => 'Item...';
 
   @override
-  String editorLastModified(String date) {
-    return 'Last modified: $date';
-  }
-
-  @override
   String get editorChooseBackground => 'Choose background color';
 
   @override
-  String editorReminderScheduled(String date) {
-    return 'Reminder: $date';
-  }
-
-  @override
   String get editorReminderFailed => 'Unable to schedule the reminder.';
-
-  @override
-  String get editorReminderRemoved => 'Reminder removed';
 
   @override
   String get editorReminderNotificationTitle => 'Note reminder';
@@ -741,4 +728,174 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get templateIdeasContent =>
       '## Idea: [TITLE]\n\n**Description:**\n\n**Pros:**\n- \n\n**Cons:**\n- \n\n**Next steps:**\n';
+
+  @override
+  String get commonEdit => 'Edit';
+
+  @override
+  String get commonShare => 'Share';
+
+  @override
+  String commonReminderScheduled(String date) {
+    return 'Reminder: $date';
+  }
+
+  @override
+  String get commonReminderRemoved => 'Reminder removed';
+
+  @override
+  String commonLastModified(String date) {
+    return 'Last modified: $date';
+  }
+
+  @override
+  String get tasksSearchHint => 'Search tasks...';
+
+  @override
+  String get tasksSortTooltip => 'Sort tasks';
+
+  @override
+  String get tasksNewTask => 'New task';
+
+  @override
+  String get tasksNewTaskHint => 'What do you need to do?';
+
+  @override
+  String get tasksAdd => 'Add';
+
+  @override
+  String get tasksNewList => 'New list';
+
+  @override
+  String get tasksListNameHint => 'List name';
+
+  @override
+  String get tasksCreate => 'Create';
+
+  @override
+  String get tasksDeleteList => 'Delete list';
+
+  @override
+  String tasksDeleteListConfirm(String name) {
+    return 'Do you really want to delete the list \"$name\"?';
+  }
+
+  @override
+  String get tasksTabAll => 'All';
+
+  @override
+  String get tasksTabStarred => 'Starred';
+
+  @override
+  String get tasksEmpty => 'No tasks found';
+
+  @override
+  String get tasksCompletedSection => 'Completed';
+
+  @override
+  String get tasksComplete => 'Complete';
+
+  @override
+  String get tasksReopen => 'Reopen';
+
+  @override
+  String get tasksCompleted => 'Task completed';
+
+  @override
+  String get tasksReopened => 'Task reopened';
+
+  @override
+  String get tasksTrashed => 'Task moved to trash';
+
+  @override
+  String get tasksAddStar => 'Add to starred';
+
+  @override
+  String get tasksRemoveStar => 'Remove from starred';
+
+  @override
+  String get tasksMoveToList => 'Move to list';
+
+  @override
+  String get tasksDeleteTask => 'Delete task';
+
+  @override
+  String tasksDeleteTaskNamedConfirm(String title) {
+    return 'Move \"$title\" to the trash?';
+  }
+
+  @override
+  String get tasksDeleteTaskConfirm => 'Move this task to the trash?';
+
+  @override
+  String get tasksMoveToListTitle => 'Move to a list';
+
+  @override
+  String get tasksNoList => 'No list';
+
+  @override
+  String get tasksUnknownList => 'Unknown';
+
+  @override
+  String get taskEditorTitle => 'Task';
+
+  @override
+  String get taskEditorUndo => 'Undo (Ctrl+Z)';
+
+  @override
+  String get taskEditorRedo => 'Redo (Ctrl+Y)';
+
+  @override
+  String get taskEditorUnpin => 'Unpin from top';
+
+  @override
+  String get taskEditorPin => 'Pin to top';
+
+  @override
+  String get taskEditorDueDate => 'Set due date';
+
+  @override
+  String get taskEditorReminder => 'Reminder';
+
+  @override
+  String get taskEditorRecurrence => 'Set repeat';
+
+  @override
+  String get taskEditorRecurrenceTitle => 'Repeat';
+
+  @override
+  String get taskEditorTitleHint => 'Task title';
+
+  @override
+  String get taskEditorDescriptionHint => 'Description...';
+
+  @override
+  String taskEditorSubtasks(int completed, int total) {
+    return 'Subtasks ($completed/$total)';
+  }
+
+  @override
+  String get taskEditorAddSubtaskHint => 'Add subtask...';
+
+  @override
+  String get taskEditorReminderNotificationTitle => 'Task reminder';
+
+  @override
+  String get taskEditorReminderNotificationBody =>
+      'You have a reminder for this task';
+
+  @override
+  String get recurrenceNone => 'None';
+
+  @override
+  String get recurrenceDaily => 'Daily';
+
+  @override
+  String get recurrenceWeekly => 'Weekly';
+
+  @override
+  String get recurrenceMonthly => 'Monthly';
+
+  @override
+  String get recurrenceYearly => 'Yearly';
 }

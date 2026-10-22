@@ -183,25 +183,8 @@
   "editorTitleHint": "Titolo",
   "editorContentHint": "Nota",
   "editorItemHint": "Elemento...",
-  "editorLastModified": "Ultima modifica: {date}",
-  "@editorLastModified": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
   "editorChooseBackground": "Scegli colore sfondo",
-  "editorReminderScheduled": "Promemoria: {date}",
-  "@editorReminderScheduled": {
-    "placeholders": {
-      "date": {
-        "type": "String"
-      }
-    }
-  },
   "editorReminderFailed": "Impossibile pianificare il promemoria.",
-  "editorReminderRemoved": "Promemoria rimosso",
   "editorReminderNotificationTitle": "Promemoria nota",
   "editorReminderNotificationBody": "Hai un promemoria per questa nota",
   "editorAudioSection": "Audio",
@@ -250,5 +233,96 @@
   "templateTravelItems": "Passaporto / Documenti\nCaricabatterie\nVestiti\nProdotti da toilette\nMedicinali\nContanti / Carte",
   "templateIdeasName": "Brainstorming idee",
   "templateIdeasDescription": "Spazio libero per raccogliere idee",
-  "templateIdeasContent": "## Idea: [TITOLO]\n\n**Descrizione:**\n\n**Pro:**\n- \n\n**Contro:**\n- \n\n**Prossimi passi:**\n"
+  "templateIdeasContent": "## Idea: [TITOLO]\n\n**Descrizione:**\n\n**Pro:**\n- \n\n**Contro:**\n- \n\n**Prossimi passi:**\n",
+  "commonEdit": "Modifica",
+  "commonShare": "Condividi",
+  "commonReminderScheduled": "Promemoria: {date}",
+  "@commonReminderScheduled": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "commonReminderRemoved": "Promemoria rimosso",
+  "commonLastModified": "Ultima modifica: {date}",
+  "@commonLastModified": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "tasksSearchHint": "Cerca tra i task...",
+  "tasksSortTooltip": "Ordina task",
+  "tasksNewTask": "Nuovo task",
+  "tasksNewTaskHint": "Cosa devi fare?",
+  "tasksAdd": "Aggiungi",
+  "tasksNewList": "Nuovo elenco",
+  "tasksListNameHint": "Nome elenco",
+  "tasksCreate": "Crea",
+  "tasksDeleteList": "Elimina elenco",
+  "tasksDeleteListConfirm": "Vuoi davvero eliminare l'elenco \"{name}\"?",
+  "@tasksDeleteListConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "tasksTabAll": "Tutte",
+  "tasksTabStarred": "Speciali",
+  "tasksEmpty": "Nessun task trovato",
+  "tasksCompletedSection": "Completati",
+  "tasksComplete": "Completa",
+  "tasksReopen": "Riapri",
+  "tasksCompleted": "Task completato",
+  "tasksReopened": "Task riaperto",
+  "tasksTrashed": "Task spostato nel cestino",
+  "tasksAddStar": "Aggiungi agli speciali",
+  "tasksRemoveStar": "Rimuovi dagli speciali",
+  "tasksMoveToList": "Sposta in elenco",
+  "tasksDeleteTask": "Elimina task",
+  "tasksDeleteTaskNamedConfirm": "Vuoi spostare \"{title}\" nel cestino?",
+  "@tasksDeleteTaskNamedConfirm": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "tasksDeleteTaskConfirm": "Vuoi spostare questo task nel cestino?",
+  "tasksMoveToListTitle": "Sposta in un elenco",
+  "tasksNoList": "Nessun elenco",
+  "tasksUnknownList": "Sconosciuto",
+  "taskEditorTitle": "Task",
+  "taskEditorUndo": "Annulla (Ctrl+Z)",
+  "taskEditorRedo": "Ripeti (Ctrl+Y)",
+  "taskEditorUnpin": "Sposta in alto",
+  "taskEditorPin": "Fissa in alto",
+  "taskEditorDueDate": "Imposta data scadenza",
+  "taskEditorReminder": "Promemoria",
+  "taskEditorRecurrence": "Imposta ripetizione",
+  "taskEditorRecurrenceTitle": "Ripetizione",
+  "taskEditorTitleHint": "Titolo task",
+  "taskEditorDescriptionHint": "Descrizione...",
+  "taskEditorSubtasks": "Sottoattività ({completed}/{total})",
+  "@taskEditorSubtasks": {
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "taskEditorAddSubtaskHint": "Aggiungi sottoattività...",
+  "taskEditorReminderNotificationTitle": "Promemoria task",
+  "taskEditorReminderNotificationBody": "Hai un promemoria per questo task",
+  "recurrenceNone": "Nessuna",
+  "recurrenceDaily": "Giornaliero",
+  "recurrenceWeekly": "Settimanale",
+  "recurrenceMonthly": "Mensile",
+  "recurrenceYearly": "Annuale"
 }

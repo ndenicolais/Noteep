@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/tasks_provider.dart';
 
@@ -27,7 +28,7 @@ void showMoveToListDialog({
     context: context,
     builder:
         (context) => AlertDialog(
-          title: const Text('Sposta in un elenco'),
+          title: Text(context.l10n.tasksMoveToListTitle),
           content: SizedBox(
             width: double.maxFinite,
             child: RadioGroup<String?>(
@@ -40,7 +41,7 @@ void showMoveToListDialog({
                 shrinkWrap: true,
                 children: [
                   ListTile(
-                    title: const Text('Nessun elenco'),
+                    title: Text(context.l10n.tasksNoList),
                     leading: const Radio<String?>(value: null),
                     onTap: () {
                       onListSelected(null);

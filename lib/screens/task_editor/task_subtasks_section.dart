@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import '../../models/subtask_model.dart';
 import '../../theme/app_font_sizes.dart';
 import '../../theme/app_spacing.dart';
@@ -39,7 +40,7 @@ class TaskSubtasksList extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Sottoattività ($completed/${subtasks.length})',
+            context.l10n.taskEditorSubtasks(completed, subtasks.length),
             style: TextStyle(
               fontSize: AppFontSizes.sm,
               color: Theme.of(context).colorScheme.primary,
@@ -115,7 +116,7 @@ class TaskAddSubtaskField extends StatelessWidget {
             child: TextField(
               controller: controller,
               decoration: InputDecoration(
-                hintText: 'Aggiungi sottoattività...',
+                hintText: context.l10n.taskEditorAddSubtaskHint,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),

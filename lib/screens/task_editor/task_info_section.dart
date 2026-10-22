@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../models/task_list_model.dart';
@@ -18,18 +19,18 @@ import '../../theme/app_font_sizes.dart';
 import '../../theme/app_spacing.dart';
 import '../../utils/recurrence.dart';
 
-String recurrenceLabel(RecurrenceType type) {
+String recurrenceLabel(AppLocalizations l, RecurrenceType type) {
   switch (type) {
     case RecurrenceType.none:
-      return 'Nessuna';
+      return l.recurrenceNone;
     case RecurrenceType.daily:
-      return 'Giornaliero';
+      return l.recurrenceDaily;
     case RecurrenceType.weekly:
-      return 'Settimanale';
+      return l.recurrenceWeekly;
     case RecurrenceType.monthly:
-      return 'Mensile';
+      return l.recurrenceMonthly;
     case RecurrenceType.yearly:
-      return 'Annuale';
+      return l.recurrenceYearly;
   }
 }
 
@@ -78,7 +79,7 @@ class TaskInfoSection extends StatelessWidget {
                   Icon(Icons.repeat, size: 16, color: primary),
                   const SizedBox(width: AppSpacing.sm),
                   Text(
-                    recurrenceLabel(task.recurrence),
+                    recurrenceLabel(context.l10n, task.recurrence),
                     style: TextStyle(color: primary, fontSize: AppFontSizes.sm),
                   ),
                 ],
@@ -95,8 +96,10 @@ class TaskInfoSection extends StatelessWidget {
                           .firstWhere(
                             (l) => l.id == task.listId,
                             orElse:
-                                () =>
-                                    TaskListModel(id: '', name: 'Sconosciuto'),
+                                () => TaskListModel(
+                                  id: '',
+                                  name: context.l10n.tasksUnknownList,
+                                ),
                           )
                           .name;
                   return Row(

@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/task_list_model.dart';
 import '../../models/task_model.dart';
@@ -50,9 +51,9 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
     final tabs = DefaultTabController.of(tabContext);
     final title = await showAppTextInputDialog(
       tabContext,
-      title: 'Nuovo Task',
-      hintText: 'Cosa devi fare?',
-      confirmLabel: 'Aggiungi',
+      title: tabContext.l10n.tasksNewTask,
+      hintText: tabContext.l10n.tasksNewTaskHint,
+      confirmLabel: tabContext.l10n.tasksAdd,
     );
     if (title == null || !tabContext.mounted) return;
     // New tasks land in the tab they were created from.
@@ -69,9 +70,9 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
   Future<void> _createList() async {
     final name = await showAppTextInputDialog(
       context,
-      title: 'Nuovo Elenco',
-      hintText: 'Nome elenco',
-      confirmLabel: 'Crea',
+      title: context.l10n.tasksNewList,
+      hintText: context.l10n.tasksListNameHint,
+      confirmLabel: context.l10n.tasksCreate,
     );
     if (name == null) return;
     ref.read(taskListsProvider.notifier).addList(TaskListModel(name: name));
@@ -83,9 +84,9 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
     if (list == null) return;
     final confirmed = await showAppConfirmDialog(
       tabContext,
-      title: 'Elimina Elenco',
-      message: 'Vuoi davvero eliminare l\'elenco "${list.name}"?',
-      confirmLabel: 'Elimina',
+      title: tabContext.l10n.tasksDeleteList,
+      message: tabContext.l10n.tasksDeleteListConfirm(list.name),
+      confirmLabel: tabContext.l10n.commonDelete,
       destructive: true,
     );
     if (!confirmed) return;
@@ -125,7 +126,7 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
             titleWidget: SearchField(
               controller: _searchController,
               provider: taskSearchQueryProvider,
-              hintText: 'Cerca tra i task...',
+              hintText: context.l10n.tasksSearchHint,
             ),
             appBarActions: [
               ListenableBuilder(
@@ -138,17 +139,17 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
                           IconButton(
                             icon: const Icon(Icons.delete_outline),
                             onPressed: () => _deleteCurrentList(tabContext),
-                            tooltip: 'Elimina elenco',
+                            tooltip: context.l10n.tasksDeleteList,
                           ),
                         IconButton(
                           icon: const Icon(Icons.sort),
                           onPressed: () => _showSortSheet(tabContext),
-                          tooltip: 'Ordina task',
+                          tooltip: context.l10n.tasksSortTooltip,
                         ),
                         IconButton(
                           icon: const Icon(Icons.playlist_add),
                           onPressed: _createList,
-                          tooltip: 'Nuovo elenco',
+                          tooltip: context.l10n.tasksNewList,
                         ),
                       ],
                     ),
@@ -156,7 +157,7 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
             ],
             floatingActionButton: FloatingActionButton(
               onPressed: () => _addTask(tabContext),
-              tooltip: 'Nuovo task',
+              tooltip: context.l10n.tasksNewTask,
               child: const Icon(Icons.add),
             ),
             body: Column(
@@ -164,8 +165,8 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
                 TabBar(
                   isScrollable: true,
                   tabs: [
-                    const Tab(text: 'Tutte'),
-                    const Tab(text: 'Speciali'),
+                    Tab(text: context.l10n.tasksTabAll),
+                    Tab(text: context.l10n.tasksTabStarred),
                     for (final l in taskLists) Tab(text: l.name),
                   ],
                 ),
