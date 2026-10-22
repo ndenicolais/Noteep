@@ -36,6 +36,30 @@ class SettingsGoogleDriveSection extends StatelessWidget {
   }
 }
 
+/// "Account" section: permanent deletion of the account and all its data.
+class SettingsAccountSection extends StatelessWidget {
+  const SettingsAccountSection({super.key, required this.onDeleteAccount});
+
+  final VoidCallback onDeleteAccount;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const SectionHeader('Account'),
+        ActionTile(
+          icon: Icons.person_remove_outlined,
+          title: 'Elimina account',
+          subtitle: 'Elimina definitivamente l\'account e tutti i suoi dati',
+          destructive: true,
+          onTap: onDeleteAccount,
+        ),
+      ],
+    );
+  }
+}
+
 /// "Informazioni" section: link to the app info screen.
 class SettingsInfoSection extends StatelessWidget {
   const SettingsInfoSection({super.key});

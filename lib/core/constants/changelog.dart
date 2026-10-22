@@ -49,6 +49,7 @@ const List<ChangelogEntry> changelogEntries = [
       'Nuova icona dell\'app: la lampadina con la spunta su sfondo scuro, che si adatta alla forma scelta dal launcher e ai temi colore di Android 13 e successivi.',
       'Il nuovo logo dell\'app compare anche nella schermata di accesso e registrazione, in quella di caricamento e nella pagina Info.',
       'Link nelle note: con il pulsante "Inserisci link" aggiungi un collegamento a un sito, e nell\'anteprima Markdown basta toccarlo per aprirlo nel browser. Anche gli indirizzi scritti a mano diventano cliccabili.',
+      'Eliminazione dell\'account: in Impostazioni, dopo aver confermato la password o l\'account Google, puoi eliminare definitivamente l\'account insieme a tutte le note, le attività e gli eventi.',
     ],
   ),
 ];

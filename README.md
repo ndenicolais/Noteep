@@ -40,6 +40,7 @@ Noteep is a full-featured Flutter note-taking and productivity app. It combines 
 - **Email / Password** sign-in and registration
 - **Password reset** by email
 - Persistent session — on app launch the user is redirected to Home if already authenticated
+- **Account deletion** from Settings: after re-authentication (password or Google), deletes all Firestore data and the Firebase Auth user
 
 ### Notes
 | Feature | Details |
@@ -115,6 +116,7 @@ Export notes to **PDF** format (rendered with the `pdf` / `printing` packages); 
 | ICS import / export | Calendar interoperability |
 | Export notes | Opens the PDF export screen |
 | Statistics | Opens the statistics screen |
+| Delete account | Re-authenticate, then permanently delete account and all data |
 | App info | Version, build number, changelog, author |
 
 ### Home Screen Widget

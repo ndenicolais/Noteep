@@ -8,11 +8,17 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants/app_version.dart';
+import '../../utils/backup_service.dart';
 import '../../utils/ics_export_service.dart';
 import '../../utils/ics_import_service.dart';
+import '../../utils/notification_service.dart';
+import '../auth_provider.dart';
 import '../calendar_provider.dart';
+import '../core_providers.dart';
 import '../notes_provider.dart';
 import '../tasks_provider.dart';
 import 'backup_restore.dart';
@@ -125,6 +131,60 @@ class DataActions {
 
   Future<void> clearAll() =>
       Future.wait([clearNotes(), clearTasks(), clearCalendar()]).then((_) {});
+
+  // -- Account deletion ------------------------------------------------------
+
+  static const _userCollections = [
+    'notes',
+    'tasks',
+    'task_lists',
+    'calendar_events',
+  ];
+
+  /// Deletes every Firestore document of the signed-in user, including the
+  /// `users/{uid}` document. Unlike [clearAll] it reads the collections from
+  /// the server rather than from provider state, so documents not loaded
+  /// locally are deleted too, and it fails offline instead of leaving data
+  /// behind.
+  Future<void> wipeRemoteData() async {
+    final uid = _ref.read(currentUidProvider);
+    if (uid.isEmpty) throw StateError('No signed-in user');
+    final db = _ref.read(firestoreProvider);
+    final userDoc = db.collection('users').doc(uid);
+
+    final refs = <DocumentReference>[];
+    for (final name in _userCollections) {
+      final snap = await userDoc
+          .collection(name)
+          .get(const GetOptions(source: Source.server));
+      refs.addAll(snap.docs.map((d) => d.reference));
+    }
+    refs.add(userDoc);
+
+    // Committed one after the other: online, so nothing is queued.
+    for (var i = 0; i < refs.length; i += 500) {
+      final batch = db.batch();
+      for (final r in refs.skip(i).take(500)) {
+        batch.delete(r);
+      }
+      await batch.commit();
+    }
+  }
+
+  /// Best-effort removal of what the account left on this device: scheduled
+  /// reminders and automatic backups. Failures are ignored, as the account
+  /// is already gone when this runs.
+  Future<void> wipeLocalData() async {
+    try {
+      await NotificationService.instance.cancelAllNotifications();
+    } catch (_) {}
+    if (kIsWeb) return;
+    try {
+      for (final file in await BackupService.listBackups()) {
+        await BackupService.deleteBackup(file.path);
+      }
+    } catch (_) {}
+  }
 }
 
 final dataActionsProvider = Provider<DataActions>(DataActions.new);

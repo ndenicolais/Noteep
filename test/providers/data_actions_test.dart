@@ -192,4 +192,23 @@ void main() {
       }
     });
   });
+
+  group('account deletion', () {
+    test('wipeRemoteData deletes documents not loaded in state', () async {
+      await seed();
+      // Written behind the notifiers' back: absent from provider state.
+      await firestore.doc('users/u/notes/extra').set({'title': 'x'});
+      await firestore.doc('users/u').set({'name': 'u'});
+      await firestore.doc('users/other/notes/n').set({'title': 'y'});
+
+      await actions.wipeRemoteData();
+
+      for (final c in ['notes', 'tasks', 'task_lists', 'calendar_events']) {
+        final snap = await firestore.collection('users/u/$c').get();
+        expect(snap.docs, isEmpty, reason: c);
+      }
+      expect((await firestore.doc('users/u').get()).exists, isFalse);
+      expect((await firestore.doc('users/other/notes/n').get()).exists, isTrue);
+    });
+  });
 }

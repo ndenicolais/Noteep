@@ -34,6 +34,7 @@ Future<T?> showAppSheet<T>(
 /// Resolves to the trimmed text when confirmed (button or keyboard submit)
 /// and non-empty; `null` when cancelled, dismissed or left empty. The field
 /// starts with [initialValue] (e.g. the current name when renaming).
+/// [obscureText] hides the input and returns it untrimmed (passwords).
 Future<String?> showAppTextInputDialog(
   BuildContext context, {
   required String title,
@@ -41,6 +42,7 @@ Future<String?> showAppTextInputDialog(
   required String confirmLabel,
   String initialValue = '',
   TextCapitalization textCapitalization = TextCapitalization.none,
+  bool obscureText = false,
 }) {
   return showDialog<String>(
     context: context,
@@ -51,6 +53,7 @@ Future<String?> showAppTextInputDialog(
           confirmLabel: confirmLabel,
           initialValue: initialValue,
           textCapitalization: textCapitalization,
+          obscureText: obscureText,
         ),
   );
 }
@@ -62,6 +65,7 @@ class _TextInputDialog extends StatefulWidget {
     required this.confirmLabel,
     required this.initialValue,
     required this.textCapitalization,
+    required this.obscureText,
   });
 
   final String title;
@@ -69,6 +73,7 @@ class _TextInputDialog extends StatefulWidget {
   final String confirmLabel;
   final String initialValue;
   final TextCapitalization textCapitalization;
+  final bool obscureText;
 
   @override
   State<_TextInputDialog> createState() => _TextInputDialogState();
@@ -84,7 +89,8 @@ class _TextInputDialogState extends State<_TextInputDialog> {
   }
 
   void _submit() {
-    final text = _controller.text.trim();
+    final text =
+        widget.obscureText ? _controller.text : _controller.text.trim();
     Navigator.pop(context, text.isEmpty ? null : text);
   }
 
@@ -96,6 +102,7 @@ class _TextInputDialogState extends State<_TextInputDialog> {
         controller: _controller,
         autofocus: true,
         textCapitalization: widget.textCapitalization,
+        obscureText: widget.obscureText,
         decoration: InputDecoration(hintText: widget.hintText),
         onSubmitted: (_) => _submit(),
       ),

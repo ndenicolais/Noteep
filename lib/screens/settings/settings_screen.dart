@@ -8,9 +8,11 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
+import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuthException;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../providers/auth_provider.dart';
 import '../../providers/settings/theme_provider.dart';
 import '../../providers/settings/ui_provider.dart';
 import '../../providers/settings/backup_provider.dart';
@@ -104,6 +106,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       SettingsGoogleDriveSection(
         onTap: () => _showGoogleDriveComingSoon(context),
       ),
+      SettingsAccountSection(onDeleteAccount: () => _deleteAccount(context)),
       const SettingsInfoSection(),
     ];
 
@@ -343,6 +346,71 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     }
     notifyOnError(result.saved, context);
     _showSnack(context, '${result.count} eventi importati nel calendario.');
+  }
+
+  // -- Account ---------------------------------------------------------------
+
+  Future<void> _deleteAccount(BuildContext context) async {
+    final user = ref.read(currentUserProvider);
+    if (user == null) return;
+    final confirmed = await showAppConfirmDialog(
+      context,
+      title: 'Elimina account',
+      message:
+          'L\'account e tutti i suoi dati (note, task ed eventi) verranno eliminati definitivamente da tutti i dispositivi. Questa operazione è irreversibile: se vuoi conservare i dati, esporta prima un backup completo. Continuare?',
+      confirmLabel: 'Elimina account',
+      destructive: true,
+    );
+    if (!confirmed || !context.mounted) return;
+
+    String? password;
+    if (usesPasswordSignIn(user)) {
+      password = await showAppTextInputDialog(
+        context,
+        title: 'Conferma la password',
+        hintText: 'Password',
+        confirmLabel: 'Elimina account',
+        obscureText: true,
+      );
+      if (password == null || !context.mounted) return;
+    }
+
+    final navigator = Navigator.of(context);
+    final messenger = ScaffoldMessenger.of(context);
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder:
+          (_) => const PopScope(
+            canPop: false,
+            child: Center(child: CircularProgressIndicator()),
+          ),
+    );
+    String? error;
+    var deleted = false;
+    try {
+      deleted = await ref
+          .read(authNotifierProvider.notifier)
+          .deleteAccount(password: password);
+    } on FirebaseAuthException catch (e) {
+      error = authErrorMessage(e);
+    } catch (_) {
+      error =
+          'Impossibile eliminare l\'account. Controlla la connessione e riprova.';
+    }
+    navigator.pop();
+
+    if (error != null) {
+      messenger.showSnackBar(
+        SnackBar(content: Text(error), duration: const Duration(seconds: 4)),
+      );
+    } else if (deleted) {
+      // Signed out: drop the pushed screens so the login screen is visible.
+      navigator.popUntil((route) => route.isFirst);
+      messenger.showSnackBar(
+        const SnackBar(content: Text('Account eliminato.')),
+      );
+    }
   }
 
   // -- Misc ------------------------------------------------------------------
