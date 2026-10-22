@@ -13,13 +13,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/task_model.dart';
 import '../models/task_list_model.dart';
 import 'auth_provider.dart';
+import 'sync_provider.dart';
 import 'settings/ui_provider.dart'; // For SortOrder
 
 // ─── Tasks Notifier ───────────────────────────────────────────────────────────
 
-class TasksNotifier extends StateNotifier<List<TaskModel>> {
-  TasksNotifier(this._uid, this._db, this._onLoadError, this._onLoadDone)
-    : super([]) {
+class TasksNotifier extends StateNotifier<List<TaskModel>>
+    with FirestoreListMutations<TaskModel> {
+  TasksNotifier(
+    this._uid,
+    this._db,
+    this._onLoadError,
+    this._onLoadDone, {
+    this.syncStatus,
+  }) : super([]) {
     _load();
   }
 
@@ -28,28 +35,18 @@ class TasksNotifier extends StateNotifier<List<TaskModel>> {
   final void Function(Object? error) _onLoadError;
   final void Function() _onLoadDone;
 
+  @override
+  FirebaseFirestore get db => _db;
+
+  @override
+  final SyncStatusNotifier? syncStatus;
+
   CollectionReference<Map<String, dynamic>> get _col =>
       _db.collection('users').doc(_uid).collection('tasks');
 
-  /// Applies [apply] to state immediately (optimistic update), then runs
-  /// [persist]; if it throws, the state change is rolled back and the error
-  /// is rethrown instead of being silently swallowed.
-  Future<void> _mutate(
-    List<TaskModel> Function(List<TaskModel> current) apply,
-    Future<void> Function() persist,
-  ) async {
-    final previous = state;
-    state = apply(previous);
-    try {
-      await persist();
-    } catch (_) {
-      state = previous;
-      rethrow;
-    }
-  }
-
   /// Re-fetches all tasks from Firestore, replacing local state (e.g.
   /// pull-to-refresh after a sync error or edits from another device).
+  @override
   Future<void> reload() => _load(replace: true);
 
   Future<void> _load({bool replace = false}) async {
@@ -71,7 +68,9 @@ class TasksNotifier extends StateNotifier<List<TaskModel>> {
         state = [...state, ...tasks.where((t) => !existingIds.contains(t.id))];
       }
       _onLoadError(null);
-      await _purgeOldTrashFirestore();
+      // Not awaited: offline the deletes stay queued and must not hold up
+      // the loading flag.
+      _purgeOldTrashFirestore().ignore();
     } catch (e) {
       _onLoadError(e);
     } finally {
@@ -87,20 +86,6 @@ class TasksNotifier extends StateNotifier<List<TaskModel>> {
     await _col.doc(id).delete();
   }
 
-  /// Commits Firestore batch writes in chunks of 500 (Firestore's per-batch
-  /// operation limit).
-  Future<void> _commitInChunks(
-    List<void Function(WriteBatch batch)> ops,
-  ) async {
-    for (var i = 0; i < ops.length; i += 500) {
-      final batch = _db.batch();
-      for (final op in ops.skip(i).take(500)) {
-        op(batch);
-      }
-      await batch.commit();
-    }
-  }
-
   Future<void> _purgeOldTrashFirestore() async {
     final cutoff = DateTime.now().subtract(const Duration(days: 7));
     final expired =
@@ -108,12 +93,14 @@ class TasksNotifier extends StateNotifier<List<TaskModel>> {
             .where((t) => t.deletedAt != null && t.deletedAt!.isBefore(cutoff))
             .toList();
     if (expired.isEmpty) return;
-    state =
-        state
-            .where((t) => t.deletedAt == null || t.deletedAt!.isAfter(cutoff))
-            .toList();
-    await _commitInChunks(
-      expired.map((t) => (WriteBatch b) => b.delete(_col.doc(t.id))).toList(),
+    await mutate(
+      (current) =>
+          current
+              .where((t) => t.deletedAt == null || t.deletedAt!.isAfter(cutoff))
+              .toList(),
+      () => commitInChunks(
+        expired.map((t) => (WriteBatch b) => b.delete(_col.doc(t.id))).toList(),
+      ),
     );
   }
 
@@ -122,9 +109,9 @@ class TasksNotifier extends StateNotifier<List<TaskModel>> {
   }
 
   Future<void> addTask(TaskModel task) =>
-      _mutate((current) => [task, ...current], () => _saveDoc(task));
+      mutate((current) => [task, ...current], () => _saveDoc(task));
 
-  Future<void> updateTask(TaskModel updated) => _mutate(
+  Future<void> updateTask(TaskModel updated) => mutate(
     (current) => current.map((t) => t.id == updated.id ? updated : t).toList(),
     () => _saveDoc(updated),
   );
@@ -133,7 +120,7 @@ class TasksNotifier extends StateNotifier<List<TaskModel>> {
     final updated = state
         .firstWhere((t) => t.id == id)
         .copyWith(deletedAt: DateTime.now(), isArchived: false);
-    await _mutate(
+    await mutate(
       (current) => current.map((t) => t.id == id ? updated : t).toList(),
       () => _saveDoc(updated),
     );
@@ -143,13 +130,13 @@ class TasksNotifier extends StateNotifier<List<TaskModel>> {
     final updated = state
         .firstWhere((t) => t.id == id)
         .copyWith(clearDeletedAt: true);
-    await _mutate(
+    await mutate(
       (current) => current.map((t) => t.id == id ? updated : t).toList(),
       () => _saveDoc(updated),
     );
   }
 
-  Future<void> permanentlyDelete(String id) => _mutate(
+  Future<void> permanentlyDelete(String id) => mutate(
     (current) => current.where((t) => t.id != id).toList(),
     () => _deleteDoc(id),
   );
@@ -158,13 +145,13 @@ class TasksNotifier extends StateNotifier<List<TaskModel>> {
     final updated = state
         .firstWhere((t) => t.id == id)
         .copyWith(isArchived: !state.firstWhere((t) => t.id == id).isArchived);
-    await _mutate(
+    await mutate(
       (current) => current.map((t) => t.id == id ? updated : t).toList(),
       () => _saveDoc(updated),
     );
   }
 
-  Future<void> deleteTask(String id) => _mutate(
+  Future<void> deleteTask(String id) => mutate(
     (current) => current.where((t) => t.id != id).toList(),
     () => _deleteDoc(id),
   );
@@ -175,7 +162,7 @@ class TasksNotifier extends StateNotifier<List<TaskModel>> {
         .copyWith(
           isCompleted: !state.firstWhere((t) => t.id == id).isCompleted,
         );
-    await _mutate(
+    await mutate(
       (current) => current.map((t) => t.id == id ? updated : t).toList(),
       () => _saveDoc(updated),
     );
@@ -185,7 +172,7 @@ class TasksNotifier extends StateNotifier<List<TaskModel>> {
     final updated = state
         .firstWhere((t) => t.id == id)
         .copyWith(isSpecial: !state.firstWhere((t) => t.id == id).isSpecial);
-    await _mutate(
+    await mutate(
       (current) => current.map((t) => t.id == id ? updated : t).toList(),
       () => _saveDoc(updated),
     );
@@ -195,7 +182,7 @@ class TasksNotifier extends StateNotifier<List<TaskModel>> {
     final updated = state
         .firstWhere((t) => t.id == taskId)
         .copyWith(listId: listId, clearListId: listId == null);
-    await _mutate(
+    await mutate(
       (current) => current.map((t) => t.id == taskId ? updated : t).toList(),
       () => _saveDoc(updated),
     );
@@ -206,14 +193,14 @@ class TasksNotifier extends StateNotifier<List<TaskModel>> {
   Future<void> clearListReferences(String listId) async {
     final affected = state.where((t) => t.listId == listId).toList();
     if (affected.isEmpty) return;
-    await _mutate(
+    await mutate(
       (current) =>
           current
               .map(
                 (t) => t.listId == listId ? t.copyWith(clearListId: true) : t,
               )
               .toList(),
-      () => _commitInChunks(
+      () => commitInChunks(
         affected
             .map(
               (t) =>
@@ -236,9 +223,9 @@ class TasksNotifier extends StateNotifier<List<TaskModel>> {
       for (final t in state)
         if (!keep.contains(t.id)) t.id,
     ];
-    return _mutate(
+    return mutate(
       (_) => tasks,
-      () => _commitInChunks([
+      () => commitInChunks([
         for (final id in stale) (WriteBatch b) => b.delete(_col.doc(id)),
         for (final t in tasks)
           (WriteBatch b) => b.set(_col.doc(t.id), t.toJson()),
@@ -249,9 +236,9 @@ class TasksNotifier extends StateNotifier<List<TaskModel>> {
   /// Permanently removes all tasks.
   Future<void> clearAll() {
     final ids = state.map((t) => t.id).toList();
-    return _mutate(
+    return mutate(
       (_) => [],
-      () => _commitInChunks(
+      () => commitInChunks(
         ids.map((id) => (WriteBatch b) => b.delete(_col.doc(id))).toList(),
       ),
     );
@@ -276,13 +263,16 @@ final tasksProvider = StateNotifierProvider<TasksNotifier, List<TaskModel>>((
     FirebaseFirestore.instance,
     (error) => ref.read(tasksLoadErrorProvider.notifier).state = error,
     () => ref.read(tasksLoadingProvider.notifier).state = false,
+    syncStatus: ref.read(syncStatusProvider.notifier),
   );
 });
 
 // ─── Task Lists Notifier ──────────────────────────────────────────────────────
 
-class TaskListsNotifier extends StateNotifier<List<TaskListModel>> {
-  TaskListsNotifier(this._uid, this._db, this._ref) : super([]) {
+class TaskListsNotifier extends StateNotifier<List<TaskListModel>>
+    with FirestoreListMutations<TaskListModel> {
+  TaskListsNotifier(this._uid, this._db, this._ref, {this.syncStatus})
+    : super([]) {
     _load();
   }
 
@@ -290,36 +280,17 @@ class TaskListsNotifier extends StateNotifier<List<TaskListModel>> {
   final FirebaseFirestore _db;
   final Ref _ref;
 
+  @override
+  FirebaseFirestore get db => _db;
+
+  @override
+  final SyncStatusNotifier? syncStatus;
+
   CollectionReference<Map<String, dynamic>> get _col =>
       _db.collection('users').doc(_uid).collection('task_lists');
 
-  Future<void> _mutate(
-    List<TaskListModel> Function(List<TaskListModel> current) apply,
-    Future<void> Function() persist,
-  ) async {
-    final previous = state;
-    state = apply(previous);
-    try {
-      await persist();
-    } catch (_) {
-      state = previous;
-      rethrow;
-    }
-  }
-
-  Future<void> _commitInChunks(
-    List<void Function(WriteBatch batch)> ops,
-  ) async {
-    for (var i = 0; i < ops.length; i += 500) {
-      final batch = _db.batch();
-      for (final op in ops.skip(i).take(500)) {
-        op(batch);
-      }
-      await batch.commit();
-    }
-  }
-
   /// Re-fetches all task lists from Firestore, replacing local state.
+  @override
   Future<void> reload() => _load(replace: true);
 
   Future<void> _load({bool replace = false}) async {
@@ -339,18 +310,18 @@ class TaskListsNotifier extends StateNotifier<List<TaskListModel>> {
     state = [...state, ...lists.where((l) => !existingIds.contains(l.id))];
   }
 
-  Future<void> addList(TaskListModel taskList) => _mutate(
+  Future<void> addList(TaskListModel taskList) => mutate(
     (current) => [...current, taskList],
     () => _col.doc(taskList.id).set(taskList.toJson()),
   );
 
-  Future<void> updateList(TaskListModel updated) => _mutate(
+  Future<void> updateList(TaskListModel updated) => mutate(
     (current) => current.map((l) => l.id == updated.id ? updated : l).toList(),
     () => _col.doc(updated.id).set(updated.toJson()),
   );
 
   Future<void> deleteList(String id) async {
-    await _mutate(
+    await mutate(
       (current) => current.where((l) => l.id != id).toList(),
       () => _col.doc(id).delete(),
     );
@@ -368,9 +339,9 @@ class TaskListsNotifier extends StateNotifier<List<TaskListModel>> {
       for (final l in state)
         if (!keep.contains(l.id)) l.id,
     ];
-    return _mutate(
+    return mutate(
       (_) => lists,
-      () => _commitInChunks([
+      () => commitInChunks([
         for (final id in stale) (WriteBatch b) => b.delete(_col.doc(id)),
         for (final l in lists)
           (WriteBatch b) => b.set(_col.doc(l.id), l.toJson()),
@@ -381,9 +352,9 @@ class TaskListsNotifier extends StateNotifier<List<TaskListModel>> {
   /// Permanently removes all task lists.
   Future<void> clearAll() {
     final ids = state.map((l) => l.id).toList();
-    return _mutate(
+    return mutate(
       (_) => [],
-      () => _commitInChunks(
+      () => commitInChunks(
         ids.map((id) => (WriteBatch b) => b.delete(_col.doc(id))).toList(),
       ),
     );
@@ -397,6 +368,7 @@ final taskListsProvider =
         user?.uid ?? '',
         FirebaseFirestore.instance,
         ref,
+        syncStatus: ref.read(syncStatusProvider.notifier),
       );
     });
 

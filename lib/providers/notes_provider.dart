@@ -13,6 +13,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/note_model.dart';
 import 'auth_provider.dart';
+import 'sync_provider.dart';
 
 // ─── SharedPreferences singleton (used by settings providers) ────────────────
 
@@ -24,9 +25,15 @@ final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
 
 // ─── Notes Notifier ───────────────────────────────────────────────────────────
 
-class NotesNotifier extends StateNotifier<List<NoteModel>> {
-  NotesNotifier(this._uid, this._db, this._onLoadError, this._onLoadDone)
-    : super([]) {
+class NotesNotifier extends StateNotifier<List<NoteModel>>
+    with FirestoreListMutations<NoteModel> {
+  NotesNotifier(
+    this._uid,
+    this._db,
+    this._onLoadError,
+    this._onLoadDone, {
+    this.syncStatus,
+  }) : super([]) {
     _load();
   }
 
@@ -35,42 +42,18 @@ class NotesNotifier extends StateNotifier<List<NoteModel>> {
   final void Function(Object? error) _onLoadError;
   final void Function() _onLoadDone;
 
+  @override
+  FirebaseFirestore get db => _db;
+
+  @override
+  final SyncStatusNotifier? syncStatus;
+
   CollectionReference<Map<String, dynamic>> get _col =>
       _db.collection('users').doc(_uid).collection('notes');
 
-  /// Applies [apply] to state immediately (optimistic update), then runs
-  /// [persist]; if it throws, the state change is rolled back and the error
-  /// is rethrown instead of being silently swallowed.
-  Future<void> _mutate(
-    List<NoteModel> Function(List<NoteModel> current) apply,
-    Future<void> Function() persist,
-  ) async {
-    final previous = state;
-    state = apply(previous);
-    try {
-      await persist();
-    } catch (_) {
-      state = previous;
-      rethrow;
-    }
-  }
-
-  /// Commits Firestore batch writes in chunks of 500 (Firestore's per-batch
-  /// operation limit).
-  Future<void> _commitInChunks(
-    List<void Function(WriteBatch batch)> ops,
-  ) async {
-    for (var i = 0; i < ops.length; i += 500) {
-      final batch = _db.batch();
-      for (final op in ops.skip(i).take(500)) {
-        op(batch);
-      }
-      await batch.commit();
-    }
-  }
-
   /// Re-fetches all notes from Firestore, replacing local state (e.g.
   /// pull-to-refresh after a sync error or edits from another device).
+  @override
   Future<void> reload() => _load(replace: true);
 
   Future<void> _load({bool replace = false}) async {
@@ -92,7 +75,9 @@ class NotesNotifier extends StateNotifier<List<NoteModel>> {
         state = [...state, ...notes.where((n) => !existingIds.contains(n.id))];
       }
       _onLoadError(null);
-      await _purgeOldTrashFirestore();
+      // Not awaited: offline the deletes stay queued and must not hold up
+      // the loading flag.
+      _purgeOldTrashFirestore().ignore();
     } catch (e) {
       _onLoadError(e);
     } finally {
@@ -113,14 +98,14 @@ class NotesNotifier extends StateNotifier<List<NoteModel>> {
   // ── Public mutations ──────────────────────────────────────────────────────
 
   Future<void> addNote(NoteModel note) =>
-      _mutate((current) => [note, ...current], () => _saveDoc(note));
+      mutate((current) => [note, ...current], () => _saveDoc(note));
 
-  Future<void> updateNote(NoteModel updated) => _mutate(
+  Future<void> updateNote(NoteModel updated) => mutate(
     (current) => current.map((n) => n.id == updated.id ? updated : n).toList(),
     () => _saveDoc(updated),
   );
 
-  Future<void> deleteNote(String id) => _mutate(
+  Future<void> deleteNote(String id) => mutate(
     (current) => current.where((n) => n.id != id).toList(),
     () => _deleteDoc(id),
   );
@@ -129,7 +114,7 @@ class NotesNotifier extends StateNotifier<List<NoteModel>> {
     final updated = state
         .firstWhere((n) => n.id == id)
         .copyWith(deletedAt: DateTime.now(), isArchived: false);
-    await _mutate(
+    await mutate(
       (current) => current.map((n) => n.id == id ? updated : n).toList(),
       () => _saveDoc(updated),
     );
@@ -139,22 +124,22 @@ class NotesNotifier extends StateNotifier<List<NoteModel>> {
     final updated = state
         .firstWhere((n) => n.id == id)
         .copyWith(clearDeletedAt: true);
-    await _mutate(
+    await mutate(
       (current) => current.map((n) => n.id == id ? updated : n).toList(),
       () => _saveDoc(updated),
     );
   }
 
-  Future<void> permanentlyDelete(String id) => _mutate(
+  Future<void> permanentlyDelete(String id) => mutate(
     (current) => current.where((n) => n.id != id).toList(),
     () => _deleteDoc(id),
   );
 
   Future<void> emptyTrash() async {
     final trashed = state.where((n) => n.deletedAt != null).toList();
-    await _mutate(
+    await mutate(
       (current) => current.where((n) => n.deletedAt == null).toList(),
-      () => _commitInChunks(
+      () => commitInChunks(
         trashed.map((n) => (WriteBatch b) => b.delete(_col.doc(n.id))).toList(),
       ),
     );
@@ -167,12 +152,14 @@ class NotesNotifier extends StateNotifier<List<NoteModel>> {
             .where((n) => n.deletedAt != null && n.deletedAt!.isBefore(cutoff))
             .toList();
     if (expired.isEmpty) return;
-    state =
-        state
-            .where((n) => n.deletedAt == null || n.deletedAt!.isAfter(cutoff))
-            .toList();
-    await _commitInChunks(
-      expired.map((n) => (WriteBatch b) => b.delete(_col.doc(n.id))).toList(),
+    await mutate(
+      (current) =>
+          current
+              .where((n) => n.deletedAt == null || n.deletedAt!.isAfter(cutoff))
+              .toList(),
+      () => commitInChunks(
+        expired.map((n) => (WriteBatch b) => b.delete(_col.doc(n.id))).toList(),
+      ),
     );
   }
 
@@ -185,7 +172,7 @@ class NotesNotifier extends StateNotifier<List<NoteModel>> {
     final updated = state
         .firstWhere((n) => n.id == id)
         .copyWith(isArchived: !state.firstWhere((n) => n.id == id).isArchived);
-    await _mutate(
+    await mutate(
       (current) => current.map((n) => n.id == id ? updated : n).toList(),
       () => _saveDoc(updated),
     );
@@ -195,7 +182,7 @@ class NotesNotifier extends StateNotifier<List<NoteModel>> {
     final updated = state
         .firstWhere((n) => n.id == id)
         .copyWith(isPinned: !state.firstWhere((n) => n.id == id).isPinned);
-    await _mutate(
+    await mutate(
       (current) => current.map((n) => n.id == id ? updated : n).toList(),
       () => _saveDoc(updated),
     );
@@ -225,12 +212,12 @@ class NotesNotifier extends StateNotifier<List<NoteModel>> {
       }
     }
     final reordered = ids.map((id) => noteMap[id]!).toList();
-    await _mutate(
+    await mutate(
       (_) => newState,
       // Only the reordered subset actually changed; writing just those keeps
       // this within Firestore's 500-op batch limit even on large
       // collections.
-      () => _commitInChunks(
+      () => commitInChunks(
         reordered
             .map((n) => (WriteBatch b) => b.set(_col.doc(n.id), n.toJson()))
             .toList(),
@@ -249,9 +236,9 @@ class NotesNotifier extends StateNotifier<List<NoteModel>> {
           tags: n.tags.map((t) => t == oldTag ? newTag.trim() : t).toList(),
         ),
     };
-    await _mutate(
+    await mutate(
       (current) => current.map((n) => updates[n.id] ?? n).toList(),
-      () => _commitInChunks(
+      () => commitInChunks(
         updates.values
             .map((n) => (WriteBatch b) => b.set(_col.doc(n.id), n.toJson()))
             .toList(),
@@ -267,9 +254,9 @@ class NotesNotifier extends StateNotifier<List<NoteModel>> {
       for (final n in affected)
         n.id: n.copyWith(tags: n.tags.where((t) => t != tag).toList()),
     };
-    await _mutate(
+    await mutate(
       (current) => current.map((n) => updates[n.id] ?? n).toList(),
-      () => _commitInChunks(
+      () => commitInChunks(
         updates.values
             .map((n) => (WriteBatch b) => b.set(_col.doc(n.id), n.toJson()))
             .toList(),
@@ -286,9 +273,9 @@ class NotesNotifier extends StateNotifier<List<NoteModel>> {
       for (final n in state)
         if (!keep.contains(n.id)) n.id,
     ];
-    return _mutate(
+    return mutate(
       (_) => notes,
-      () => _commitInChunks([
+      () => commitInChunks([
         for (final id in stale) (WriteBatch b) => b.delete(_col.doc(id)),
         for (final n in notes)
           (WriteBatch b) => b.set(_col.doc(n.id), n.toJson()),
@@ -299,9 +286,9 @@ class NotesNotifier extends StateNotifier<List<NoteModel>> {
   /// Permanently removes all notes.
   Future<void> clearAll() {
     final ids = state.map((n) => n.id).toList();
-    return _mutate(
+    return mutate(
       (_) => [],
-      () => _commitInChunks(
+      () => commitInChunks(
         ids.map((id) => (WriteBatch b) => b.delete(_col.doc(id))).toList(),
       ),
     );
@@ -326,6 +313,7 @@ final notesProvider = StateNotifierProvider<NotesNotifier, List<NoteModel>>((
     FirebaseFirestore.instance,
     (error) => ref.read(notesLoadErrorProvider.notifier).state = error,
     () => ref.read(notesLoadingProvider.notifier).state = false,
+    syncStatus: ref.read(syncStatusProvider.notifier),
   );
 });
 

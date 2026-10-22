@@ -25,6 +25,7 @@ import 'theme/app_spacing.dart';
 import 'theme/app_theme.dart';
 import 'utils/app_bootstrap.dart';
 import 'utils/widget_service.dart';
+import 'widgets/sync_status_listener.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -73,6 +74,7 @@ class NotesApp extends ConsumerWidget {
       locale: const Locale('it'),
       supportedLocales: const [Locale('it'), Locale('en')],
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
+      builder: (context, child) => SyncStatusListener(child: child!),
       home: authState.when(
         loading: () => const _SplashScreen(),
         error: (_, __) => const LoginScreen(),

@@ -18,6 +18,12 @@ class ChangelogEntry {
 /// Newest version first.
 const List<ChangelogEntry> changelogEntries = [
   ChangelogEntry(
+    version: '2.0.2',
+    bullets: [
+      'Modalità offline: le modifiche fatte senza connessione vengono salvate sul dispositivo e inviate appena torni online, con un avviso finché restano in attesa. Anche sul web i dati restano disponibili offline.',
+    ],
+  ),
+  ChangelogEntry(
     version: '2.0.1',
     bullets: [
       'Durante il primo caricamento di note e attività compare un\'anteprima della lista al posto della rotellina, con un passaggio più morbido tra caricamento, lista e schermata vuota.',

@@ -12,52 +12,33 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/calendar_model.dart';
 import 'auth_provider.dart';
+import 'sync_provider.dart';
 
 // ─── Calendar Notifier ────────────────────────────────────────────────────────
 
-class CalendarNotifier extends StateNotifier<List<CalendarEventModel>> {
-  CalendarNotifier(this._uid, this._db) : super([]) {
+class CalendarNotifier extends StateNotifier<List<CalendarEventModel>>
+    with FirestoreListMutations<CalendarEventModel> {
+  CalendarNotifier(this._uid, this._db, {this.syncStatus}) : super([]) {
     _load();
   }
 
   final String _uid;
   final FirebaseFirestore _db;
 
+  @override
+  FirebaseFirestore get db => _db;
+
+  @override
+  final SyncStatusNotifier? syncStatus;
+
   CollectionReference<Map<String, dynamic>> get _col =>
       _db.collection('users').doc(_uid).collection('calendar_events');
 
-  /// Applies [apply] to state immediately (optimistic update), then runs
-  /// [persist]; if it throws, the state change is rolled back and the error
-  /// is rethrown instead of being silently swallowed.
-  Future<void> _mutate(
-    List<CalendarEventModel> Function(List<CalendarEventModel> current) apply,
-    Future<void> Function() persist,
-  ) async {
-    final previous = state;
-    state = apply(previous);
-    try {
-      await persist();
-    } catch (_) {
-      state = previous;
-      rethrow;
-    }
-  }
+  /// Re-fetches all events from Firestore, replacing local state.
+  @override
+  Future<void> reload() => _load(replace: true);
 
-  /// Commits Firestore batch writes in chunks of 500 (Firestore's per-batch
-  /// operation limit).
-  Future<void> _commitInChunks(
-    List<void Function(WriteBatch batch)> ops,
-  ) async {
-    for (var i = 0; i < ops.length; i += 500) {
-      final batch = _db.batch();
-      for (final op in ops.skip(i).take(500)) {
-        op(batch);
-      }
-      await batch.commit();
-    }
-  }
-
-  Future<void> _load() async {
+  Future<void> _load({bool replace = false}) async {
     if (_uid.isEmpty) return;
     final snap = await _col.get();
     final events =
@@ -66,11 +47,16 @@ class CalendarNotifier extends StateNotifier<List<CalendarEventModel>> {
           data['id'] = doc.id;
           return CalendarEventModel.fromJson(data);
         }).toList();
+    if (replace) {
+      state = events;
+      return;
+    }
     // Merge instead of replace: an event added locally while this initial
     // fetch was in flight must not be wiped out by it.
     final existingIds = state.map((e) => e.id).toSet();
     state = [...state, ...events.where((e) => !existingIds.contains(e.id))];
-    await _purgeOldTrashFirestore();
+    // Not awaited: offline the deletes stay queued.
+    _purgeOldTrashFirestore().ignore();
   }
 
   Future<void> _saveDoc(CalendarEventModel event) async {
@@ -88,12 +74,14 @@ class CalendarNotifier extends StateNotifier<List<CalendarEventModel>> {
             .where((e) => e.deletedAt != null && e.deletedAt!.isBefore(cutoff))
             .toList();
     if (expired.isEmpty) return;
-    state =
-        state
-            .where((e) => e.deletedAt == null || e.deletedAt!.isAfter(cutoff))
-            .toList();
-    await _commitInChunks(
-      expired.map((e) => (WriteBatch b) => b.delete(_col.doc(e.id))).toList(),
+    await mutate(
+      (current) =>
+          current
+              .where((e) => e.deletedAt == null || e.deletedAt!.isAfter(cutoff))
+              .toList(),
+      () => commitInChunks(
+        expired.map((e) => (WriteBatch b) => b.delete(_col.doc(e.id))).toList(),
+      ),
     );
   }
 
@@ -102,9 +90,9 @@ class CalendarNotifier extends StateNotifier<List<CalendarEventModel>> {
   }
 
   Future<void> addEvent(CalendarEventModel event) =>
-      _mutate((current) => [event, ...current], () => _saveDoc(event));
+      mutate((current) => [event, ...current], () => _saveDoc(event));
 
-  Future<void> updateEvent(CalendarEventModel updated) => _mutate(
+  Future<void> updateEvent(CalendarEventModel updated) => mutate(
     (current) => current.map((e) => e.id == updated.id ? updated : e).toList(),
     () => _saveDoc(updated),
   );
@@ -113,7 +101,7 @@ class CalendarNotifier extends StateNotifier<List<CalendarEventModel>> {
     final updated = state
         .firstWhere((e) => e.id == id)
         .copyWith(deletedAt: DateTime.now(), isArchived: false);
-    await _mutate(
+    await mutate(
       (current) => current.map((e) => e.id == id ? updated : e).toList(),
       () => _saveDoc(updated),
     );
@@ -123,13 +111,13 @@ class CalendarNotifier extends StateNotifier<List<CalendarEventModel>> {
     final updated = state
         .firstWhere((e) => e.id == id)
         .copyWith(clearDeletedAt: true);
-    await _mutate(
+    await mutate(
       (current) => current.map((e) => e.id == id ? updated : e).toList(),
       () => _saveDoc(updated),
     );
   }
 
-  Future<void> permanentlyDelete(String id) => _mutate(
+  Future<void> permanentlyDelete(String id) => mutate(
     (current) => current.where((e) => e.id != id).toList(),
     () => _deleteDoc(id),
   );
@@ -138,13 +126,13 @@ class CalendarNotifier extends StateNotifier<List<CalendarEventModel>> {
     final updated = state
         .firstWhere((e) => e.id == id)
         .copyWith(isArchived: !state.firstWhere((e) => e.id == id).isArchived);
-    await _mutate(
+    await mutate(
       (current) => current.map((e) => e.id == id ? updated : e).toList(),
       () => _saveDoc(updated),
     );
   }
 
-  Future<void> deleteEvent(String id) => _mutate(
+  Future<void> deleteEvent(String id) => mutate(
     (current) => current.where((e) => e.id != id).toList(),
     () => _deleteDoc(id),
   );
@@ -155,9 +143,9 @@ class CalendarNotifier extends StateNotifier<List<CalendarEventModel>> {
     final existingIds = state.map((e) => e.id).toSet();
     final newEvents = events.where((e) => !existingIds.contains(e.id)).toList();
     if (newEvents.isEmpty) return;
-    await _mutate(
+    await mutate(
       (current) => [...newEvents, ...current],
-      () => _commitInChunks(
+      () => commitInChunks(
         newEvents
             .map((e) => (WriteBatch b) => b.set(_col.doc(e.id), e.toJson()))
             .toList(),
@@ -168,9 +156,9 @@ class CalendarNotifier extends StateNotifier<List<CalendarEventModel>> {
   /// Permanently delete all calendar events.
   Future<void> clearAllEvents() {
     final ids = state.map((e) => e.id).toList();
-    return _mutate(
+    return mutate(
       (_) => [],
-      () => _commitInChunks(
+      () => commitInChunks(
         ids.map((id) => (WriteBatch b) => b.delete(_col.doc(id))).toList(),
       ),
     );
@@ -185,9 +173,9 @@ class CalendarNotifier extends StateNotifier<List<CalendarEventModel>> {
       for (final e in state)
         if (!keep.contains(e.id)) e.id,
     ];
-    return _mutate(
+    return mutate(
       (_) => events,
-      () => _commitInChunks([
+      () => commitInChunks([
         for (final id in stale) (WriteBatch b) => b.delete(_col.doc(id)),
         for (final e in events)
           (WriteBatch b) => b.set(_col.doc(e.id), e.toJson()),
@@ -199,7 +187,11 @@ class CalendarNotifier extends StateNotifier<List<CalendarEventModel>> {
 final calendarProvider =
     StateNotifierProvider<CalendarNotifier, List<CalendarEventModel>>((ref) {
       final user = ref.watch(currentUserProvider);
-      return CalendarNotifier(user?.uid ?? '', FirebaseFirestore.instance);
+      return CalendarNotifier(
+        user?.uid ?? '',
+        FirebaseFirestore.instance,
+        syncStatus: ref.read(syncStatusProvider.notifier),
+      );
     });
 
 final activeEventsProvider = Provider<List<CalendarEventModel>>((ref) {
