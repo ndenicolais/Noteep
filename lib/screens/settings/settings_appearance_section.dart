@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import '../../widgets/shared/section_header.dart';
 
 /// "Aspetto" section: system/light/dark theme mode selector.
@@ -24,26 +25,27 @@ class SettingsAppearanceSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SectionHeader('Aspetto'),
+        SectionHeader(l10n.settingsAppearanceTitle),
         RadioGroup<ThemeMode>(
           groupValue: themeMode,
           onChanged: (v) => onChanged(v!),
-          child: const Column(
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               RadioListTile<ThemeMode>(
-                title: Text('Sistema'),
+                title: Text(l10n.settingsThemeSystem),
                 value: ThemeMode.system,
               ),
               RadioListTile<ThemeMode>(
-                title: Text('Chiaro'),
+                title: Text(l10n.settingsThemeLight),
                 value: ThemeMode.light,
               ),
               RadioListTile<ThemeMode>(
-                title: Text('Scuro'),
+                title: Text(l10n.settingsThemeDark),
                 value: ThemeMode.dark,
               ),
             ],

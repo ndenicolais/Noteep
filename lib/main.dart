@@ -10,14 +10,16 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'core/routing/app_router.dart';
 import 'core/routing/notification_launch_handler.dart';
+import 'l10n/l10n.dart';
 import 'providers/auth_provider.dart';
 import 'providers/core_providers.dart';
 import 'providers/notes_provider.dart';
 import 'providers/tasks_provider.dart';
+import 'providers/settings/locale_provider.dart';
 import 'providers/settings/theme_provider.dart';
 import 'providers/settings/ui_provider.dart';
 import 'screens/auth/login_screen.dart';
@@ -73,12 +75,16 @@ class NotesApp extends ConsumerWidget {
       themeMode: themeMode,
       themeAnimationDuration: const Duration(milliseconds: 300),
       themeAnimationCurve: Curves.easeInOut,
-      // UI strings are Italian-only for now, so system widgets (pickers,
-      // text selection menu, tooltips) are pinned to Italian to match.
-      locale: const Locale('it'),
-      supportedLocales: const [Locale('it'), Locale('en')],
-      localizationsDelegates: GlobalMaterialLocalizations.delegates,
-      builder: (context, child) => SyncStatusListener(child: child!),
+      // Null follows the device; English comes first in supportedLocales, so
+      // an unsupported device language falls back to it.
+      locale: ref.watch(appLanguageProvider).locale,
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      builder: (context, child) {
+        // DateFormat calls without an explicit locale follow the UI language.
+        Intl.defaultLocale = Localizations.localeOf(context).languageCode;
+        return SyncStatusListener(child: child!);
+      },
       home: authState.when(
         loading: () => const _SplashScreen(),
         error: (_, __) => const LoginScreen(),

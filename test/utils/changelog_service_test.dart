@@ -4,9 +4,9 @@ import 'package:noteep/utils/changelog_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const _entries = [
-  ChangelogEntry(version: '1.2.0', bullets: ['c']),
-  ChangelogEntry(version: '1.1.0', bullets: ['b']),
-  ChangelogEntry(version: '1.0.0', bullets: ['a']),
+  ChangelogEntry(version: '1.2.0', items: []),
+  ChangelogEntry(version: '1.1.0', items: []),
+  ChangelogEntry(version: '1.0.0', items: []),
 ];
 
 Future<SharedPreferences> _prefs([Map<String, Object> values = const {}]) {

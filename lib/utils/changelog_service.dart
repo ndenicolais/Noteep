@@ -23,15 +23,16 @@ class ChangelogService {
   static Future<List<ChangelogEntry>> pendingEntries(
     SharedPreferences prefs,
     String currentVersion, {
-    List<ChangelogEntry> entries = changelogEntries,
+    List<ChangelogEntry>? entries,
   }) async {
+    final all = entries ?? changelogEntries;
     final lastSeen = prefs.getString(_kLastSeenChangelogVersionKey);
 
     if (lastSeen == currentVersion) return const [];
     await prefs.setString(_kLastSeenChangelogVersionKey, currentVersion);
     if (lastSeen == null) return const [];
 
-    final lastSeenIndex = entries.indexWhere((e) => e.version == lastSeen);
-    return lastSeenIndex == -1 ? entries : entries.sublist(0, lastSeenIndex);
+    final lastSeenIndex = all.indexWhere((e) => e.version == lastSeen);
+    return lastSeenIndex == -1 ? all : all.sublist(0, lastSeenIndex);
   }
 }

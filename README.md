@@ -545,7 +545,7 @@ flutter test
 | `url_launcher` | ^6.3.3 | Open note links in the browser |
 | `path_provider` | ^2.1.4 | File system paths |
 | `intl` | ^0.20.2 | Date formatting / i18n |
-| `flutter_localizations` | SDK | Italian Material/Cupertino widgets (pickers, menus) |
+| `flutter_localizations` | SDK | Italian/English UI (`gen-l10n`) and Material/Cupertino widgets (pickers, menus) in the same language |
 | `uuid` | ^4.5.1 | UUID generation |
 | `fake_cloud_firestore` *(dev)* | latest | Firestore fake for provider/widget tests |
 

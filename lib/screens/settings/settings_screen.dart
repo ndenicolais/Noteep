@@ -13,6 +13,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/auth_provider.dart';
+import '../../providers/settings/locale_provider.dart';
 import '../../providers/settings/theme_provider.dart';
 import '../../providers/settings/ui_provider.dart';
 import '../../providers/settings/backup_provider.dart';
@@ -28,6 +29,7 @@ import 'settings_backup_section.dart';
 import 'settings_backup_sheets.dart';
 import 'settings_calendar_data_section.dart';
 import 'settings_global_backup_section.dart';
+import 'settings_language_section.dart';
 import 'settings_misc_sections.dart';
 import 'settings_notes_data_section.dart';
 import 'settings_notes_prefs_section.dart';
@@ -55,6 +57,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       SettingsAppearanceSection(
         themeMode: themeMode,
         onChanged: (v) => ref.read(themeModeProvider.notifier).setMode(v),
+      ),
+      SettingsLanguageSection(
+        language: ref.watch(appLanguageProvider),
+        onChanged: (v) => ref.read(appLanguageProvider.notifier).set(v),
       ),
       SettingsNotesPrefsSection(
         homeLayout: homeLayout,
