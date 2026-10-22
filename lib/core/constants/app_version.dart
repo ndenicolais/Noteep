@@ -9,5 +9,5 @@
 // GitHub: https://github.com/ndenicolais
 
 /// Must match `version: <appVersion>+<appBuildNumber>` in `pubspec.yaml`.
-const appVersion = '2.0.2';
-const appBuildNumber = 4;
+const appVersion = '2.0.3';
+const appBuildNumber = 5;

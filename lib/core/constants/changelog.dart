@@ -18,6 +18,12 @@ class ChangelogEntry {
 /// Newest version first.
 const List<ChangelogEntry> changelogEntries = [
   ChangelogEntry(
+    version: '2.0.3',
+    bullets: [
+      'Nuova icona dell\'app: la lampadina con la spunta su sfondo scuro, che si adatta alla forma scelta dal launcher e ai temi colore di Android 13 e successivi.',
+    ],
+  ),
+  ChangelogEntry(
     version: '2.0.2',
     bullets: [
       'Modalità offline: le modifiche fatte senza connessione vengono salvate sul dispositivo e inviate appena torni online, con un avviso finché restano in attesa. Anche sul web i dati restano disponibili offline.',
