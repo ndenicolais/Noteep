@@ -23,7 +23,6 @@ import '../../theme/app_colors.dart';
 import '../../theme/app_font_sizes.dart';
 import '../../theme/app_spacing.dart';
 import '../../utils/audio_service.dart';
-import '../../utils/note_lock_service.dart';
 import '../../widgets/reminder_banner.dart';
 import '../../widgets/shared/app_dialogs.dart';
 import '../../widgets/shared/error_feedback.dart';
@@ -262,28 +261,6 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
     }
   }
 
-  // ─── Lock ─────────────────────────────────────────────────────────────────
-
-  Future<void> _toggleLock() async {
-    if (_note.isLocked) {
-      final ok = await NoteLockService.instance.authenticate();
-      if (!ok) return;
-    } else if (!await NoteLockService.instance.canAuthenticate()) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Il blocco nota non è disponibile su questa piattaforma.',
-            ),
-          ),
-        );
-      }
-      return;
-    }
-    _controller.updateNote((n) => n.copyWith(isLocked: !n.isLocked));
-    _save();
-  }
-
   // ─── Undo / Redo ──────────────────────────────────────────────────────────
 
   void _performUndo() {
@@ -495,7 +472,6 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
             markdownMode: _markdownMode,
             onToggleMarkdown:
                 () => setState(() => _markdownMode = !_markdownMode),
-            onToggleLock: _toggleLock,
             onUndo: _performUndo,
             onRedo: _performRedo,
             onPin: () {

@@ -25,7 +25,6 @@ class NoteEditorAppBar extends ConsumerWidget implements PreferredSizeWidget {
     this.isSaving = false,
     required this.markdownMode,
     required this.onToggleMarkdown,
-    required this.onToggleLock,
     required this.onUndo,
     required this.onRedo,
     required this.onPin,
@@ -39,7 +38,6 @@ class NoteEditorAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final bool isSaving;
   final bool markdownMode;
   final VoidCallback onToggleMarkdown;
-  final VoidCallback onToggleLock;
   final VoidCallback onUndo;
   final VoidCallback onRedo;
   final VoidCallback onPin;
@@ -83,11 +81,6 @@ class NoteEditorAppBar extends ConsumerWidget implements PreferredSizeWidget {
             tooltip: markdownMode ? 'Modifica' : 'Anteprima Markdown',
             onPressed: onToggleMarkdown,
           ),
-        IconButton(
-          icon: Icon(note.isLocked ? Icons.lock : Icons.lock_open_outlined),
-          tooltip: note.isLocked ? 'Sblocca nota' : 'Blocca nota',
-          onPressed: onToggleLock,
-        ),
         PopupMenuButton<String>(
           onSelected: (v) {
             switch (v) {

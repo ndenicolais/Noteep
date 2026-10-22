@@ -52,7 +52,6 @@ Noteep is a full-featured Flutter note-taking and productivity app. It combines 
 | Pin | Pins a note to the top of the list |
 | Archive | Moves note out of the main list without deleting it |
 | Soft-delete / Trash | Moves note to Trash; auto-purged after **7 days** |
-| Note lock | Protects a note behind biometric authentication (`local_auth`) |
 | Reminders | Schedule a local notification for any note |
 | Tags / Labels | Add multiple tags per note; manage (rename, delete) all tags from the Labels screen |
 | Note linking | Cross-reference notes by linking their IDs |
@@ -139,7 +138,6 @@ Flutter (Dart)
 ├── Audio              → record + just_audio + audio_waveforms
 ├── PDF Export         → pdf + printing
 ├── Charts             → fl_chart
-├── Biometrics         → local_auth
 ├── Home Widget        → home_widget
 └── Backup             → archive (ZIP)
 ```
@@ -242,7 +240,6 @@ lib/
 │   ├── backup_service.dart       # BackupService (ZIP create/restore)
 │   ├── notification_service.dart # NotificationService singleton
 │   ├── widget_service.dart       # Home widget updates
-│   ├── note_lock_service.dart    # Biometric lock
 │   ├── recurrence.dart           # RecurrenceType enum + helpers
 │   ├── ics_export_service.dart   # Calendar → ICS
 │   ├── ics_import_service.dart   # ICS → CalendarEventModel
@@ -281,7 +278,6 @@ lib/
 | `audioNotes` | `List<AudioNote>` | Attached audio recordings |
 | `isArchived` | `bool` | |
 | `isPinned` | `bool` | |
-| `isLocked` | `bool` | Biometric lock |
 | `reminder` | `DateTime?` | Scheduled reminder |
 | `linkedNoteIds` | `List<String>` | IDs of linked notes |
 | `tags` | `List<String>` | User-defined tags |
@@ -407,9 +403,6 @@ Static class:
 - `listBackups()` → sorted list of backup files
 - `deleteBackup(path)`, auto-purge (keeps last 30)
 - `getLastBackupTime()` / `setLastBackupTime()` via SharedPreferences
-
-### `NoteLockService`
-Wraps `local_auth` to prompt biometric or device credential authentication before showing a locked note.
 
 ### `WidgetService`
 Manages the Android home screen widget state via `home_widget`.
@@ -537,7 +530,6 @@ flutter test
 | `fl_chart` | ^0.68.0 | Statistics charts |
 | `pdf` | ^3.11.1 | PDF generation |
 | `printing` | ^5.13.1 | PDF preview & print |
-| `local_auth` | ^2.3.0 | Biometric authentication |
 | `home_widget` | ^0.9.1 | Android home screen widget |
 | `archive` | ^3.6.1 | ZIP backup |
 | `background_fetch` | ^1.3.0 | Background auto-backup |

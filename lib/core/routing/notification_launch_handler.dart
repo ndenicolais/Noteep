@@ -18,7 +18,6 @@ import '../../models/task_model.dart';
 import '../../providers/calendar_provider.dart';
 import '../../providers/notes_provider.dart';
 import '../../providers/tasks_provider.dart';
-import '../../utils/note_lock_service.dart';
 import '../../utils/notification_service.dart';
 import 'app_router.dart';
 import 'notification_target.dart';
@@ -36,14 +35,11 @@ class NotificationLaunchHandler extends ConsumerStatefulWidget {
     super.key,
     required this.child,
     ValueNotifier<NotificationTarget?>? targets,
-    Future<bool> Function()? unlockNote,
     this.eventLoadTimeout = const Duration(seconds: 10),
-  }) : targets = targets ?? NotificationService.instance.pendingTarget,
-       unlockNote = unlockNote ?? NoteLockService.instance.authenticate;
+  }) : targets = targets ?? NotificationService.instance.pendingTarget;
 
   final Widget child;
   final ValueNotifier<NotificationTarget?> targets;
-  final Future<bool> Function() unlockNote;
   final Duration eventLoadTimeout;
 
   @override
@@ -127,8 +123,6 @@ class _NotificationLaunchHandlerState
   Future<void> _open(Object item) async {
     switch (item) {
       case NoteModel note:
-        if (note.isLocked && !await widget.unlockNote()) return;
-        if (!mounted) return;
         await AppNav.openNote(context, note);
       case TaskModel task:
         await AppNav.openTask(context, task);

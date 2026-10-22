@@ -71,14 +71,6 @@ void main() {
       );
       expect(DateTime.tryParse(full['exportedAt'] as String), isNotNull);
     });
-
-    test('hasLockedNotes reflects the notes', () async {
-      expect(actions.hasLockedNotes, isFalse);
-      await container
-          .read(notesProvider.notifier)
-          .addNote(NoteModel(title: 'Segreta', isLocked: true));
-      expect(actions.hasLockedNotes, isTrue);
-    });
   });
 
   group('JSON imports', () {

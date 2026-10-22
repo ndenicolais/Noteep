@@ -136,7 +136,6 @@ void main() {
         reminder: DateTime(2026, 12, 24),
       ),
       NoteModel(title: 'Corta', content: 'ok'),
-      NoteModel(title: 'Protetta', isLocked: true),
     ];
     for (final n in list) {
       await notes.addNote(n);

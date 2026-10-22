@@ -161,7 +161,6 @@ class NoteModel {
   List<AudioNote> audioNotes;
   bool isArchived;
   bool isPinned;
-  bool isLocked;
   DateTime? reminder;
   List<String> linkedNoteIds;
   List<String> tags;
@@ -179,7 +178,6 @@ class NoteModel {
     List<AudioNote>? audioNotes,
     this.isArchived = false,
     this.isPinned = false,
-    this.isLocked = false,
     this.reminder,
     List<String>? linkedNoteIds,
     List<String>? tags,
@@ -204,7 +202,6 @@ class NoteModel {
     List<AudioNote>? audioNotes,
     bool? isArchived,
     bool? isPinned,
-    bool? isLocked,
     DateTime? reminder,
     bool clearReminder = false,
     List<String>? linkedNoteIds,
@@ -223,7 +220,6 @@ class NoteModel {
       audioNotes: audioNotes ?? this.audioNotes,
       isArchived: isArchived ?? this.isArchived,
       isPinned: isPinned ?? this.isPinned,
-      isLocked: isLocked ?? this.isLocked,
       reminder: clearReminder ? null : (reminder ?? this.reminder),
       linkedNoteIds: linkedNoteIds ?? this.linkedNoteIds,
       tags: tags ?? this.tags,
@@ -243,7 +239,6 @@ class NoteModel {
     'audioNotes': audioNotes.map((e) => e.toJson()).toList(),
     'isArchived': isArchived,
     'isPinned': isPinned,
-    'isLocked': isLocked,
     if (reminder != null) 'reminder': reminder!.toIso8601String(),
     'linkedNoteIds': linkedNoteIds,
     'tags': tags,
@@ -276,7 +271,6 @@ class NoteModel {
         [],
     isArchived: json['isArchived'] as bool? ?? false,
     isPinned: json['isPinned'] as bool? ?? false,
-    isLocked: json['isLocked'] as bool? ?? false,
     reminder:
         json['reminder'] != null
             ? DateTime.parse(json['reminder'] as String)

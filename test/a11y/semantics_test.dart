@@ -57,12 +57,7 @@ void main() {
     expect(node.getSemanticsData().label, contains('Spesa'));
     expect(node.getSemanticsData().label, contains('latte'));
     expect(node.getSemanticsData().hasAction(SemanticsAction.tap), isTrue);
-    expect(actionLabels(node), [
-      'Fissa',
-      'Archivia',
-      'Blocca',
-      'Sposta nel cestino',
-    ]);
+    expect(actionLabels(node), ['Fissa', 'Archivia', 'Sposta nel cestino']);
 
     perform(node, 'Fissa');
     await tester.pump();

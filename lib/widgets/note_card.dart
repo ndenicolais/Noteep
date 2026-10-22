@@ -19,7 +19,6 @@ import '../theme/app_font_sizes.dart';
 import '../theme/app_radius.dart';
 import '../theme/app_spacing.dart';
 import 'shared/note_hero.dart';
-import '../utils/note_lock_service.dart';
 import 'shared/error_feedback.dart';
 import 'shared/tag_chip.dart';
 
@@ -40,14 +39,7 @@ class NoteCard extends ConsumerWidget {
   /// in the Home grid, where reordering is otherwise drag-only).
   final Map<CustomSemanticsAction, VoidCallback> extraSemanticsActions;
 
-  Future<void> _openNote(BuildContext context) async {
-    if (note.isLocked) {
-      final ok = await NoteLockService.instance.authenticate();
-      if (!ok) return;
-    }
-    if (!context.mounted) return;
-    AppNav.openNote(context, note);
-  }
+  void _openNote(BuildContext context) => AppNav.openNote(context, note);
 
   Future<void> _showQuickActions(
     BuildContext context,
@@ -79,16 +71,6 @@ class NoteCard extends ConsumerWidget {
               Icon(note.isArchived ? Icons.unarchive : Icons.archive_outlined),
               const SizedBox(width: AppSpacing.md),
               Text(note.isArchived ? 'Ripristina' : 'Archivia'),
-            ],
-          ),
-        ),
-        PopupMenuItem(
-          value: 'lock',
-          child: Row(
-            children: [
-              Icon(note.isLocked ? Icons.lock_open_outlined : Icons.lock),
-              const SizedBox(width: AppSpacing.md),
-              Text(note.isLocked ? 'Sblocca' : 'Blocca'),
             ],
           ),
         ),
@@ -142,19 +124,6 @@ class NoteCard extends ConsumerWidget {
           onUndo: () => notifier.toggleArchive(note.id),
         );
         break;
-      case 'lock':
-        if (note.isLocked) {
-          final ok = await NoteLockService.instance.authenticate();
-          if (!ok) return;
-        }
-        if (!context.mounted) return;
-        notifyOnError(
-          ref
-              .read(notesProvider.notifier)
-              .updateNote(note.copyWith(isLocked: !note.isLocked)),
-          context,
-        );
-        break;
       case 'delete':
         final notifier = ref.read(notesProvider.notifier);
         notifyWithUndo(
@@ -206,8 +175,6 @@ class NoteCard extends ConsumerWidget {
                 label: note.isArchived ? 'Ripristina' : 'Archivia',
               ):
               () => _runAction(context, ref, 'archive'),
-          CustomSemanticsAction(label: note.isLocked ? 'Sblocca' : 'Blocca'):
-              () => _runAction(context, ref, 'lock'),
           const CustomSemanticsAction(label: 'Sposta nel cestino'):
               () => _runAction(context, ref, 'delete'),
           ...extraSemanticsActions,
@@ -233,7 +200,7 @@ class NoteCard extends ConsumerWidget {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (note.isPinned || note.isLocked || note.reminder != null)
+                    if (note.isPinned || note.reminder != null)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -243,18 +210,6 @@ class NoteCard extends ConsumerWidget {
                               size: 14,
                               color: s.fontColor?.withAlpha(153),
                               semanticLabel: 'Promemoria impostato',
-                            ),
-                          if (note.isLocked)
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                left: AppSpacing.xs,
-                              ),
-                              child: Icon(
-                                Icons.lock_outline,
-                                size: 14,
-                                color: s.fontColor?.withAlpha(153),
-                                semanticLabel: 'Nota protetta',
-                              ),
                             ),
                           if (note.isPinned)
                             Padding(
@@ -270,42 +225,24 @@ class NoteCard extends ConsumerWidget {
                             ),
                         ],
                       ),
-                    if (note.isLocked) ...[
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.lock, size: 16, color: textStyle.color),
-                          const SizedBox(width: 6),
-                          Flexible(
-                            child: Text(
-                              'Nota protetta',
-                              style: textStyle.copyWith(
-                                fontStyle: FontStyle.italic,
-                              ),
-                            ),
-                          ),
-                        ],
+                    if (note.title.isNotEmpty) ...[
+                      Text(
+                        note.title,
+                        style: titleStyle,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                    ] else ...[
-                      if (note.title.isNotEmpty) ...[
-                        Text(
-                          note.title,
-                          style: titleStyle,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: AppSpacing.xs),
-                      ],
-                      if (note.type == NoteType.checklist)
-                        _ChecklistPreview(note: note, textStyle: textStyle)
-                      else
-                        Text(
-                          note.content,
-                          style: textStyle,
-                          maxLines: 8,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                      const SizedBox(height: AppSpacing.xs),
                     ],
+                    if (note.type == NoteType.checklist)
+                      _ChecklistPreview(note: note, textStyle: textStyle)
+                    else
+                      Text(
+                        note.content,
+                        style: textStyle,
+                        maxLines: 8,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     if (note.tags.isNotEmpty) ...[
                       const SizedBox(height: AppSpacing.sm),
                       Wrap(

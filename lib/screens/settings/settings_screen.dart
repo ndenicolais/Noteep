@@ -129,33 +129,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   // -- Shared export / import / clear flows ----------------------------------
 
-  /// If any note is locked, ask the user to confirm before including its
-  /// plaintext content in an exported file (locked notes are only gated in
-  /// the UI — export is not encrypted).
-  Future<bool> _confirmLockedNotesExport(BuildContext context) async {
-    if (!_actions.hasLockedNotes) return true;
-    return showAppConfirmDialog(
-      context,
-      title: 'Note protette incluse',
-      message:
-          'Il file esportato conterrà anche il testo delle note protette, in chiaro e non cifrato. Vuoi continuare?',
-      confirmLabel: 'Esporta comunque',
-    );
-  }
-
   Future<void> _exportJson(
     BuildContext context, {
     required Map<String, dynamic> Function() buildData,
     required String fileNamePrefix,
     required String exportedMessage,
     required String savedMessagePrefix,
-    bool warnIfLockedNotes = false,
   }) async {
-    if (warnIfLockedNotes) {
-      final proceed = await _confirmLockedNotesExport(context);
-      if (!proceed) return;
-      if (!context.mounted) return;
-    }
     final savedPath = await DataExportService.exportJson(
       buildData: buildData,
       fileNamePrefix: fileNamePrefix,
@@ -223,7 +203,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   Future<void> _exportFullBackup(BuildContext context) => _exportJson(
     context,
-    warnIfLockedNotes: true,
     fileNamePrefix: 'noteep_backup',
     exportedMessage: 'Backup esportato',
     savedMessagePrefix: 'Backup salvato in:\n',
@@ -253,7 +232,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   Future<void> _exportNotesJson(BuildContext context) => _exportJson(
     context,
-    warnIfLockedNotes: true,
     fileNamePrefix: 'noteep_notes',
     exportedMessage: 'Note esportate',
     savedMessagePrefix: 'Note salvate in:\n',

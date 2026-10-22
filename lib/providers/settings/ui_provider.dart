@@ -111,7 +111,7 @@ final filteredNotesProvider = Provider<List<NoteModel>>((ref) {
     filtered =
         filtered.where((n) {
           return n.title.toLowerCase().contains(query) ||
-              (!n.isLocked && n.content.toLowerCase().contains(query));
+              n.content.toLowerCase().contains(query);
         }).toList();
   }
 

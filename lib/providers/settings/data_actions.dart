@@ -30,9 +30,6 @@ class DataActions {
 
   BackupRestorer get _restorer => _ref.read(backupRestorerProvider);
 
-  /// Whether exporting notes would include locked notes in plaintext.
-  bool get hasLockedNotes => _ref.read(notesProvider).any((n) => n.isLocked);
-
   // -- Export payloads -------------------------------------------------------
 
   Map<String, dynamic> _header(String version) => {

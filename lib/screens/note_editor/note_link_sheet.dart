@@ -41,10 +41,7 @@ class _NoteLinkSheetState extends State<NoteLinkSheet> {
                 .where(
                   (n) =>
                       n.title.toLowerCase().contains(_query.toLowerCase()) ||
-                      (!n.isLocked &&
-                          n.content.toLowerCase().contains(
-                            _query.toLowerCase(),
-                          )),
+                      n.content.toLowerCase().contains(_query.toLowerCase()),
                 )
                 .toList();
 
@@ -81,16 +78,12 @@ class _NoteLinkSheetState extends State<NoteLinkSheet> {
                     return CheckboxListTile(
                       value: isLinked,
                       title: Text(
-                        note.isLocked
-                            ? 'Nota protetta'
-                            : (note.title.isEmpty
-                                ? 'Nota senza titolo'
-                                : note.title),
+                        note.title.isEmpty ? 'Nota senza titolo' : note.title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       subtitle:
-                          (!note.isLocked && note.content.isNotEmpty)
+                          note.content.isNotEmpty
                               ? Text(
                                 note.content,
                                 maxLines: 1,

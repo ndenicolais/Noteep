@@ -27,7 +27,6 @@ void main() {
   late ProviderContainer container;
   late bool pinnedLoading;
   late ValueNotifier<NotificationTarget?> targets;
-  late bool unlockResult;
 
   setUp(() {
     pinnedLoading = false;
@@ -40,7 +39,6 @@ void main() {
       ],
     );
     targets = ValueNotifier(null);
-    unlockResult = true;
   });
 
   // Detail routes render a marker instead of the real editors, so the test
@@ -67,7 +65,6 @@ void main() {
           onGenerateRoute: fakeRoute,
           home: NotificationLaunchHandler(
             targets: targets,
-            unlockNote: () async => unlockResult,
             eventLoadTimeout: const Duration(seconds: 2),
             child: const Scaffold(body: Text('home')),
           ),
@@ -141,18 +138,5 @@ void main() {
     await tester.pump();
     expect(find.text('Elemento del promemoria non trovato'), findsOneWidget);
     expect(targets.value, isNull);
-  });
-
-  testWidgets('a locked note opens only after unlocking', (tester) async {
-    await container
-        .read(notesProvider.notifier)
-        .addNote(NoteModel(id: 'n1', isLocked: true));
-    unlockResult = false;
-    targets.value = const NotificationTarget.note('n1');
-
-    await pump(tester);
-
-    expect(find.text('opened note n1'), findsNothing);
-    expect(find.text('home'), findsOneWidget);
   });
 }
