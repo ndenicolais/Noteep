@@ -11,7 +11,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/backup_service.dart';
-import '../notes_provider.dart';
+import '../core_providers.dart';
 
 const _kBackupEnabledKey = 'backup_enabled';
 const _kBackupFrequencyKey = 'backup_frequency_v2';
@@ -33,21 +33,19 @@ class BackupSettings {
   }
 }
 
-class BackupSettingsNotifier extends StateNotifier<BackupSettings> {
-  BackupSettingsNotifier(this._prefs) : super(const BackupSettings()) {
-    _load();
-  }
+class BackupSettingsNotifier extends Notifier<BackupSettings> {
+  SharedPreferences get _prefs => ref.read(sharedPreferencesProvider);
 
-  final SharedPreferences _prefs;
-
-  void _load() {
-    final enabled = _prefs.getBool(_kBackupEnabledKey) ?? false;
-    final frequencyName = _prefs.getString(_kBackupFrequencyKey);
+  @override
+  BackupSettings build() {
+    final prefs = ref.watch(sharedPreferencesProvider);
+    final enabled = prefs.getBool(_kBackupEnabledKey) ?? false;
+    final frequencyName = prefs.getString(_kBackupFrequencyKey);
     final frequency = BackupFrequency.values.firstWhere(
       (f) => f.name == frequencyName,
       orElse: () => BackupFrequency.daily,
     );
-    state = BackupSettings(enabled: enabled, frequency: frequency);
+    return BackupSettings(enabled: enabled, frequency: frequency);
   }
 
   Future<void> setEnabled(bool enabled) async {
@@ -62,10 +60,9 @@ class BackupSettingsNotifier extends StateNotifier<BackupSettings> {
 }
 
 final backupSettingsProvider =
-    StateNotifierProvider<BackupSettingsNotifier, BackupSettings>((ref) {
-      final prefs = ref.watch(sharedPreferencesProvider);
-      return BackupSettingsNotifier(prefs);
-    });
+    NotifierProvider<BackupSettingsNotifier, BackupSettings>(
+      BackupSettingsNotifier.new,
+    );
 
 // Provider to get available backups
 final availableBackupsProvider = FutureProvider<List<String>>((ref) async {
@@ -88,8 +85,9 @@ class BackupStatus {
   });
 }
 
-class BackupStatusNotifier extends StateNotifier<BackupStatus> {
-  BackupStatusNotifier() : super(const BackupStatus());
+class BackupStatusNotifier extends Notifier<BackupStatus> {
+  @override
+  BackupStatus build() => const BackupStatus();
 
   void setLoading(bool loading) {
     state = BackupStatus(
@@ -121,6 +119,6 @@ class BackupStatusNotifier extends StateNotifier<BackupStatus> {
 }
 
 final backupStatusProvider =
-    StateNotifierProvider<BackupStatusNotifier, BackupStatus>((ref) {
-      return BackupStatusNotifier();
-    });
+    NotifierProvider<BackupStatusNotifier, BackupStatus>(
+      BackupStatusNotifier.new,
+    );

@@ -104,7 +104,7 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
           (_) => SortSheet(
             current: current,
             onChanged: (s) {
-              ref.read(taskSortOrderProvider.notifier).state = s;
+              ref.read(taskSortOrderProvider.notifier).set(s);
               Navigator.pop(context);
             },
           ),

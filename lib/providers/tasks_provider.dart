@@ -13,36 +13,33 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/task_model.dart';
 import '../models/task_list_model.dart';
 import 'auth_provider.dart';
+import 'core_providers.dart';
 import 'sync_provider.dart';
 import 'settings/ui_provider.dart'; // For SortOrder
 
 // ─── Tasks Notifier ───────────────────────────────────────────────────────────
 
-class TasksNotifier extends StateNotifier<List<TaskModel>>
+/// Tasks of the signed-in user ([currentUidProvider]); same lifecycle as
+/// `NotesNotifier`.
+class TasksNotifier extends Notifier<List<TaskModel>>
     with FirestoreListMutations<TaskModel> {
-  TasksNotifier(
-    this._uid,
-    this._db,
-    this._onLoadError,
-    this._onLoadDone, {
-    this.syncStatus,
-  }) : super([]) {
+  late String _uid;
+
+  @override
+  List<TaskModel> build() {
+    _uid = ref.watch(currentUidProvider);
+    ref.watch(firestoreProvider);
     _load();
+    return [];
   }
 
-  final String _uid;
-  final FirebaseFirestore _db;
-  final void Function(Object? error) _onLoadError;
-  final void Function() _onLoadDone;
-
-  @override
-  FirebaseFirestore get db => _db;
-
-  @override
-  final SyncStatusNotifier? syncStatus;
-
   CollectionReference<Map<String, dynamic>> get _col =>
-      _db.collection('users').doc(_uid).collection('tasks');
+      db.collection('users').doc(_uid).collection('tasks');
+
+  void _onLoadError(Object? error) =>
+      ref.read(tasksLoadErrorProvider.notifier).set(error);
+
+  void _onLoadDone() => ref.read(tasksLoadingProvider.notifier).set(false);
 
   /// Re-fetches all tasks from Firestore, replacing local state (e.g.
   /// pull-to-refresh after a sync error or edits from another device).
@@ -50,9 +47,12 @@ class TasksNotifier extends StateNotifier<List<TaskModel>>
   Future<void> reload() => _load(replace: true);
 
   Future<void> _load({bool replace = false}) async {
-    if (_uid.isEmpty) return;
+    final uid = _uid;
+    if (uid.isEmpty) return;
     try {
       final snap = await _col.get();
+      // The user changed while this fetch was in flight.
+      if (uid != _uid) return;
       final tasks =
           snap.docs.map((doc) {
             final data = Map<String, dynamic>.from(doc.data());
@@ -248,54 +248,42 @@ class TasksNotifier extends StateNotifier<List<TaskModel>>
 /// Set (or cleared) whenever the initial Firestore load in [TasksNotifier]
 /// succeeds or fails, so the UI can tell a real sync error apart from a
 /// genuinely empty task list.
-final tasksLoadErrorProvider = StateProvider<Object?>((ref) => null);
+final tasksLoadErrorProvider = valueStateProvider<Object?>(null);
 
 /// True while the initial Firestore load in [TasksNotifier] is in flight,
 /// so the UI can tell "still loading" apart from a genuinely empty list.
-final tasksLoadingProvider = StateProvider<bool>((ref) => true);
+final tasksLoadingProvider = valueStateProvider<bool>(true);
 
-final tasksProvider = StateNotifierProvider<TasksNotifier, List<TaskModel>>((
-  ref,
-) {
-  final user = ref.watch(currentUserProvider);
-  return TasksNotifier(
-    user?.uid ?? '',
-    FirebaseFirestore.instance,
-    (error) => ref.read(tasksLoadErrorProvider.notifier).state = error,
-    () => ref.read(tasksLoadingProvider.notifier).state = false,
-    syncStatus: ref.read(syncStatusProvider.notifier),
-  );
-});
+final tasksProvider = NotifierProvider<TasksNotifier, List<TaskModel>>(
+  TasksNotifier.new,
+);
 
 // ─── Task Lists Notifier ──────────────────────────────────────────────────────
 
-class TaskListsNotifier extends StateNotifier<List<TaskListModel>>
+class TaskListsNotifier extends Notifier<List<TaskListModel>>
     with FirestoreListMutations<TaskListModel> {
-  TaskListsNotifier(this._uid, this._db, this._ref, {this.syncStatus})
-    : super([]) {
-    _load();
+  late String _uid;
+
+  @override
+  List<TaskListModel> build() {
+    _uid = ref.watch(currentUidProvider);
+    ref.watch(firestoreProvider);
+    _load().ignore();
+    return [];
   }
 
-  final String _uid;
-  final FirebaseFirestore _db;
-  final Ref _ref;
-
-  @override
-  FirebaseFirestore get db => _db;
-
-  @override
-  final SyncStatusNotifier? syncStatus;
-
   CollectionReference<Map<String, dynamic>> get _col =>
-      _db.collection('users').doc(_uid).collection('task_lists');
+      db.collection('users').doc(_uid).collection('task_lists');
 
   /// Re-fetches all task lists from Firestore, replacing local state.
   @override
   Future<void> reload() => _load(replace: true);
 
   Future<void> _load({bool replace = false}) async {
-    if (_uid.isEmpty) return;
+    final uid = _uid;
+    if (uid.isEmpty) return;
     final snap = await _col.get();
+    if (uid != _uid) return;
     final lists =
         snap.docs.map((doc) {
           final data = Map<String, dynamic>.from(doc.data());
@@ -327,7 +315,7 @@ class TaskListsNotifier extends StateNotifier<List<TaskListModel>>
     );
     // Tasks pointing at this now-deleted list must not keep a dangling
     // listId, otherwise they become invisible in every filter/tab forever.
-    await _ref.read(tasksProvider.notifier).clearListReferences(id);
+    await ref.read(tasksProvider.notifier).clearListReferences(id);
   }
 
   /// Replaces the entire task-lists collection (used for full backup restore).
@@ -362,15 +350,9 @@ class TaskListsNotifier extends StateNotifier<List<TaskListModel>>
 }
 
 final taskListsProvider =
-    StateNotifierProvider<TaskListsNotifier, List<TaskListModel>>((ref) {
-      final user = ref.watch(currentUserProvider);
-      return TaskListsNotifier(
-        user?.uid ?? '',
-        FirebaseFirestore.instance,
-        ref,
-        syncStatus: ref.read(syncStatusProvider.notifier),
-      );
-    });
+    NotifierProvider<TaskListsNotifier, List<TaskListModel>>(
+      TaskListsNotifier.new,
+    );
 
 // ─── Filtered & Sorted Providers ─────────────────────────────────────────────
 

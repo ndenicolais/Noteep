@@ -15,19 +15,22 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:noteep/models/note_model.dart';
 import 'package:noteep/providers/notes_provider.dart';
 import 'package:noteep/screens/note_editor/note_editor_screen.dart';
+import '../helpers/test_container.dart';
 
 void main() {
   late FakeFirebaseFirestore firestore;
+  late ProviderContainer container;
   late NotesNotifier notifier;
 
   setUp(() {
     firestore = FakeFirebaseFirestore();
-    notifier = NotesNotifier('test-uid', firestore, (_) {}, () {});
+    container = createTestContainer(firestore);
+    notifier = container.read(notesProvider.notifier);
   });
 
   Widget wrap(NoteModel note) {
-    return ProviderScope(
-      overrides: [notesProvider.overrideWith((ref) => notifier)],
+    return UncontrolledProviderScope(
+      container: container,
       child: MaterialApp(
         home: Builder(
           builder:

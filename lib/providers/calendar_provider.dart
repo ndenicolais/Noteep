@@ -12,35 +12,36 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/calendar_model.dart';
 import 'auth_provider.dart';
+import 'core_providers.dart';
 import 'sync_provider.dart';
 
 // ─── Calendar Notifier ────────────────────────────────────────────────────────
 
-class CalendarNotifier extends StateNotifier<List<CalendarEventModel>>
+class CalendarNotifier extends Notifier<List<CalendarEventModel>>
     with FirestoreListMutations<CalendarEventModel> {
-  CalendarNotifier(this._uid, this._db, {this.syncStatus}) : super([]) {
-    _load();
+  late String _uid;
+
+  @override
+  List<CalendarEventModel> build() {
+    _uid = ref.watch(currentUidProvider);
+    ref.watch(firestoreProvider);
+    _load().ignore();
+    return [];
   }
 
-  final String _uid;
-  final FirebaseFirestore _db;
-
-  @override
-  FirebaseFirestore get db => _db;
-
-  @override
-  final SyncStatusNotifier? syncStatus;
-
   CollectionReference<Map<String, dynamic>> get _col =>
-      _db.collection('users').doc(_uid).collection('calendar_events');
+      db.collection('users').doc(_uid).collection('calendar_events');
 
   /// Re-fetches all events from Firestore, replacing local state.
   @override
   Future<void> reload() => _load(replace: true);
 
   Future<void> _load({bool replace = false}) async {
-    if (_uid.isEmpty) return;
+    final uid = _uid;
+    if (uid.isEmpty) return;
     final snap = await _col.get();
+    // The user changed while this fetch was in flight.
+    if (uid != _uid) return;
     final events =
         snap.docs.map((doc) {
           final data = Map<String, dynamic>.from(doc.data());
@@ -185,14 +186,9 @@ class CalendarNotifier extends StateNotifier<List<CalendarEventModel>>
 }
 
 final calendarProvider =
-    StateNotifierProvider<CalendarNotifier, List<CalendarEventModel>>((ref) {
-      final user = ref.watch(currentUserProvider);
-      return CalendarNotifier(
-        user?.uid ?? '',
-        FirebaseFirestore.instance,
-        syncStatus: ref.read(syncStatusProvider.notifier),
-      );
-    });
+    NotifierProvider<CalendarNotifier, List<CalendarEventModel>>(
+      CalendarNotifier.new,
+    );
 
 final activeEventsProvider = Provider<List<CalendarEventModel>>((ref) {
   final events = ref.watch(calendarProvider);
@@ -209,7 +205,7 @@ final trashedEventsProvider = Provider<List<CalendarEventModel>>((ref) {
   return events.where((e) => e.deletedAt != null).toList();
 });
 
-final calendarSearchQueryProvider = StateProvider<String>((ref) => '');
+final calendarSearchQueryProvider = valueStateProvider<String>('');
 
 final filteredCalendarEventsProvider = Provider<List<CalendarEventModel>>((
   ref,

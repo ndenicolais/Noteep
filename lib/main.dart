@@ -15,6 +15,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/routing/app_router.dart';
 import 'core/routing/notification_launch_handler.dart';
 import 'providers/auth_provider.dart';
+import 'providers/core_providers.dart';
 import 'providers/notes_provider.dart';
 import 'providers/tasks_provider.dart';
 import 'providers/settings/theme_provider.dart';

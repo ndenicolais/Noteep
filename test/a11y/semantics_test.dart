@@ -11,16 +11,19 @@ import 'package:noteep/providers/notes_provider.dart';
 import 'package:noteep/screens/home/reorderable_grid_view.dart';
 import 'package:noteep/widgets/note_card.dart';
 import 'package:noteep/widgets/shared/app_dialogs.dart';
+import '../helpers/test_container.dart';
 
 void main() {
+  late ProviderContainer container;
   late NotesNotifier notes;
 
   setUp(() {
-    notes = NotesNotifier('uid', FakeFirebaseFirestore(), (_) {}, () {});
+    container = createTestContainer(FakeFirebaseFirestore());
+    notes = container.read(notesProvider.notifier);
   });
 
-  Widget app(Widget body) => ProviderScope(
-    overrides: [notesProvider.overrideWith((ref) => notes)],
+  Widget app(Widget body) => UncontrolledProviderScope(
+    container: container,
     child: MaterialApp(home: Scaffold(body: body)),
   );
 

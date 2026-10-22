@@ -10,6 +10,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../providers/core_providers.dart';
 import '../../theme/app_spacing.dart';
 
 class SearchField extends ConsumerWidget {
@@ -22,7 +23,7 @@ class SearchField extends ConsumerWidget {
   });
 
   final TextEditingController controller;
-  final StateProvider<String> provider;
+  final ValueStateProvider<String> provider;
   final String hintText;
   final VoidCallback? onChanged;
 
@@ -56,7 +57,7 @@ class SearchField extends ConsumerWidget {
                       icon: const Icon(Icons.clear, size: 20),
                       onPressed: () {
                         controller.clear();
-                        ref.read(provider.notifier).state = '';
+                        ref.read(provider.notifier).set('');
                         onChanged?.call();
                       },
                       tooltip: 'Cancella ricerca',
@@ -67,7 +68,7 @@ class SearchField extends ConsumerWidget {
             isDense: true,
           ),
           onChanged: (v) {
-            ref.read(provider.notifier).state = v;
+            ref.read(provider.notifier).set(v);
             onChanged?.call();
           },
         ),

@@ -129,7 +129,7 @@ After an update, a "Changelog" dialog lists what changed since the last version 
 
 ```
 Flutter (Dart)
-├── State Management   → Riverpod (StateNotifier + Provider)
+├── State Management   → Riverpod (Notifier + Provider)
 ├── Backend            → Firebase (Auth + Firestore)
 ├── Local Storage      → SharedPreferences (settings)
 ├── Notifications      → flutter_local_notifications (timezone-aware)
@@ -146,7 +146,7 @@ Data flow for notes and tasks:
 ```
 UI Widget
   └─ reads/writes via Riverpod provider
-       └─ StateNotifier mutates in-memory state + writes to Firestore
+       └─ Notifier mutates in-memory state + writes to Firestore
             └─ Firestore collection: users/{uid}/notes | tasks | task_lists | calendar_events
 ```
 
@@ -344,34 +344,34 @@ The `AppDrawer` (slide-in from the left) is present on all main screens and prov
 
 ## State Management
 
-Noteep uses **Riverpod** with `StateNotifier` for mutable collections and `Provider` for derived read-only views.
+Noteep uses **Riverpod** with `Notifier` for mutable collections and `Provider` for derived read-only views.
 
 ### Key Providers
 
 | Provider | Type | Purpose |
 |---|---|---|
-| `notesProvider` | `StateNotifierProvider` | Full notes list (Firestore-backed) |
+| `notesProvider` | `NotifierProvider` | Full notes list (Firestore-backed) |
 | `activeNotesProvider` | `Provider` | Notes that are not archived or trashed |
 | `archivedNotesProvider` | `Provider` | Archived, not trashed |
 | `trashedNotesProvider` | `Provider` | Soft-deleted notes |
 | `filteredNotesProvider` | `Provider` | Applies search query and sort order |
-| `tasksProvider` | `StateNotifierProvider` | Full tasks list |
-| `taskListsProvider` | `StateNotifierProvider` | Task lists |
+| `tasksProvider` | `NotifierProvider` | Full tasks list |
+| `taskListsProvider` | `NotifierProvider` | Task lists |
 | `activeTasksProvider` | `Provider` | Active tasks sorted by `taskSortOrderProvider` |
 | `specialTasksProvider` | `Provider` | Tasks with `isSpecial == true` |
 | `filteredTasksProvider` | `Provider` | Applies search + sort |
 | `taskListTasksProvider` | `Provider.family` | Tasks filtered by list ID + search |
-| `calendarProvider` | `StateNotifierProvider` | Calendar events |
+| `calendarProvider` | `NotifierProvider` | Calendar events |
 | `authStateProvider` | `StreamProvider` | Firebase Auth stream |
 | `currentUserProvider` | `Provider` | Current `User?` |
-| `authNotifierProvider` | `StateNotifierProvider` | Sign-in / sign-out operations |
-| `themeModeProvider` | `StateNotifierProvider` | Persisted in SharedPreferences |
-| `homeLayoutProvider` | `StateProvider` | Grid or List |
-| `sortOrderProvider` | `StateProvider` | Notes sort order |
-| `taskSortOrderProvider` | `StateProvider` | Tasks sort order |
-| `searchQueryProvider` | `StateProvider` | Notes search string |
-| `taskSearchQueryProvider` | `StateProvider` | Tasks search string |
-| `backupSettingsProvider` | `StateNotifierProvider` | Backup frequency |
+| `authNotifierProvider` | `NotifierProvider` | Sign-in / sign-out operations |
+| `themeModeProvider` | `NotifierProvider` | Persisted in SharedPreferences |
+| `homeLayoutProvider` | `NotifierProvider` | Grid or List |
+| `sortOrderProvider` | `NotifierProvider` | Notes sort order |
+| `taskSortOrderProvider` | `NotifierProvider` | Tasks sort order |
+| `searchQueryProvider` | `NotifierProvider` | Notes search string |
+| `taskSearchQueryProvider` | `NotifierProvider` | Tasks search string |
+| `backupSettingsProvider` | `NotifierProvider` | Backup frequency |
 
 ---
 
@@ -434,7 +434,7 @@ users/
     calendar_events/ ← CalendarEventModel documents
 ```
 
-Each `StateNotifier` holds the `uid` and a `FirebaseFirestore` reference, loading its collection on construction. Write operations use `doc(id).set(...)` for upserts and `batch.commit()` for bulk changes (reorder, tag rename/delete, replaceAll, clearAll).
+Each data `Notifier` watches `currentUidProvider` and `firestoreProvider` in `build()`, loading its collection whenever the user changes. Write operations use `doc(id).set(...)` for upserts and `batch.commit()` for bulk changes (reorder, tag rename/delete, replaceAll, clearAll).
 
 ### Security Rules
 `firestore.rules` restricts every signed-in user to their own `users/{uid}/` branch; everything else is denied. Deploy with:

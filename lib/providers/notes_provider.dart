@@ -10,46 +10,35 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../models/note_model.dart';
 import 'auth_provider.dart';
+import 'core_providers.dart';
 import 'sync_provider.dart';
-
-// ─── SharedPreferences singleton (used by settings providers) ────────────────
-
-final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
-  throw UnimplementedError(
-    'Initialize SharedPreferences before using this provider',
-  );
-});
 
 // ─── Notes Notifier ───────────────────────────────────────────────────────────
 
-class NotesNotifier extends StateNotifier<List<NoteModel>>
+/// Notes of the signed-in user ([currentUidProvider]), loaded once from
+/// Firestore and then kept in memory with optimistic updates. Rebuilt (and
+/// reloaded) when the user changes.
+class NotesNotifier extends Notifier<List<NoteModel>>
     with FirestoreListMutations<NoteModel> {
-  NotesNotifier(
-    this._uid,
-    this._db,
-    this._onLoadError,
-    this._onLoadDone, {
-    this.syncStatus,
-  }) : super([]) {
+  late String _uid;
+
+  @override
+  List<NoteModel> build() {
+    _uid = ref.watch(currentUidProvider);
+    ref.watch(firestoreProvider);
     _load();
+    return [];
   }
 
-  final String _uid;
-  final FirebaseFirestore _db;
-  final void Function(Object? error) _onLoadError;
-  final void Function() _onLoadDone;
-
-  @override
-  FirebaseFirestore get db => _db;
-
-  @override
-  final SyncStatusNotifier? syncStatus;
-
   CollectionReference<Map<String, dynamic>> get _col =>
-      _db.collection('users').doc(_uid).collection('notes');
+      db.collection('users').doc(_uid).collection('notes');
+
+  void _onLoadError(Object? error) =>
+      ref.read(notesLoadErrorProvider.notifier).set(error);
+
+  void _onLoadDone() => ref.read(notesLoadingProvider.notifier).set(false);
 
   /// Re-fetches all notes from Firestore, replacing local state (e.g.
   /// pull-to-refresh after a sync error or edits from another device).
@@ -57,9 +46,12 @@ class NotesNotifier extends StateNotifier<List<NoteModel>>
   Future<void> reload() => _load(replace: true);
 
   Future<void> _load({bool replace = false}) async {
-    if (_uid.isEmpty) return;
+    final uid = _uid;
+    if (uid.isEmpty) return;
     try {
       final snap = await _col.get();
+      // The user changed while this fetch was in flight.
+      if (uid != _uid) return;
       final notes =
           snap.docs.map((doc) {
             final data = Map<String, dynamic>.from(doc.data());
@@ -298,24 +290,15 @@ class NotesNotifier extends StateNotifier<List<NoteModel>>
 /// Set (or cleared) whenever the initial Firestore load in [NotesNotifier]
 /// succeeds or fails, so the UI can tell a real sync error apart from a
 /// genuinely empty notes list.
-final notesLoadErrorProvider = StateProvider<Object?>((ref) => null);
+final notesLoadErrorProvider = valueStateProvider<Object?>(null);
 
 /// True while the initial Firestore load in [NotesNotifier] is in flight,
 /// so the UI can tell "still loading" apart from a genuinely empty list.
-final notesLoadingProvider = StateProvider<bool>((ref) => true);
+final notesLoadingProvider = valueStateProvider<bool>(true);
 
-final notesProvider = StateNotifierProvider<NotesNotifier, List<NoteModel>>((
-  ref,
-) {
-  final user = ref.watch(currentUserProvider);
-  return NotesNotifier(
-    user?.uid ?? '',
-    FirebaseFirestore.instance,
-    (error) => ref.read(notesLoadErrorProvider.notifier).state = error,
-    () => ref.read(notesLoadingProvider.notifier).state = false,
-    syncStatus: ref.read(syncStatusProvider.notifier),
-  );
-});
+final notesProvider = NotifierProvider<NotesNotifier, List<NoteModel>>(
+  NotesNotifier.new,
+);
 
 final activeNotesProvider = Provider<List<NoteModel>>((ref) {
   final notes = ref.watch(notesProvider);

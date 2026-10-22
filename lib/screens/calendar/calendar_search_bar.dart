@@ -10,6 +10,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../providers/core_providers.dart';
 import '../../theme/app_spacing.dart';
 
 class CalendarSearchBar extends ConsumerWidget {
@@ -21,7 +22,7 @@ class CalendarSearchBar extends ConsumerWidget {
   });
 
   final TextEditingController controller;
-  final StateProvider<String> provider;
+  final ValueStateProvider<String> provider;
   final String hintText;
 
   @override
@@ -54,7 +55,7 @@ class CalendarSearchBar extends ConsumerWidget {
                       icon: const Icon(Icons.clear, size: 20),
                       onPressed: () {
                         controller.clear();
-                        ref.read(provider.notifier).state = '';
+                        ref.read(provider.notifier).set('');
                       },
                       tooltip: 'Cancella ricerca',
                     )
@@ -63,7 +64,7 @@ class CalendarSearchBar extends ConsumerWidget {
             contentPadding: EdgeInsets.zero,
             isDense: true,
           ),
-          onChanged: (v) => ref.read(provider.notifier).state = v,
+          onChanged: (v) => ref.read(provider.notifier).set(v),
         ),
       ),
     );

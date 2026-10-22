@@ -10,22 +10,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../notes_provider.dart';
 import 'ui_provider.dart' show PersistedEnumNotifier;
 
 const _kThemeKey = 'theme_mode_v2';
 
 class ThemeModeNotifier extends PersistedEnumNotifier<ThemeMode> {
-  ThemeModeNotifier(SharedPreferences prefs)
-    : super(prefs, _kThemeKey, ThemeMode.values, ThemeMode.system);
+  ThemeModeNotifier() : super(_kThemeKey, ThemeMode.values, ThemeMode.system);
 
-  void setMode(ThemeMode mode) => state = mode;
+  void setMode(ThemeMode mode) => set(mode);
 }
 
-final themeModeProvider = StateNotifierProvider<ThemeModeNotifier, ThemeMode>((
-  ref,
-) {
-  final prefs = ref.watch(sharedPreferencesProvider);
-  return ThemeModeNotifier(prefs);
-});
+final themeModeProvider = NotifierProvider<ThemeModeNotifier, ThemeMode>(
+  ThemeModeNotifier.new,
+);

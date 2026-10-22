@@ -24,13 +24,15 @@ class TaskHistoryState {
 /// `autoDispose` releases each task's history once no editor screen is
 /// watching it anymore — without it, every task ever opened during a
 /// session keeps its (up to 50-entry) undo/redo stack alive forever.
-final taskChangeHistoryProvider = StateNotifierProvider.autoDispose
+final taskChangeHistoryProvider = NotifierProvider.autoDispose
     .family<TaskChangeHistoryNotifier, TaskHistoryState, String>(
-      (ref, taskId) => TaskChangeHistoryNotifier(),
+      TaskChangeHistoryNotifier.new,
     );
 
-class TaskChangeHistoryNotifier extends StateNotifier<TaskHistoryState> {
-  TaskChangeHistoryNotifier() : super(TaskHistoryState.empty);
+class TaskChangeHistoryNotifier
+    extends AutoDisposeFamilyNotifier<TaskHistoryState, String> {
+  @override
+  TaskHistoryState build(String taskId) => TaskHistoryState.empty;
 
   final List<TaskChange> _undoStack = [];
   final List<TaskChange> _redoStack = [];

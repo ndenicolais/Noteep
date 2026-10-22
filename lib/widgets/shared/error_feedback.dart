@@ -49,7 +49,7 @@ void notifyWithUndo(
 }
 
 /// Attaches a SnackBar error handler to a fire-and-forget persistence
-/// [Future] (e.g. a Firestore write from a `StateNotifier` mutation), so a
+/// [Future] (e.g. a Firestore write from a data `Notifier` mutation), so a
 /// failure surfaces to the user instead of disappearing as an unhandled
 /// exception. Safe to call even if [context] is unmounted by the time the
 /// future settles.

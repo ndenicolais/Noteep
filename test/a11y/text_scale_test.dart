@@ -20,21 +20,25 @@ import 'package:noteep/widgets/reminder_banner.dart';
 import 'package:noteep/widgets/shared/empty_state.dart';
 import 'package:noteep/widgets/shared/search_field.dart';
 import 'package:noteep/widgets/style_editor/style_editor_sheet.dart';
+import '../helpers/test_container.dart';
+import 'package:noteep/providers/core_providers.dart';
 
 /// Renders key widgets on a small phone (360×690 dp) with the system text
 /// size at 200% and fails on any layout overflow.
 void main() {
   late FakeFirebaseFirestore db;
+  late ProviderContainer container;
   late NotesNotifier notes;
   late TasksNotifier tasks;
-  final query = StateProvider<String>((ref) => '');
+  final query = valueStateProvider<String>('');
 
   setUpAll(() => initializeDateFormatting('it'));
 
   setUp(() {
     db = FakeFirebaseFirestore();
-    notes = NotesNotifier('uid', db, (_) {}, () {});
-    tasks = TasksNotifier('uid', db, (_) {}, () {});
+    container = createTestContainer(db);
+    notes = container.read(notesProvider.notifier);
+    tasks = container.read(tasksProvider.notifier);
   });
 
   Future<void> pumpScaled(WidgetTester tester, Widget home) async {
@@ -42,11 +46,8 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
     await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          notesProvider.overrideWith((ref) => notes),
-          tasksProvider.overrideWith((ref) => tasks),
-        ],
+      UncontrolledProviderScope(
+        container: container,
         child: MaterialApp(
           theme: AppTheme.light,
           builder:

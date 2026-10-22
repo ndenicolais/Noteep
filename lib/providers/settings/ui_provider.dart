@@ -9,44 +9,38 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../core_providers.dart';
 import '../notes_provider.dart';
 import '../tasks_provider.dart';
 import '../../models/note_model.dart';
 import '../../models/task_model.dart';
 
-/// Base for a StateNotifier whose enum value is persisted to
-/// SharedPreferences by *name* rather than index, so a future reordering or
-/// removal of enum values can't make a stored preference point at the wrong
-/// value (or throw a RangeError) — every subclass persists on every `state =`
-/// assignment automatically, so a new setting can't forget to save itself.
-abstract class PersistedEnumNotifier<T extends Enum> extends StateNotifier<T> {
-  PersistedEnumNotifier(this._prefs, this._key, this._values, T defaultValue)
-    : super(defaultValue) {
-    _load();
-  }
+/// Base for a Notifier whose enum value is persisted to SharedPreferences by
+/// *name* rather than index, so a future reordering or removal of enum
+/// values can't make a stored preference point at the wrong value (or throw
+/// a RangeError). Every change goes through [set], which also saves it, so a
+/// new setting can't forget to save itself.
+abstract class PersistedEnumNotifier<T extends Enum> extends Notifier<T> {
+  PersistedEnumNotifier(this._key, this._values, this._defaultValue);
 
-  final SharedPreferences _prefs;
   final String _key;
   final List<T> _values;
-
-  void _load() {
-    final name = _prefs.getString(_key);
-    if (name == null) return;
-    for (final v in _values) {
-      if (v.name == name) {
-        super.state = v;
-        return;
-      }
-    }
-    // Unknown/stale value (e.g. saved by a since-removed enum entry) — keep
-    // the default instead of throwing.
-  }
+  final T _defaultValue;
 
   @override
-  set state(T val) {
-    super.state = val;
-    _prefs.setString(_key, val.name);
+  T build() {
+    final name = ref.watch(sharedPreferencesProvider).getString(_key);
+    for (final v in _values) {
+      if (v.name == name) return v;
+    }
+    // Missing or stale value (e.g. saved by a since-removed enum entry) —
+    // keep the default instead of throwing.
+    return _defaultValue;
+  }
+
+  void set(T value) {
+    state = value;
+    ref.read(sharedPreferencesProvider).setString(_key, value.name);
   }
 }
 
@@ -57,19 +51,15 @@ enum HomeLayout { grid, list }
 const _kLayoutKey = 'home_layout_v2';
 
 class HomeLayoutNotifier extends PersistedEnumNotifier<HomeLayout> {
-  HomeLayoutNotifier(SharedPreferences prefs)
-    : super(prefs, _kLayoutKey, HomeLayout.values, HomeLayout.grid);
+  HomeLayoutNotifier() : super(_kLayoutKey, HomeLayout.values, HomeLayout.grid);
 
-  void toggle() {
-    state = state == HomeLayout.grid ? HomeLayout.list : HomeLayout.grid;
-  }
+  void toggle() =>
+      set(state == HomeLayout.grid ? HomeLayout.list : HomeLayout.grid);
 }
 
-final homeLayoutProvider =
-    StateNotifierProvider<HomeLayoutNotifier, HomeLayout>((ref) {
-      final prefs = ref.watch(sharedPreferencesProvider);
-      return HomeLayoutNotifier(prefs);
-    });
+final homeLayoutProvider = NotifierProvider<HomeLayoutNotifier, HomeLayout>(
+  HomeLayoutNotifier.new,
+);
 
 // --- Sort Order ---
 
@@ -84,36 +74,32 @@ enum SortOrder {
 const _kSortKey = 'sort_order_v2';
 
 class SortOrderNotifier extends PersistedEnumNotifier<SortOrder> {
-  SortOrderNotifier(SharedPreferences prefs)
-    : super(prefs, _kSortKey, SortOrder.values, SortOrder.createdNewest);
+  SortOrderNotifier()
+    : super(_kSortKey, SortOrder.values, SortOrder.createdNewest);
 }
 
-final sortOrderProvider = StateNotifierProvider<SortOrderNotifier, SortOrder>((
-  ref,
-) {
-  final prefs = ref.watch(sharedPreferencesProvider);
-  return SortOrderNotifier(prefs);
-});
+final sortOrderProvider = NotifierProvider<SortOrderNotifier, SortOrder>(
+  SortOrderNotifier.new,
+);
 
 // --- Task Sort Order ---
 
 const _kTaskSortKey = 'task_sort_order_v2';
 
 class TaskSortOrderNotifier extends PersistedEnumNotifier<SortOrder> {
-  TaskSortOrderNotifier(SharedPreferences prefs)
-    : super(prefs, _kTaskSortKey, SortOrder.values, SortOrder.createdNewest);
+  TaskSortOrderNotifier()
+    : super(_kTaskSortKey, SortOrder.values, SortOrder.createdNewest);
 }
 
 final taskSortOrderProvider =
-    StateNotifierProvider<TaskSortOrderNotifier, SortOrder>((ref) {
-      final prefs = ref.watch(sharedPreferencesProvider);
-      return TaskSortOrderNotifier(prefs);
-    });
+    NotifierProvider<TaskSortOrderNotifier, SortOrder>(
+      TaskSortOrderNotifier.new,
+    );
 
 // --- Search & Filters ---
 
-final searchQueryProvider = StateProvider<String>((ref) => '');
-final taskSearchQueryProvider = StateProvider<String>((ref) => '');
+final searchQueryProvider = valueStateProvider<String>('');
+final taskSearchQueryProvider = valueStateProvider<String>('');
 
 final filteredNotesProvider = Provider<List<NoteModel>>((ref) {
   final notes = ref.watch(activeNotesProvider);
@@ -176,19 +162,16 @@ final allTagsProvider = Provider<List<String>>((ref) {
 
 const _kCustomLabelsKey = 'custom_labels';
 
-class CustomLabelsNotifier extends StateNotifier<List<String>> {
-  CustomLabelsNotifier(this._prefs) : super([]) {
-    _load();
-  }
-
-  final SharedPreferences _prefs;
-
-  void _load() {
-    state = _prefs.getStringList(_kCustomLabelsKey) ?? [];
-  }
+class CustomLabelsNotifier extends Notifier<List<String>> {
+  @override
+  List<String> build() =>
+      ref.watch(sharedPreferencesProvider).getStringList(_kCustomLabelsKey) ??
+      [];
 
   Future<void> _save() async {
-    await _prefs.setStringList(_kCustomLabelsKey, state);
+    await ref
+        .read(sharedPreferencesProvider)
+        .setStringList(_kCustomLabelsKey, state);
   }
 
   void addLabel(String label) {
@@ -212,50 +195,39 @@ class CustomLabelsNotifier extends StateNotifier<List<String>> {
 }
 
 final customLabelsProvider =
-    StateNotifierProvider<CustomLabelsNotifier, List<String>>((ref) {
-      final prefs = ref.watch(sharedPreferencesProvider);
-      return CustomLabelsNotifier(prefs);
-    });
+    NotifierProvider<CustomLabelsNotifier, List<String>>(
+      CustomLabelsNotifier.new,
+    );
 
 // --- Task Settings ---
 
 const _kShowCompletedTasksKey = 'show_completed_tasks';
 const _kGroupTasksByPriorityKey = 'group_tasks_by_priority';
 
-final showCompletedTasksProvider =
-    StateNotifierProvider<_BoolSettingNotifier, bool>((ref) {
-      final prefs = ref.watch(sharedPreferencesProvider);
-      return _BoolSettingNotifier(prefs, _kShowCompletedTasksKey, true);
-    });
+final showCompletedTasksProvider = NotifierProvider<BoolSettingNotifier, bool>(
+  () => BoolSettingNotifier(_kShowCompletedTasksKey, true),
+);
 
 final groupTasksByPriorityProvider =
-    StateNotifierProvider<_BoolSettingNotifier, bool>((ref) {
-      final prefs = ref.watch(sharedPreferencesProvider);
-      return _BoolSettingNotifier(prefs, _kGroupTasksByPriorityKey, true);
-    });
+    NotifierProvider<BoolSettingNotifier, bool>(
+      () => BoolSettingNotifier(_kGroupTasksByPriorityKey, true),
+    );
 
-class _BoolSettingNotifier extends StateNotifier<bool> {
-  _BoolSettingNotifier(this._prefs, this._key, bool defaultValue)
-    : super(defaultValue) {
-    _load();
-  }
+/// A boolean preference persisted to SharedPreferences under its key.
+class BoolSettingNotifier extends Notifier<bool> {
+  BoolSettingNotifier(this._key, this._defaultValue);
 
-  final SharedPreferences _prefs;
   final String _key;
-
-  void _load() {
-    final value = _prefs.getBool(_key);
-    if (value != null) state = value;
-  }
-
-  void toggle() {
-    state = !state;
-    _prefs.setBool(_key, state);
-  }
+  final bool _defaultValue;
 
   @override
-  set state(bool val) {
-    super.state = val;
-    _prefs.setBool(_key, val);
+  bool build() =>
+      ref.watch(sharedPreferencesProvider).getBool(_key) ?? _defaultValue;
+
+  void toggle() => set(!state);
+
+  void set(bool value) {
+    state = value;
+    ref.read(sharedPreferencesProvider).setBool(_key, value);
   }
 }

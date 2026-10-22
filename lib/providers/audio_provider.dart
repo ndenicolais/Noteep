@@ -52,10 +52,14 @@ class RecordingState {
   }
 }
 
-class RecordingStateNotifier extends StateNotifier<RecordingState> {
-  RecordingStateNotifier(this._audioService) : super(const RecordingState());
+class RecordingStateNotifier extends Notifier<RecordingState> {
+  AudioRecordingService get _audioService => ref.read(audioServiceProvider);
 
-  final AudioRecordingService _audioService;
+  @override
+  RecordingState build() {
+    ref.watch(audioServiceProvider);
+    return const RecordingState();
+  }
 
   Future<void> startRecording() async {
     try {
@@ -98,7 +102,6 @@ class RecordingStateNotifier extends StateNotifier<RecordingState> {
 }
 
 final recordingStateProvider =
-    StateNotifierProvider<RecordingStateNotifier, RecordingState>((ref) {
-      final audioService = ref.watch(audioServiceProvider);
-      return RecordingStateNotifier(audioService);
-    });
+    NotifierProvider<RecordingStateNotifier, RecordingState>(
+      RecordingStateNotifier.new,
+    );

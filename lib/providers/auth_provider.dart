@@ -30,13 +30,23 @@ final currentUserProvider = Provider<User?>((ref) {
   return ref.watch(authStateProvider).asData?.value;
 });
 
+/// Uid of the signed-in user, or `''` when signed out. The data notifiers
+/// watch this instead of [currentUserProvider], so tests can override it.
+final currentUidProvider = Provider<String>((ref) {
+  return ref.watch(currentUserProvider)?.uid ?? '';
+});
+
 // ─── Auth operations notifier ─────────────────────────────────────────────────
 
-class AuthNotifier extends StateNotifier<AsyncValue<void>> {
-  AuthNotifier(this._auth) : super(const AsyncValue.data(null));
-
-  final FirebaseAuth _auth;
+class AuthNotifier extends Notifier<AsyncValue<void>> {
+  FirebaseAuth get _auth => ref.read(firebaseAuthProvider);
   final _googleSignIn = GoogleSignIn();
+
+  @override
+  AsyncValue<void> build() {
+    ref.watch(firebaseAuthProvider);
+    return const AsyncValue.data(null);
+  }
 
   // ── Google Sign-In ──────────────────────────────────────────────────────────
 
@@ -108,10 +118,9 @@ class AuthNotifier extends StateNotifier<AsyncValue<void>> {
   }
 }
 
-final authNotifierProvider =
-    StateNotifierProvider<AuthNotifier, AsyncValue<void>>((ref) {
-      return AuthNotifier(ref.watch(firebaseAuthProvider));
-    });
+final authNotifierProvider = NotifierProvider<AuthNotifier, AsyncValue<void>>(
+  AuthNotifier.new,
+);
 
 // ─── Firebase error → Italian message ────────────────────────────────────────
 

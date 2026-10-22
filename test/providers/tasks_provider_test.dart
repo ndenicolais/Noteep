@@ -13,23 +13,25 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noteep/models/task_list_model.dart';
 import 'package:noteep/models/task_model.dart';
-import 'package:noteep/providers/notes_provider.dart'
-    show sharedPreferencesProvider;
+import 'package:noteep/providers/core_providers.dart';
 import 'package:noteep/providers/tasks_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-/// Exposes a usable [Ref] tied to a [ProviderContainer], for constructing
-/// notifiers (like [TaskListsNotifier]) that need one outside of Riverpod's
-/// normal provider wiring.
-final _refProvider = Provider<Ref>((ref) => ref);
+import '../helpers/test_container.dart';
 
 void main() {
   late FakeFirebaseFirestore firestore;
+  late ProviderContainer container;
   late TasksNotifier notifier;
 
-  setUp(() {
+  setUp(() async {
     firestore = FakeFirebaseFirestore();
-    notifier = TasksNotifier('test-uid', firestore, (_) {}, () {});
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    container = createTestContainer(
+      firestore,
+      overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+    );
+    notifier = container.read(tasksProvider.notifier);
   });
 
   group('TasksNotifier CRUD', () {
@@ -168,13 +170,7 @@ void main() {
 
   group('TaskListsNotifier', () {
     test('addList/updateList/clearAll manage the lists collection', () async {
-      final container = ProviderContainer();
-      addTearDown(container.dispose);
-      final listsNotifier = TaskListsNotifier(
-        'test-uid',
-        firestore,
-        container.read(_refProvider),
-      );
+      final listsNotifier = container.read(taskListsProvider.notifier);
 
       final list = TaskListModel(name: 'Work');
       await listsNotifier.addList(list);
@@ -190,15 +186,7 @@ void main() {
     test(
       'deleteList removes the list and clears listId on referencing tasks',
       () async {
-        final container = ProviderContainer(
-          overrides: [tasksProvider.overrideWith((ref) => notifier)],
-        );
-        addTearDown(container.dispose);
-        final listsNotifier = TaskListsNotifier(
-          'test-uid',
-          firestore,
-          container.read(_refProvider),
-        );
+        final listsNotifier = container.read(taskListsProvider.notifier);
 
         final list = TaskListModel(name: 'Work');
         await listsNotifier.addList(list);
@@ -215,23 +203,8 @@ void main() {
   });
 
   group('Derived task providers', () {
-    late SharedPreferences prefs;
-
-    setUp(() async {
-      SharedPreferences.setMockInitialValues({});
-      prefs = await SharedPreferences.getInstance();
-    });
-
     test('activeTasksProvider/archivedTasksProvider/trashedTasksProvider '
         'filter by archive/trash status', () async {
-      final container = ProviderContainer(
-        overrides: [
-          tasksProvider.overrideWith((ref) => notifier),
-          sharedPreferencesProvider.overrideWithValue(prefs),
-        ],
-      );
-      addTearDown(container.dispose);
-
       final active = TaskModel(title: 'Active');
       final archived = TaskModel(title: 'Archived', isArchived: true);
       final trashed = TaskModel(title: 'Trashed', deletedAt: DateTime.now());
@@ -253,14 +226,6 @@ void main() {
     test(
       'specialTasksProvider only returns non-archived special tasks',
       () async {
-        final container = ProviderContainer(
-          overrides: [
-            tasksProvider.overrideWith((ref) => notifier),
-            sharedPreferencesProvider.overrideWithValue(prefs),
-          ],
-        );
-        addTearDown(container.dispose);
-
         final special = TaskModel(title: 'Special', isSpecial: true);
         final archivedSpecial = TaskModel(
           title: 'ArchivedSpecial',

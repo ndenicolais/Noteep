@@ -11,20 +11,34 @@ import 'package:noteep/models/task_model.dart';
 import 'package:noteep/providers/calendar_provider.dart';
 import 'package:noteep/providers/notes_provider.dart';
 import 'package:noteep/providers/tasks_provider.dart';
+import '../helpers/test_container.dart';
+import 'package:noteep/providers/core_providers.dart';
+
+/// A loading flag that keeps its initial value, so the test decides whether
+/// loading is still in progress regardless of the fake Firestore fetch.
+class _PinnedFlag extends ValueStateNotifier<bool> {
+  _PinnedFlag(super.initial);
+
+  @override
+  void set(bool value) {}
+}
 
 void main() {
-  late FakeFirebaseFirestore db;
-  late NotesNotifier notes;
-  late TasksNotifier tasks;
-  late CalendarNotifier events;
+  late ProviderContainer container;
+  late bool pinnedLoading;
   late ValueNotifier<NotificationTarget?> targets;
   late bool unlockResult;
 
   setUp(() {
-    db = FakeFirebaseFirestore();
-    notes = NotesNotifier('uid', db, (_) {}, () {});
-    tasks = TasksNotifier('uid', db, (_) {}, () {});
-    events = CalendarNotifier('uid', db);
+    pinnedLoading = false;
+    // The loading flags are built lazily, so `pump(loading:)` still applies.
+    container = createTestContainer(
+      FakeFirebaseFirestore(),
+      overrides: [
+        notesLoadingProvider.overrideWith(() => _PinnedFlag(pinnedLoading)),
+        tasksLoadingProvider.overrideWith(() => _PinnedFlag(pinnedLoading)),
+      ],
+    );
     targets = ValueNotifier(null);
     unlockResult = true;
   });
@@ -45,15 +59,10 @@ void main() {
   }
 
   Future<void> pump(WidgetTester tester, {bool loading = false}) async {
+    pinnedLoading = loading;
     await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          notesProvider.overrideWith((ref) => notes),
-          tasksProvider.overrideWith((ref) => tasks),
-          calendarProvider.overrideWith((ref) => events),
-          notesLoadingProvider.overrideWith((ref) => loading),
-          tasksLoadingProvider.overrideWith((ref) => loading),
-        ],
+      UncontrolledProviderScope(
+        container: container,
         child: MaterialApp(
           onGenerateRoute: fakeRoute,
           home: NotificationLaunchHandler(
@@ -69,7 +78,7 @@ void main() {
   }
 
   testWidgets('opens a target that was pending at launch', (tester) async {
-    await notes.addNote(NoteModel(id: 'n1'));
+    await container.read(notesProvider.notifier).addNote(NoteModel(id: 'n1'));
     targets.value = const NotificationTarget.note('n1');
 
     await pump(tester);
@@ -79,14 +88,16 @@ void main() {
   });
 
   testWidgets('opens a target tapped while the app is running', (tester) async {
-    await tasks.addTask(TaskModel(id: 't1'));
-    await events.addEvent(
-      CalendarEventModel(
-        id: 'e1',
-        startTime: DateTime(2026),
-        endTime: DateTime(2026),
-      ),
-    );
+    await container.read(tasksProvider.notifier).addTask(TaskModel(id: 't1'));
+    await container
+        .read(calendarProvider.notifier)
+        .addEvent(
+          CalendarEventModel(
+            id: 'e1',
+            startTime: DateTime(2026),
+            endTime: DateTime(2026),
+          ),
+        );
     await pump(tester);
 
     targets.value = const NotificationTarget.task('t1');
@@ -104,7 +115,7 @@ void main() {
     expect(find.text('home'), findsOneWidget);
     expect(targets.value, isNotNull);
 
-    await notes.addNote(NoteModel(id: 'n1'));
+    await container.read(notesProvider.notifier).addNote(NoteModel(id: 'n1'));
     await tester.pumpAndSettle();
     expect(find.text('opened note n1'), findsOneWidget);
   });
@@ -133,7 +144,9 @@ void main() {
   });
 
   testWidgets('a locked note opens only after unlocking', (tester) async {
-    await notes.addNote(NoteModel(id: 'n1', isLocked: true));
+    await container
+        .read(notesProvider.notifier)
+        .addNote(NoteModel(id: 'n1', isLocked: true));
     unlockResult = false;
     targets.value = const NotificationTarget.note('n1');
 

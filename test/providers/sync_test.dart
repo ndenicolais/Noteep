@@ -17,22 +17,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noteep/providers/sync_provider.dart';
 import 'package:noteep/widgets/sync_status_listener.dart';
+import '../helpers/test_container.dart';
 
-class _ListNotifier extends StateNotifier<List<int>>
+class _ListNotifier extends Notifier<List<int>>
     with FirestoreListMutations<int> {
-  _ListNotifier(this.syncStatus) : super([]);
-
-  @override
-  final SyncStatusNotifier? syncStatus;
-
-  @override
-  final FirebaseFirestore db = FakeFirebaseFirestore();
-
   int reloads = 0;
+
+  @override
+  List<int> build() => [];
 
   @override
   Future<void> reload() async => reloads++;
 }
+
+final _listProvider = NotifierProvider<_ListNotifier, List<int>>(
+  _ListNotifier.new,
+);
 
 void main() {
   late SyncStatusNotifier sync;
@@ -42,8 +42,9 @@ void main() {
   late Duration defaultGrace;
 
   setUp(() {
-    sync = SyncStatusNotifier();
-    notifier = _ListNotifier(sync);
+    final container = createTestContainer(FakeFirebaseFirestore());
+    sync = container.read(syncStatusProvider.notifier);
+    notifier = container.read(_listProvider.notifier);
     defaultGrace = FirestoreListMutations.writeGrace;
     FirestoreListMutations.writeGrace = grace;
   });

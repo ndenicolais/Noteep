@@ -16,6 +16,7 @@ import 'package:noteep/providers/notes_provider.dart';
 import 'package:noteep/providers/settings/backup_restore.dart';
 import 'package:noteep/providers/tasks_provider.dart';
 import 'package:noteep/utils/backup_service.dart';
+import '../helpers/test_container.dart';
 
 const _pathProviderChannel = MethodChannel('plugins.flutter.io/path_provider');
 
@@ -28,20 +29,7 @@ void main() {
   setUp(() {
     firestore = FakeFirebaseFirestore();
     container = ProviderContainer(
-      overrides: [
-        notesProvider.overrideWith(
-          (ref) => NotesNotifier('u', firestore, (_) {}, () {}),
-        ),
-        tasksProvider.overrideWith(
-          (ref) => TasksNotifier('u', firestore, (_) {}, () {}),
-        ),
-        taskListsProvider.overrideWith(
-          (ref) => TaskListsNotifier('u', firestore, ref),
-        ),
-        calendarProvider.overrideWith(
-          (ref) => CalendarNotifier('u', firestore),
-        ),
-      ],
+      overrides: firestoreOverrides(firestore, uid: 'u'),
     );
   });
 

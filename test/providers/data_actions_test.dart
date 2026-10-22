@@ -13,6 +13,7 @@ import 'package:noteep/providers/calendar_provider.dart';
 import 'package:noteep/providers/notes_provider.dart';
 import 'package:noteep/providers/settings/data_actions.dart';
 import 'package:noteep/providers/tasks_provider.dart';
+import '../helpers/test_container.dart';
 
 void main() {
   late FakeFirebaseFirestore firestore;
@@ -22,20 +23,7 @@ void main() {
   setUp(() {
     firestore = FakeFirebaseFirestore();
     container = ProviderContainer(
-      overrides: [
-        notesProvider.overrideWith(
-          (ref) => NotesNotifier('u', firestore, (_) {}, () {}),
-        ),
-        tasksProvider.overrideWith(
-          (ref) => TasksNotifier('u', firestore, (_) {}, () {}),
-        ),
-        taskListsProvider.overrideWith(
-          (ref) => TaskListsNotifier('u', firestore, ref),
-        ),
-        calendarProvider.overrideWith(
-          (ref) => CalendarNotifier('u', firestore),
-        ),
-      ],
+      overrides: firestoreOverrides(firestore, uid: 'u'),
     );
     actions = container.read(dataActionsProvider);
   });

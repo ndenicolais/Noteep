@@ -13,14 +13,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noteep/models/note_model.dart';
 import 'package:noteep/providers/notes_provider.dart';
+import '../helpers/test_container.dart';
 
 void main() {
   late FakeFirebaseFirestore firestore;
+  late ProviderContainer container;
   late NotesNotifier notifier;
 
   setUp(() {
     firestore = FakeFirebaseFirestore();
-    notifier = NotesNotifier('test-uid', firestore, (_) {}, () {});
+    container = createTestContainer(firestore);
+    notifier = container.read(notesProvider.notifier);
   });
 
   Future<Map<String, dynamic>?> firestoreDoc(String id) async {
@@ -208,11 +211,6 @@ void main() {
   group('Derived providers', () {
     test('activeNotesProvider/archivedNotesProvider/trashedNotesProvider '
         'filter by archive/trash status', () async {
-      final container = ProviderContainer(
-        overrides: [notesProvider.overrideWith((ref) => notifier)],
-      );
-      addTearDown(container.dispose);
-
       final active = NoteModel(title: 'Active');
       final archived = NoteModel(title: 'Archived', isArchived: true);
       final trashed = NoteModel(title: 'Trashed', deletedAt: DateTime.now());

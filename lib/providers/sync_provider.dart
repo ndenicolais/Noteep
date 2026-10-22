@@ -13,6 +13,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'core_providers.dart';
 
 /// Snapshot of Firestore writes not yet acknowledged by the server.
 @immutable
@@ -37,8 +38,9 @@ class SyncStatus {
 
 /// Counts the Firestore writes that outlived [FirestoreListMutations.writeGrace]
 /// and are now queued in the offline cache.
-class SyncStatusNotifier extends StateNotifier<SyncStatus> {
-  SyncStatusNotifier() : super(const SyncStatus());
+class SyncStatusNotifier extends Notifier<SyncStatus> {
+  @override
+  SyncStatus build() => const SyncStatus();
 
   /// Tracks [write] until it settles; [onFailure] runs if the server
   /// rejects it.
@@ -46,25 +48,22 @@ class SyncStatusNotifier extends StateNotifier<SyncStatus> {
     state = state.copyWith(queued: state.queued + 1);
     write.then(
       (_) {
-        if (mounted) state = state.copyWith(queued: state.queued - 1);
+        state = state.copyWith(queued: state.queued - 1);
       },
       onError: (Object _) {
-        if (mounted) {
-          state = state.copyWith(
-            queued: state.queued - 1,
-            failures: state.failures + 1,
-          );
-        }
+        state = state.copyWith(
+          queued: state.queued - 1,
+          failures: state.failures + 1,
+        );
         onFailure?.call();
       },
     );
   }
 }
 
-final syncStatusProvider =
-    StateNotifierProvider<SyncStatusNotifier, SyncStatus>(
-      (ref) => SyncStatusNotifier(),
-    );
+final syncStatusProvider = NotifierProvider<SyncStatusNotifier, SyncStatus>(
+  SyncStatusNotifier.new,
+);
 
 /// Optimistic-update helpers shared by the Firestore-backed list notifiers.
 ///
@@ -72,15 +71,15 @@ final syncStatusProvider =
 /// cache immediately but its future only completes once the server
 /// acknowledges it — never, while offline. [mutate] therefore waits at most
 /// [writeGrace]: errors within that window roll the state back as before,
-/// slower writes are handed to [syncStatus] and stay queued in the cache.
+/// slower writes are handed to [syncStatusProvider] and stay queued in the
+/// cache.
 /// If the server later rejects one, Firestore reverts its cache and
 /// [reload] re-reads it.
-mixin FirestoreListMutations<T> on StateNotifier<List<T>> {
+mixin FirestoreListMutations<T> on Notifier<List<T>> {
   /// How long a write may take before it is considered queued offline.
   static Duration writeGrace = const Duration(seconds: 3);
 
-  FirebaseFirestore get db;
-  SyncStatusNotifier? get syncStatus;
+  FirebaseFirestore get db => ref.read(firestoreProvider);
   Future<void> reload();
 
   /// Applies [apply] to state immediately, then runs [persist]; if it fails
@@ -99,17 +98,9 @@ mixin FirestoreListMutations<T> on StateNotifier<List<T>> {
       state = previous;
       rethrow;
     }
-    final tracker = syncStatus;
-    if (tracker != null) {
-      tracker.track(
-        write,
-        onFailure: () {
-          if (mounted) reload();
-        },
-      );
-    } else {
-      write.ignore();
-    }
+    ref
+        .read(syncStatusProvider.notifier)
+        .track(write, onFailure: () => reload().ignore());
   }
 
   /// Commits Firestore batch writes in chunks of 500 (Firestore's per-batch

@@ -13,6 +13,7 @@ import 'package:noteep/providers/notes_provider.dart';
 import 'package:noteep/providers/notes_undo_redo_provider.dart';
 import 'package:noteep/providers/tasks_provider.dart';
 import 'package:noteep/providers/tasks_undo_redo_provider.dart';
+import '../helpers/test_container.dart';
 
 NoteTitleChange _title(int i) =>
     NoteTitleChange(oldTitle: 't$i', newTitle: 't${i + 1}');
@@ -38,11 +39,21 @@ Future<WidgetRef> _pumpRef(
   return captured;
 }
 
+/// Reads an autoDispose history notifier, kept alive for the whole test.
+N _keepAlive<N extends AutoDisposeFamilyNotifier<Object?, String>>(
+  AutoDisposeFamilyNotifierProvider<N, Object?, String> provider,
+) {
+  final container = ProviderContainer();
+  addTearDown(container.dispose);
+  container.listen(provider, (_, _) {});
+  return container.read(provider.notifier);
+}
+
 void main() {
   group('NoteChangeHistoryNotifier', () {
     late NoteChangeHistoryNotifier history;
 
-    setUp(() => history = NoteChangeHistoryNotifier());
+    setUp(() => history = _keepAlive(noteChangeHistoryProvider('n')));
 
     test('starts empty', () {
       expect(history.state.canUndo, isFalse);
@@ -107,7 +118,7 @@ void main() {
 
   group('TaskChangeHistoryNotifier', () {
     test('mirrors the note history behaviour', () {
-      final history = TaskChangeHistoryNotifier();
+      final history = _keepAlive(taskChangeHistoryProvider('t'));
       final a = TaskTitleChange(oldTitle: 'a', newTitle: 'b');
       final b = TaskDescriptionChange(oldDescription: '', newDescription: 'x');
       history
@@ -169,11 +180,7 @@ void main() {
     setUp(() {
       firestore = FakeFirebaseFirestore();
       container = ProviderContainer(
-        overrides: [
-          notesProvider.overrideWith(
-            (ref) => NotesNotifier('u', firestore, (_) {}, () {}),
-          ),
-        ],
+        overrides: firestoreOverrides(firestore, uid: 'u'),
       );
     });
 
@@ -220,11 +227,7 @@ void main() {
     testWidgets('undo/redo return the task and persist it', (tester) async {
       final firestore = FakeFirebaseFirestore();
       final container = ProviderContainer(
-        overrides: [
-          tasksProvider.overrideWith(
-            (ref) => TasksNotifier('u', firestore, (_) {}, () {}),
-          ),
-        ],
+        overrides: firestoreOverrides(firestore, uid: 'u'),
       );
       addTearDown(container.dispose);
       final ref = await _pumpRef(tester, container);

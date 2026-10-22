@@ -15,6 +15,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/constants/app_version.dart';
 import '../models/note_model.dart';
 import '../providers/calendar_provider.dart';
+import '../providers/core_providers.dart';
 import '../providers/notes_provider.dart';
 import '../providers/tasks_provider.dart';
 import '../providers/settings/backup_provider.dart';
@@ -178,7 +179,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ? ReorderableGridView(
           notes: notes,
           onReorder: (from, to) {
-            ref.read(sortOrderProvider.notifier).state = SortOrder.custom;
+            ref.read(sortOrderProvider.notifier).set(SortOrder.custom);
             ref
                 .read(notesProvider.notifier)
                 .reorderNotes(notes, from, from < to ? to + 1 : to);
@@ -187,7 +188,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         : ReorderableListViewWidget(
           notes: notes,
           onReorder: (oldIndex, newIndex) {
-            ref.read(sortOrderProvider.notifier).state = SortOrder.custom;
+            ref.read(sortOrderProvider.notifier).set(SortOrder.custom);
             ref
                 .read(notesProvider.notifier)
                 .reorderNotes(notes, oldIndex, newIndex);
@@ -233,7 +234,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           (_) => SortSheet(
             current: current,
             onChanged: (s) {
-              ref.read(sortOrderProvider.notifier).state = s;
+              ref.read(sortOrderProvider.notifier).set(s);
               Navigator.pop(context);
             },
           ),
