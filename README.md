@@ -110,6 +110,7 @@ Export notes to **PDF** format (rendered with the `pdf` / `printing` packages); 
 |---|---|
 | Theme | System / Light / Dark |
 | Home layout | Masonry grid (cards at natural height) / List |
+| Notes "+" button menu | Toggle: speed dial (note, checklist, task, audio, template) or direct new note |
 | Show completed tasks | Toggle |
 | Group tasks by priority | Toggle |
 | Backup frequency | Daily / Weekly / Monthly |

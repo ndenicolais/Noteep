@@ -12,16 +12,20 @@ import 'package:flutter/material.dart';
 import '../../providers/settings/ui_provider.dart';
 import '../../widgets/shared/section_header.dart';
 
-/// "Note" section: home layout (grid/list) toggle.
+/// "Note" section: home layout (grid/list) toggle and "+" button behavior.
 class SettingsNotesPrefsSection extends StatelessWidget {
   const SettingsNotesPrefsSection({
     super.key,
     required this.homeLayout,
     required this.onToggleLayout,
+    required this.fabMenu,
+    required this.onToggleFabMenu,
   });
 
   final HomeLayout homeLayout;
   final VoidCallback onToggleLayout;
+  final bool fabMenu;
+  final VoidCallback onToggleFabMenu;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +40,16 @@ class SettingsNotesPrefsSection extends StatelessWidget {
             homeLayout == HomeLayout.grid ? Icons.grid_view : Icons.view_list,
           ),
           onTap: onToggleLayout,
+        ),
+        SwitchListTile(
+          title: const Text('Menu del pulsante +'),
+          subtitle: Text(
+            fabMenu
+                ? 'Scegli tra nota, lista, task, audio e modello'
+                : 'Il pulsante + crea subito una nuova nota',
+          ),
+          value: fabMenu,
+          onChanged: (_) => onToggleFabMenu(),
         ),
       ],
     );

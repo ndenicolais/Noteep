@@ -59,6 +59,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       SettingsNotesPrefsSection(
         homeLayout: homeLayout,
         onToggleLayout: () => ref.read(homeLayoutProvider.notifier).toggle(),
+        fabMenu: ref.watch(notesFabMenuProvider),
+        onToggleFabMenu: () => ref.read(notesFabMenuProvider.notifier).toggle(),
       ),
       SettingsTasksPrefsSection(
         showCompletedTasks: showCompletedTasks,

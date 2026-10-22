@@ -206,6 +206,16 @@ final customLabelsProvider =
       CustomLabelsNotifier.new,
     );
 
+// --- Notes FAB ---
+
+const _kNotesFabMenuKey = 'notes_fab_menu';
+
+/// Whether the "+" button of the notes section opens the speed-dial menu
+/// (note, checklist, task, audio, template) or creates a note directly.
+final notesFabMenuProvider = NotifierProvider<BoolSettingNotifier, bool>(
+  () => BoolSettingNotifier(_kNotesFabMenuKey, true),
+);
+
 // --- Task Settings ---
 
 const _kShowCompletedTasksKey = 'show_completed_tasks';

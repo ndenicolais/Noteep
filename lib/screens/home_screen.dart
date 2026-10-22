@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/constants/app_version.dart';
 import '../models/note_model.dart';
+import '../models/task_model.dart';
 import '../providers/calendar_provider.dart';
 import '../providers/core_providers.dart';
 import '../providers/notes_provider.dart';
@@ -106,6 +107,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final sortOrder = ref.watch(sortOrderProvider);
     final loadError = ref.watch(notesLoadErrorProvider);
     final isLoading = ref.watch(notesLoadingProvider);
+    final fabMenu = ref.watch(notesFabMenuProvider);
 
     return NavScaffold(
       section: DrawerSection.home,
@@ -132,15 +134,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   child: _buildNotes(noteIds, layout, loadError),
                 ),
       ),
-      floatingActionButton: SpeedDialFab(
-        onNoteTap: () => _openEditor(NoteType.note),
-        onChecklistTap: () => _openEditor(NoteType.checklist),
-        onTaskTap: () {
-          AppNav.openTasks(context);
-        },
-        onAudioNoteTap: _openAudioNote,
-        onTemplateTap: _openFromTemplate,
-      ),
+      floatingActionButton:
+          fabMenu
+              ? SpeedDialFab(
+                onNoteTap: () => _openEditor(NoteType.note),
+                onChecklistTap: () => _openEditor(NoteType.checklist),
+                onTaskTap: () => AppNav.openTask(context, TaskModel()),
+                onAudioNoteTap: _openAudioNote,
+                onTemplateTap: _openFromTemplate,
+              )
+              : FloatingActionButton(
+                heroTag: 'fab_main',
+                onPressed: () => _openEditor(NoteType.note),
+                tooltip: 'Nuova nota',
+                child: const Icon(Icons.add),
+              ),
     );
   }
 
