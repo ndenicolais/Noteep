@@ -13,22 +13,24 @@ import 'package:noteep/screens/tasks/task_sorting.dart';
 import 'package:noteep/utils/recurrence.dart';
 import 'package:noteep/widgets/shared/app_dialogs.dart';
 
+import '../helpers/l10n.dart';
+
 /// Logic and widgets extracted from the former monolithic screens.
 void main() {
   group('login validators', () {
     test('email', () {
-      expect(validateEmail(null), isNotNull);
-      expect(validateEmail('   '), 'Inserisci la tua email.');
-      expect(validateEmail('nope'), 'Formato email non valido.');
-      expect(validateEmail(' a@b.it '), isNull);
+      expect(validateEmail(itL10n, null), isNotNull);
+      expect(validateEmail(itL10n, '   '), 'Inserisci la tua email.');
+      expect(validateEmail(itL10n, 'nope'), 'Formato email non valido.');
+      expect(validateEmail(itL10n, ' a@b.it '), isNull);
     });
 
     test('password and confirmation', () {
-      expect(validatePassword(''), 'Inserisci la password.');
-      expect(validatePassword('12345'), 'Minimo 6 caratteri.');
-      expect(validatePassword('123456'), isNull);
-      expect(validatePasswordConfirmation('abc', 'abd'), isNotNull);
-      expect(validatePasswordConfirmation('abc', 'abc'), isNull);
+      expect(validatePassword(itL10n, ''), 'Inserisci la password.');
+      expect(validatePassword(itL10n, '12345'), 'Minimo 6 caratteri.');
+      expect(validatePassword(itL10n, '123456'), isNull);
+      expect(validatePasswordConfirmation(itL10n, 'abc', 'abd'), isNotNull);
+      expect(validatePasswordConfirmation(itL10n, 'abc', 'abc'), isNull);
     });
   });
 

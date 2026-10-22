@@ -2,6 +2,7 @@
 // Licensed under the GNU GPL v3 with Additional Commercial Restrictions.
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import '../../theme/app_font_sizes.dart';
 import '../../theme/app_spacing.dart';
 import 'login_validators.dart';
@@ -27,6 +28,7 @@ class LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Form(
       key: formKey,
       child: Column(
@@ -36,8 +38,8 @@ class LoginForm extends StatelessWidget {
           const SizedBox(height: 14),
           _PasswordField(
             controller: passCtrl,
-            label: 'Password',
-            validator: validatePassword,
+            label: l10n.commonPassword,
+            validator: (v) => validatePassword(l10n, v),
             onSubmitted: onSubmit,
           ),
           const SizedBox(height: 6),
@@ -49,11 +51,11 @@ class LoginForm extends StatelessWidget {
                 padding: EdgeInsets.zero,
                 minimumSize: const Size(0, 32),
               ),
-              child: const Text('Password dimenticata?'),
+              child: Text(l10n.loginForgotPassword),
             ),
           ),
           const SizedBox(height: AppSpacing.lg),
-          _SubmitButton(label: 'Accedi', onPressed: onSubmit),
+          _SubmitButton(label: l10n.loginSubmitSignIn, onPressed: onSubmit),
         ],
       ),
     );
@@ -81,6 +83,7 @@ class RegisterForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Form(
       key: formKey,
       child: Column(
@@ -90,18 +93,19 @@ class RegisterForm extends StatelessWidget {
           const SizedBox(height: 14),
           _PasswordField(
             controller: passCtrl,
-            label: 'Password',
-            validator: validatePassword,
+            label: l10n.commonPassword,
+            validator: (v) => validatePassword(l10n, v),
           ),
           const SizedBox(height: 14),
           _PasswordField(
             controller: confirmPassCtrl,
-            label: 'Conferma password',
-            validator: (v) => validatePasswordConfirmation(v, passCtrl.text),
+            label: l10n.loginConfirmPassword,
+            validator:
+                (v) => validatePasswordConfirmation(l10n, v, passCtrl.text),
             onSubmitted: onSubmit,
           ),
           const SizedBox(height: 20),
-          _SubmitButton(label: 'Crea account', onPressed: onSubmit),
+          _SubmitButton(label: l10n.loginSubmitRegister, onPressed: onSubmit),
         ],
       ),
     );
@@ -115,16 +119,17 @@ class _EmailField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return TextFormField(
       controller: controller,
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
-      decoration: const InputDecoration(
-        labelText: 'Email',
-        prefixIcon: Icon(Icons.email_outlined),
-        border: OutlineInputBorder(),
+      decoration: InputDecoration(
+        labelText: l10n.commonEmail,
+        prefixIcon: const Icon(Icons.email_outlined),
+        border: const OutlineInputBorder(),
       ),
-      validator: validateEmail,
+      validator: (v) => validateEmail(l10n, v),
     );
   }
 }
@@ -166,7 +171,10 @@ class _PasswordFieldState extends State<_PasswordField> {
         border: const OutlineInputBorder(),
         suffixIcon: IconButton(
           icon: Icon(_visible ? Icons.visibility_off : Icons.visibility),
-          tooltip: _visible ? 'Nascondi password' : 'Mostra password',
+          tooltip:
+              _visible
+                  ? context.l10n.loginHidePassword
+                  : context.l10n.loginShowPassword,
           onPressed: () => setState(() => _visible = !_visible),
         ),
       ),

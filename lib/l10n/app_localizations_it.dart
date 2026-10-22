@@ -171,4 +171,169 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_32 =>
       'L\'app è disponibile anche in inglese: segue la lingua del telefono, oppure puoi sceglierla in Impostazioni > Lingua.';
+
+  @override
+  String get commonCancel => 'Annulla';
+
+  @override
+  String get commonRetry => 'Riprova';
+
+  @override
+  String get commonEmail => 'Email';
+
+  @override
+  String get commonPassword => 'Password';
+
+  @override
+  String get commonGenericError => 'Si è verificato un errore. Riprova.';
+
+  @override
+  String get loginTagline => 'Il tuo taccuino digitale';
+
+  @override
+  String get loginTabSignIn => 'Accedi';
+
+  @override
+  String get loginTabRegister => 'Registrati';
+
+  @override
+  String get loginOr => 'oppure';
+
+  @override
+  String get loginContinueWithGoogle => 'Continua con Google';
+
+  @override
+  String get loginForgotPassword => 'Password dimenticata?';
+
+  @override
+  String get loginSubmitSignIn => 'Accedi';
+
+  @override
+  String get loginConfirmPassword => 'Conferma password';
+
+  @override
+  String get loginSubmitRegister => 'Crea account';
+
+  @override
+  String get loginShowPassword => 'Mostra password';
+
+  @override
+  String get loginHidePassword => 'Nascondi password';
+
+  @override
+  String get loginResetEmailSent => 'Email di reimpostazione inviata.';
+
+  @override
+  String get loginResetTitle => 'Reimposta password';
+
+  @override
+  String get loginResetSend => 'Invia';
+
+  @override
+  String get validationEmailEmpty => 'Inserisci la tua email.';
+
+  @override
+  String get validationEmailInvalid => 'Formato email non valido.';
+
+  @override
+  String get validationPasswordEmpty => 'Inserisci la password.';
+
+  @override
+  String get validationPasswordTooShort => 'Minimo 6 caratteri.';
+
+  @override
+  String get validationPasswordMismatch => 'Le password non coincidono.';
+
+  @override
+  String get authErrorUserNotFound =>
+      'Nessun account trovato con questa email.';
+
+  @override
+  String get authErrorWrongPassword => 'Password errata. Riprova.';
+
+  @override
+  String get authErrorInvalidCredential =>
+      'Credenziali non valide. Controlla email e password.';
+
+  @override
+  String get authErrorEmailInUse =>
+      'Questa email è già associata a un account.';
+
+  @override
+  String get authErrorWeakPassword =>
+      'La password è troppo debole (min. 6 caratteri).';
+
+  @override
+  String get authErrorTooManyRequests => 'Troppi tentativi. Riprova più tardi.';
+
+  @override
+  String get authErrorNetwork => 'Errore di rete. Controlla la connessione.';
+
+  @override
+  String get authErrorUserMismatch =>
+      'L\'account scelto non è quello con cui hai effettuato l\'accesso.';
+
+  @override
+  String get authErrorRequiresRecentLogin =>
+      'Per sicurezza, esci e accedi di nuovo prima di riprovare.';
+
+  @override
+  String get onboardingSkip => 'Salta';
+
+  @override
+  String get onboardingNext => 'Avanti';
+
+  @override
+  String get onboardingStart => 'Inizia';
+
+  @override
+  String get onboardingWelcomeTitle => 'Benvenuto in Noteep';
+
+  @override
+  String get onboardingWelcomeBody =>
+      'Note, attività e calendario in un unico posto, sincronizzati sul tuo account e disponibili su tutti i tuoi dispositivi.';
+
+  @override
+  String get onboardingNotesTitle => 'Note';
+
+  @override
+  String get onboardingNotesBody =>
+      'Scrivi note con stili personalizzati, Markdown, liste di controllo e note audio. Organizzale con etichette e collegale tra loro.';
+
+  @override
+  String get onboardingTasksTitle => 'Attività';
+
+  @override
+  String get onboardingTasksBody =>
+      'Crea elenchi di attività con sottoattività, scadenze e ricorrenze. Scorri un\'attività verso destra per completarla.';
+
+  @override
+  String get onboardingCalendarTitle => 'Calendario';
+
+  @override
+  String get onboardingCalendarBody =>
+      'Pianifica eventi con vista giorno, settimana, mese, anno e programma. Importa ed esporta i tuoi calendari in formato ICS.';
+
+  @override
+  String get onboardingRemindersTitle => 'Promemoria e backup';
+
+  @override
+  String get onboardingRemindersBody =>
+      'Imposta promemoria per note, attività ed eventi. Esporta le note e crea backup manuali o automatici dalle Impostazioni.';
+
+  @override
+  String get bootErrorTitle => 'Impossibile avviare Noteep';
+
+  @override
+  String get bootErrorBody =>
+      'Si è verificato un problema durante l\'avvio. Controlla la connessione e riprova.';
+
+  @override
+  String get unknownRouteTitle => 'Pagina non trovata';
+
+  @override
+  String get unknownRouteBody => 'Il contenuto che cercavi non è disponibile.';
+
+  @override
+  String get unknownRouteHome => 'Torna alla home';
 }

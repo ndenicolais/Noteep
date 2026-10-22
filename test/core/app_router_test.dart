@@ -22,6 +22,8 @@ import 'package:noteep/screens/tasks/tasks_screen.dart';
 import 'package:noteep/screens/trash_screen.dart';
 import 'package:noteep/screens/unknown_route_screen.dart';
 
+import '../helpers/l10n.dart';
+
 void main() {
   /// Resolves [name] through the router and returns the widget its builder
   /// produces (without building it), or null if the router rejects it.
@@ -114,6 +116,9 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         navigatorKey: navigatorKey,
+        locale: testLocale,
+        supportedLocales: testSupportedLocales,
+        localizationsDelegates: testLocalizationsDelegates,
         home: const Scaffold(body: Text('Home')),
         onGenerateRoute: AppRouter.onGenerateRoute,
         onUnknownRoute: AppRouter.onUnknownRoute,

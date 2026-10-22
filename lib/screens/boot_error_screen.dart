@@ -10,6 +10,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import '../l10n/l10n.dart';
 import '../theme/app_spacing.dart';
 import '../theme/app_theme.dart';
 
@@ -27,10 +28,15 @@ class BootErrorApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,
+      // Startup failed, so the language setting may be unreadable: follow
+      // the device.
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
       home: Builder(
         builder: (context) {
           final cs = Theme.of(context).colorScheme;
           final tt = Theme.of(context).textTheme;
+          final l10n = context.l10n;
           return Scaffold(
             body: SafeArea(
               child: Center(
@@ -42,14 +48,13 @@ class BootErrorApp extends StatelessWidget {
                       Icon(Icons.error_outline, size: 56, color: cs.error),
                       const SizedBox(height: AppSpacing.lg),
                       Text(
-                        'Impossibile avviare Noteep',
+                        l10n.bootErrorTitle,
                         style: tt.titleLarge,
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: AppSpacing.sm),
                       Text(
-                        'Si è verificato un problema durante l\'avvio. '
-                        'Controlla la connessione e riprova.',
+                        l10n.bootErrorBody,
                         style: tt.bodyMedium?.copyWith(
                           color: cs.onSurfaceVariant,
                         ),
@@ -67,7 +72,7 @@ class BootErrorApp extends StatelessWidget {
                       FilledButton.icon(
                         onPressed: onRetry,
                         icon: const Icon(Icons.refresh),
-                        label: const Text('Riprova'),
+                        label: Text(l10n.commonRetry),
                       ),
                     ],
                   ),

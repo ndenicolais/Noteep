@@ -12,6 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuthException;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../l10n/l10n.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/settings/locale_provider.dart';
 import '../../providers/settings/theme_provider.dart';
@@ -385,6 +386,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
     final navigator = Navigator.of(context);
     final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
     showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -401,7 +403,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
           .read(authNotifierProvider.notifier)
           .deleteAccount(password: password);
     } on FirebaseAuthException catch (e) {
-      error = authErrorMessage(e);
+      error = authErrorMessage(l10n, e);
     } catch (_) {
       error =
           'Impossibile eliminare l\'account. Controlla la connessione e riprova.';

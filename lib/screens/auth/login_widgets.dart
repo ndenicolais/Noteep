@@ -2,6 +2,7 @@
 // Licensed under the GNU GPL v3 with Additional Commercial Restrictions.
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 import '../../widgets/shared/app_logo.dart';
@@ -29,7 +30,7 @@ class LoginHeader extends StatelessWidget {
         ),
         const SizedBox(height: 6),
         Text(
-          'Il tuo taccuino digitale',
+          context.l10n.loginTagline,
           textAlign: TextAlign.center,
           style: textTheme.bodyMedium?.copyWith(color: colorScheme.outline),
         ),
@@ -62,7 +63,10 @@ class LoginTabBar extends StatelessWidget {
         indicatorSize: TabBarIndicatorSize.tab,
         labelColor: colorScheme.onPrimary,
         unselectedLabelColor: colorScheme.onSurfaceVariant,
-        tabs: const [Tab(text: 'Accedi'), Tab(text: 'Registrati')],
+        tabs: [
+          Tab(text: context.l10n.loginTabSignIn),
+          Tab(text: context.l10n.loginTabRegister),
+        ],
       ),
     );
   }
@@ -80,7 +84,7 @@ class OrDivider extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
           child: Text(
-            'oppure',
+            context.l10n.loginOr,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: Theme.of(context).colorScheme.outline,
             ),
@@ -107,10 +111,10 @@ class GoogleSignInButton extends StatelessWidget {
         side: BorderSide(color: colorScheme.outline),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
+          const Text(
             'G',
             style: TextStyle(
               fontSize: 20,
@@ -118,8 +122,11 @@ class GoogleSignInButton extends StatelessWidget {
               color: AppColors.warmBrown,
             ),
           ),
-          SizedBox(width: 10),
-          Text('Continua con Google', style: TextStyle(fontSize: 15)),
+          const SizedBox(width: 10),
+          Text(
+            context.l10n.loginContinueWithGoogle,
+            style: const TextStyle(fontSize: 15),
+          ),
         ],
       ),
     );

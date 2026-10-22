@@ -4,6 +4,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../l10n/l10n.dart';
 import '../../providers/auth_provider.dart';
 import '../../theme/app_spacing.dart';
 import 'login_forms.dart';
@@ -74,11 +75,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
     );
     if (email == null || !mounted) return;
     final messenger = ScaffoldMessenger.of(context);
+    final l10n = context.l10n;
     await ref.read(authNotifierProvider.notifier).sendPasswordResetEmail(email);
     if (!mounted) return;
     messenger.showSnackBar(
-      const SnackBar(
-        content: Text('Email di reimpostazione inviata.'),
+      SnackBar(
+        content: Text(l10n.loginResetEmailSent),
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -94,8 +96,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
         final e = next.error;
         final msg =
             e is FirebaseAuthException
-                ? authErrorMessage(e)
-                : 'Si è verificato un errore. Riprova.';
+                ? authErrorMessage(context.l10n, e)
+                : context.l10n.commonGenericError;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(msg), behavior: SnackBarBehavior.floating),
         );

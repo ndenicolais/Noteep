@@ -10,6 +10,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import '../l10n/l10n.dart';
 import '../theme/app_spacing.dart';
 
 /// Shown for a route name the app doesn't know (or a detail route opened
@@ -23,6 +24,7 @@ class UnknownRouteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
+    final l10n = context.l10n;
     return Scaffold(
       appBar: AppBar(),
       body: SafeArea(
@@ -35,13 +37,13 @@ class UnknownRouteScreen extends StatelessWidget {
                 Icon(Icons.explore_off_outlined, size: 56, color: cs.primary),
                 const SizedBox(height: AppSpacing.lg),
                 Text(
-                  'Pagina non trovata',
+                  l10n.unknownRouteTitle,
                   style: tt.titleLarge,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: AppSpacing.sm),
                 Text(
-                  'Il contenuto che cercavi non è disponibile.',
+                  l10n.unknownRouteBody,
                   style: tt.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
                   textAlign: TextAlign.center,
                 ),
@@ -60,7 +62,7 @@ class UnknownRouteScreen extends StatelessWidget {
                         context,
                       ).popUntil((route) => route.isFirst),
                   icon: const Icon(Icons.home_outlined),
-                  label: const Text('Torna alla home'),
+                  label: Text(l10n.unknownRouteHome),
                 ),
               ],
             ),

@@ -11,6 +11,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import '../l10n/app_localizations.dart';
 import 'settings/data_actions.dart';
 
 // ─── Firebase Auth instance ───────────────────────────────────────────────────
@@ -168,31 +169,31 @@ final authNotifierProvider = NotifierProvider<AuthNotifier, AsyncValue<void>>(
   AuthNotifier.new,
 );
 
-// ─── Firebase error → Italian message ────────────────────────────────────────
+// ─── Firebase error → localized message ──────────────────────────────────────
 
-String authErrorMessage(FirebaseAuthException e) {
+String authErrorMessage(AppLocalizations l, FirebaseAuthException e) {
   switch (e.code) {
     case 'user-not-found':
-      return 'Nessun account trovato con questa email.';
+      return l.authErrorUserNotFound;
     case 'wrong-password':
-      return 'Password errata. Riprova.';
+      return l.authErrorWrongPassword;
     case 'invalid-credential':
-      return 'Credenziali non valide. Controlla email e password.';
+      return l.authErrorInvalidCredential;
     case 'email-already-in-use':
-      return 'Questa email è già associata a un account.';
+      return l.authErrorEmailInUse;
     case 'weak-password':
-      return 'La password è troppo debole (min. 6 caratteri).';
+      return l.authErrorWeakPassword;
     case 'invalid-email':
-      return 'Formato email non valido.';
+      return l.validationEmailInvalid;
     case 'too-many-requests':
-      return 'Troppi tentativi. Riprova più tardi.';
+      return l.authErrorTooManyRequests;
     case 'network-request-failed':
-      return 'Errore di rete. Controlla la connessione.';
+      return l.authErrorNetwork;
     case 'user-mismatch':
-      return 'L\'account scelto non è quello con cui hai effettuato l\'accesso.';
+      return l.authErrorUserMismatch;
     case 'requires-recent-login':
-      return 'Per sicurezza, esci e accedi di nuovo prima di riprovare.';
+      return l.authErrorRequiresRecentLogin;
     default:
-      return 'Si è verificato un errore. Riprova.';
+      return l.commonGenericError;
   }
 }

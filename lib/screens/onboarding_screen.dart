@@ -10,6 +10,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../l10n/l10n.dart';
 import '../providers/settings/ui_provider.dart';
 import '../theme/app_spacing.dart';
 import '../widgets/shared/app_logo.dart';
@@ -19,40 +20,35 @@ class _OnboardingPage {
 
   /// Null shows the app logo instead of an icon.
   final IconData? icon;
-  final String title;
-  final String body;
+  final String Function(AppLocalizations l) title;
+  final String Function(AppLocalizations l) body;
 }
 
-const _pages = [
+final _pages = [
   _OnboardingPage(
     null,
-    'Benvenuto in Noteep',
-    'Note, attività e calendario in un unico posto, sincronizzati sul tuo '
-        'account e disponibili su tutti i tuoi dispositivi.',
+    (l) => l.onboardingWelcomeTitle,
+    (l) => l.onboardingWelcomeBody,
   ),
   _OnboardingPage(
     Icons.note_outlined,
-    'Note',
-    'Scrivi note con stili personalizzati, Markdown, liste di controllo e '
-        'note audio. Organizzale con etichette e collegale tra loro.',
+    (l) => l.onboardingNotesTitle,
+    (l) => l.onboardingNotesBody,
   ),
   _OnboardingPage(
     Icons.task_alt_outlined,
-    'Attività',
-    'Crea elenchi di attività con sottoattività, scadenze e ricorrenze. '
-        'Scorri un\'attività verso destra per completarla.',
+    (l) => l.onboardingTasksTitle,
+    (l) => l.onboardingTasksBody,
   ),
   _OnboardingPage(
     Icons.calendar_month_outlined,
-    'Calendario',
-    'Pianifica eventi con vista giorno, settimana, mese, anno e programma. '
-        'Importa ed esporta i tuoi calendari in formato ICS.',
+    (l) => l.onboardingCalendarTitle,
+    (l) => l.onboardingCalendarBody,
   ),
   _OnboardingPage(
     Icons.notifications_active_outlined,
-    'Promemoria e backup',
-    'Imposta promemoria per note, attività ed eventi. Esporta le note e '
-        'crea backup manuali o automatici dalle Impostazioni.',
+    (l) => l.onboardingRemindersTitle,
+    (l) => l.onboardingRemindersBody,
   ),
 ];
 
@@ -116,7 +112,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   duration: const Duration(milliseconds: 200),
                   child: TextButton(
                     onPressed: _isLast ? null : _finish,
-                    child: const Text('Salta'),
+                    child: Text(context.l10n.onboardingSkip),
                   ),
                 ),
               ),
@@ -153,7 +149,11 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 width: double.infinity,
                 child: FilledButton(
                   onPressed: _next,
-                  child: Text(_isLast ? 'Inizia' : 'Avanti'),
+                  child: Text(
+                    _isLast
+                        ? context.l10n.onboardingStart
+                        : context.l10n.onboardingNext,
+                  ),
                 ),
               ),
             ),
@@ -195,13 +195,13 @@ class _PageContent extends StatelessWidget {
               ),
             const SizedBox(height: AppSpacing.xxl),
             Text(
-              page.title,
+              page.title(context.l10n),
               textAlign: TextAlign.center,
               style: tt.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: AppSpacing.lg),
             Text(
-              page.body,
+              page.body(context.l10n),
               textAlign: TextAlign.center,
               style: tt.bodyLarge?.copyWith(color: cs.onSurfaceVariant),
             ),

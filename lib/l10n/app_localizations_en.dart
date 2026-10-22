@@ -170,4 +170,169 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_32 =>
       'The app is now also available in English: it follows your phone\'s language, or you can choose it in Settings > Language.';
+
+  @override
+  String get commonCancel => 'Cancel';
+
+  @override
+  String get commonRetry => 'Retry';
+
+  @override
+  String get commonEmail => 'Email';
+
+  @override
+  String get commonPassword => 'Password';
+
+  @override
+  String get commonGenericError => 'Something went wrong. Please try again.';
+
+  @override
+  String get loginTagline => 'Your digital notebook';
+
+  @override
+  String get loginTabSignIn => 'Sign in';
+
+  @override
+  String get loginTabRegister => 'Sign up';
+
+  @override
+  String get loginOr => 'or';
+
+  @override
+  String get loginContinueWithGoogle => 'Continue with Google';
+
+  @override
+  String get loginForgotPassword => 'Forgot password?';
+
+  @override
+  String get loginSubmitSignIn => 'Sign in';
+
+  @override
+  String get loginConfirmPassword => 'Confirm password';
+
+  @override
+  String get loginSubmitRegister => 'Create account';
+
+  @override
+  String get loginShowPassword => 'Show password';
+
+  @override
+  String get loginHidePassword => 'Hide password';
+
+  @override
+  String get loginResetEmailSent => 'Password reset email sent.';
+
+  @override
+  String get loginResetTitle => 'Reset password';
+
+  @override
+  String get loginResetSend => 'Send';
+
+  @override
+  String get validationEmailEmpty => 'Enter your email.';
+
+  @override
+  String get validationEmailInvalid => 'Invalid email format.';
+
+  @override
+  String get validationPasswordEmpty => 'Enter your password.';
+
+  @override
+  String get validationPasswordTooShort => 'At least 6 characters.';
+
+  @override
+  String get validationPasswordMismatch => 'Passwords don\'t match.';
+
+  @override
+  String get authErrorUserNotFound => 'No account found with this email.';
+
+  @override
+  String get authErrorWrongPassword => 'Wrong password. Please try again.';
+
+  @override
+  String get authErrorInvalidCredential =>
+      'Invalid credentials. Check your email and password.';
+
+  @override
+  String get authErrorEmailInUse =>
+      'This email is already linked to an account.';
+
+  @override
+  String get authErrorWeakPassword =>
+      'The password is too weak (at least 6 characters).';
+
+  @override
+  String get authErrorTooManyRequests => 'Too many attempts. Try again later.';
+
+  @override
+  String get authErrorNetwork => 'Network error. Check your connection.';
+
+  @override
+  String get authErrorUserMismatch =>
+      'The chosen account is not the one you are signed in with.';
+
+  @override
+  String get authErrorRequiresRecentLogin =>
+      'For security, sign out and sign in again before retrying.';
+
+  @override
+  String get onboardingSkip => 'Skip';
+
+  @override
+  String get onboardingNext => 'Next';
+
+  @override
+  String get onboardingStart => 'Get started';
+
+  @override
+  String get onboardingWelcomeTitle => 'Welcome to Noteep';
+
+  @override
+  String get onboardingWelcomeBody =>
+      'Notes, tasks and calendar in one place, synced to your account and available on all your devices.';
+
+  @override
+  String get onboardingNotesTitle => 'Notes';
+
+  @override
+  String get onboardingNotesBody =>
+      'Write notes with custom styles, Markdown, checklists and audio notes. Organize them with labels and link them together.';
+
+  @override
+  String get onboardingTasksTitle => 'Tasks';
+
+  @override
+  String get onboardingTasksBody =>
+      'Create task lists with subtasks, due dates and recurrences. Swipe a task right to complete it.';
+
+  @override
+  String get onboardingCalendarTitle => 'Calendar';
+
+  @override
+  String get onboardingCalendarBody =>
+      'Plan events with day, week, month, year and schedule views. Import and export your calendars in ICS format.';
+
+  @override
+  String get onboardingRemindersTitle => 'Reminders and backups';
+
+  @override
+  String get onboardingRemindersBody =>
+      'Set reminders for notes, tasks and events. Export your notes and create manual or automatic backups from Settings.';
+
+  @override
+  String get bootErrorTitle => 'Unable to start Noteep';
+
+  @override
+  String get bootErrorBody =>
+      'Something went wrong during startup. Check your connection and try again.';
+
+  @override
+  String get unknownRouteTitle => 'Page not found';
+
+  @override
+  String get unknownRouteBody =>
+      'The content you were looking for is not available.';
+
+  @override
+  String get unknownRouteHome => 'Back to home';
 }

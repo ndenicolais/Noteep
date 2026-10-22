@@ -2,6 +2,7 @@
 // Licensed under the GNU GPL v3 with Additional Commercial Restrictions.
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import 'login_validators.dart';
 
 /// Asks for the email to send the password-reset link to, prefilled with
@@ -42,27 +43,28 @@ class _ResetPasswordDialogState extends State<_ResetPasswordDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return AlertDialog(
-      title: const Text('Reimposta password'),
+      title: Text(l10n.loginResetTitle),
       content: Form(
         key: _formKey,
         child: TextFormField(
           controller: _emailCtrl,
           keyboardType: TextInputType.emailAddress,
-          decoration: const InputDecoration(
-            labelText: 'Email',
-            prefixIcon: Icon(Icons.email_outlined),
+          decoration: InputDecoration(
+            labelText: l10n.commonEmail,
+            prefixIcon: const Icon(Icons.email_outlined),
           ),
-          validator: validateEmail,
+          validator: (v) => validateEmail(l10n, v),
           onFieldSubmitted: (_) => _submit(),
         ),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Annulla'),
+          child: Text(l10n.commonCancel),
         ),
-        FilledButton(onPressed: _submit, child: const Text('Invia')),
+        FilledButton(onPressed: _submit, child: Text(l10n.loginResetSend)),
       ],
     );
   }
