@@ -10,6 +10,7 @@
 
 import 'package:flutter/material.dart';
 import '../core/constants/app_version.dart';
+import '../core/routing/app_router.dart';
 import '../theme/app_spacing.dart';
 import '../widgets/changelog_dialog.dart';
 import '../widgets/shared/app_logo.dart';
@@ -103,6 +104,20 @@ class InfoScreen extends StatelessWidget {
               TagChip('SharedPreferences'),
             ],
           ),
+          const SizedBox(height: AppSpacing.xl),
+
+          // ── Guida ────────────────────────────────────────────────────────
+          const SectionHeader('Guida', padding: EdgeInsets.zero),
+          const SizedBox(height: AppSpacing.sm),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: Icon(Icons.school_outlined, color: cs.primary),
+            title: const Text('Guida introduttiva'),
+            subtitle: const Text('Rivedi la presentazione dell\'app'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => AppNav.openOnboarding(context),
+          ),
+          const Divider(height: 1),
           const SizedBox(height: AppSpacing.xl),
 
           // ── Changelog ────────────────────────────────────────────────────

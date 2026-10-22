@@ -120,6 +120,9 @@ Export notes to **PDF** format (rendered with the `pdf` / `printing` packages); 
 ### Home Screen Widget
 Android home screen widget support via `home_widget`.
 
+### Onboarding
+On first launch, before signing in, a short swipeable introduction presents notes, tasks, calendar, reminders and backup. It can be skipped and replayed anytime from **Info app → Guida introduttiva**.
+
 ### Changelog
 After an update, a "Changelog" dialog lists what changed since the last version the user saw (nothing is shown on a fresh install). The full history is always available from **Info app**.
 
@@ -191,6 +194,7 @@ lib/
 │   ├── reminders_screen.dart
 │   ├── export_screen.dart        # PDF export
 │   ├── info_screen.dart
+│   ├── onboarding_screen.dart    # First-launch introduction
 │   ├── unknown_route_screen.dart # "Page not found" for unknown routes
 │   ├── note_template_screen.dart
 │   ├── auth/
@@ -325,6 +329,7 @@ Same timestamp fields as `NoteModel` and `TaskModel`, plus `startTime`, `endTime
 
 | Screen | Route | Description |
 |---|---|---|
+| `OnboardingScreen` | `/onboarding` | First-launch introduction (replayable from Info) |
 | `LoginScreen` | — | Email/password and Google sign-in |
 | `HomeScreen` | `/` | Notes grid/list with FAB (speed dial) |
 | `NoteEditorScreen` | `/note` | Create or edit a note / checklist |

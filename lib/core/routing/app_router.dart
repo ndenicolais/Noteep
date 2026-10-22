@@ -19,6 +19,7 @@ import '../../screens/export_screen.dart';
 import '../../screens/info_screen.dart';
 import '../../screens/labels_screen.dart';
 import '../../screens/note_editor/note_editor_screen.dart';
+import '../../screens/onboarding_screen.dart';
 import '../../screens/reminders_screen.dart';
 import '../../screens/settings/settings_screen.dart';
 import '../../screens/statistics/statistics_screen.dart';
@@ -46,6 +47,7 @@ abstract final class AppRoutes {
   static const statistics = '/statistics';
   static const export = '/export';
   static const info = '/info';
+  static const onboarding = '/onboarding';
 }
 
 /// Arguments for [AppRoutes.note].
@@ -100,6 +102,7 @@ abstract final class AppRouter {
       AppRoutes.statistics => (_) => const StatisticsScreen(),
       AppRoutes.export => (_) => const ExportScreen(),
       AppRoutes.info => (_) => const InfoScreen(),
+      AppRoutes.onboarding => (_) => const OnboardingScreen(replay: true),
       AppRoutes.note when args is NoteRouteArgs =>
         (_) => NoteEditorScreen(
           note: args.note,
@@ -180,4 +183,7 @@ abstract final class AppNav {
 
   static Future<void> openInfo(BuildContext context) =>
       Navigator.pushNamed(context, AppRoutes.info);
+
+  static Future<void> openOnboarding(BuildContext context) =>
+      Navigator.pushNamed(context, AppRoutes.onboarding);
 }

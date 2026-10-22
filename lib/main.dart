@@ -19,9 +19,11 @@ import 'providers/core_providers.dart';
 import 'providers/notes_provider.dart';
 import 'providers/tasks_provider.dart';
 import 'providers/settings/theme_provider.dart';
+import 'providers/settings/ui_provider.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/boot_error_screen.dart';
 import 'screens/home_screen.dart';
+import 'screens/onboarding_screen.dart';
 import 'theme/app_spacing.dart';
 import 'theme/app_theme.dart';
 import 'utils/app_bootstrap.dart';
@@ -84,7 +86,9 @@ class NotesApp extends ConsumerWidget {
             (user) =>
                 user != null
                     ? NotificationLaunchHandler(child: const HomeScreen())
-                    : const LoginScreen(),
+                    : ref.watch(onboardingSeenProvider)
+                    ? const LoginScreen()
+                    : const OnboardingScreen(),
       ),
       onGenerateRoute: AppRouter.onGenerateRoute,
       onUnknownRoute: AppRouter.onUnknownRoute,

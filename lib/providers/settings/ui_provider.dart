@@ -220,6 +220,15 @@ final groupTasksByPriorityProvider =
       () => BoolSettingNotifier(_kGroupTasksByPriorityKey, true),
     );
 
+// --- Onboarding ---
+
+const _kOnboardingSeenKey = 'onboarding_seen';
+
+/// Whether the first-launch introduction has been completed or skipped.
+final onboardingSeenProvider = NotifierProvider<BoolSettingNotifier, bool>(
+  () => BoolSettingNotifier(_kOnboardingSeenKey, false),
+);
+
 /// A boolean preference persisted to SharedPreferences under its key.
 class BoolSettingNotifier extends Notifier<bool> {
   BoolSettingNotifier(this._key, this._defaultValue);
