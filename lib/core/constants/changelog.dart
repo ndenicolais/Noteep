@@ -27,6 +27,7 @@ const List<ChangelogEntry> changelogEntries = [
     version: '2.0.2',
     bullets: [
       'Modalità offline: le modifiche fatte senza connessione vengono salvate sul dispositivo e inviate appena torni online, con un avviso finché restano in attesa. Anche sul web i dati restano disponibili offline.',
+      'Aspetto più uniforme: intestazioni di sezione, voci delle impostazioni, elementi di archivio e cestino ed etichette hanno ora lo stesso stile in tutta l\'app, e le conferme di eliminazione usano sempre il pulsante rosso.',
     ],
   ),
   ChangelogEntry(

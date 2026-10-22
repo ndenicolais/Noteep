@@ -32,12 +32,15 @@ Future<T?> showAppSheet<T>(
 /// Shared "title + single text field + Annulla/confirm" dialog.
 ///
 /// Resolves to the trimmed text when confirmed (button or keyboard submit)
-/// and non-empty; `null` when cancelled, dismissed or left empty.
+/// and non-empty; `null` when cancelled, dismissed or left empty. The field
+/// starts with [initialValue] (e.g. the current name when renaming).
 Future<String?> showAppTextInputDialog(
   BuildContext context, {
   required String title,
   required String hintText,
   required String confirmLabel,
+  String initialValue = '',
+  TextCapitalization textCapitalization = TextCapitalization.none,
 }) {
   return showDialog<String>(
     context: context,
@@ -46,6 +49,8 @@ Future<String?> showAppTextInputDialog(
           title: title,
           hintText: hintText,
           confirmLabel: confirmLabel,
+          initialValue: initialValue,
+          textCapitalization: textCapitalization,
         ),
   );
 }
@@ -55,18 +60,22 @@ class _TextInputDialog extends StatefulWidget {
     required this.title,
     required this.hintText,
     required this.confirmLabel,
+    required this.initialValue,
+    required this.textCapitalization,
   });
 
   final String title;
   final String hintText;
   final String confirmLabel;
+  final String initialValue;
+  final TextCapitalization textCapitalization;
 
   @override
   State<_TextInputDialog> createState() => _TextInputDialogState();
 }
 
 class _TextInputDialogState extends State<_TextInputDialog> {
-  final _controller = TextEditingController();
+  late final _controller = TextEditingController(text: widget.initialValue);
 
   @override
   void dispose() {
@@ -86,6 +95,7 @@ class _TextInputDialogState extends State<_TextInputDialog> {
       content: TextField(
         controller: _controller,
         autofocus: true,
+        textCapitalization: widget.textCapitalization,
         decoration: InputDecoration(hintText: widget.hintText),
         onSubmitted: (_) => _submit(),
       ),
@@ -145,4 +155,28 @@ Future<bool> showAppConfirmDialog(
     },
   );
   return confirmed == true;
+}
+
+/// Shared "title + message + OK" dialog for information that needs no
+/// decision (e.g. a feature not available yet).
+Future<void> showAppMessageDialog(
+  BuildContext context, {
+  required String title,
+  required String message,
+  String okLabel = 'OK',
+}) {
+  return showDialog<void>(
+    context: context,
+    builder:
+        (ctx) => AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: Text(okLabel),
+            ),
+          ],
+        ),
+  );
 }

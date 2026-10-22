@@ -14,6 +14,7 @@ import '../models/note_template.dart';
 import '../theme/app_font_sizes.dart';
 import '../theme/app_spacing.dart';
 import '../widgets/shared/app_dialogs.dart';
+import '../widgets/shared/section_header.dart';
 
 /// Shows a bottom sheet to pick a note template.
 /// Returns the chosen [NoteTemplate] or null if dismissed.
@@ -99,15 +100,7 @@ class _TemplateSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
-          child: Text(
-            title,
-            style: Theme.of(context).textTheme.labelLarge?.copyWith(
-              color: Theme.of(context).colorScheme.outline,
-            ),
-          ),
-        ),
+        SectionHeader(title, muted: true, padding: SectionHeader.inlinePadding),
         ...templates.map((t) => _TemplateCard(template: t)),
       ],
     );

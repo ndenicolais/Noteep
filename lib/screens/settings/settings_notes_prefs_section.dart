@@ -10,7 +10,7 @@
 
 import 'package:flutter/material.dart';
 import '../../providers/settings/ui_provider.dart';
-import 'settings_section_header.dart';
+import '../../widgets/shared/section_header.dart';
 
 /// "Note" section: home layout (grid/list) toggle.
 class SettingsNotesPrefsSection extends StatelessWidget {
@@ -28,7 +28,7 @@ class SettingsNotesPrefsSection extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SettingsSectionHeader(title: 'Note'),
+        const SectionHeader('Note'),
         ListTile(
           title: const Text('Layout'),
           subtitle: Text(homeLayout == HomeLayout.grid ? 'Griglia' : 'Lista'),

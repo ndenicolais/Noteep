@@ -20,7 +20,9 @@ import '../theme/app_font_sizes.dart';
 import '../theme/app_spacing.dart';
 import '../widgets/nav_scaffold.dart';
 import '../widgets/shared/app_dialogs.dart';
+import '../widgets/shared/empty_state.dart';
 import '../widgets/shared/error_feedback.dart';
+import '../widgets/shared/item_card.dart';
 import '../widgets/shared/swipe_actions.dart';
 
 class TrashScreen extends ConsumerWidget {
@@ -110,32 +112,14 @@ class _NoteTrashList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (items.isEmpty) {
-      final colorScheme = Theme.of(context).colorScheme;
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.note_alt_outlined,
-              size: 64,
-              color: colorScheme.outlineVariant,
-            ),
-            const SizedBox(height: AppSpacing.lg),
-            Text(
-              'Nessuna nota nel cestino',
-              style: TextStyle(
-                color: colorScheme.outline,
-                fontSize: AppFontSizes.lg,
-              ),
-            ),
-          ],
-        ),
+      return const EmptyState(
+        icon: Icons.note_alt_outlined,
+        message: 'Nessuna nota nel cestino',
+        iconSize: 64,
       );
     }
-    return ListView.separated(
-      padding: const EdgeInsets.all(AppSpacing.md),
+    return ItemCardList(
       itemCount: items.length,
-      separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.sm),
       itemBuilder: (_, i) => _TrashNoteCard(note: items[i]),
     );
   }
@@ -148,46 +132,23 @@ class _TaskTrashList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (items.isEmpty) {
-      final colorScheme = Theme.of(context).colorScheme;
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.check_circle_outline,
-              size: 64,
-              color: colorScheme.outlineVariant,
-            ),
-            const SizedBox(height: AppSpacing.lg),
-            Text(
-              'Nessun task nel cestino',
-              style: TextStyle(
-                color: colorScheme.outline,
-                fontSize: AppFontSizes.lg,
-              ),
-            ),
-          ],
-        ),
+      return const EmptyState(
+        icon: Icons.check_circle_outline,
+        message: 'Nessun task nel cestino',
+        iconSize: 64,
       );
     }
-    return ListView.separated(
-      padding: const EdgeInsets.all(AppSpacing.md),
+    return ItemCardList(
       itemCount: items.length,
-      separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.sm),
       itemBuilder: (_, i) {
         final task = items[i];
-        return ListTile(
-          title: Text(task.title),
-          subtitle: const Text('Scade tra poco (auto-purge)'),
-          trailing: IconButton(
-            icon: const Icon(Icons.restore),
-            onPressed:
-                () => notifyOnError(
-                  ref.read(tasksProvider.notifier).restoreFromTrash(task.id),
-                  context,
-                ),
-            tooltip: 'Ripristina',
-          ),
+        return _TrashRow(
+          title: task.title,
+          onRestore:
+              () => notifyOnError(
+                ref.read(tasksProvider.notifier).restoreFromTrash(task.id),
+                context,
+              ),
         );
       },
     );
@@ -201,46 +162,45 @@ class _EventTrashList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (items.isEmpty) {
-      final colorScheme = Theme.of(context).colorScheme;
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.event_busy, size: 64, color: colorScheme.outlineVariant),
-            const SizedBox(height: AppSpacing.lg),
-            Text(
-              'Nessun evento nel cestino',
-              style: TextStyle(
-                color: colorScheme.outline,
-                fontSize: AppFontSizes.lg,
-              ),
-            ),
-          ],
-        ),
+      return const EmptyState(
+        icon: Icons.event_busy,
+        message: 'Nessun evento nel cestino',
+        iconSize: 64,
       );
     }
-    return ListView.separated(
-      padding: const EdgeInsets.all(AppSpacing.md),
+    return ItemCardList(
       itemCount: items.length,
-      separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.sm),
       itemBuilder: (_, i) {
         final event = items[i];
-        return ListTile(
-          title: Text(event.title),
-          subtitle: const Text('Scade tra poco (auto-purge)'),
-          trailing: IconButton(
-            icon: const Icon(Icons.restore),
-            onPressed:
-                () => notifyOnError(
-                  ref
-                      .read(calendarProvider.notifier)
-                      .restoreFromTrash(event.id),
-                  context,
-                ),
-            tooltip: 'Ripristina',
-          ),
+        return _TrashRow(
+          title: event.title,
+          onRestore:
+              () => notifyOnError(
+                ref.read(calendarProvider.notifier).restoreFromTrash(event.id),
+                context,
+              ),
         );
       },
+    );
+  }
+}
+
+/// A trashed task/event: title, auto-purge hint and a restore button.
+class _TrashRow extends StatelessWidget {
+  const _TrashRow({required this.title, required this.onRestore});
+  final String title;
+  final VoidCallback onRestore;
+
+  @override
+  Widget build(BuildContext context) {
+    return ItemCard(
+      title: Text(title),
+      subtitle: const Text('Scade tra poco (auto-purge)'),
+      trailing: IconButton(
+        icon: const Icon(Icons.restore),
+        onPressed: onRestore,
+        tooltip: 'Ripristina',
+      ),
     );
   }
 }
@@ -292,52 +252,53 @@ class _TrashNoteCard extends ConsumerWidget {
           );
         }
       },
-      child: Card(
-        child: ListTile(
-          title: Text(
-            note.title.isNotEmpty ? note.title : '(senza titolo)',
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+      child: ItemCard(
+        title: Text(
+          note.title.isNotEmpty ? note.title : '(senza titolo)',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        subtitle: Text(
+          _daysLeft(),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.error,
+            fontSize: AppFontSizes.sm,
           ),
-          subtitle: Text(
-            _daysLeft(),
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.error,
-              fontSize: AppFontSizes.sm,
-            ),
-          ),
-          trailing: PopupMenuButton<String>(
-            onSelected: (v) {
-              if (v == 'restore') {
-                notifyOnError(
-                  ref.read(notesProvider.notifier).restoreFromTrash(note.id),
-                  context,
-                );
-              } else if (v == 'delete') {
-                _confirmPermanentDelete(context).then((confirmed) {
-                  if (confirmed == true && context.mounted) {
-                    notifyOnError(
-                      ref
-                          .read(notesProvider.notifier)
-                          .permanentlyDelete(note.id),
-                      context,
-                    );
-                  }
-                });
-              }
-            },
-            itemBuilder:
-                (_) => const [
-                  PopupMenuItem(value: 'restore', child: Text('Ripristina')),
-                  PopupMenuItem(
-                    value: 'delete',
-                    child: Text(
-                      'Elimina definitivamente',
-                      style: TextStyle(color: Colors.red),
+        ),
+        trailing: PopupMenuButton<String>(
+          onSelected: (v) {
+            if (v == 'restore') {
+              notifyOnError(
+                ref.read(notesProvider.notifier).restoreFromTrash(note.id),
+                context,
+              );
+            } else if (v == 'delete') {
+              _confirmPermanentDelete(context).then((confirmed) {
+                if (confirmed == true && context.mounted) {
+                  notifyOnError(
+                    ref.read(notesProvider.notifier).permanentlyDelete(note.id),
+                    context,
+                  );
+                }
+              });
+            }
+          },
+          itemBuilder:
+              (_) => [
+                const PopupMenuItem(
+                  value: 'restore',
+                  child: Text('Ripristina'),
+                ),
+                PopupMenuItem(
+                  value: 'delete',
+                  child: Text(
+                    'Elimina definitivamente',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.error,
                     ),
                   ),
-                ],
-          ),
+                ),
+              ],
         ),
       ),
     );

@@ -20,37 +20,15 @@ import '../widgets/shared/app_dialogs.dart';
 class LabelsScreen extends ConsumerWidget {
   const LabelsScreen({super.key});
 
-  void _showAddLabelDialog(BuildContext context, WidgetRef ref) {
-    final controller = TextEditingController();
-    showDialog(
-      context: context,
-      builder:
-          (ctx) => AlertDialog(
-            title: const Text('Nuova etichetta'),
-            content: TextField(
-              controller: controller,
-              autofocus: true,
-              decoration: const InputDecoration(hintText: 'Nome etichetta'),
-              textCapitalization: TextCapitalization.sentences,
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(ctx),
-                child: const Text('Annulla'),
-              ),
-              FilledButton(
-                onPressed: () {
-                  final name = controller.text.trim();
-                  if (name.isNotEmpty) {
-                    ref.read(customLabelsProvider.notifier).addLabel(name);
-                  }
-                  Navigator.pop(ctx);
-                },
-                child: const Text('Crea'),
-              ),
-            ],
-          ),
+  Future<void> _showAddLabelDialog(BuildContext context, WidgetRef ref) async {
+    final name = await showAppTextInputDialog(
+      context,
+      title: 'Nuova etichetta',
+      hintText: 'Nome etichetta',
+      confirmLabel: 'Crea',
+      textCapitalization: TextCapitalization.sentences,
     );
+    if (name != null) ref.read(customLabelsProvider.notifier).addLabel(name);
   }
 
   @override
@@ -131,39 +109,17 @@ class _LabelTile extends ConsumerWidget {
     );
   }
 
-  void _showRenameDialog(BuildContext context, WidgetRef ref) {
-    final controller = TextEditingController(text: tag);
-    showDialog(
-      context: context,
-      builder:
-          (ctx) => AlertDialog(
-            title: const Text('Rinomina etichetta'),
-            content: TextField(
-              controller: controller,
-              autofocus: true,
-              decoration: const InputDecoration(hintText: 'Nome etichetta'),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(ctx),
-                child: const Text('Annulla'),
-              ),
-              FilledButton(
-                onPressed: () {
-                  final newName = controller.text.trim();
-                  if (newName.isNotEmpty && newName != tag) {
-                    ref.read(notesProvider.notifier).renameTag(tag, newName);
-                    ref
-                        .read(customLabelsProvider.notifier)
-                        .renameLabel(tag, newName);
-                  }
-                  Navigator.pop(ctx);
-                },
-                child: const Text('Salva'),
-              ),
-            ],
-          ),
+  Future<void> _showRenameDialog(BuildContext context, WidgetRef ref) async {
+    final newName = await showAppTextInputDialog(
+      context,
+      title: 'Rinomina etichetta',
+      hintText: 'Nome etichetta',
+      confirmLabel: 'Salva',
+      initialValue: tag,
     );
+    if (newName == null || newName == tag) return;
+    ref.read(notesProvider.notifier).renameTag(tag, newName);
+    ref.read(customLabelsProvider.notifier).renameLabel(tag, newName);
   }
 
   Future<void> _confirmDelete(BuildContext context, WidgetRef ref) async {

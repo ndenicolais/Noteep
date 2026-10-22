@@ -9,7 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
-import 'settings_section_header.dart';
+import '../../widgets/shared/section_header.dart';
 
 /// "Task" preferences section: show-completed and group-by-priority switches.
 class SettingsTasksPrefsSection extends StatelessWidget {
@@ -31,7 +31,7 @@ class SettingsTasksPrefsSection extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SettingsSectionHeader(title: 'Task'),
+        const SectionHeader('Task'),
         SwitchListTile(
           title: const Text('Mostra task completati'),
           subtitle: const Text('Visualizza i task marcati come completati'),

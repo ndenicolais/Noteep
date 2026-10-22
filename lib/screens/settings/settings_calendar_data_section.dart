@@ -9,7 +9,8 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
-import 'settings_section_header.dart';
+import '../../widgets/shared/action_tile.dart';
+import '../../widgets/shared/section_header.dart';
 
 /// "Calendario" section: JSON/ICS export-import and clear-events actions.
 class SettingsCalendarDataSection extends StatelessWidget {
@@ -30,48 +31,39 @@ class SettingsCalendarDataSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primary = Theme.of(context).colorScheme.primary;
-    final error = Theme.of(context).colorScheme.error;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SettingsSectionHeader(title: 'Calendario'),
-        ListTile(
-          leading: Icon(Icons.download_outlined, color: primary),
-          title: const Text('Esporta calendario JSON'),
-          subtitle: const Text('Scarica gli eventi come file .json'),
-          trailing: const Icon(Icons.chevron_right),
+        const SectionHeader('Calendario'),
+        ActionTile(
+          icon: Icons.download_outlined,
+          title: 'Esporta calendario JSON',
+          subtitle: 'Scarica gli eventi come file .json',
           onTap: onExportJson,
         ),
-        ListTile(
-          leading: Icon(Icons.upload_file_outlined, color: primary),
-          title: const Text('Importa calendario JSON'),
-          subtitle: const Text('Ripristina gli eventi da un file .json'),
-          trailing: const Icon(Icons.chevron_right),
+        ActionTile(
+          icon: Icons.upload_file_outlined,
+          title: 'Importa calendario JSON',
+          subtitle: 'Ripristina gli eventi da un file .json',
           onTap: onImportJson,
         ),
-        ListTile(
-          leading: Icon(Icons.calendar_today_outlined, color: primary),
-          title: const Text('Esporta calendario ICS'),
-          subtitle: const Text('Esporta tutti gli eventi in un file .ics'),
-          trailing: const Icon(Icons.chevron_right),
+        ActionTile(
+          icon: Icons.calendar_today_outlined,
+          title: 'Esporta calendario ICS',
+          subtitle: 'Esporta tutti gli eventi in un file .ics',
           onTap: onExportIcs,
         ),
-        ListTile(
-          leading: Icon(Icons.calendar_month_outlined, color: primary),
-          title: const Text('Importa da Google Calendar'),
-          subtitle: const Text('Importa eventi da un file .ics'),
-          trailing: const Icon(Icons.chevron_right),
+        ActionTile(
+          icon: Icons.calendar_month_outlined,
+          title: 'Importa da Google Calendar',
+          subtitle: 'Importa eventi da un file .ics',
           onTap: onImportIcs,
         ),
-        ListTile(
-          leading: Icon(Icons.delete_sweep_outlined, color: error),
-          title: Text(
-            'Cancella eventi calendario',
-            style: TextStyle(color: error),
-          ),
-          subtitle: const Text('Rimuove tutti gli eventi dal calendario'),
-          trailing: const Icon(Icons.chevron_right),
+        ActionTile(
+          icon: Icons.delete_sweep_outlined,
+          title: 'Cancella eventi calendario',
+          subtitle: 'Rimuove tutti gli eventi dal calendario',
+          destructive: true,
           onTap: onClearCalendar,
         ),
       ],

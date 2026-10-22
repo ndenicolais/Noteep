@@ -10,7 +10,8 @@
 
 import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
-import 'settings_section_header.dart';
+import '../../widgets/shared/action_tile.dart';
+import '../../widgets/shared/section_header.dart';
 
 /// "Google Drive" section: coming-soon sync entry point.
 class SettingsGoogleDriveSection extends StatelessWidget {
@@ -23,17 +24,11 @@ class SettingsGoogleDriveSection extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SettingsSectionHeader(title: 'Google Drive'),
-        ListTile(
-          leading: Icon(
-            Icons.cloud_outlined,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-          title: const Text('Collega Google Drive'),
-          subtitle: const Text(
-            'Sincronizza i backup con il tuo account Google',
-          ),
-          trailing: const Icon(Icons.chevron_right),
+        const SectionHeader('Google Drive'),
+        ActionTile(
+          icon: Icons.cloud_outlined,
+          title: 'Collega Google Drive',
+          subtitle: 'Sincronizza i backup con il tuo account Google',
           onTap: onTap,
         ),
       ],
@@ -47,14 +42,10 @@ class SettingsInfoSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(
-        Icons.info_outline,
-        color: Theme.of(context).colorScheme.primary,
-      ),
-      title: const Text('Info app'),
-      subtitle: const Text('Informazioni sull\'app e sulla versione'),
-      trailing: const Icon(Icons.chevron_right),
+    return ActionTile(
+      icon: Icons.info_outline,
+      title: 'Info app',
+      subtitle: 'Informazioni sull\'app e sulla versione',
       onTap: () => AppNav.openInfo(context),
     );
   }

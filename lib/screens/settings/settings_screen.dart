@@ -199,39 +199,24 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     }
   }
 
-  void _confirmClear(
+  Future<void> _confirmClear(
     BuildContext context, {
     required String title,
     required String message,
     required Future<void> Function() onConfirm,
     required String successMessage,
     String deleteLabel = 'Elimina',
-  }) {
-    showDialog<void>(
-      context: context,
-      builder:
-          (ctx) => AlertDialog(
-            title: Text(title),
-            content: Text(message),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(ctx),
-                child: const Text('Annulla'),
-              ),
-              TextButton(
-                onPressed: () {
-                  notifyOnError(onConfirm(), context);
-                  Navigator.pop(ctx);
-                  _showSnack(context, successMessage);
-                },
-                child: Text(
-                  deleteLabel,
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
-                ),
-              ),
-            ],
-          ),
+  }) async {
+    final confirmed = await showAppConfirmDialog(
+      context,
+      title: title,
+      message: message,
+      confirmLabel: deleteLabel,
+      destructive: true,
     );
+    if (!confirmed || !context.mounted) return;
+    notifyOnError(onConfirm(), context);
+    _showSnack(context, successMessage);
   }
 
   // -- Full backup -----------------------------------------------------------
@@ -384,24 +369,12 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   // -- Misc ------------------------------------------------------------------
 
-  void _showGoogleDriveComingSoon(BuildContext context) {
-    showDialog<void>(
-      context: context,
-      builder:
-          (ctx) => AlertDialog(
-            title: const Text('Google Drive'),
-            content: const Text(
-              'La sincronizzazione con Google Drive sarà disponibile in una prossima versione.',
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(ctx),
-                child: const Text('OK'),
-              ),
-            ],
-          ),
-    );
-  }
+  void _showGoogleDriveComingSoon(BuildContext context) => showAppMessageDialog(
+    context,
+    title: 'Google Drive',
+    message:
+        'La sincronizzazione con Google Drive sarà disponibile in una prossima versione.',
+  );
 
   String _getFrequencyLabel(BackupFrequency frequency) {
     switch (frequency) {

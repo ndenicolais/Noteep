@@ -13,10 +13,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/notes_provider.dart';
 import '../providers/tasks_provider.dart';
 import '../providers/calendar_provider.dart';
-import '../theme/app_spacing.dart';
 import '../widgets/nav_scaffold.dart';
 import '../widgets/note_card.dart';
 import '../widgets/shared/empty_state.dart';
+import '../widgets/shared/item_card.dart';
 
 class ArchiveScreen extends ConsumerWidget {
   const ArchiveScreen({super.key});
@@ -72,10 +72,8 @@ class _NoteList extends StatelessWidget {
         iconSize: 64,
       );
     }
-    return ListView.separated(
-      padding: const EdgeInsets.all(AppSpacing.md),
+    return ItemCardList(
       itemCount: notes.length,
-      separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.sm),
       itemBuilder: (_, i) => NoteCard(note: notes[i]),
     );
   }
@@ -98,18 +96,14 @@ class _TaskList extends StatelessWidget {
         iconSize: 64,
       );
     }
-    return ListView.separated(
-      padding: const EdgeInsets.all(AppSpacing.md),
+    return ItemCardList(
       itemCount: tasks.length,
-      separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.sm),
       itemBuilder: (_, i) {
         final task = tasks[i];
-        return Card(
-          child: ListTile(
-            title: Text(task.title),
-            subtitle: Text(task.description),
-            trailing: const Icon(Icons.archive_outlined),
-          ),
+        return ItemCard(
+          title: Text(task.title),
+          subtitle: Text(task.description),
+          trailing: const Icon(Icons.archive_outlined),
         );
       },
     );
@@ -129,18 +123,14 @@ class _EventList extends StatelessWidget {
         iconSize: 64,
       );
     }
-    return ListView.separated(
-      padding: const EdgeInsets.all(AppSpacing.md),
+    return ItemCardList(
       itemCount: events.length,
-      separatorBuilder: (_, __) => const SizedBox(height: AppSpacing.sm),
       itemBuilder: (_, i) {
         final event = events[i];
-        return Card(
-          child: ListTile(
-            title: Text(event.title),
-            subtitle: Text(event.description),
-            trailing: const Icon(Icons.archive_outlined),
-          ),
+        return ItemCard(
+          title: Text(event.title),
+          subtitle: Text(event.description),
+          trailing: const Icon(Icons.archive_outlined),
         );
       },
     );

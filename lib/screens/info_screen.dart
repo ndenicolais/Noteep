@@ -10,9 +10,10 @@
 
 import 'package:flutter/material.dart';
 import '../core/constants/app_version.dart';
-import '../theme/app_font_sizes.dart';
 import '../theme/app_spacing.dart';
 import '../widgets/changelog_dialog.dart';
+import '../widgets/shared/section_header.dart';
+import '../widgets/shared/tag_chip.dart';
 
 class InfoScreen extends StatelessWidget {
   const InfoScreen({super.key});
@@ -63,7 +64,7 @@ class InfoScreen extends StatelessWidget {
           const SizedBox(height: AppSpacing.xxl),
 
           // ── Descrizione ──────────────────────────────────────────────────
-          _SectionHeader(label: 'Descrizione'),
+          const SectionHeader('Descrizione', padding: EdgeInsets.zero),
           const SizedBox(height: AppSpacing.sm),
           Text(
             'Noteep è un\'app per prendere note, creare liste di controllo '
@@ -75,7 +76,7 @@ class InfoScreen extends StatelessWidget {
           const SizedBox(height: AppSpacing.xl),
 
           // ── Funzionalità ─────────────────────────────────────────────────
-          _SectionHeader(label: 'Funzionalità'),
+          const SectionHeader('Funzionalità', padding: EdgeInsets.zero),
           const SizedBox(height: AppSpacing.sm),
           ...[
             (Icons.note_outlined, 'Note di testo con formattazione'),
@@ -102,23 +103,23 @@ class InfoScreen extends StatelessWidget {
           const SizedBox(height: AppSpacing.xl),
 
           // ── Tecnologie ───────────────────────────────────────────────────
-          _SectionHeader(label: 'Tecnologie'),
+          const SectionHeader('Tecnologie', padding: EdgeInsets.zero),
           const SizedBox(height: AppSpacing.sm),
           Wrap(
             spacing: 8,
             runSpacing: 8,
             children: [
-              _TechChip(label: 'Flutter'),
-              _TechChip(label: 'Dart'),
-              _TechChip(label: 'Riverpod'),
-              _TechChip(label: 'Material 3'),
-              _TechChip(label: 'SharedPreferences'),
+              TagChip('Flutter'),
+              TagChip('Dart'),
+              TagChip('Riverpod'),
+              TagChip('Material 3'),
+              TagChip('SharedPreferences'),
             ],
           ),
           const SizedBox(height: AppSpacing.xl),
 
           // ── Changelog ────────────────────────────────────────────────────
-          _SectionHeader(label: 'Changelog'),
+          const SectionHeader('Changelog', padding: EdgeInsets.zero),
           const SizedBox(height: AppSpacing.sm),
           ListTile(
             contentPadding: EdgeInsets.zero,
@@ -132,7 +133,7 @@ class InfoScreen extends StatelessWidget {
           const SizedBox(height: AppSpacing.xl),
 
           // ── Licenze ──────────────────────────────────────────────────────
-          _SectionHeader(label: 'Licenze open source'),
+          const SectionHeader('Licenze open source', padding: EdgeInsets.zero),
           const SizedBox(height: AppSpacing.sm),
           ListTile(
             contentPadding: EdgeInsets.zero,
@@ -168,41 +169,6 @@ class InfoScreen extends StatelessWidget {
           const SizedBox(height: AppSpacing.lg),
         ],
       ),
-    );
-  }
-}
-
-// ─── Helper widgets ───────────────────────────────────────────────────────────
-
-class _SectionHeader extends StatelessWidget {
-  const _SectionHeader({required this.label});
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      label,
-      style: Theme.of(context).textTheme.labelLarge?.copyWith(
-        color: Theme.of(context).colorScheme.primary,
-        fontWeight: FontWeight.bold,
-      ),
-    );
-  }
-}
-
-class _TechChip extends StatelessWidget {
-  const _TechChip({required this.label});
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Chip(
-      label: Text(label, style: const TextStyle(fontSize: AppFontSizes.sm)),
-      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-      labelStyle: TextStyle(
-        color: Theme.of(context).colorScheme.onSecondaryContainer,
-      ),
-      side: BorderSide.none,
     );
   }
 }

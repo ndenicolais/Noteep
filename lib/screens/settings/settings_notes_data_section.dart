@@ -10,7 +10,8 @@
 
 import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
-import 'settings_section_header.dart';
+import '../../widgets/shared/action_tile.dart';
+import '../../widgets/shared/section_header.dart';
 
 /// "Dati note" section: statistics, export screen, JSON export/import/clear.
 class SettingsNotesDataSection extends StatelessWidget {
@@ -27,47 +28,39 @@ class SettingsNotesDataSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primary = Theme.of(context).colorScheme.primary;
-    final error = Theme.of(context).colorScheme.error;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SettingsSectionHeader(title: 'Dati note'),
-        ListTile(
-          leading: Icon(Icons.bar_chart_outlined, color: primary),
-          title: const Text('Statistiche'),
-          subtitle: const Text(
-            'Visualizza tutte le informazioni sulle tue note',
-          ),
-          trailing: const Icon(Icons.chevron_right),
+        const SectionHeader('Dati note'),
+        ActionTile(
+          icon: Icons.bar_chart_outlined,
+          title: 'Statistiche',
+          subtitle: 'Visualizza tutte le informazioni sulle tue note',
           onTap: () => AppNav.openStatistics(context),
         ),
-        ListTile(
-          leading: Icon(Icons.upload, color: primary),
-          title: const Text('Esporta note'),
-          subtitle: const Text('Esporta tutte le note in diversi formati'),
-          trailing: const Icon(Icons.chevron_right),
+        ActionTile(
+          icon: Icons.upload,
+          title: 'Esporta note',
+          subtitle: 'Esporta tutte le note in diversi formati',
           onTap: () => AppNav.openExport(context),
         ),
-        ListTile(
-          leading: Icon(Icons.download_outlined, color: primary),
-          title: const Text('Esporta note JSON'),
-          subtitle: const Text('Scarica le note come file .json'),
-          trailing: const Icon(Icons.chevron_right),
+        ActionTile(
+          icon: Icons.download_outlined,
+          title: 'Esporta note JSON',
+          subtitle: 'Scarica le note come file .json',
           onTap: onExportJson,
         ),
-        ListTile(
-          leading: Icon(Icons.upload_file_outlined, color: primary),
-          title: const Text('Importa note JSON'),
-          subtitle: const Text('Ripristina le note da un file .json'),
-          trailing: const Icon(Icons.chevron_right),
+        ActionTile(
+          icon: Icons.upload_file_outlined,
+          title: 'Importa note JSON',
+          subtitle: 'Ripristina le note da un file .json',
           onTap: onImportJson,
         ),
-        ListTile(
-          leading: Icon(Icons.delete_sweep_outlined, color: error),
-          title: Text('Cancella note', style: TextStyle(color: error)),
-          subtitle: const Text('Rimuove tutte le note'),
-          trailing: const Icon(Icons.chevron_right),
+        ActionTile(
+          icon: Icons.delete_sweep_outlined,
+          title: 'Cancella note',
+          subtitle: 'Rimuove tutte le note',
+          destructive: true,
           onTap: onClearNotes,
         ),
       ],

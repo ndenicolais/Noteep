@@ -21,6 +21,7 @@ import '../theme/app_spacing.dart';
 import 'shared/note_hero.dart';
 import '../utils/note_lock_service.dart';
 import 'shared/error_feedback.dart';
+import 'shared/tag_chip.dart';
 
 class NoteCard extends ConsumerWidget {
   const NoteCard({
@@ -311,27 +312,7 @@ class NoteCard extends ConsumerWidget {
                         spacing: 4,
                         children:
                             note.tags
-                                .map(
-                                  (t) => Chip(
-                                    label: Text(
-                                      t,
-                                      style: TextStyle(
-                                        fontSize: AppFontSizes.xs,
-                                        color:
-                                            Theme.of(
-                                              context,
-                                            ).colorScheme.onSecondaryContainer,
-                                      ),
-                                    ),
-                                    backgroundColor:
-                                        Theme.of(
-                                          context,
-                                        ).colorScheme.secondaryContainer,
-                                    padding: EdgeInsets.zero,
-                                    materialTapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                  ),
-                                )
+                                .map((t) => TagChip(t, dense: true))
                                 .toList(),
                       ),
                     ],

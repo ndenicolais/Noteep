@@ -9,7 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
-import 'settings_section_header.dart';
+import '../../widgets/shared/section_header.dart';
 
 /// "Aspetto" section: system/light/dark theme mode selector.
 class SettingsAppearanceSection extends StatelessWidget {
@@ -27,7 +27,7 @@ class SettingsAppearanceSection extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SettingsSectionHeader(title: 'Aspetto'),
+        const SectionHeader('Aspetto'),
         RadioGroup<ThemeMode>(
           groupValue: themeMode,
           onChanged: (v) => onChanged(v!),

@@ -9,7 +9,8 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
-import 'settings_section_header.dart';
+import '../../widgets/shared/action_tile.dart';
+import '../../widgets/shared/section_header.dart';
 
 /// "Backup globale" section: full JSON backup export/import and clear-all.
 class SettingsGlobalBackupSection extends StatelessWidget {
@@ -26,33 +27,27 @@ class SettingsGlobalBackupSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primary = Theme.of(context).colorScheme.primary;
-    final error = Theme.of(context).colorScheme.error;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SettingsSectionHeader(title: 'Backup globale'),
-        ListTile(
-          leading: Icon(Icons.save_alt_outlined, color: primary),
-          title: const Text('Esporta backup completo'),
-          subtitle: const Text(
-            'Scarica un file .json con note, task ed eventi',
-          ),
-          trailing: const Icon(Icons.chevron_right),
+        const SectionHeader('Backup globale'),
+        ActionTile(
+          icon: Icons.save_alt_outlined,
+          title: 'Esporta backup completo',
+          subtitle: 'Scarica un file .json con note, task ed eventi',
           onTap: onExportFullBackup,
         ),
-        ListTile(
-          leading: Icon(Icons.restore_outlined, color: primary),
-          title: const Text('Importa backup completo'),
-          subtitle: const Text('Ripristina dati da un file .json di backup'),
-          trailing: const Icon(Icons.chevron_right),
+        ActionTile(
+          icon: Icons.restore_outlined,
+          title: 'Importa backup completo',
+          subtitle: 'Ripristina dati da un file .json di backup',
           onTap: onImportFullBackup,
         ),
-        ListTile(
-          leading: Icon(Icons.delete_forever_outlined, color: error),
-          title: Text('Cancella tutti i dati', style: TextStyle(color: error)),
-          subtitle: const Text('Elimina definitivamente note, task ed eventi'),
-          trailing: const Icon(Icons.chevron_right),
+        ActionTile(
+          icon: Icons.delete_forever_outlined,
+          title: 'Cancella tutti i dati',
+          subtitle: 'Elimina definitivamente note, task ed eventi',
+          destructive: true,
           onTap: onClearAll,
         ),
       ],

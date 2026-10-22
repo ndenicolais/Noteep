@@ -225,8 +225,7 @@ lib/
 │   │   ├── calendar_search_bar.dart
 │   │   └── calendar_utils.dart
 │   ├── settings/
-│   │   ├── settings_screen.dart
-│   │   └── settings_section_header.dart
+│   │   └── settings_screen.dart       # + one file per section
 │   └── statistics/
 │       ├── statistics_screen.dart
 │       └── statistics_widgets.dart
@@ -251,9 +250,14 @@ lib/
     ├── nav_scaffold.dart         # Scaffold with drawer
     ├── note_card.dart            # Note preview card
     ├── sort_sheet.dart           # Bottom sheet for sort options
-    ├── shared/
+    ├── shared/                   # Design system: reusable components
+    │   ├── action_tile.dart      # Icon + title + subtitle + chevron row
+    │   ├── app_dialogs.dart      # Confirm / text input / message dialogs, sheets
     │   ├── empty_state.dart
-    │   └── search_field.dart
+    │   ├── item_card.dart        # Card rows for Archive, Trash, Reminders
+    │   ├── search_field.dart
+    │   ├── section_header.dart
+    │   └── tag_chip.dart
     └── style_editor/             # Note styling controls
 ```
 

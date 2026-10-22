@@ -10,7 +10,8 @@
 
 import 'package:flutter/material.dart';
 import '../../providers/settings/backup_provider.dart';
-import 'settings_section_header.dart';
+import '../../widgets/shared/action_tile.dart';
+import '../../widgets/shared/section_header.dart';
 
 /// "Backup" section: automatic backup toggle, frequency and history entry.
 class SettingsBackupSection extends StatelessWidget {
@@ -34,7 +35,7 @@ class SettingsBackupSection extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SettingsSectionHeader(title: 'Backup'),
+        const SectionHeader('Backup'),
         SwitchListTile(
           title: const Text('Backup automatico'),
           subtitle: const Text('Salva automaticamente i tuoi dati'),
@@ -48,14 +49,10 @@ class SettingsBackupSection extends StatelessWidget {
             trailing: const Icon(Icons.chevron_right),
             onTap: onShowFrequencySheet,
           ),
-        ListTile(
-          leading: Icon(
-            Icons.backup,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-          title: const Text('Visualizza backup'),
-          subtitle: const Text('Gestisci i backup salvati'),
-          trailing: const Icon(Icons.chevron_right),
+        ActionTile(
+          icon: Icons.backup,
+          title: 'Visualizza backup',
+          subtitle: 'Gestisci i backup salvati',
           onTap: onShowBackupsSheet,
         ),
       ],

@@ -21,6 +21,7 @@ import '../../widgets/shared/pull_to_refresh.dart';
 import '../../widgets/shared/skeleton.dart';
 import 'task_item.dart';
 import 'task_sorting.dart';
+import '../../widgets/shared/section_header.dart';
 
 /// One tab of the Tasks screen: the tasks from [source], with skeleton on
 /// first load, empty/error state and pull-to-refresh.
@@ -93,9 +94,9 @@ class TaskListView extends ConsumerWidget {
                 padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
                 child: Divider(),
               ),
-              const Text(
+              const SectionHeader(
                 'Completati',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                padding: SectionHeader.inlinePadding,
               ),
               for (final id in completed.ids)
                 _TaskRow(key: ValueKey(id), id: id),

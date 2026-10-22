@@ -17,10 +17,11 @@ import '../models/task_model.dart';
 import '../providers/notes_provider.dart';
 import '../providers/tasks_provider.dart';
 import '../theme/app_font_sizes.dart';
-import '../theme/app_radius.dart';
 import '../theme/app_spacing.dart';
 import '../utils/notification_service.dart';
 import '../widgets/nav_scaffold.dart';
+import '../widgets/shared/item_card.dart';
+import '../widgets/shared/section_header.dart';
 
 // ─── Sealed union for reminder items ─────────────────────────────────────────
 
@@ -88,15 +89,20 @@ class RemindersScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(AppSpacing.md),
                 children: [
                   if (upcoming.isNotEmpty) ...[
-                    const _SectionHeader(
+                    const SectionHeader(
+                      'In arrivo',
                       icon: Icons.upcoming_outlined,
-                      label: 'In arrivo',
+                      padding: SectionHeader.inlinePadding,
                     ),
                     ...upcoming.map((item) => _ReminderCard(item: item)),
                   ],
                   if (past.isNotEmpty) ...[
                     const SizedBox(height: AppSpacing.sm),
-                    const _SectionHeader(icon: Icons.history, label: 'Scaduti'),
+                    const SectionHeader(
+                      'Scaduti',
+                      icon: Icons.history,
+                      padding: SectionHeader.inlinePadding,
+                    ),
                     ...past.map(
                       (item) => _ReminderCard(item: item, past: true),
                     ),
@@ -139,37 +145,6 @@ class _EmptyState extends StatelessWidget {
   }
 }
 
-// ─── Section header ───────────────────────────────────────────────────────────
-
-class _SectionHeader extends StatelessWidget {
-  const _SectionHeader({required this.icon, required this.label});
-  final IconData icon;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: AppSpacing.sm,
-        horizontal: AppSpacing.xs,
-      ),
-      child: Row(
-        children: [
-          Icon(icon, size: 18, color: Theme.of(context).colorScheme.primary),
-          const SizedBox(width: 6),
-          Text(
-            label,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 // ─── Reminder card ────────────────────────────────────────────────────────────
 
 class _ReminderCard extends ConsumerWidget {
@@ -183,12 +158,9 @@ class _ReminderCard extends ConsumerWidget {
     final dateStr = DateFormat('dd MMM yyyy, HH:mm').format(item.reminder);
     final isNote = item is _NoteReminder;
 
-    return Card(
-      margin: const EdgeInsets.only(bottom: AppSpacing.sm),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadius.md),
-      ),
-      child: ListTile(
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+      child: ItemCard(
         leading: CircleAvatar(
           backgroundColor: past ? cs.errorContainer : cs.primaryContainer,
           child: Icon(
