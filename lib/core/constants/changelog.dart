@@ -21,6 +21,7 @@ const List<ChangelogEntry> changelogEntries = [
     version: '2.0.3',
     bullets: [
       'Nuova icona dell\'app: la lampadina con la spunta su sfondo scuro, che si adatta alla forma scelta dal launcher e ai temi colore di Android 13 e successivi.',
+      'La schermata di accesso e registrazione mostra il nuovo logo dell\'app.',
     ],
   ),
   ChangelogEntry(

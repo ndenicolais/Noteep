@@ -20,14 +20,14 @@ class LoginHeader extends StatelessWidget {
           child: Container(
             width: 84,
             height: 84,
+            padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: colorScheme.primaryContainer,
+              color: AppColors.dark,
               borderRadius: BorderRadius.circular(24),
             ),
-            child: Icon(
-              Icons.note_alt,
-              size: 46,
-              color: colorScheme.onPrimaryContainer,
+            child: Image.asset(
+              'assets/images/app_logo_icon.png',
+              semanticLabel: 'Logo Noteep',
             ),
           ),
         ),
