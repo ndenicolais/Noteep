@@ -47,6 +47,7 @@ Noteep is a full-featured Flutter note-taking and productivity app. It combines 
 | Note types | Free-text note or Checklist |
 | Rich styling | Font family, font size, bold, italic, strikethrough, text color, background color — with separate overrides for the title |
 | Markdown | Full Markdown rendering inside notes |
+| Web links | "Insert link" button adds `[text](url)` at the cursor; links (and bare URLs) open in the browser from the Markdown preview |
 | Audio notes | Record audio clips (AAC/M4A) directly inside a note; playback with waveform visualisation |
 | Checklist items | Each item has its own `id`, text, and checked state |
 | Pin | Pins a note to the top of the list |
@@ -214,6 +215,7 @@ lib/
 │   ├── note_editor/
 │   │   ├── note_editor_screen.dart
 │   │   ├── note_checklist_editor.dart
+│   │   ├── note_insert_link_dialog.dart
 │   │   └── note_link_sheet.dart
 │   ├── task_editor/
 │   │   └── task_editor_screen.dart
@@ -240,6 +242,7 @@ lib/
 │   ├── backup_service.dart       # BackupService (ZIP create/restore)
 │   ├── notification_service.dart # NotificationService singleton
 │   ├── widget_service.dart       # Home widget updates
+│   ├── link_utils.dart           # URL normalize / Markdown link / open
 │   ├── recurrence.dart           # RecurrenceType enum + helpers
 │   ├── ics_export_service.dart   # Calendar → ICS
 │   ├── ics_import_service.dart   # ICS → CalendarEventModel
@@ -536,6 +539,7 @@ flutter test
 | `share_plus` | ^10.1.4 | Share sheet |
 | `file_picker` | ^8.1.7 | File picker (ICS, backup) |
 | `flutter_markdown` | ^0.7.6 | Markdown rendering |
+| `url_launcher` | ^6.3.3 | Open note links in the browser |
 | `path_provider` | ^2.1.4 | File system paths |
 | `intl` | ^0.20.2 | Date formatting / i18n |
 | `flutter_localizations` | SDK | Italian Material/Cupertino widgets (pickers, menus) |

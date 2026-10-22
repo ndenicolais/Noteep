@@ -23,6 +23,7 @@ import '../../theme/app_colors.dart';
 import '../../theme/app_font_sizes.dart';
 import '../../theme/app_spacing.dart';
 import '../../utils/audio_service.dart';
+import '../../utils/link_utils.dart';
 import '../../widgets/reminder_banner.dart';
 import '../../widgets/shared/app_dialogs.dart';
 import '../../widgets/shared/error_feedback.dart';
@@ -35,6 +36,7 @@ import 'note_checklist_editor.dart';
 import 'note_editor_app_bar.dart';
 import 'note_editor_bottom_bar.dart';
 import 'note_editor_controller.dart';
+import 'note_insert_link_dialog.dart';
 import 'note_link_sheet.dart';
 import 'note_linked_notes_section.dart';
 
@@ -316,6 +318,42 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
     );
   }
 
+  // ─── Web links ────────────────────────────────────────────────────────────
+
+  /// Inserts a Markdown link at the cursor (replacing the selection, which
+  /// pre-fills the link text), or at the end when there is no cursor.
+  Future<void> _insertLink() async {
+    final value = _contentController.value;
+    final sel = value.selection;
+    final hasCursor = sel.isValid && !_markdownMode;
+    final link = await showInsertLinkDialog(
+      context,
+      initialText: hasCursor ? sel.textInside(value.text) : '',
+    );
+    if (link == null || !mounted) return;
+
+    final text = value.text;
+    final start = hasCursor ? sel.start : text.length;
+    final end = hasCursor ? sel.end : text.length;
+    final newText = text.replaceRange(start, end, link);
+    _contentController.value = TextEditingValue(
+      text: newText,
+      selection: TextSelection.collapsed(offset: start + link.length),
+    );
+    _commitContentChange(newText);
+    _save();
+  }
+
+  Future<void> _openLink(String? href) async {
+    if (href == null) return;
+    final opened = await openExternalLink(href);
+    if (!opened && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Impossibile aprire il link')),
+      );
+    }
+  }
+
   // ─── Style helpers ────────────────────────────────────────────────────────
 
   TextStyle _titleStyle(BuildContext context) {
@@ -472,6 +510,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
             markdownMode: _markdownMode,
             onToggleMarkdown:
                 () => setState(() => _markdownMode = !_markdownMode),
+            onInsertLink: _insertLink,
             onUndo: _performUndo,
             onRedo: _performRedo,
             onPin: () {
@@ -543,6 +582,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
                           styleSheet: MarkdownStyleSheet.fromTheme(
                             Theme.of(context),
                           ).copyWith(p: _contentStyle(context)),
+                          onTapLink: (_, href, _) => _openLink(href),
                         ),
                       )
                     else

@@ -14,7 +14,7 @@ import '../../models/note_model.dart';
 import '../../providers/notes_undo_redo_provider.dart';
 import '../../theme/app_spacing.dart';
 
-/// App bar for [NoteEditorScreen]: undo/redo, markdown toggle, lock and the
+/// App bar for [NoteEditorScreen]: undo/redo, insert link, markdown toggle and the
 /// pin/archive/share overflow menu.
 class NoteEditorAppBar extends ConsumerWidget implements PreferredSizeWidget {
   const NoteEditorAppBar({
@@ -25,6 +25,7 @@ class NoteEditorAppBar extends ConsumerWidget implements PreferredSizeWidget {
     this.isSaving = false,
     required this.markdownMode,
     required this.onToggleMarkdown,
+    required this.onInsertLink,
     required this.onUndo,
     required this.onRedo,
     required this.onPin,
@@ -38,6 +39,7 @@ class NoteEditorAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final bool isSaving;
   final bool markdownMode;
   final VoidCallback onToggleMarkdown;
+  final VoidCallback onInsertLink;
   final VoidCallback onUndo;
   final VoidCallback onRedo;
   final VoidCallback onPin;
@@ -73,6 +75,12 @@ class NoteEditorAppBar extends ConsumerWidget implements PreferredSizeWidget {
           onPressed: history.canRedo ? onRedo : null,
           tooltip: 'Ripeti',
         ),
+        if (note.type == NoteType.note)
+          IconButton(
+            icon: const Icon(Icons.add_link),
+            tooltip: 'Inserisci link',
+            onPressed: onInsertLink,
+          ),
         if (note.type == NoteType.note)
           IconButton(
             icon: Icon(
