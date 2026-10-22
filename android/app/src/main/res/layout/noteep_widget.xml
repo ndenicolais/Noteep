@@ -47,7 +47,7 @@
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:src="@android:drawable/ic_menu_edit"
-            android:contentDescription="Note" />
+            android:contentDescription="@string/widget_notes" />
 
         <TextView
             android:id="@+id/widget_note_count"
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="6dp"
-            android:text="0 note"
+            android:text="@string/widget_note_count_empty"
             android:textSize="12sp"
             android:textColor="#FF444444" />
 
@@ -63,14 +63,14 @@
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:src="@android:drawable/ic_menu_agenda"
-            android:contentDescription="Task" />
+            android:contentDescription="@string/widget_tasks" />
 
         <TextView
             android:id="@+id/widget_task_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
-            android:text="0 task"
+            android:text="@string/widget_task_count_empty"
             android:textSize="12sp"
             android:textColor="#FF444444" />
     </LinearLayout>
@@ -81,7 +81,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_marginTop="8dp"
-        android:text="Nessuna nota recente"
+        android:text="@string/widget_no_notes"
         android:textSize="12sp"
         android:textColor="#FF666666"
         android:maxLines="3"
@@ -91,7 +91,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="Tocca per aprire"
+        android:text="@string/widget_tap_to_open"
         android:textSize="10sp"
         android:textColor="#88000000"
         android:gravity="end" />

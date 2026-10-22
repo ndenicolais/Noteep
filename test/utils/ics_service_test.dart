@@ -2,6 +2,7 @@
 // Licensed under the GNU GPL v3 with Additional Commercial Restrictions.
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/intl.dart';
 import 'package:noteep/models/calendar_model.dart';
 import 'package:noteep/screens/calendar/calendar_utils.dart';
 import 'package:noteep/utils/ics_export_service.dart';
@@ -221,6 +222,9 @@ void main() {
     });
 
     test('uses a placeholder title for untitled events', () {
+      // The placeholder is in the UI language.
+      addTearDown(() => Intl.defaultLocale = null);
+      Intl.defaultLocale = 'it';
       final ics = IcsExportService.generateIcs([
         CalendarEventModel(
           startTime: DateTime(2026, 5, 1),

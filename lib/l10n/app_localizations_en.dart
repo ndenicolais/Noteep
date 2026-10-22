@@ -1668,4 +1668,43 @@ class AppLocalizationsEn extends AppLocalizations {
   String exportHtmlHeading(String date) {
     return 'Notes export – $date';
   }
+
+  @override
+  String get notificationChannelName => 'Reminders';
+
+  @override
+  String get notificationChannelDescription =>
+      'Notifications for Noteep reminders';
+
+  @override
+  String get notificationTargetNotFound => 'Reminder item not found';
+
+  @override
+  String widgetNoteCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count notes',
+      one: '1 note',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String widgetTaskCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count tasks',
+      one: '1 task',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get widgetNoRecentNote => 'No recent notes';
+
+  @override
+  String get changelog_v2_0_0_bullet_33 =>
+      'The home screen widget now really updates with the number of notes and tasks and the last edited note, in the app\'s language.';
 }

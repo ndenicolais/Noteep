@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Noteep</string>
-    <string name="widget_no_notes">Nessuna nota recente</string>
+    <string name="widget_notes">Notes</string>
+    <string name="widget_tasks">Tasks</string>
+    <string name="widget_note_count_empty">0 notes</string>
+    <string name="widget_task_count_empty">0 tasks</string>
+    <string name="widget_no_notes">No recent notes</string>
+    <string name="widget_tap_to_open">Tap to open</string>
 </resources>

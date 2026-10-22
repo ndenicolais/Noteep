@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import 'app_localizations.dart';
 
 export 'app_localizations.dart';
@@ -16,4 +17,15 @@ export 'app_localizations.dart';
 extension AppLocalizationsContext on BuildContext {
   /// Strings of the current UI language.
   AppLocalizations get l10n => AppLocalizations.of(this);
+}
+
+/// Strings of the current UI language for code without a [BuildContext]
+/// (notifications, home widget, exported files): the language of
+/// `Intl.defaultLocale`, set at startup by `AppBootstrap` and then kept in
+/// sync by `MaterialApp.builder`.
+AppLocalizations currentL10n() {
+  final locale = Locale(Intl.getCurrentLocale().split(RegExp('[_-]')).first);
+  return lookupAppLocalizations(
+    AppLocalizations.delegate.isSupported(locale) ? locale : const Locale('en'),
+  );
 }

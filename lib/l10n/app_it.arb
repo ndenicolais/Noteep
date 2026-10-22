@@ -653,5 +653,26 @@
         "type": "String"
       }
     }
-  }
+  },
+  "notificationChannelName": "Promemoria",
+  "notificationChannelDescription": "Notifiche per i promemoria di Noteep",
+  "notificationTargetNotFound": "Elemento del promemoria non trovato",
+  "widgetNoteCount": "{count, plural, =1{1 nota} other{{count} note}}",
+  "@widgetNoteCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "widgetTaskCount": "{count, plural, =1{1 task} other{{count} task}}",
+  "@widgetTaskCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "widgetNoRecentNote": "Nessuna nota recente",
+  "changelog_v2_0_0_bullet_33": "Il widget per la schermata Home ora si aggiorna davvero con il numero di note e task e con l'ultima nota modificata, nella lingua dell'app."
 }

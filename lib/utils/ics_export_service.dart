@@ -10,6 +10,7 @@
 
 import '../models/calendar_model.dart';
 import 'recurrence.dart';
+import '../l10n/l10n.dart';
 
 class IcsExportService {
   /// Generates an ICS (iCalendar) string from a list of [CalendarEventModel].
@@ -41,7 +42,7 @@ class IcsExportService {
       }
 
       buf.writeln(
-        'SUMMARY:${_escape(event.title.isEmpty ? '(senza titolo)' : event.title)}',
+        'SUMMARY:${_escape(event.title.isEmpty ? currentL10n().commonUntitledParens : event.title)}',
       );
 
       if (event.description.isNotEmpty) {

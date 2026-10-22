@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_notes">Note</string>
+    <string name="widget_tasks">Task</string>
+    <string name="widget_note_count_empty">0 note</string>
+    <string name="widget_task_count_empty">0 task</string>
+    <string name="widget_no_notes">Nessuna nota recente</string>
+    <string name="widget_tap_to_open">Tocca per aprire</string>
+</resources>

@@ -13,8 +13,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart' show Intl;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../firebase_options.dart';
+import '../providers/settings/locale_provider.dart';
 import 'notification_service.dart';
 import 'widget_service.dart';
 
@@ -58,18 +60,20 @@ class AppBootstrap {
         cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
       );
     }
+    final prefs = await SharedPreferences.getInstance();
+    await _optional('date formatting', () async {
+      await initializeDateFormatting('it');
+      await initializeDateFormatting('en');
+    });
+    // Strings and dates built before the first frame (notification channel,
+    // home widget) use this; MaterialApp.builder then keeps it in sync.
+    Intl.defaultLocale = startupLanguageCode(prefs);
     await _optional('notifications', () async {
       await NotificationService.instance.init();
       await NotificationService.instance.requestPermissions();
     });
     await _optional('home widget', WidgetService.instance.init);
-    await _optional('date formatting', () async {
-      // Intl.defaultLocale is then set by MaterialApp.builder to the UI
-      // language, so DateFormat calls without an explicit locale follow it.
-      await initializeDateFormatting('it');
-      await initializeDateFormatting('en');
-    });
-    return SharedPreferences.getInstance();
+    return prefs;
   }
 
   static Future<void> _optional(

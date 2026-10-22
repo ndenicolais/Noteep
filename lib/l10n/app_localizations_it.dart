@@ -1674,4 +1674,44 @@ class AppLocalizationsIt extends AppLocalizations {
   String exportHtmlHeading(String date) {
     return 'Export note – $date';
   }
+
+  @override
+  String get notificationChannelName => 'Promemoria';
+
+  @override
+  String get notificationChannelDescription =>
+      'Notifiche per i promemoria di Noteep';
+
+  @override
+  String get notificationTargetNotFound =>
+      'Elemento del promemoria non trovato';
+
+  @override
+  String widgetNoteCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count note',
+      one: '1 nota',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String widgetTaskCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count task',
+      one: '1 task',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get widgetNoRecentNote => 'Nessuna nota recente';
+
+  @override
+  String get changelog_v2_0_0_bullet_33 =>
+      'Il widget per la schermata Home ora si aggiorna davvero con il numero di note e task e con l\'ultima nota modificata, nella lingua dell\'app.';
 }

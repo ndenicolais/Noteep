@@ -11,6 +11,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/calendar_model.dart';
 import '../../models/note_model.dart';
@@ -107,7 +108,7 @@ class _NotificationLaunchHandlerState
       if (!loaded) return; // Still loading: retried on the next change.
       _consume();
       ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-        const SnackBar(content: Text('Elemento del promemoria non trovato')),
+        SnackBar(content: Text(context.l10n.notificationTargetNotFound)),
       );
       return;
     }

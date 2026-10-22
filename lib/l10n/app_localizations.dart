@@ -3127,6 +3127,48 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Export note – {date}'**
   String exportHtmlHeading(String date);
+
+  /// No description provided for @notificationChannelName.
+  ///
+  /// In it, this message translates to:
+  /// **'Promemoria'**
+  String get notificationChannelName;
+
+  /// No description provided for @notificationChannelDescription.
+  ///
+  /// In it, this message translates to:
+  /// **'Notifiche per i promemoria di Noteep'**
+  String get notificationChannelDescription;
+
+  /// No description provided for @notificationTargetNotFound.
+  ///
+  /// In it, this message translates to:
+  /// **'Elemento del promemoria non trovato'**
+  String get notificationTargetNotFound;
+
+  /// No description provided for @widgetNoteCount.
+  ///
+  /// In it, this message translates to:
+  /// **'{count, plural, =1{1 nota} other{{count} note}}'**
+  String widgetNoteCount(int count);
+
+  /// No description provided for @widgetTaskCount.
+  ///
+  /// In it, this message translates to:
+  /// **'{count, plural, =1{1 task} other{{count} task}}'**
+  String widgetTaskCount(int count);
+
+  /// No description provided for @widgetNoRecentNote.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessuna nota recente'**
+  String get widgetNoRecentNote;
+
+  /// No description provided for @changelog_v2_0_0_bullet_33.
+  ///
+  /// In it, this message translates to:
+  /// **'Il widget per la schermata Home ora si aggiorna davvero con il numero di note e task e con l\'ultima nota modificata, nella lingua dell\'app.'**
+  String get changelog_v2_0_0_bullet_33;
 }
 
 class _AppLocalizationsDelegate

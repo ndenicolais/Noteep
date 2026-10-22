@@ -7,6 +7,7 @@ import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz_data;
 import '../core/routing/notification_target.dart';
+import '../l10n/l10n.dart';
 
 class NotificationService {
   NotificationService._();
@@ -21,8 +22,6 @@ class NotificationService {
   final ValueNotifier<NotificationTarget?> pendingTarget = ValueNotifier(null);
 
   static const _channelId = 'noteep_reminders';
-  static const _channelName = 'Promemoria';
-  static const _channelDesc = 'Notifiche per i promemoria di Noteep';
 
   Future<void> init() async {
     tz_data.initializeTimeZones();
@@ -77,21 +76,24 @@ class NotificationService {
     final tzDate = tz.TZDateTime.from(scheduledAt, tz.local);
     if (tzDate.isBefore(tz.TZDateTime.now(tz.local))) return;
 
+    // The channel name is updated by Android on every schedule, so it
+    // follows the current language.
+    final l10n = currentL10n();
     await _plugin.zonedSchedule(
       id,
       title,
       body,
       tzDate,
-      const NotificationDetails(
+      NotificationDetails(
         android: AndroidNotificationDetails(
           _channelId,
-          _channelName,
-          channelDescription: _channelDesc,
+          l10n.notificationChannelName,
+          channelDescription: l10n.notificationChannelDescription,
           importance: Importance.high,
           priority: Priority.high,
           icon: '@mipmap/ic_launcher',
         ),
-        iOS: DarwinNotificationDetails(),
+        iOS: const DarwinNotificationDetails(),
       ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:

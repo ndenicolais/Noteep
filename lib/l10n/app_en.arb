@@ -504,5 +504,12 @@
   "exportLabels": "Labels: {labels}",
   "exportDateTimePattern": "d MMM y 'at' HH:mm",
   "exportCsvHeader": "id,title,content,type,labels,pinned,created,modified",
-  "exportHtmlHeading": "Notes export – {date}"
+  "exportHtmlHeading": "Notes export – {date}",
+  "notificationChannelName": "Reminders",
+  "notificationChannelDescription": "Notifications for Noteep reminders",
+  "notificationTargetNotFound": "Reminder item not found",
+  "widgetNoteCount": "{count, plural, =1{1 note} other{{count} notes}}",
+  "widgetTaskCount": "{count, plural, =1{1 task} other{{count} tasks}}",
+  "widgetNoRecentNote": "No recent notes",
+  "changelog_v2_0_0_bullet_33": "The home screen widget now really updates with the number of notes and tasks and the last edited note, in the app's language."
 }

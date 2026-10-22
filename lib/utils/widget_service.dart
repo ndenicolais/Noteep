@@ -5,6 +5,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:home_widget/home_widget.dart';
+import '../l10n/l10n.dart';
 import '../models/note_model.dart';
 import '../models/task_model.dart';
 
@@ -39,15 +40,21 @@ class WidgetService {
           latest = n;
         }
       }
+      // Labels are built here, in the UI language: the Android widget only
+      // displays them.
+      final l10n = currentL10n();
+      final latestTitle = latest?.title ?? '';
       updateWidget(
-        noteCount: notes.length.toString(),
-        taskCount: tasks.where((t) => !t.isCompleted).length.toString(),
-        latestNote: latest?.title ?? '',
+        noteCount: l10n.widgetNoteCount(notes.length),
+        taskCount: l10n.widgetTaskCount(
+          tasks.where((t) => !t.isCompleted).length,
+        ),
+        latestNote: latestTitle.isEmpty ? l10n.widgetNoRecentNote : latestTitle,
       );
     });
   }
 
-  /// Updates the home widget with latest note info.
+  /// Updates the home widget with ready-to-show labels (e.g. "3 note").
   Future<void> updateWidget({
     required String noteCount,
     required String taskCount,

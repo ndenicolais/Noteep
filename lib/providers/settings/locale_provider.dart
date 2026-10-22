@@ -8,8 +8,12 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
+import 'dart:ui' show PlatformDispatcher;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../l10n/app_localizations.dart';
 import 'ui_provider.dart' show PersistedEnumNotifier;
 
 /// UI language. [system] follows the device and falls back to English when
@@ -35,3 +39,19 @@ class AppLanguageNotifier extends PersistedEnumNotifier<AppLanguage> {
 final appLanguageProvider = NotifierProvider<AppLanguageNotifier, AppLanguage>(
   AppLanguageNotifier.new,
 );
+
+/// Language code to use before the UI is built: the saved choice, else the
+/// device language when supported, else English — the same resolution as
+/// `MaterialApp`.
+String startupLanguageCode(SharedPreferences prefs) {
+  final saved = prefs.getString(_kLanguageKey);
+  for (final language in AppLanguage.values) {
+    if (language.name == saved && language.locale != null) {
+      return language.locale!.languageCode;
+    }
+  }
+  final device = Locale(PlatformDispatcher.instance.locale.languageCode);
+  return AppLocalizations.delegate.isSupported(device)
+      ? device.languageCode
+      : 'en';
+}

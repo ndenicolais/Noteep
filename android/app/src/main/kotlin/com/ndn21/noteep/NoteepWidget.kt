@@ -26,14 +26,19 @@ class NoteepWidget : AppWidgetProvider() {
     ) {
         val widgetData = HomeWidgetPlugin.getData(context)
 
-        val noteCount = widgetData.getInt("note_count", 0)
-        val taskCount = widgetData.getInt("task_count", 0)
-        val latestNote = widgetData.getString("latest_note", context.getString(R.string.widget_no_notes))
+        // Ready-to-show labels in the app language, written by WidgetService;
+        // the string resources are only shown before the first sync.
+        val noteCount = widgetData.getString("note_count", null)
+            ?: context.getString(R.string.widget_note_count_empty)
+        val taskCount = widgetData.getString("task_count", null)
+            ?: context.getString(R.string.widget_task_count_empty)
+        val latestNote = widgetData.getString("latest_note", null)
+            ?: context.getString(R.string.widget_no_notes)
 
         val views = RemoteViews(context.packageName, R.layout.noteep_widget)
-        views.setTextViewText(R.id.widget_note_count, "$noteCount note")
-        views.setTextViewText(R.id.widget_task_count, "$taskCount task")
-        views.setTextViewText(R.id.widget_latest_note, latestNote ?: context.getString(R.string.widget_no_notes))
+        views.setTextViewText(R.id.widget_note_count, noteCount)
+        views.setTextViewText(R.id.widget_task_count, taskCount)
+        views.setTextViewText(R.id.widget_latest_note, latestNote)
 
         // Tap opens the app
         val launchIntent = context.packageManager.getLaunchIntentForPackage(context.packageName)

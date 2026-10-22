@@ -66,6 +66,8 @@ class NotesApp extends ConsumerWidget {
     // change — otherwise it stays on its placeholder values forever.
     ref.listen(activeNotesProvider, (_, _) => _syncHomeWidget(ref));
     ref.listen(activeTasksProvider, (_, _) => _syncHomeWidget(ref));
+    // The widget labels are in the UI language.
+    ref.listen(appLanguageProvider, (_, _) => _syncHomeWidget(ref));
 
     return MaterialApp(
       title: 'Noteep',
