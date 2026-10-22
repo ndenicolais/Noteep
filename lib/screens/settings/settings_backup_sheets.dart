@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/settings/backup_provider.dart';
 import '../../providers/settings/backup_restore.dart';
@@ -30,10 +31,10 @@ void showBackupFrequencySheet(
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Padding(
+          Padding(
             padding: EdgeInsets.all(AppSpacing.lg),
             child: Text(
-              'Frequenza backup',
+              context.l10n.settingsBackupFrequency,
               style: TextStyle(
                 fontSize: AppFontSizes.xl,
                 fontWeight: FontWeight.bold,
@@ -41,7 +42,7 @@ void showBackupFrequencySheet(
             ),
           ),
           ListTile(
-            title: const Text('Giornaliero'),
+            title: Text(context.l10n.recurrenceDaily),
             trailing:
                 current == BackupFrequency.daily
                     ? const Icon(Icons.check)
@@ -54,7 +55,7 @@ void showBackupFrequencySheet(
             },
           ),
           ListTile(
-            title: const Text('Settimanale'),
+            title: Text(context.l10n.recurrenceWeekly),
             trailing:
                 current == BackupFrequency.weekly
                     ? const Icon(Icons.check)
@@ -67,7 +68,7 @@ void showBackupFrequencySheet(
             },
           ),
           ListTile(
-            title: const Text('Mensile'),
+            title: Text(context.l10n.recurrenceMonthly),
             trailing:
                 current == BackupFrequency.monthly
                     ? const Icon(Icons.check)
@@ -95,10 +96,9 @@ Future<void> _restoreBackup(
 ) async {
   final confirmed = await showAppConfirmDialog(
     context,
-    title: 'Ripristina backup',
-    message:
-        'I dati attuali (note, task ed eventi) verranno sostituiti con quelli del backup. Continuare?',
-    confirmLabel: 'Ripristina',
+    title: context.l10n.settingsRestoreBackup,
+    message: context.l10n.settingsReplaceAllConfirm,
+    confirmLabel: context.l10n.commonRestore,
   );
   if (!confirmed || !context.mounted) return;
 
@@ -108,13 +108,13 @@ Future<void> _restoreBackup(
   final messenger = ScaffoldMessenger.of(context);
   if (data == null) {
     messenger.showSnackBar(
-      const SnackBar(content: Text('Impossibile leggere il backup.')),
+      SnackBar(content: Text(context.l10n.settingsBackupReadFailed)),
     );
     return;
   }
   notifyOnError(restorer.apply(data), context);
   messenger.showSnackBar(
-    const SnackBar(content: Text('Backup ripristinato con successo.')),
+    SnackBar(content: Text(context.l10n.settingsBackupRestored)),
   );
 }
 
@@ -139,16 +139,16 @@ void showBackupsSheet(BuildContext context, WidgetRef ref) {
             return Padding(
               padding: const EdgeInsets.all(AppSpacing.lg),
               child: Text(
-                'Errore nel caricamento dei backup: ${snapshot.error}',
+                context.l10n.settingsBackupsLoadError('${snapshot.error}'),
               ),
             );
           }
 
           final backups = snapshot.data!;
           if (backups.isEmpty) {
-            return const Padding(
+            return Padding(
               padding: EdgeInsets.all(AppSpacing.lg),
-              child: Text('Nessun backup disponibile'),
+              child: Text(context.l10n.settingsNoBackups),
             );
           }
 
@@ -160,10 +160,10 @@ void showBackupsSheet(BuildContext context, WidgetRef ref) {
                 itemCount: backups.length + 1,
                 itemBuilder: (context, index) {
                   if (index == 0) {
-                    return const Padding(
+                    return Padding(
                       padding: EdgeInsets.all(AppSpacing.lg),
                       child: Text(
-                        'Backup disponibili',
+                        context.l10n.settingsBackupsAvailable,
                         style: TextStyle(
                           fontSize: AppFontSizes.xl,
                           fontWeight: FontWeight.bold,
@@ -193,10 +193,10 @@ void showBackupsSheet(BuildContext context, WidgetRef ref) {
                           (context) => [
                             PopupMenuItem(
                               onTap: restore,
-                              child: const Text('Ripristina'),
+                              child: Text(context.l10n.commonRestore),
                             ),
                             PopupMenuItem(
-                              child: const Text('Elimina'),
+                              child: Text(context.l10n.commonDelete),
                               onTap: () async {
                                 await BackupService.deleteBackup(
                                   info['path'] as String,

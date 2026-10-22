@@ -10,6 +10,7 @@
 
 import '../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
+import '../l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../models/note_model.dart';
@@ -27,7 +28,7 @@ import '../widgets/shared/section_header.dart';
 
 sealed class _ReminderItem {
   DateTime get reminder;
-  String get title;
+  String title(AppLocalizations l);
 }
 
 class _NoteReminder implements _ReminderItem {
@@ -38,7 +39,8 @@ class _NoteReminder implements _ReminderItem {
   DateTime get reminder => note.reminder!;
 
   @override
-  String get title => note.title.isEmpty ? 'Nota senza titolo' : note.title;
+  String title(AppLocalizations l) =>
+      note.title.isEmpty ? l.remindersUntitledNote : note.title;
 }
 
 class _TaskReminder implements _ReminderItem {
@@ -49,7 +51,8 @@ class _TaskReminder implements _ReminderItem {
   DateTime get reminder => task.reminder!;
 
   @override
-  String get title => task.title.isEmpty ? 'Task senza titolo' : task.title;
+  String title(AppLocalizations l) =>
+      task.title.isEmpty ? l.remindersUntitledTask : task.title;
 }
 
 // ─── Screen ───────────────────────────────────────────────────────────────────
@@ -81,7 +84,7 @@ class RemindersScreen extends ConsumerWidget {
 
     return NavScaffold(
       section: DrawerSection.reminders,
-      titleWidget: const Text('Promemoria'),
+      titleWidget: Text(context.l10n.navReminders),
       body:
           items.isEmpty
               ? _EmptyState()
@@ -89,8 +92,8 @@ class RemindersScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(AppSpacing.md),
                 children: [
                   if (upcoming.isNotEmpty) ...[
-                    const SectionHeader(
-                      'In arrivo',
+                    SectionHeader(
+                      context.l10n.remindersUpcoming,
                       icon: Icons.upcoming_outlined,
                       padding: SectionHeader.inlinePadding,
                     ),
@@ -98,8 +101,8 @@ class RemindersScreen extends ConsumerWidget {
                   ],
                   if (past.isNotEmpty) ...[
                     const SizedBox(height: AppSpacing.sm),
-                    const SectionHeader(
-                      'Scaduti',
+                    SectionHeader(
+                      context.l10n.remindersPast,
                       icon: Icons.history,
                       padding: SectionHeader.inlinePadding,
                     ),
@@ -126,7 +129,7 @@ class _EmptyState extends StatelessWidget {
           Icon(Icons.alarm_outlined, size: 72, color: cs.outlineVariant),
           const SizedBox(height: AppSpacing.lg),
           Text(
-            'Nessun promemoria',
+            context.l10n.remindersEmpty,
             style: TextStyle(
               color: cs.outline,
               fontSize: 17,
@@ -135,7 +138,7 @@ class _EmptyState extends StatelessWidget {
           ),
           const SizedBox(height: AppSpacing.sm),
           Text(
-            'Aggiungi un promemoria aprendo\nuna nota o un task.',
+            context.l10n.remindersEmptyHint,
             textAlign: TextAlign.center,
             style: TextStyle(color: cs.outline, fontSize: 13),
           ),
@@ -170,7 +173,7 @@ class _ReminderCard extends ConsumerWidget {
           ),
         ),
         title: Text(
-          item.title,
+          item.title(context.l10n),
           style: TextStyle(
             fontWeight: FontWeight.w600,
             decoration: past ? TextDecoration.lineThrough : null,
@@ -199,7 +202,7 @@ class _ReminderCard extends ConsumerWidget {
         ),
         trailing: IconButton(
           icon: const Icon(Icons.alarm_off_outlined),
-          tooltip: 'Rimuovi promemoria',
+          tooltip: context.l10n.commonRemoveReminder,
           onPressed: () => _removeReminder(context, ref),
         ),
         onTap: () => _openItem(context),
@@ -235,6 +238,6 @@ class _ReminderCard extends ConsumerWidget {
     }
     ScaffoldMessenger.of(
       context,
-    ).showSnackBar(const SnackBar(content: Text('Promemoria rimosso')));
+    ).showSnackBar(SnackBar(content: Text(context.l10n.commonReminderRemoved)));
   }
 }

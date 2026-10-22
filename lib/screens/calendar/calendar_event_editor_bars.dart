@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 
 /// App bar for [CalendarEventEditorScreen]: pin and archive toggles.
 class CalendarEventEditorAppBar extends StatelessWidget
@@ -32,17 +33,23 @@ class CalendarEventEditorAppBar extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: const Text('Evento'),
+      title: Text(context.l10n.calendarEventTitle),
       elevation: 0,
       actions: [
         IconButton(
           icon: Icon(isPinned ? Icons.push_pin : Icons.push_pin_outlined),
           onPressed: onTogglePin,
-          tooltip: isPinned ? 'Sposta in alto' : 'Fissa in alto',
+          tooltip:
+              isPinned
+                  ? context.l10n.taskEditorUnpin
+                  : context.l10n.taskEditorPin,
         ),
         IconButton(
           icon: Icon(isArchived ? Icons.unarchive : Icons.archive_outlined),
-          tooltip: isArchived ? 'Ripristina' : 'Archivia',
+          tooltip:
+              isArchived
+                  ? context.l10n.commonUnarchive
+                  : context.l10n.commonArchive,
           onPressed: onToggleArchive,
         ),
       ],
@@ -76,7 +83,7 @@ class CalendarEventEditorBottomBar extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.delete_outline),
             onPressed: onDelete,
-            tooltip: 'Elimina evento',
+            tooltip: context.l10n.calendarDeleteEvent,
           ),
           IconButton(
             icon: Icon(
@@ -84,10 +91,10 @@ class CalendarEventEditorBottomBar extends StatelessWidget {
               color: hasReminder ? colorScheme.primary : null,
             ),
             onPressed: onReminder,
-            tooltip: 'Promemoria',
+            tooltip: context.l10n.calendarReminder,
           ),
           const Spacer(),
-          TextButton(onPressed: onClose, child: const Text('Chiudi')),
+          TextButton(onPressed: onClose, child: Text(context.l10n.commonClose)),
         ],
       ),
     );

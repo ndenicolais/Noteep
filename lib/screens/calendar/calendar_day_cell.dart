@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import '../../models/calendar_model.dart';
 import '../../theme/app_spacing.dart';
 
@@ -161,7 +162,7 @@ class CalendarDayCell extends StatelessWidget {
                                 Expanded(
                                   child: Text(
                                     e.title.isEmpty
-                                        ? '(senza titolo)'
+                                        ? context.l10n.commonUntitledParens
                                         : e.title,
                                     style: TextStyle(
                                       fontSize: 9,

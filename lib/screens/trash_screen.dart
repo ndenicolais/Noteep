@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/note_model.dart';
 import '../models/task_model.dart';
@@ -36,12 +37,12 @@ class TrashScreen extends ConsumerWidget {
 
     return NavScaffold(
       section: DrawerSection.trash,
-      titleWidget: const Text('Cestino'),
+      titleWidget: Text(context.l10n.navTrash),
       appBarActions: [
         if (notes.isNotEmpty || tasks.isNotEmpty || events.isNotEmpty)
           TextButton(
             onPressed: () => _confirmEmptyTrash(context, ref),
-            child: const Text('Svuota'),
+            child: Text(context.l10n.trashEmptyAction),
           ),
       ],
       body: DefaultTabController(
@@ -56,12 +57,16 @@ class TrashScreen extends ConsumerWidget {
                 vertical: 10,
               ),
               child: Text(
-                'Gli elementi vengono eliminati definitivamente dopo 7 giorni.',
+                context.l10n.trashAutoDeleteInfo,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ),
-            const TabBar(
-              tabs: [Tab(text: 'Note'), Tab(text: 'Task'), Tab(text: 'Eventi')],
+            TabBar(
+              tabs: [
+                Tab(text: context.l10n.commonTabNotes),
+                Tab(text: context.l10n.commonTabTasks),
+                Tab(text: context.l10n.commonTabEvents),
+              ],
             ),
             Expanded(
               child: TabBarView(
@@ -81,10 +86,9 @@ class TrashScreen extends ConsumerWidget {
   Future<void> _confirmEmptyTrash(BuildContext context, WidgetRef ref) async {
     final confirmed = await showAppConfirmDialog(
       context,
-      title: 'Svuota cestino',
-      message:
-          'Tutti gli elementi nel cestino verranno eliminati definitivamente.',
-      confirmLabel: 'Svuota',
+      title: context.l10n.trashEmptyTitle,
+      message: context.l10n.trashEmptyConfirm,
+      confirmLabel: context.l10n.trashEmptyAction,
       destructive: true,
     );
     if (!confirmed || !context.mounted) return;
@@ -112,9 +116,9 @@ class _NoteTrashList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (items.isEmpty) {
-      return const EmptyState(
+      return EmptyState(
         icon: Icons.note_alt_outlined,
-        message: 'Nessuna nota nel cestino',
+        message: context.l10n.trashEmptyNotes,
         iconSize: 64,
       );
     }
@@ -132,9 +136,9 @@ class _TaskTrashList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (items.isEmpty) {
-      return const EmptyState(
+      return EmptyState(
         icon: Icons.check_circle_outline,
-        message: 'Nessun task nel cestino',
+        message: context.l10n.trashEmptyTasks,
         iconSize: 64,
       );
     }
@@ -162,9 +166,9 @@ class _EventTrashList extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     if (items.isEmpty) {
-      return const EmptyState(
+      return EmptyState(
         icon: Icons.event_busy,
-        message: 'Nessun evento nel cestino',
+        message: context.l10n.trashEmptyEvents,
         iconSize: 64,
       );
     }
@@ -195,11 +199,11 @@ class _TrashRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return ItemCard(
       title: Text(title),
-      subtitle: const Text('Scade tra poco (auto-purge)'),
+      subtitle: Text(context.l10n.trashExpiresSoon),
       trailing: IconButton(
         icon: const Icon(Icons.restore),
         onPressed: onRestore,
-        tooltip: 'Ripristina',
+        tooltip: context.l10n.commonRestore,
       ),
     );
   }
@@ -209,12 +213,12 @@ class _TrashNoteCard extends ConsumerWidget {
   const _TrashNoteCard({required this.note});
   final NoteModel note;
 
-  String _daysLeft() {
+  String _daysLeft(AppLocalizations l) {
     if (note.deletedAt == null) return '';
     final expiry = note.deletedAt!.add(const Duration(days: 7));
     final remaining = expiry.difference(DateTime.now()).inDays;
-    if (remaining <= 0) return 'Scade oggi';
-    return 'Scade tra $remaining giorn${remaining == 1 ? "o" : "i"}';
+    if (remaining <= 0) return l.trashExpiresToday;
+    return l.trashExpiresInDays(remaining);
   }
 
   @override
@@ -225,13 +229,13 @@ class _TrashNoteCard extends ConsumerWidget {
         alignment: Alignment.centerLeft,
         color: Colors.green,
         icon: Icons.restore,
-        label: 'Ripristina',
+        label: context.l10n.commonRestore,
       ),
       secondaryBackground: DismissBackground(
         alignment: Alignment.centerRight,
         color: Colors.red,
         icon: Icons.delete_forever,
-        label: 'Elimina',
+        label: context.l10n.commonDelete,
       ),
       confirmDismiss: (direction) async {
         if (direction == DismissDirection.startToEnd) {
@@ -254,12 +258,14 @@ class _TrashNoteCard extends ConsumerWidget {
       },
       child: ItemCard(
         title: Text(
-          note.title.isNotEmpty ? note.title : '(senza titolo)',
+          note.title.isNotEmpty
+              ? note.title
+              : context.l10n.commonUntitledParens,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
         subtitle: Text(
-          _daysLeft(),
+          _daysLeft(context.l10n),
           style: TextStyle(
             color: Theme.of(context).colorScheme.error,
             fontSize: AppFontSizes.sm,
@@ -285,14 +291,14 @@ class _TrashNoteCard extends ConsumerWidget {
           },
           itemBuilder:
               (_) => [
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: 'restore',
-                  child: Text('Ripristina'),
+                  child: Text(context.l10n.commonRestore),
                 ),
                 PopupMenuItem(
                   value: 'delete',
                   child: Text(
-                    'Elimina definitivamente',
+                    context.l10n.trashDeleteForever,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.error,
                     ),
@@ -307,9 +313,9 @@ class _TrashNoteCard extends ConsumerWidget {
   Future<bool> _confirmPermanentDelete(BuildContext context) {
     return showAppConfirmDialog(
       context,
-      title: 'Elimina definitivamente',
-      message: 'La nota verrà eliminata in modo permanente.',
-      confirmLabel: 'Elimina',
+      title: context.l10n.trashDeleteForever,
+      message: context.l10n.trashDeleteForeverConfirm,
+      confirmLabel: context.l10n.commonDelete,
       destructive: true,
     );
   }

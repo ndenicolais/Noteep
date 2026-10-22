@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import '../../providers/settings/ui_provider.dart';
 import '../../widgets/shared/section_header.dart';
 
@@ -32,21 +33,25 @@ class SettingsNotesPrefsSection extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SectionHeader('Note'),
+        SectionHeader(context.l10n.navNotes),
         ListTile(
-          title: const Text('Layout'),
-          subtitle: Text(homeLayout == HomeLayout.grid ? 'Griglia' : 'Lista'),
+          title: Text(context.l10n.settingsLayout),
+          subtitle: Text(
+            homeLayout == HomeLayout.grid
+                ? context.l10n.settingsLayoutGrid
+                : context.l10n.settingsLayoutList,
+          ),
           trailing: Icon(
             homeLayout == HomeLayout.grid ? Icons.grid_view : Icons.view_list,
           ),
           onTap: onToggleLayout,
         ),
         SwitchListTile(
-          title: const Text('Menu del pulsante +'),
+          title: Text(context.l10n.settingsFabMenu),
           subtitle: Text(
             fabMenu
-                ? 'Scegli tra nota, lista, task, audio e modello'
-                : 'Il pulsante + crea subito una nuova nota',
+                ? context.l10n.settingsFabMenuOn
+                : context.l10n.settingsFabMenuOff,
           ),
           value: fabMenu,
           onChanged: (_) => onToggleFabMenu(),

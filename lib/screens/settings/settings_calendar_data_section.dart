@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import '../../widgets/shared/action_tile.dart';
 import '../../widgets/shared/section_header.dart';
 
@@ -34,35 +35,35 @@ class SettingsCalendarDataSection extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SectionHeader('Calendario'),
+        SectionHeader(context.l10n.navCalendar),
         ActionTile(
           icon: Icons.download_outlined,
-          title: 'Esporta calendario JSON',
-          subtitle: 'Scarica gli eventi come file .json',
+          title: context.l10n.settingsExportCalendarJson,
+          subtitle: context.l10n.settingsExportCalendarJsonSubtitle,
           onTap: onExportJson,
         ),
         ActionTile(
           icon: Icons.upload_file_outlined,
-          title: 'Importa calendario JSON',
-          subtitle: 'Ripristina gli eventi da un file .json',
+          title: context.l10n.settingsImportCalendarJson,
+          subtitle: context.l10n.settingsImportCalendarJsonSubtitle,
           onTap: onImportJson,
         ),
         ActionTile(
           icon: Icons.calendar_today_outlined,
-          title: 'Esporta calendario ICS',
-          subtitle: 'Esporta tutti gli eventi in un file .ics',
+          title: context.l10n.settingsExportIcs,
+          subtitle: context.l10n.settingsExportIcsSubtitle,
           onTap: onExportIcs,
         ),
         ActionTile(
           icon: Icons.calendar_month_outlined,
-          title: 'Importa da Google Calendar',
-          subtitle: 'Importa eventi da un file .ics',
+          title: context.l10n.settingsImportIcs,
+          subtitle: context.l10n.settingsImportIcsSubtitle,
           onTap: onImportIcs,
         ),
         ActionTile(
           icon: Icons.delete_sweep_outlined,
-          title: 'Cancella eventi calendario',
-          subtitle: 'Rimuove tutti gli eventi dal calendario',
+          title: context.l10n.settingsClearCalendar,
+          subtitle: context.l10n.settingsClearCalendarSubtitle,
           destructive: true,
           onTap: onClearCalendar,
         ),

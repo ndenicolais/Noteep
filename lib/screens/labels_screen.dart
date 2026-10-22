@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/notes_provider.dart';
 import '../providers/settings/ui_provider.dart';
@@ -23,9 +24,9 @@ class LabelsScreen extends ConsumerWidget {
   Future<void> _showAddLabelDialog(BuildContext context, WidgetRef ref) async {
     final name = await showAppTextInputDialog(
       context,
-      title: 'Nuova etichetta',
-      hintText: 'Nome etichetta',
-      confirmLabel: 'Crea',
+      title: context.l10n.labelsNew,
+      hintText: context.l10n.labelsNameHint,
+      confirmLabel: context.l10n.tasksCreate,
       textCapitalization: TextCapitalization.sentences,
     );
     if (name != null) ref.read(customLabelsProvider.notifier).addLabel(name);
@@ -38,10 +39,10 @@ class LabelsScreen extends ConsumerWidget {
 
     return NavScaffold(
       section: DrawerSection.labels,
-      titleWidget: const Text('Etichette'),
+      titleWidget: Text(context.l10n.navLabels),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddLabelDialog(context, ref),
-        tooltip: 'Nuova etichetta',
+        tooltip: context.l10n.labelsNew,
         child: const Icon(Icons.add),
       ),
       body:
@@ -57,7 +58,7 @@ class LabelsScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: AppSpacing.lg),
                     Text(
-                      'Nessuna etichetta',
+                      context.l10n.labelsEmpty,
                       style: TextStyle(
                         color: colorScheme.outline,
                         fontSize: AppFontSizes.lg,
@@ -65,7 +66,7 @@ class LabelsScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: AppSpacing.sm),
                     Text(
-                      'Crea una nuova etichetta o aggiungila da una nota.',
+                      context.l10n.labelsEmptyHint,
                       textAlign: TextAlign.center,
                       style: TextStyle(color: colorScheme.outline),
                     ),
@@ -97,12 +98,12 @@ class _LabelTile extends ConsumerWidget {
           IconButton(
             icon: const Icon(Icons.edit_outlined),
             onPressed: () => _showRenameDialog(context, ref),
-            tooltip: 'Rinomina',
+            tooltip: context.l10n.labelsRename,
           ),
           IconButton(
             icon: const Icon(Icons.delete_outline),
             onPressed: () => _confirmDelete(context, ref),
-            tooltip: 'Elimina',
+            tooltip: context.l10n.commonDelete,
           ),
         ],
       ),
@@ -112,9 +113,9 @@ class _LabelTile extends ConsumerWidget {
   Future<void> _showRenameDialog(BuildContext context, WidgetRef ref) async {
     final newName = await showAppTextInputDialog(
       context,
-      title: 'Rinomina etichetta',
-      hintText: 'Nome etichetta',
-      confirmLabel: 'Salva',
+      title: context.l10n.labelsRenameTitle,
+      hintText: context.l10n.labelsNameHint,
+      confirmLabel: context.l10n.commonSave,
       initialValue: tag,
     );
     if (newName == null || newName == tag) return;
@@ -125,9 +126,9 @@ class _LabelTile extends ConsumerWidget {
   Future<void> _confirmDelete(BuildContext context, WidgetRef ref) async {
     final confirmed = await showAppConfirmDialog(
       context,
-      title: 'Elimina etichetta',
-      message: 'L\'etichetta "$tag" verrà rimossa da tutte le note.',
-      confirmLabel: 'Elimina',
+      title: context.l10n.labelsDeleteTitle,
+      message: context.l10n.labelsDeleteConfirm(tag),
+      confirmLabel: context.l10n.commonDelete,
       destructive: true,
     );
     if (!confirmed) return;

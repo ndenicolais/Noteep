@@ -172,7 +172,7 @@ void main() {
 
       await tester.tap(find.text('Ricorrenza'));
       await tester.pumpAndSettle();
-      await tester.tap(find.text(RecurrenceType.weekly.label));
+      await tester.tap(find.text(RecurrenceType.weekly.label(itL10n)));
       await tester.pumpAndSettle();
       expect(event.recurrence, RecurrenceType.weekly);
     });

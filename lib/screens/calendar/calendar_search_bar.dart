@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/core_providers.dart';
 import '../../theme/app_spacing.dart';
@@ -57,7 +58,7 @@ class CalendarSearchBar extends ConsumerWidget {
                         controller.clear();
                         ref.read(provider.notifier).set('');
                       },
-                      tooltip: 'Cancella ricerca',
+                      tooltip: context.l10n.commonClearSearch,
                     )
                     : null,
             border: InputBorder.none,

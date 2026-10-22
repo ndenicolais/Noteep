@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
 import '../../theme/app_spacing.dart';
@@ -41,32 +42,30 @@ class CalendarEventDetailsSection extends StatelessWidget {
         ListTile(
           contentPadding: EdgeInsets.zero,
           leading: const Icon(Icons.calendar_today_outlined),
-          title: Text(
-            DateFormat('EEEE, dd MMMM yyyy', 'it_IT').format(event.startTime),
-          ),
+          title: Text(DateFormat('EEEE, dd MMMM yyyy').format(event.startTime)),
           subtitle: Text(
             event.isAllDay
-                ? 'Tutto il giorno'
+                ? context.l10n.calendarAllDay
                 : '${time.format(event.startTime)} - ${time.format(event.endTime)}',
           ),
           onTap: onPickDateTime,
         ),
         const SizedBox(height: AppSpacing.sm),
         _Toggle(
-          title: 'Tutto il giorno',
+          title: context.l10n.calendarAllDay,
           value: event.isAllDay,
           onChanged: (v) => onChanged(event.copyWith(isAllDay: v)),
         ),
         const SizedBox(height: AppSpacing.sm),
         _Toggle(
           icon: Icons.cake_outlined,
-          title: 'Compleanno',
+          title: context.l10n.calendarBirthday,
           value: event.isBirthday,
           onChanged: (v) => onChanged(event.copyWith(isBirthday: v)),
         ),
         _Toggle(
           icon: Icons.auto_awesome_outlined,
-          title: 'Onomastico',
+          title: context.l10n.calendarNameDay,
           value: event.isNameDay,
           onChanged: (v) => onChanged(event.copyWith(isNameDay: v)),
         ),
@@ -74,8 +73,8 @@ class CalendarEventDetailsSection extends StatelessWidget {
         ListTile(
           contentPadding: EdgeInsets.zero,
           leading: const Icon(Icons.repeat_outlined),
-          title: const Text('Ricorrenza'),
-          subtitle: Text(event.recurrence.label),
+          title: Text(context.l10n.calendarRecurrence),
+          subtitle: Text(event.recurrence.label(context.l10n)),
           onTap: () => _pickRecurrence(context),
         ),
       ],
@@ -91,7 +90,7 @@ class CalendarEventDetailsSection extends StatelessWidget {
             children: [
               for (final type in RecurrenceType.values)
                 ListTile(
-                  title: Text(type.label),
+                  title: Text(type.label(ctx.l10n)),
                   selected: event.recurrence == type,
                   onTap: () => Navigator.pop(ctx, type),
                 ),

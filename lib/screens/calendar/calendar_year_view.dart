@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import '../../models/calendar_model.dart';
 import '../../theme/app_spacing.dart';
 import 'calendar_mini_month.dart';
@@ -47,7 +48,7 @@ class CalendarYearView extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.chevron_left, color: colorScheme.primary),
                 onPressed: onPreviousYear,
-                tooltip: 'Anno precedente',
+                tooltip: context.l10n.calendarPreviousYear,
               ),
               Expanded(
                 child: Text(
@@ -63,7 +64,7 @@ class CalendarYearView extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.chevron_right, color: colorScheme.primary),
                 onPressed: onNextYear,
-                tooltip: 'Anno successivo',
+                tooltip: context.l10n.calendarNextYear,
               ),
             ],
           ),

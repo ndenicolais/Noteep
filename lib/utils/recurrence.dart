@@ -8,6 +8,8 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
+import '../l10n/app_localizations.dart';
+
 enum RecurrenceType {
   none, // No recurrence
   daily, // Repeats every day
@@ -27,33 +29,18 @@ RecurrenceType recurrenceTypeFromString(String value) {
 }
 
 extension RecurrenceTypeExtension on RecurrenceType {
-  String get label {
+  String label(AppLocalizations l) {
     switch (this) {
       case RecurrenceType.none:
-        return 'Non ripetere';
+        return l.eventRecurrenceNone;
       case RecurrenceType.daily:
-        return 'Giornalmente';
+        return l.eventRecurrenceDaily;
       case RecurrenceType.weekly:
-        return 'Settimanalmente';
+        return l.eventRecurrenceWeekly;
       case RecurrenceType.monthly:
-        return 'Mensilmente';
+        return l.eventRecurrenceMonthly;
       case RecurrenceType.yearly:
-        return 'Annualmente';
-    }
-  }
-
-  String get shortLabel {
-    switch (this) {
-      case RecurrenceType.none:
-        return '';
-      case RecurrenceType.daily:
-        return 'Giorn.';
-      case RecurrenceType.weekly:
-        return 'Sett.';
-      case RecurrenceType.monthly:
-        return 'Mens.';
-      case RecurrenceType.yearly:
-        return 'Ann.';
+        return l.eventRecurrenceYearly;
     }
   }
 

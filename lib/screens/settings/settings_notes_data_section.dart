@@ -10,6 +10,7 @@
 
 import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import '../../widgets/shared/action_tile.dart';
 import '../../widgets/shared/section_header.dart';
 
@@ -31,35 +32,35 @@ class SettingsNotesDataSection extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SectionHeader('Dati note'),
+        SectionHeader(context.l10n.settingsNotesDataTitle),
         ActionTile(
           icon: Icons.bar_chart_outlined,
-          title: 'Statistiche',
-          subtitle: 'Visualizza tutte le informazioni sulle tue note',
+          title: context.l10n.statsTitle,
+          subtitle: context.l10n.settingsStatisticsSubtitle,
           onTap: () => AppNav.openStatistics(context),
         ),
         ActionTile(
           icon: Icons.upload,
-          title: 'Esporta note',
-          subtitle: 'Esporta tutte le note in diversi formati',
+          title: context.l10n.exportTitle,
+          subtitle: context.l10n.settingsExportNotesSubtitle,
           onTap: () => AppNav.openExport(context),
         ),
         ActionTile(
           icon: Icons.download_outlined,
-          title: 'Esporta note JSON',
-          subtitle: 'Scarica le note come file .json',
+          title: context.l10n.settingsExportNotesJson,
+          subtitle: context.l10n.settingsExportNotesJsonSubtitle,
           onTap: onExportJson,
         ),
         ActionTile(
           icon: Icons.upload_file_outlined,
-          title: 'Importa note JSON',
-          subtitle: 'Ripristina le note da un file .json',
+          title: context.l10n.settingsImportNotesJson,
+          subtitle: context.l10n.settingsImportNotesJsonSubtitle,
           onTap: onImportJson,
         ),
         ActionTile(
           icon: Icons.delete_sweep_outlined,
-          title: 'Cancella note',
-          subtitle: 'Rimuove tutte le note',
+          title: context.l10n.settingsClearNotes,
+          subtitle: context.l10n.settingsClearNotesSubtitle,
           destructive: true,
           onTap: onClearNotes,
         ),

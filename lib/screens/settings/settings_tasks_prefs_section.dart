@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import '../../widgets/shared/section_header.dart';
 
 /// "Task" preferences section: show-completed and group-by-priority switches.
@@ -31,16 +32,16 @@ class SettingsTasksPrefsSection extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SectionHeader('Task'),
+        SectionHeader(context.l10n.commonTabTasks),
         SwitchListTile(
-          title: const Text('Mostra task completati'),
-          subtitle: const Text('Visualizza i task marcati come completati'),
+          title: Text(context.l10n.settingsShowCompleted),
+          subtitle: Text(context.l10n.settingsShowCompletedSubtitle),
           value: showCompletedTasks,
           onChanged: (_) => onToggleShowCompleted(),
         ),
         SwitchListTile(
-          title: const Text('Raggruppa per priorità'),
-          subtitle: const Text('Ordina task per priorità (speciali in alto)'),
+          title: Text(context.l10n.settingsGroupByPriority),
+          subtitle: Text(context.l10n.settingsGroupByPrioritySubtitle),
           value: groupTasksByPriority,
           onChanged: (_) => onToggleGroupByPriority(),
         ),

@@ -900,4 +900,778 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get recurrenceYearly => 'Annuale';
+
+  @override
+  String get commonSave => 'Salva';
+
+  @override
+  String get commonRestore => 'Ripristina';
+
+  @override
+  String get commonUntitledParens => '(senza titolo)';
+
+  @override
+  String get commonTabNotes => 'Note';
+
+  @override
+  String get commonTabTasks => 'Task';
+
+  @override
+  String get commonTabEvents => 'Eventi';
+
+  @override
+  String get commonToday => 'Oggi';
+
+  @override
+  String get calendarSearchHint => 'Cerca eventi...';
+
+  @override
+  String get calendarChangeView => 'Cambia visualizzazione';
+
+  @override
+  String get calendarViewDay => 'Giorno';
+
+  @override
+  String get calendarViewWeek => 'Settimana';
+
+  @override
+  String get calendarViewMonth => 'Mese';
+
+  @override
+  String get calendarViewYear => 'Anno';
+
+  @override
+  String get calendarViewSchedule => 'Programma';
+
+  @override
+  String get calendarViewSevenDays => '7 giorni';
+
+  @override
+  String get calendarPreviousDay => 'Giorno precedente';
+
+  @override
+  String get calendarNextDay => 'Giorno successivo';
+
+  @override
+  String get calendarPreviousMonth => 'Mese precedente';
+
+  @override
+  String get calendarNextMonth => 'Mese successivo';
+
+  @override
+  String get calendarPreviousYear => 'Anno precedente';
+
+  @override
+  String get calendarNextYear => 'Anno successivo';
+
+  @override
+  String get calendarNoEventsDay => 'Nessun evento per questo giorno';
+
+  @override
+  String get calendarNoEventsScheduled => 'Nessun evento in programma';
+
+  @override
+  String get calendarNoEventsFound => 'Nessun evento trovato';
+
+  @override
+  String get calendarAdd => 'Aggiungi';
+
+  @override
+  String get calendarAllDay => 'Tutto il giorno';
+
+  @override
+  String get calendarBirthday => 'Compleanno';
+
+  @override
+  String get calendarNameDay => 'Onomastico';
+
+  @override
+  String get calendarRecurrence => 'Ricorrenza';
+
+  @override
+  String get calendarEventTitle => 'Evento';
+
+  @override
+  String get calendarDeleteEvent => 'Elimina evento';
+
+  @override
+  String get calendarDeleteEventConfirm =>
+      'Vuoi spostare questo evento nel cestino?';
+
+  @override
+  String get calendarEventTrashed => 'Evento spostato nel cestino';
+
+  @override
+  String get calendarReminder => 'Promemoria';
+
+  @override
+  String get calendarTitleHint => 'Titolo';
+
+  @override
+  String get calendarDescriptionHint => 'Descrizione';
+
+  @override
+  String get calendarReminderNotificationTitle => 'Promemoria evento';
+
+  @override
+  String get calendarReminderNotificationBody =>
+      'Hai un promemoria per questo evento';
+
+  @override
+  String get eventRecurrenceNone => 'Non ripetere';
+
+  @override
+  String get eventRecurrenceDaily => 'Giornalmente';
+
+  @override
+  String get eventRecurrenceWeekly => 'Settimanalmente';
+
+  @override
+  String get eventRecurrenceMonthly => 'Mensilmente';
+
+  @override
+  String get eventRecurrenceYearly => 'Annualmente';
+
+  @override
+  String get remindersUpcoming => 'In arrivo';
+
+  @override
+  String get remindersPast => 'Scaduti';
+
+  @override
+  String get remindersEmpty => 'Nessun promemoria';
+
+  @override
+  String get remindersEmptyHint =>
+      'Aggiungi un promemoria aprendo\nuna nota o un task.';
+
+  @override
+  String get remindersUntitledNote => 'Nota senza titolo';
+
+  @override
+  String get remindersUntitledTask => 'Task senza titolo';
+
+  @override
+  String get archiveEmptyNotes => 'Nessuna nota archiviata';
+
+  @override
+  String get archiveEmptyTasks => 'Nessun task archiviato';
+
+  @override
+  String get archiveEmptyEvents => 'Nessun evento archiviato';
+
+  @override
+  String get trashEmptyAction => 'Svuota';
+
+  @override
+  String get trashAutoDeleteInfo =>
+      'Gli elementi vengono eliminati definitivamente dopo 7 giorni.';
+
+  @override
+  String get trashEmptyTitle => 'Svuota cestino';
+
+  @override
+  String get trashEmptyConfirm =>
+      'Tutti gli elementi nel cestino verranno eliminati definitivamente.';
+
+  @override
+  String get trashEmptyNotes => 'Nessuna nota nel cestino';
+
+  @override
+  String get trashEmptyTasks => 'Nessun task nel cestino';
+
+  @override
+  String get trashEmptyEvents => 'Nessun evento nel cestino';
+
+  @override
+  String get trashExpiresSoon => 'Scade tra poco (eliminazione automatica)';
+
+  @override
+  String get trashExpiresToday => 'Scade oggi';
+
+  @override
+  String trashExpiresInDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Scade tra $count giorni',
+      one: 'Scade tra 1 giorno',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get trashDeleteForever => 'Elimina definitivamente';
+
+  @override
+  String get trashDeleteForeverConfirm =>
+      'La nota verrà eliminata in modo permanente.';
+
+  @override
+  String get labelsNew => 'Nuova etichetta';
+
+  @override
+  String get labelsNameHint => 'Nome etichetta';
+
+  @override
+  String get labelsEmpty => 'Nessuna etichetta';
+
+  @override
+  String get labelsEmptyHint =>
+      'Crea una nuova etichetta o aggiungila da una nota.';
+
+  @override
+  String get labelsRename => 'Rinomina';
+
+  @override
+  String get labelsRenameTitle => 'Rinomina etichetta';
+
+  @override
+  String get labelsDeleteTitle => 'Elimina etichetta';
+
+  @override
+  String labelsDeleteConfirm(String tag) {
+    return 'L\'etichetta \"$tag\" verrà rimossa da tutte le note.';
+  }
+
+  @override
+  String get statsTitle => 'Statistiche';
+
+  @override
+  String get statsNotesActive => 'Attive';
+
+  @override
+  String get statsNotesArchived => 'Archiviate';
+
+  @override
+  String get statsNotesTrashed => 'Eliminate';
+
+  @override
+  String get statsActive => 'Attivi';
+
+  @override
+  String get statsArchived => 'Archiviati';
+
+  @override
+  String get statsTrashed => 'Eliminati';
+
+  @override
+  String get statsBirthdays => 'Compleanni';
+
+  @override
+  String get statsNameDays => 'Onomastici';
+
+  @override
+  String get statsTotal => 'Totali';
+
+  @override
+  String get statsNotesDistribution => 'Distribuzione note';
+
+  @override
+  String get statsNoNotes => 'Nessuna nota presente';
+
+  @override
+  String get statsTasksDistribution => 'Distribuzione task';
+
+  @override
+  String get statsNoTasks => 'Nessun task presente';
+
+  @override
+  String get statsTaskCompletion => 'Completamento task';
+
+  @override
+  String get statsNoData => 'Nessun dato';
+
+  @override
+  String get statsNoTasksShort => 'Nessun task';
+
+  @override
+  String get statsTotalSingular => 'Totale';
+
+  @override
+  String get infoTitle => 'Info app';
+
+  @override
+  String get infoDescriptionTitle => 'Descrizione';
+
+  @override
+  String get infoFeaturesTitle => 'Funzionalità';
+
+  @override
+  String get infoFeatureNotes => 'Note di testo con formattazione';
+
+  @override
+  String get infoFeatureChecklists => 'Liste di controllo interattive';
+
+  @override
+  String get infoFeatureLabels => 'Etichette personalizzate';
+
+  @override
+  String get infoFeatureArchive => 'Archivio e cestino';
+
+  @override
+  String get infoFeatureTheme => 'Tema chiaro, scuro e di sistema';
+
+  @override
+  String get infoFeatureExport => 'Esportazione in PDF, TXT, JSON, CSV, HTML';
+
+  @override
+  String get infoTechTitle => 'Tecnologie';
+
+  @override
+  String get infoGuideTitle => 'Guida';
+
+  @override
+  String get infoGuideOpen => 'Guida introduttiva';
+
+  @override
+  String get infoGuideSubtitle => 'Rivedi la presentazione dell\'app';
+
+  @override
+  String get infoChangelogTitle => 'Novità';
+
+  @override
+  String get infoChangelogOpen => 'Visualizza le novità';
+
+  @override
+  String get infoChangelogSubtitle => 'Le modifiche di ogni versione';
+
+  @override
+  String get infoLicensesTitle => 'Licenze open source';
+
+  @override
+  String get infoLicensesOpen => 'Visualizza licenze';
+
+  @override
+  String get infoLicensesSubtitle => 'Librerie di terze parti utilizzate';
+
+  @override
+  String get exportTitle => 'Esporta note';
+
+  @override
+  String get exportIntro =>
+      'Esporta tutte le note attive (escluse quelle nel cestino).';
+
+  @override
+  String get exportPdfSubtitle => 'Salva le note in un file .pdf';
+
+  @override
+  String get exportTxtSubtitle => 'Salva le note in un file .txt';
+
+  @override
+  String get exportJsonSubtitle => 'Salva le note in un file .json';
+
+  @override
+  String get exportCsvSubtitle => 'Salva le note in un file .csv';
+
+  @override
+  String get exportHtmlSubtitle => 'Salva le note in un file .html';
+
+  @override
+  String get exportDownload => 'Scarica';
+
+  @override
+  String get settingsBackupTitle => 'Backup';
+
+  @override
+  String get settingsAutoBackup => 'Backup automatico';
+
+  @override
+  String get settingsAutoBackupSubtitle => 'Salva automaticamente i tuoi dati';
+
+  @override
+  String get settingsBackupFrequency => 'Frequenza backup';
+
+  @override
+  String get settingsViewBackups => 'Visualizza backup';
+
+  @override
+  String get settingsViewBackupsSubtitle => 'Gestisci i backup salvati';
+
+  @override
+  String get settingsExportCalendarJson => 'Esporta calendario JSON';
+
+  @override
+  String get settingsExportCalendarJsonSubtitle =>
+      'Scarica gli eventi come file .json';
+
+  @override
+  String get settingsImportCalendarJson => 'Importa calendario JSON';
+
+  @override
+  String get settingsImportCalendarJsonSubtitle =>
+      'Ripristina gli eventi da un file .json';
+
+  @override
+  String get settingsExportIcs => 'Esporta calendario ICS';
+
+  @override
+  String get settingsExportIcsSubtitle =>
+      'Esporta tutti gli eventi in un file .ics';
+
+  @override
+  String get settingsImportIcs => 'Importa da Google Calendar';
+
+  @override
+  String get settingsImportIcsSubtitle => 'Importa eventi da un file .ics';
+
+  @override
+  String get settingsClearCalendar => 'Cancella eventi calendario';
+
+  @override
+  String get settingsClearCalendarSubtitle =>
+      'Rimuove tutti gli eventi dal calendario';
+
+  @override
+  String get settingsGlobalBackupTitle => 'Backup globale';
+
+  @override
+  String get settingsExportFullBackup => 'Esporta backup completo';
+
+  @override
+  String get settingsExportFullBackupSubtitle =>
+      'Scarica un file .json con note, task ed eventi';
+
+  @override
+  String get settingsImportFullBackup => 'Importa backup completo';
+
+  @override
+  String get settingsImportFullBackupSubtitle =>
+      'Ripristina dati da un file .json di backup';
+
+  @override
+  String get settingsClearAll => 'Cancella tutti i dati';
+
+  @override
+  String get settingsClearAllSubtitle =>
+      'Elimina definitivamente note, task ed eventi';
+
+  @override
+  String get settingsGoogleDriveTitle => 'Google Drive';
+
+  @override
+  String get settingsConnectDrive => 'Collega Google Drive';
+
+  @override
+  String get settingsConnectDriveSubtitle =>
+      'Sincronizza i backup con il tuo account Google';
+
+  @override
+  String get settingsAccountTitle => 'Account';
+
+  @override
+  String get settingsDeleteAccount => 'Elimina account';
+
+  @override
+  String get settingsDeleteAccountSubtitle =>
+      'Elimina definitivamente l\'account e tutti i suoi dati';
+
+  @override
+  String get settingsInfoSubtitle => 'Informazioni sull\'app e sulla versione';
+
+  @override
+  String get settingsNotesDataTitle => 'Dati note';
+
+  @override
+  String get settingsStatisticsSubtitle =>
+      'Visualizza tutte le informazioni sulle tue note';
+
+  @override
+  String get settingsExportNotesSubtitle =>
+      'Esporta tutte le note in diversi formati';
+
+  @override
+  String get settingsExportNotesJson => 'Esporta note JSON';
+
+  @override
+  String get settingsExportNotesJsonSubtitle =>
+      'Scarica le note come file .json';
+
+  @override
+  String get settingsImportNotesJson => 'Importa note JSON';
+
+  @override
+  String get settingsImportNotesJsonSubtitle =>
+      'Ripristina le note da un file .json';
+
+  @override
+  String get settingsClearNotes => 'Cancella note';
+
+  @override
+  String get settingsClearNotesSubtitle => 'Rimuove tutte le note';
+
+  @override
+  String get settingsLayout => 'Layout';
+
+  @override
+  String get settingsLayoutGrid => 'Griglia';
+
+  @override
+  String get settingsLayoutList => 'Lista';
+
+  @override
+  String get settingsFabMenu => 'Menu del pulsante +';
+
+  @override
+  String get settingsFabMenuOn =>
+      'Scegli tra nota, lista, task, audio e modello';
+
+  @override
+  String get settingsFabMenuOff => 'Il pulsante + crea subito una nuova nota';
+
+  @override
+  String get settingsExportTasksJson => 'Esporta task JSON';
+
+  @override
+  String get settingsExportTasksJsonSubtitle =>
+      'Scarica i task come file .json';
+
+  @override
+  String get settingsImportTasksJson => 'Importa task JSON';
+
+  @override
+  String get settingsImportTasksJsonSubtitle =>
+      'Ripristina i task da un file .json';
+
+  @override
+  String get settingsClearTasks => 'Cancella task';
+
+  @override
+  String get settingsClearTasksSubtitle => 'Rimuove tutti i task';
+
+  @override
+  String get settingsShowCompleted => 'Mostra task completati';
+
+  @override
+  String get settingsShowCompletedSubtitle =>
+      'Visualizza i task marcati come completati';
+
+  @override
+  String get settingsGroupByPriority => 'Raggruppa per priorità';
+
+  @override
+  String get settingsGroupByPrioritySubtitle =>
+      'Ordina task per priorità (speciali in alto)';
+
+  @override
+  String get settingsRestoreBackup => 'Ripristina backup';
+
+  @override
+  String get settingsReplaceAllConfirm =>
+      'I dati attuali (note, task ed eventi) verranno sostituiti con quelli del backup. Continuare?';
+
+  @override
+  String get settingsBackupReadFailed => 'Impossibile leggere il backup.';
+
+  @override
+  String get settingsBackupRestored => 'Backup ripristinato con successo.';
+
+  @override
+  String get settingsNoBackups => 'Nessun backup disponibile';
+
+  @override
+  String get settingsBackupsAvailable => 'Backup disponibili';
+
+  @override
+  String get settingsImport => 'Importa';
+
+  @override
+  String get settingsBackupExported => 'Backup esportato';
+
+  @override
+  String get settingsBackupSavedIn => 'Backup salvato in:\n';
+
+  @override
+  String get settingsImportBackupTitle => 'Importa backup';
+
+  @override
+  String get settingsBackupImported => 'Backup importato con successo.';
+
+  @override
+  String get settingsClearAllConfirm =>
+      'Tutti i dati (note, task ed eventi) verranno eliminati definitivamente. Questa operazione è irreversibile. Continuare?';
+
+  @override
+  String get settingsAllCleared => 'Tutti i dati sono stati eliminati.';
+
+  @override
+  String get settingsDeleteAll => 'Elimina tutto';
+
+  @override
+  String get settingsNotesExported => 'Note esportate';
+
+  @override
+  String get settingsNotesSavedIn => 'Note salvate in:\n';
+
+  @override
+  String get settingsImportNotesTitle => 'Importa note';
+
+  @override
+  String get settingsReplaceNotesConfirm =>
+      'Le note attuali verranno sostituite con quelle del file. Continuare?';
+
+  @override
+  String get settingsNotesImported => 'Note importate con successo.';
+
+  @override
+  String get settingsClearNotesConfirm =>
+      'Tutte le note verranno eliminate definitivamente. Continuare?';
+
+  @override
+  String get settingsNotesCleared => 'Tutte le note sono state eliminate.';
+
+  @override
+  String get settingsTasksExported => 'Task esportati';
+
+  @override
+  String get settingsTasksSavedIn => 'Task salvati in:\n';
+
+  @override
+  String get settingsImportTasksTitle => 'Importa task';
+
+  @override
+  String get settingsReplaceTasksConfirm =>
+      'I task attuali verranno sostituiti con quelli del file. Continuare?';
+
+  @override
+  String get settingsTasksImported => 'Task importati con successo.';
+
+  @override
+  String get settingsClearTasksConfirm =>
+      'Tutti i task verranno eliminati definitivamente. Continuare?';
+
+  @override
+  String get settingsTasksCleared => 'Tutti i task sono stati eliminati.';
+
+  @override
+  String get settingsCalendarExported => 'Calendario esportato';
+
+  @override
+  String get settingsCalendarSavedIn => 'Calendario salvato in:\n';
+
+  @override
+  String get settingsImportCalendarTitle => 'Importa calendario';
+
+  @override
+  String get settingsReplaceCalendarConfirm =>
+      'Gli eventi attuali verranno sostituiti con quelli del file. Continuare?';
+
+  @override
+  String get settingsCalendarImported => 'Calendario importato con successo.';
+
+  @override
+  String get settingsClearEventsTitle => 'Cancella eventi';
+
+  @override
+  String get settingsClearCalendarConfirm =>
+      'Tutti gli eventi del calendario verranno eliminati definitivamente. Continuare?';
+
+  @override
+  String get settingsCalendarCleared =>
+      'Tutti gli eventi sono stati eliminati.';
+
+  @override
+  String get settingsNoEventsToExport => 'Nessun evento da esportare.';
+
+  @override
+  String get settingsIcsDownloaded => 'Calendario ICS scaricato';
+
+  @override
+  String get settingsIcsExported => 'Calendario ICS esportato';
+
+  @override
+  String get settingsNoEventsInFile => 'Nessun evento trovato nel file.';
+
+  @override
+  String get settingsDeleteAccountConfirm =>
+      'L\'account e tutti i suoi dati (note, task ed eventi) verranno eliminati definitivamente da tutti i dispositivi. Questa operazione è irreversibile: se vuoi conservare i dati, esporta prima un backup completo. Continuare?';
+
+  @override
+  String get settingsConfirmPassword => 'Conferma la password';
+
+  @override
+  String get settingsDeleteAccountFailed =>
+      'Impossibile eliminare l\'account. Controlla la connessione e riprova.';
+
+  @override
+  String get settingsAccountDeleted => 'Account eliminato.';
+
+  @override
+  String get settingsDriveComingSoon =>
+      'La sincronizzazione con Google Drive sarà disponibile in una prossima versione.';
+
+  @override
+  String commonErrorDetail(String error) {
+    return 'Errore: $error';
+  }
+
+  @override
+  String settingsImportError(String error) {
+    return 'Errore durante l\'importazione: $error';
+  }
+
+  @override
+  String settingsBackupsLoadError(String error) {
+    return 'Errore nel caricamento dei backup: $error';
+  }
+
+  @override
+  String settingsIcsSavedIn(String path) {
+    return 'Calendario ICS salvato in:\n$path';
+  }
+
+  @override
+  String settingsIcsImported(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count eventi importati nel calendario.',
+      one: '1 evento importato nel calendario.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String infoVersion(String version, int build) {
+    return 'Versione $version (build $build)';
+  }
+
+  @override
+  String get infoDescription =>
+      'Noteep è un\'app per prendere note, creare liste di controllo e gestire le tue idee in modo semplice e veloce. Supporta temi chiaro e scuro, stili di testo personalizzati, etichette, archivio e molto altro.';
+
+  @override
+  String statsCompletedOf(int completed, int total) {
+    return 'Completati: $completed / $total';
+  }
+
+  @override
+  String exportPdfError(String error) {
+    return 'Errore PDF: $error';
+  }
+
+  @override
+  String get exportEmptyNote => '(nota vuota)';
+
+  @override
+  String exportModified(String date) {
+    return 'Modificata: $date';
+  }
+
+  @override
+  String exportLabels(String labels) {
+    return 'Etichette: $labels';
+  }
+
+  @override
+  String get exportDateTimePattern => 'd MMM y \'alle\' HH:mm';
+
+  @override
+  String get exportCsvHeader =>
+      'id,titolo,contenuto,tipo,etichette,fissata,creata,modificata';
+
+  @override
+  String exportHtmlHeading(String date) {
+    return 'Export note – $date';
+  }
 }

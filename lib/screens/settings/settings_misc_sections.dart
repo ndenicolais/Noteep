@@ -10,6 +10,7 @@
 
 import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import '../../widgets/shared/action_tile.dart';
 import '../../widgets/shared/section_header.dart';
 
@@ -24,11 +25,11 @@ class SettingsGoogleDriveSection extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SectionHeader('Google Drive'),
+        SectionHeader(context.l10n.settingsGoogleDriveTitle),
         ActionTile(
           icon: Icons.cloud_outlined,
-          title: 'Collega Google Drive',
-          subtitle: 'Sincronizza i backup con il tuo account Google',
+          title: context.l10n.settingsConnectDrive,
+          subtitle: context.l10n.settingsConnectDriveSubtitle,
           onTap: onTap,
         ),
       ],
@@ -47,11 +48,11 @@ class SettingsAccountSection extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SectionHeader('Account'),
+        SectionHeader(context.l10n.settingsAccountTitle),
         ActionTile(
           icon: Icons.person_remove_outlined,
-          title: 'Elimina account',
-          subtitle: 'Elimina definitivamente l\'account e tutti i suoi dati',
+          title: context.l10n.settingsDeleteAccount,
+          subtitle: context.l10n.settingsDeleteAccountSubtitle,
           destructive: true,
           onTap: onDeleteAccount,
         ),
@@ -68,8 +69,8 @@ class SettingsInfoSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return ActionTile(
       icon: Icons.info_outline,
-      title: 'Info app',
-      subtitle: 'Informazioni sull\'app e sulla versione',
+      title: context.l10n.infoTitle,
+      subtitle: context.l10n.settingsInfoSubtitle,
       onTap: () => AppNav.openInfo(context),
     );
   }

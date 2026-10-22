@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
@@ -132,9 +133,9 @@ class _CalendarEventEditorScreenState
   Future<void> _confirmDelete() async {
     final confirmed = await showAppConfirmDialog(
       context,
-      title: 'Elimina evento',
-      message: 'Vuoi spostare questo evento nel cestino?',
-      confirmLabel: 'Elimina',
+      title: context.l10n.calendarDeleteEvent,
+      message: context.l10n.calendarDeleteEventConfirm,
+      confirmLabel: context.l10n.commonDelete,
       destructive: true,
     );
     if (!confirmed || !mounted) return;
@@ -145,7 +146,7 @@ class _CalendarEventEditorScreenState
       notifyWithUndo(
         notifier.softDelete(id),
         context,
-        message: 'Evento spostato nel cestino',
+        message: context.l10n.calendarEventTrashed,
         onUndo: () => notifier.restoreFromTrash(id),
       );
     }
@@ -185,12 +186,16 @@ class _CalendarEventEditorScreenState
     setState(() => _event = updated);
     _save();
 
+    final l10n = context.l10n;
     await NotificationService.instance.scheduleNotification(
       id: NotificationService.idForEvent(_event.id),
-      title: _event.title.isEmpty ? 'Promemoria evento' : _event.title,
+      title:
+          _event.title.isEmpty
+              ? l10n.calendarReminderNotificationTitle
+              : _event.title,
       body:
           _event.description.isEmpty
-              ? 'Hai un promemoria per questo evento'
+              ? l10n.calendarReminderNotificationBody
               : _event.description.substring(
                 0,
                 _event.description.length > 80 ? 80 : _event.description.length,
@@ -203,7 +208,9 @@ class _CalendarEventEditorScreenState
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Promemoria: ${DateFormat('dd MMM, HH:mm').format(scheduled)}',
+            context.l10n.commonReminderScheduled(
+              DateFormat('dd MMM, HH:mm').format(scheduled),
+            ),
           ),
         ),
       );
@@ -218,9 +225,9 @@ class _CalendarEventEditorScreenState
     setState(() => _event = updated);
     _save();
     if (mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Promemoria rimosso')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.commonReminderRemoved)),
+      );
     }
   }
 
@@ -272,7 +279,7 @@ class _CalendarEventEditorScreenState
               ),
               maxLines: null,
               decoration: InputDecoration(
-                hintText: 'Titolo',
+                hintText: context.l10n.calendarTitleHint,
                 hintStyle: TextStyle(
                   fontSize: AppFontSizes.headline,
                   color: colorScheme.onSurface.withAlpha(100),
@@ -295,7 +302,7 @@ class _CalendarEventEditorScreenState
               maxLines: null,
               minLines: 4,
               decoration: InputDecoration(
-                hintText: 'Descrizione',
+                hintText: context.l10n.calendarDescriptionHint,
                 hintStyle: TextStyle(
                   color: colorScheme.onSurface.withAlpha(100),
                 ),
@@ -307,7 +314,9 @@ class _CalendarEventEditorScreenState
             ),
             const SizedBox(height: AppSpacing.lg),
             Text(
-              'Ultima modifica: ${DateFormat('dd MMM, HH:mm').format(_event.updatedAt)}',
+              context.l10n.commonLastModified(
+                DateFormat('dd MMM, HH:mm').format(_event.updatedAt),
+              ),
               style: TextStyle(
                 fontSize: AppFontSizes.sm,
                 color: colorScheme.onSurface.withAlpha(150),

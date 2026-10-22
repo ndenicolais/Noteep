@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/notes_provider.dart';
 import '../providers/tasks_provider.dart';
@@ -31,13 +32,17 @@ class ArchiveScreen extends ConsumerWidget {
 
     return NavScaffold(
       section: DrawerSection.archive,
-      titleWidget: const Text('Archivio'),
+      titleWidget: Text(context.l10n.navArchive),
       body: DefaultTabController(
         length: 3,
         child: Column(
           children: [
-            const TabBar(
-              tabs: [Tab(text: 'Note'), Tab(text: 'Task'), Tab(text: 'Eventi')],
+            TabBar(
+              tabs: [
+                Tab(text: context.l10n.commonTabNotes),
+                Tab(text: context.l10n.commonTabTasks),
+                Tab(text: context.l10n.commonTabEvents),
+              ],
             ),
             Expanded(
               child: TabBarView(
@@ -67,8 +72,8 @@ class _NoteList extends StatelessWidget {
         icon: loadError != null ? Icons.cloud_off : Icons.note_alt_outlined,
         message:
             loadError != null
-                ? 'Errore di sincronizzazione. Verifica la connessione e riprova.'
-                : 'Nessuna nota archiviata',
+                ? context.l10n.commonSyncError
+                : context.l10n.archiveEmptyNotes,
         iconSize: 64,
       );
     }
@@ -91,8 +96,8 @@ class _TaskList extends StatelessWidget {
         icon: loadError != null ? Icons.cloud_off : Icons.task_alt,
         message:
             loadError != null
-                ? 'Errore di sincronizzazione. Verifica la connessione e riprova.'
-                : 'Nessun task archiviato',
+                ? context.l10n.commonSyncError
+                : context.l10n.archiveEmptyTasks,
         iconSize: 64,
       );
     }
@@ -117,9 +122,9 @@ class _EventList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (events.isEmpty) {
-      return const EmptyState(
+      return EmptyState(
         icon: Icons.event_busy,
-        message: 'Nessun evento archiviato',
+        message: context.l10n.archiveEmptyEvents,
         iconSize: 64,
       );
     }

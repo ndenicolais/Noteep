@@ -10,6 +10,7 @@
 
 import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
 import '../../theme/app_spacing.dart';
@@ -44,7 +45,7 @@ class CalendarMonthView extends StatelessWidget {
     final totalCells = startOffset + daysInMonth;
     final totalRows = (totalCells / 7).ceil();
 
-    final monthLabel = DateFormat('MMMM yyyy', 'it_IT').format(focusedMonth);
+    final monthLabel = DateFormat('MMMM yyyy').format(focusedMonth);
 
     return Column(
       children: [
@@ -58,7 +59,7 @@ class CalendarMonthView extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.chevron_left, color: colorScheme.primary),
                 onPressed: onPreviousMonth,
-                tooltip: 'Mese precedente',
+                tooltip: context.l10n.calendarPreviousMonth,
               ),
               Expanded(
                 child: Text(
@@ -74,14 +75,14 @@ class CalendarMonthView extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.chevron_right, color: colorScheme.primary),
                 onPressed: onNextMonth,
-                tooltip: 'Mese successivo',
+                tooltip: context.l10n.calendarNextMonth,
               ),
             ],
           ),
         ),
         Row(
           children:
-              ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom']
+              weekdayLabels('E')
                   .map(
                     (d) => Expanded(
                       child: Center(

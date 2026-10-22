@@ -10,6 +10,7 @@
 
 import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
 import '../../theme/app_font_sizes.dart';
@@ -41,7 +42,7 @@ class CalendarDayView extends StatelessWidget {
     final dayEvents =
         allEvents.where((e) => calendarEventOccursOn(e, day)).toList()
           ..sort((a, b) => a.startTime.compareTo(b.startTime));
-    final dateStr = DateFormat('EEEE, d MMMM yyyy', 'it_IT').format(day);
+    final dateStr = DateFormat('EEEE, d MMMM yyyy').format(day);
 
     return Column(
       children: [
@@ -55,7 +56,7 @@ class CalendarDayView extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.chevron_left, color: colorScheme.primary),
                 onPressed: onPreviousDay,
-                tooltip: 'Giorno precedente',
+                tooltip: context.l10n.calendarPreviousDay,
               ),
               Expanded(
                 child: Text(
@@ -72,7 +73,7 @@ class CalendarDayView extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.chevron_right, color: colorScheme.primary),
                 onPressed: onNextDay,
-                tooltip: 'Giorno successivo',
+                tooltip: context.l10n.calendarNextDay,
               ),
             ],
           ),
@@ -92,7 +93,7 @@ class CalendarDayView extends StatelessWidget {
                         ),
                         const SizedBox(height: AppSpacing.lg),
                         Text(
-                          'Nessun evento per questo giorno',
+                          context.l10n.calendarNoEventsDay,
                           style: TextStyle(
                             color: colorScheme.outline,
                             fontSize: AppFontSizes.lg,

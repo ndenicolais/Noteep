@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import '../../widgets/shared/action_tile.dart';
 import '../../widgets/shared/section_header.dart';
 
@@ -30,23 +31,23 @@ class SettingsTasksDataSection extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SectionHeader('Task'),
+        SectionHeader(context.l10n.commonTabTasks),
         ActionTile(
           icon: Icons.download_outlined,
-          title: 'Esporta task JSON',
-          subtitle: 'Scarica i task come file .json',
+          title: context.l10n.settingsExportTasksJson,
+          subtitle: context.l10n.settingsExportTasksJsonSubtitle,
           onTap: onExportJson,
         ),
         ActionTile(
           icon: Icons.upload_file_outlined,
-          title: 'Importa task JSON',
-          subtitle: 'Ripristina i task da un file .json',
+          title: context.l10n.settingsImportTasksJson,
+          subtitle: context.l10n.settingsImportTasksJsonSubtitle,
           onTap: onImportJson,
         ),
         ActionTile(
           icon: Icons.delete_sweep_outlined,
-          title: 'Cancella task',
-          subtitle: 'Rimuove tutti i task',
+          title: context.l10n.settingsClearTasks,
+          subtitle: context.l10n.settingsClearTasksSubtitle,
           destructive: true,
           onTap: onClearTasks,
         ),

@@ -324,5 +324,334 @@
   "recurrenceDaily": "Giornaliero",
   "recurrenceWeekly": "Settimanale",
   "recurrenceMonthly": "Mensile",
-  "recurrenceYearly": "Annuale"
+  "recurrenceYearly": "Annuale",
+  "commonSave": "Salva",
+  "commonRestore": "Ripristina",
+  "commonUntitledParens": "(senza titolo)",
+  "commonTabNotes": "Note",
+  "commonTabTasks": "Task",
+  "commonTabEvents": "Eventi",
+  "commonToday": "Oggi",
+  "calendarSearchHint": "Cerca eventi...",
+  "calendarChangeView": "Cambia visualizzazione",
+  "calendarViewDay": "Giorno",
+  "calendarViewWeek": "Settimana",
+  "calendarViewMonth": "Mese",
+  "calendarViewYear": "Anno",
+  "calendarViewSchedule": "Programma",
+  "calendarViewSevenDays": "7 giorni",
+  "calendarPreviousDay": "Giorno precedente",
+  "calendarNextDay": "Giorno successivo",
+  "calendarPreviousMonth": "Mese precedente",
+  "calendarNextMonth": "Mese successivo",
+  "calendarPreviousYear": "Anno precedente",
+  "calendarNextYear": "Anno successivo",
+  "calendarNoEventsDay": "Nessun evento per questo giorno",
+  "calendarNoEventsScheduled": "Nessun evento in programma",
+  "calendarNoEventsFound": "Nessun evento trovato",
+  "calendarAdd": "Aggiungi",
+  "calendarAllDay": "Tutto il giorno",
+  "calendarBirthday": "Compleanno",
+  "calendarNameDay": "Onomastico",
+  "calendarRecurrence": "Ricorrenza",
+  "calendarEventTitle": "Evento",
+  "calendarDeleteEvent": "Elimina evento",
+  "calendarDeleteEventConfirm": "Vuoi spostare questo evento nel cestino?",
+  "calendarEventTrashed": "Evento spostato nel cestino",
+  "calendarReminder": "Promemoria",
+  "calendarTitleHint": "Titolo",
+  "calendarDescriptionHint": "Descrizione",
+  "calendarReminderNotificationTitle": "Promemoria evento",
+  "calendarReminderNotificationBody": "Hai un promemoria per questo evento",
+  "eventRecurrenceNone": "Non ripetere",
+  "eventRecurrenceDaily": "Giornalmente",
+  "eventRecurrenceWeekly": "Settimanalmente",
+  "eventRecurrenceMonthly": "Mensilmente",
+  "eventRecurrenceYearly": "Annualmente",
+  "remindersUpcoming": "In arrivo",
+  "remindersPast": "Scaduti",
+  "remindersEmpty": "Nessun promemoria",
+  "remindersEmptyHint": "Aggiungi un promemoria aprendo\nuna nota o un task.",
+  "remindersUntitledNote": "Nota senza titolo",
+  "remindersUntitledTask": "Task senza titolo",
+  "archiveEmptyNotes": "Nessuna nota archiviata",
+  "archiveEmptyTasks": "Nessun task archiviato",
+  "archiveEmptyEvents": "Nessun evento archiviato",
+  "trashEmptyAction": "Svuota",
+  "trashAutoDeleteInfo": "Gli elementi vengono eliminati definitivamente dopo 7 giorni.",
+  "trashEmptyTitle": "Svuota cestino",
+  "trashEmptyConfirm": "Tutti gli elementi nel cestino verranno eliminati definitivamente.",
+  "trashEmptyNotes": "Nessuna nota nel cestino",
+  "trashEmptyTasks": "Nessun task nel cestino",
+  "trashEmptyEvents": "Nessun evento nel cestino",
+  "trashExpiresSoon": "Scade tra poco (eliminazione automatica)",
+  "trashExpiresToday": "Scade oggi",
+  "trashExpiresInDays": "{count, plural, =1{Scade tra 1 giorno} other{Scade tra {count} giorni}}",
+  "@trashExpiresInDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "trashDeleteForever": "Elimina definitivamente",
+  "trashDeleteForeverConfirm": "La nota verrà eliminata in modo permanente.",
+  "labelsNew": "Nuova etichetta",
+  "labelsNameHint": "Nome etichetta",
+  "labelsEmpty": "Nessuna etichetta",
+  "labelsEmptyHint": "Crea una nuova etichetta o aggiungila da una nota.",
+  "labelsRename": "Rinomina",
+  "labelsRenameTitle": "Rinomina etichetta",
+  "labelsDeleteTitle": "Elimina etichetta",
+  "labelsDeleteConfirm": "L'etichetta \"{tag}\" verrà rimossa da tutte le note.",
+  "@labelsDeleteConfirm": {
+    "placeholders": {
+      "tag": {
+        "type": "String"
+      }
+    }
+  },
+  "statsTitle": "Statistiche",
+  "statsNotesActive": "Attive",
+  "statsNotesArchived": "Archiviate",
+  "statsNotesTrashed": "Eliminate",
+  "statsActive": "Attivi",
+  "statsArchived": "Archiviati",
+  "statsTrashed": "Eliminati",
+  "statsBirthdays": "Compleanni",
+  "statsNameDays": "Onomastici",
+  "statsTotal": "Totali",
+  "statsNotesDistribution": "Distribuzione note",
+  "statsNoNotes": "Nessuna nota presente",
+  "statsTasksDistribution": "Distribuzione task",
+  "statsNoTasks": "Nessun task presente",
+  "statsTaskCompletion": "Completamento task",
+  "statsNoData": "Nessun dato",
+  "statsNoTasksShort": "Nessun task",
+  "statsTotalSingular": "Totale",
+  "infoTitle": "Info app",
+  "infoDescriptionTitle": "Descrizione",
+  "infoFeaturesTitle": "Funzionalità",
+  "infoFeatureNotes": "Note di testo con formattazione",
+  "infoFeatureChecklists": "Liste di controllo interattive",
+  "infoFeatureLabels": "Etichette personalizzate",
+  "infoFeatureArchive": "Archivio e cestino",
+  "infoFeatureTheme": "Tema chiaro, scuro e di sistema",
+  "infoFeatureExport": "Esportazione in PDF, TXT, JSON, CSV, HTML",
+  "infoTechTitle": "Tecnologie",
+  "infoGuideTitle": "Guida",
+  "infoGuideOpen": "Guida introduttiva",
+  "infoGuideSubtitle": "Rivedi la presentazione dell'app",
+  "infoChangelogTitle": "Novità",
+  "infoChangelogOpen": "Visualizza le novità",
+  "infoChangelogSubtitle": "Le modifiche di ogni versione",
+  "infoLicensesTitle": "Licenze open source",
+  "infoLicensesOpen": "Visualizza licenze",
+  "infoLicensesSubtitle": "Librerie di terze parti utilizzate",
+  "exportTitle": "Esporta note",
+  "exportIntro": "Esporta tutte le note attive (escluse quelle nel cestino).",
+  "exportPdfSubtitle": "Salva le note in un file .pdf",
+  "exportTxtSubtitle": "Salva le note in un file .txt",
+  "exportJsonSubtitle": "Salva le note in un file .json",
+  "exportCsvSubtitle": "Salva le note in un file .csv",
+  "exportHtmlSubtitle": "Salva le note in un file .html",
+  "exportDownload": "Scarica",
+  "settingsBackupTitle": "Backup",
+  "settingsAutoBackup": "Backup automatico",
+  "settingsAutoBackupSubtitle": "Salva automaticamente i tuoi dati",
+  "settingsBackupFrequency": "Frequenza backup",
+  "settingsViewBackups": "Visualizza backup",
+  "settingsViewBackupsSubtitle": "Gestisci i backup salvati",
+  "settingsExportCalendarJson": "Esporta calendario JSON",
+  "settingsExportCalendarJsonSubtitle": "Scarica gli eventi come file .json",
+  "settingsImportCalendarJson": "Importa calendario JSON",
+  "settingsImportCalendarJsonSubtitle": "Ripristina gli eventi da un file .json",
+  "settingsExportIcs": "Esporta calendario ICS",
+  "settingsExportIcsSubtitle": "Esporta tutti gli eventi in un file .ics",
+  "settingsImportIcs": "Importa da Google Calendar",
+  "settingsImportIcsSubtitle": "Importa eventi da un file .ics",
+  "settingsClearCalendar": "Cancella eventi calendario",
+  "settingsClearCalendarSubtitle": "Rimuove tutti gli eventi dal calendario",
+  "settingsGlobalBackupTitle": "Backup globale",
+  "settingsExportFullBackup": "Esporta backup completo",
+  "settingsExportFullBackupSubtitle": "Scarica un file .json con note, task ed eventi",
+  "settingsImportFullBackup": "Importa backup completo",
+  "settingsImportFullBackupSubtitle": "Ripristina dati da un file .json di backup",
+  "settingsClearAll": "Cancella tutti i dati",
+  "settingsClearAllSubtitle": "Elimina definitivamente note, task ed eventi",
+  "settingsGoogleDriveTitle": "Google Drive",
+  "settingsConnectDrive": "Collega Google Drive",
+  "settingsConnectDriveSubtitle": "Sincronizza i backup con il tuo account Google",
+  "settingsAccountTitle": "Account",
+  "settingsDeleteAccount": "Elimina account",
+  "settingsDeleteAccountSubtitle": "Elimina definitivamente l'account e tutti i suoi dati",
+  "settingsInfoSubtitle": "Informazioni sull'app e sulla versione",
+  "settingsNotesDataTitle": "Dati note",
+  "settingsStatisticsSubtitle": "Visualizza tutte le informazioni sulle tue note",
+  "settingsExportNotesSubtitle": "Esporta tutte le note in diversi formati",
+  "settingsExportNotesJson": "Esporta note JSON",
+  "settingsExportNotesJsonSubtitle": "Scarica le note come file .json",
+  "settingsImportNotesJson": "Importa note JSON",
+  "settingsImportNotesJsonSubtitle": "Ripristina le note da un file .json",
+  "settingsClearNotes": "Cancella note",
+  "settingsClearNotesSubtitle": "Rimuove tutte le note",
+  "settingsLayout": "Layout",
+  "settingsLayoutGrid": "Griglia",
+  "settingsLayoutList": "Lista",
+  "settingsFabMenu": "Menu del pulsante +",
+  "settingsFabMenuOn": "Scegli tra nota, lista, task, audio e modello",
+  "settingsFabMenuOff": "Il pulsante + crea subito una nuova nota",
+  "settingsExportTasksJson": "Esporta task JSON",
+  "settingsExportTasksJsonSubtitle": "Scarica i task come file .json",
+  "settingsImportTasksJson": "Importa task JSON",
+  "settingsImportTasksJsonSubtitle": "Ripristina i task da un file .json",
+  "settingsClearTasks": "Cancella task",
+  "settingsClearTasksSubtitle": "Rimuove tutti i task",
+  "settingsShowCompleted": "Mostra task completati",
+  "settingsShowCompletedSubtitle": "Visualizza i task marcati come completati",
+  "settingsGroupByPriority": "Raggruppa per priorità",
+  "settingsGroupByPrioritySubtitle": "Ordina task per priorità (speciali in alto)",
+  "settingsRestoreBackup": "Ripristina backup",
+  "settingsReplaceAllConfirm": "I dati attuali (note, task ed eventi) verranno sostituiti con quelli del backup. Continuare?",
+  "settingsBackupReadFailed": "Impossibile leggere il backup.",
+  "settingsBackupRestored": "Backup ripristinato con successo.",
+  "settingsNoBackups": "Nessun backup disponibile",
+  "settingsBackupsAvailable": "Backup disponibili",
+  "settingsImport": "Importa",
+  "settingsBackupExported": "Backup esportato",
+  "settingsBackupSavedIn": "Backup salvato in:\n",
+  "settingsImportBackupTitle": "Importa backup",
+  "settingsBackupImported": "Backup importato con successo.",
+  "settingsClearAllConfirm": "Tutti i dati (note, task ed eventi) verranno eliminati definitivamente. Questa operazione è irreversibile. Continuare?",
+  "settingsAllCleared": "Tutti i dati sono stati eliminati.",
+  "settingsDeleteAll": "Elimina tutto",
+  "settingsNotesExported": "Note esportate",
+  "settingsNotesSavedIn": "Note salvate in:\n",
+  "settingsImportNotesTitle": "Importa note",
+  "settingsReplaceNotesConfirm": "Le note attuali verranno sostituite con quelle del file. Continuare?",
+  "settingsNotesImported": "Note importate con successo.",
+  "settingsClearNotesConfirm": "Tutte le note verranno eliminate definitivamente. Continuare?",
+  "settingsNotesCleared": "Tutte le note sono state eliminate.",
+  "settingsTasksExported": "Task esportati",
+  "settingsTasksSavedIn": "Task salvati in:\n",
+  "settingsImportTasksTitle": "Importa task",
+  "settingsReplaceTasksConfirm": "I task attuali verranno sostituiti con quelli del file. Continuare?",
+  "settingsTasksImported": "Task importati con successo.",
+  "settingsClearTasksConfirm": "Tutti i task verranno eliminati definitivamente. Continuare?",
+  "settingsTasksCleared": "Tutti i task sono stati eliminati.",
+  "settingsCalendarExported": "Calendario esportato",
+  "settingsCalendarSavedIn": "Calendario salvato in:\n",
+  "settingsImportCalendarTitle": "Importa calendario",
+  "settingsReplaceCalendarConfirm": "Gli eventi attuali verranno sostituiti con quelli del file. Continuare?",
+  "settingsCalendarImported": "Calendario importato con successo.",
+  "settingsClearEventsTitle": "Cancella eventi",
+  "settingsClearCalendarConfirm": "Tutti gli eventi del calendario verranno eliminati definitivamente. Continuare?",
+  "settingsCalendarCleared": "Tutti gli eventi sono stati eliminati.",
+  "settingsNoEventsToExport": "Nessun evento da esportare.",
+  "settingsIcsDownloaded": "Calendario ICS scaricato",
+  "settingsIcsExported": "Calendario ICS esportato",
+  "settingsNoEventsInFile": "Nessun evento trovato nel file.",
+  "settingsDeleteAccountConfirm": "L'account e tutti i suoi dati (note, task ed eventi) verranno eliminati definitivamente da tutti i dispositivi. Questa operazione è irreversibile: se vuoi conservare i dati, esporta prima un backup completo. Continuare?",
+  "settingsConfirmPassword": "Conferma la password",
+  "settingsDeleteAccountFailed": "Impossibile eliminare l'account. Controlla la connessione e riprova.",
+  "settingsAccountDeleted": "Account eliminato.",
+  "settingsDriveComingSoon": "La sincronizzazione con Google Drive sarà disponibile in una prossima versione.",
+  "commonErrorDetail": "Errore: {error}",
+  "@commonErrorDetail": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsImportError": "Errore durante l'importazione: {error}",
+  "@settingsImportError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsBackupsLoadError": "Errore nel caricamento dei backup: {error}",
+  "@settingsBackupsLoadError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsIcsSavedIn": "Calendario ICS salvato in:\n{path}",
+  "@settingsIcsSavedIn": {
+    "placeholders": {
+      "path": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsIcsImported": "{count, plural, =1{1 evento importato nel calendario.} other{{count} eventi importati nel calendario.}}",
+  "@settingsIcsImported": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "infoVersion": "Versione {version} (build {build})",
+  "@infoVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "build": {
+        "type": "int"
+      }
+    }
+  },
+  "infoDescription": "Noteep è un'app per prendere note, creare liste di controllo e gestire le tue idee in modo semplice e veloce. Supporta temi chiaro e scuro, stili di testo personalizzati, etichette, archivio e molto altro.",
+  "statsCompletedOf": "Completati: {completed} / {total}",
+  "@statsCompletedOf": {
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "exportPdfError": "Errore PDF: {error}",
+  "@exportPdfError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "exportEmptyNote": "(nota vuota)",
+  "exportModified": "Modificata: {date}",
+  "@exportModified": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "exportLabels": "Etichette: {labels}",
+  "@exportLabels": {
+    "placeholders": {
+      "labels": {
+        "type": "String"
+      }
+    }
+  },
+  "exportDateTimePattern": "d MMM y 'alle' HH:mm",
+  "exportCsvHeader": "id,titolo,contenuto,tipo,etichette,fissata,creata,modificata",
+  "exportHtmlHeading": "Export note – {date}",
+  "@exportHtmlHeading": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  }
 }

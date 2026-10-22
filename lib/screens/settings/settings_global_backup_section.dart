@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import '../../widgets/shared/action_tile.dart';
 import '../../widgets/shared/section_header.dart';
 
@@ -30,23 +31,23 @@ class SettingsGlobalBackupSection extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SectionHeader('Backup globale'),
+        SectionHeader(context.l10n.settingsGlobalBackupTitle),
         ActionTile(
           icon: Icons.save_alt_outlined,
-          title: 'Esporta backup completo',
-          subtitle: 'Scarica un file .json con note, task ed eventi',
+          title: context.l10n.settingsExportFullBackup,
+          subtitle: context.l10n.settingsExportFullBackupSubtitle,
           onTap: onExportFullBackup,
         ),
         ActionTile(
           icon: Icons.restore_outlined,
-          title: 'Importa backup completo',
-          subtitle: 'Ripristina dati da un file .json di backup',
+          title: context.l10n.settingsImportFullBackup,
+          subtitle: context.l10n.settingsImportFullBackupSubtitle,
           onTap: onImportFullBackup,
         ),
         ActionTile(
           icon: Icons.delete_forever_outlined,
-          title: 'Cancella tutti i dati',
-          subtitle: 'Elimina definitivamente note, task ed eventi',
+          title: context.l10n.settingsClearAll,
+          subtitle: context.l10n.settingsClearAllSubtitle,
           destructive: true,
           onTap: onClearAll,
         ),

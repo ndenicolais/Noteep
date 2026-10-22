@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:noteep/providers/settings/ui_provider.dart';
 import '../../providers/calendar_provider.dart';
@@ -93,7 +94,7 @@ class StatisticsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Statistiche')),
+      appBar: AppBar(title: Text(context.l10n.statsTitle)),
       body: const SingleChildScrollView(
         padding: EdgeInsets.all(AppSpacing.lg),
         child: Column(
@@ -129,25 +130,25 @@ class _NotesSection extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const StatsSectionHeader(title: 'Note', icon: Icons.notes),
+        StatsSectionHeader(title: context.l10n.navNotes, icon: Icons.notes),
         const SizedBox(height: AppSpacing.md),
         StatsGrid(
           items: [
             StatsDataItem(
               icon: Icons.notes,
-              label: 'Attive',
+              label: context.l10n.statsNotesActive,
               value: stats.activeNotes,
               color: theme.colorScheme.primary,
             ),
             StatsDataItem(
               icon: Icons.archive_outlined,
-              label: 'Archiviate',
+              label: context.l10n.statsNotesArchived,
               value: stats.archivedNotes,
               color: Colors.orange,
             ),
             StatsDataItem(
               icon: Icons.delete_outline,
-              label: 'Eliminate',
+              label: context.l10n.statsNotesTrashed,
               value: stats.trashedNotes,
               color: theme.colorScheme.error,
             ),
@@ -171,25 +172,28 @@ class _TasksSection extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const StatsSectionHeader(title: 'Task', icon: Icons.task_alt),
+        StatsSectionHeader(
+          title: context.l10n.commonTabTasks,
+          icon: Icons.task_alt,
+        ),
         const SizedBox(height: AppSpacing.md),
         StatsGrid(
           items: [
             StatsDataItem(
               icon: Icons.task_alt,
-              label: 'Attivi',
+              label: context.l10n.statsActive,
               value: stats.activeTasks,
               color: Colors.teal,
             ),
             StatsDataItem(
               icon: Icons.archive_outlined,
-              label: 'Archiviati',
+              label: context.l10n.statsArchived,
               value: stats.archivedTasks,
               color: Colors.orange,
             ),
             StatsDataItem(
               icon: Icons.delete_outline,
-              label: 'Eliminati',
+              label: context.l10n.statsTrashed,
               value: stats.trashedTasks,
               color: theme.colorScheme.error,
             ),
@@ -213,8 +217,8 @@ class _CalendarSection extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const StatsSectionHeader(
-          title: 'Calendario',
+        StatsSectionHeader(
+          title: context.l10n.navCalendar,
           icon: Icons.calendar_today,
         ),
         const SizedBox(height: AppSpacing.md),
@@ -222,31 +226,31 @@ class _CalendarSection extends ConsumerWidget {
           items: [
             StatsDataItem(
               icon: Icons.calendar_today,
-              label: 'Attivi',
+              label: context.l10n.statsActive,
               value: stats.activeEvents,
               color: theme.colorScheme.tertiary,
             ),
             StatsDataItem(
               icon: Icons.archive_outlined,
-              label: 'Archiviati',
+              label: context.l10n.statsArchived,
               value: stats.archivedEvents,
               color: Colors.orange,
             ),
             StatsDataItem(
               icon: Icons.delete_outline,
-              label: 'Eliminati',
+              label: context.l10n.statsTrashed,
               value: stats.trashedEvents,
               color: theme.colorScheme.error,
             ),
             StatsDataItem(
               icon: Icons.cake,
-              label: 'Compleanni',
+              label: context.l10n.statsBirthdays,
               value: stats.birthdays,
               color: Colors.pink,
             ),
             StatsDataItem(
               icon: Icons.auto_awesome,
-              label: 'Onomastici',
+              label: context.l10n.statsNameDays,
               value: stats.nameDays,
               color: Colors.amber,
             ),
@@ -271,13 +275,16 @@ class _TagsSection extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const StatsSectionHeader(title: 'Etichette', icon: Icons.label_outline),
+        StatsSectionHeader(
+          title: context.l10n.navLabels,
+          icon: Icons.label_outline,
+        ),
         const SizedBox(height: AppSpacing.md),
         StatsGrid(
           items: [
             StatsDataItem(
               icon: Icons.label_outline,
-              label: 'Totali',
+              label: context.l10n.statsTotal,
               value: totalTags,
               color: Colors.purple,
             ),
@@ -306,8 +313,8 @@ class _ChartsSection extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         // Grafico Note
-        const StatsSectionHeader(
-          title: 'Distribuzione Note',
+        StatsSectionHeader(
+          title: context.l10n.statsNotesDistribution,
           icon: Icons.pie_chart_outline,
         ),
         const SizedBox(height: AppSpacing.md),
@@ -315,23 +322,21 @@ class _ChartsSection extends ConsumerWidget {
           height: 200,
           child:
               totalNotes == 0
-                  ? const _EmptyChartPlaceholder(
-                    message: 'Nessuna nota presente',
-                  )
+                  ? _EmptyChartPlaceholder(message: context.l10n.statsNoNotes)
                   : StatsPieChart(
                     sections: [
                       StatsPieSection(
-                        'Attive',
+                        context.l10n.statsNotesActive,
                         stats.activeNotes.toDouble(),
                         theme.colorScheme.primary,
                       ),
                       StatsPieSection(
-                        'Archiviate',
+                        context.l10n.statsNotesArchived,
                         stats.archivedNotes.toDouble(),
                         Colors.orange,
                       ),
                       StatsPieSection(
-                        'Eliminate',
+                        context.l10n.statsNotesTrashed,
                         stats.trashedNotes.toDouble(),
                         theme.colorScheme.error,
                       ),
@@ -342,8 +347,8 @@ class _ChartsSection extends ConsumerWidget {
         const SizedBox(height: AppSpacing.xxl),
 
         // Grafico Task
-        const StatsSectionHeader(
-          title: 'Distribuzione Task',
+        StatsSectionHeader(
+          title: context.l10n.statsTasksDistribution,
           icon: Icons.pie_chart_outline,
         ),
         const SizedBox(height: AppSpacing.md),
@@ -351,23 +356,21 @@ class _ChartsSection extends ConsumerWidget {
           height: 200,
           child:
               (totalActiveTasks + stats.archivedTasks) == 0
-                  ? const _EmptyChartPlaceholder(
-                    message: 'Nessun task presente',
-                  )
+                  ? _EmptyChartPlaceholder(message: context.l10n.statsNoTasks)
                   : StatsPieChart(
                     sections: [
                       StatsPieSection(
-                        'Attivi',
+                        context.l10n.statsActive,
                         stats.activeTasks.toDouble(),
                         Colors.teal,
                       ),
                       StatsPieSection(
-                        'Completati',
+                        context.l10n.tasksCompletedSection,
                         stats.completedTasks.toDouble(),
                         Colors.green,
                       ),
                       StatsPieSection(
-                        'Archiviati',
+                        context.l10n.statsArchived,
                         stats.archivedTasks.toDouble(),
                         Colors.orange,
                       ),
@@ -378,8 +381,8 @@ class _ChartsSection extends ConsumerWidget {
         const SizedBox(height: AppSpacing.xxl),
 
         // Barra di Completamento
-        const StatsSectionHeader(
-          title: 'Completamento Task',
+        StatsSectionHeader(
+          title: context.l10n.statsTaskCompletion,
           icon: Icons.bar_chart_outlined,
         ),
         const SizedBox(height: AppSpacing.md),

@@ -36,7 +36,7 @@ class CalendarMiniMonthView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final monthDate = DateTime(year, month);
-    final monthLabel = DateFormat('MMMM', 'it_IT').format(monthDate);
+    final monthLabel = DateFormat('MMMM').format(monthDate);
     final firstDay = DateTime(year, month, 1);
     final daysInMonth = DateUtils.getDaysInMonth(year, month);
     final startOffset = firstDay.weekday - 1;
@@ -70,7 +70,7 @@ class CalendarMiniMonthView extends StatelessWidget {
             ),
             Row(
               children:
-                  ['L', 'M', 'M', 'G', 'V', 'S', 'D']
+                  weekdayLabels('EEEEE')
                       .map(
                         (d) => Expanded(
                           child: Center(

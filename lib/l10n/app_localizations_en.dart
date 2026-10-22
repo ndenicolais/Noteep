@@ -898,4 +898,774 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get recurrenceYearly => 'Yearly';
+
+  @override
+  String get commonSave => 'Save';
+
+  @override
+  String get commonRestore => 'Restore';
+
+  @override
+  String get commonUntitledParens => '(untitled)';
+
+  @override
+  String get commonTabNotes => 'Notes';
+
+  @override
+  String get commonTabTasks => 'Tasks';
+
+  @override
+  String get commonTabEvents => 'Events';
+
+  @override
+  String get commonToday => 'Today';
+
+  @override
+  String get calendarSearchHint => 'Search events...';
+
+  @override
+  String get calendarChangeView => 'Change view';
+
+  @override
+  String get calendarViewDay => 'Day';
+
+  @override
+  String get calendarViewWeek => 'Week';
+
+  @override
+  String get calendarViewMonth => 'Month';
+
+  @override
+  String get calendarViewYear => 'Year';
+
+  @override
+  String get calendarViewSchedule => 'Schedule';
+
+  @override
+  String get calendarViewSevenDays => '7 days';
+
+  @override
+  String get calendarPreviousDay => 'Previous day';
+
+  @override
+  String get calendarNextDay => 'Next day';
+
+  @override
+  String get calendarPreviousMonth => 'Previous month';
+
+  @override
+  String get calendarNextMonth => 'Next month';
+
+  @override
+  String get calendarPreviousYear => 'Previous year';
+
+  @override
+  String get calendarNextYear => 'Next year';
+
+  @override
+  String get calendarNoEventsDay => 'No events for this day';
+
+  @override
+  String get calendarNoEventsScheduled => 'No upcoming events';
+
+  @override
+  String get calendarNoEventsFound => 'No events found';
+
+  @override
+  String get calendarAdd => 'Add';
+
+  @override
+  String get calendarAllDay => 'All day';
+
+  @override
+  String get calendarBirthday => 'Birthday';
+
+  @override
+  String get calendarNameDay => 'Name day';
+
+  @override
+  String get calendarRecurrence => 'Repeat';
+
+  @override
+  String get calendarEventTitle => 'Event';
+
+  @override
+  String get calendarDeleteEvent => 'Delete event';
+
+  @override
+  String get calendarDeleteEventConfirm => 'Move this event to the trash?';
+
+  @override
+  String get calendarEventTrashed => 'Event moved to trash';
+
+  @override
+  String get calendarReminder => 'Reminder';
+
+  @override
+  String get calendarTitleHint => 'Title';
+
+  @override
+  String get calendarDescriptionHint => 'Description';
+
+  @override
+  String get calendarReminderNotificationTitle => 'Event reminder';
+
+  @override
+  String get calendarReminderNotificationBody =>
+      'You have a reminder for this event';
+
+  @override
+  String get eventRecurrenceNone => 'Does not repeat';
+
+  @override
+  String get eventRecurrenceDaily => 'Daily';
+
+  @override
+  String get eventRecurrenceWeekly => 'Weekly';
+
+  @override
+  String get eventRecurrenceMonthly => 'Monthly';
+
+  @override
+  String get eventRecurrenceYearly => 'Yearly';
+
+  @override
+  String get remindersUpcoming => 'Upcoming';
+
+  @override
+  String get remindersPast => 'Past';
+
+  @override
+  String get remindersEmpty => 'No reminders';
+
+  @override
+  String get remindersEmptyHint =>
+      'Add a reminder by opening\na note or a task.';
+
+  @override
+  String get remindersUntitledNote => 'Untitled note';
+
+  @override
+  String get remindersUntitledTask => 'Untitled task';
+
+  @override
+  String get archiveEmptyNotes => 'No archived notes';
+
+  @override
+  String get archiveEmptyTasks => 'No archived tasks';
+
+  @override
+  String get archiveEmptyEvents => 'No archived events';
+
+  @override
+  String get trashEmptyAction => 'Empty';
+
+  @override
+  String get trashAutoDeleteInfo =>
+      'Items are permanently deleted after 7 days.';
+
+  @override
+  String get trashEmptyTitle => 'Empty trash';
+
+  @override
+  String get trashEmptyConfirm =>
+      'All items in the trash will be permanently deleted.';
+
+  @override
+  String get trashEmptyNotes => 'No notes in the trash';
+
+  @override
+  String get trashEmptyTasks => 'No tasks in the trash';
+
+  @override
+  String get trashEmptyEvents => 'No events in the trash';
+
+  @override
+  String get trashExpiresSoon => 'Expires soon (automatic deletion)';
+
+  @override
+  String get trashExpiresToday => 'Expires today';
+
+  @override
+  String trashExpiresInDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Expires in $count days',
+      one: 'Expires in 1 day',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get trashDeleteForever => 'Delete permanently';
+
+  @override
+  String get trashDeleteForeverConfirm =>
+      'The note will be permanently deleted.';
+
+  @override
+  String get labelsNew => 'New label';
+
+  @override
+  String get labelsNameHint => 'Label name';
+
+  @override
+  String get labelsEmpty => 'No labels';
+
+  @override
+  String get labelsEmptyHint => 'Create a new label or add one from a note.';
+
+  @override
+  String get labelsRename => 'Rename';
+
+  @override
+  String get labelsRenameTitle => 'Rename label';
+
+  @override
+  String get labelsDeleteTitle => 'Delete label';
+
+  @override
+  String labelsDeleteConfirm(String tag) {
+    return 'The label \"$tag\" will be removed from all notes.';
+  }
+
+  @override
+  String get statsTitle => 'Statistics';
+
+  @override
+  String get statsNotesActive => 'Active';
+
+  @override
+  String get statsNotesArchived => 'Archived';
+
+  @override
+  String get statsNotesTrashed => 'Deleted';
+
+  @override
+  String get statsActive => 'Active';
+
+  @override
+  String get statsArchived => 'Archived';
+
+  @override
+  String get statsTrashed => 'Deleted';
+
+  @override
+  String get statsBirthdays => 'Birthdays';
+
+  @override
+  String get statsNameDays => 'Name days';
+
+  @override
+  String get statsTotal => 'Total';
+
+  @override
+  String get statsNotesDistribution => 'Notes breakdown';
+
+  @override
+  String get statsNoNotes => 'No notes yet';
+
+  @override
+  String get statsTasksDistribution => 'Tasks breakdown';
+
+  @override
+  String get statsNoTasks => 'No tasks yet';
+
+  @override
+  String get statsTaskCompletion => 'Task completion';
+
+  @override
+  String get statsNoData => 'No data';
+
+  @override
+  String get statsNoTasksShort => 'No tasks';
+
+  @override
+  String get statsTotalSingular => 'Total';
+
+  @override
+  String get infoTitle => 'App info';
+
+  @override
+  String get infoDescriptionTitle => 'Description';
+
+  @override
+  String get infoFeaturesTitle => 'Features';
+
+  @override
+  String get infoFeatureNotes => 'Text notes with formatting';
+
+  @override
+  String get infoFeatureChecklists => 'Interactive checklists';
+
+  @override
+  String get infoFeatureLabels => 'Custom labels';
+
+  @override
+  String get infoFeatureArchive => 'Archive and trash';
+
+  @override
+  String get infoFeatureTheme => 'Light, dark and system theme';
+
+  @override
+  String get infoFeatureExport => 'Export to PDF, TXT, JSON, CSV, HTML';
+
+  @override
+  String get infoTechTitle => 'Technologies';
+
+  @override
+  String get infoGuideTitle => 'Guide';
+
+  @override
+  String get infoGuideOpen => 'Introduction';
+
+  @override
+  String get infoGuideSubtitle => 'Watch the app introduction again';
+
+  @override
+  String get infoChangelogTitle => 'What\'s new';
+
+  @override
+  String get infoChangelogOpen => 'See what\'s new';
+
+  @override
+  String get infoChangelogSubtitle => 'The changes in each version';
+
+  @override
+  String get infoLicensesTitle => 'Open source licenses';
+
+  @override
+  String get infoLicensesOpen => 'View licenses';
+
+  @override
+  String get infoLicensesSubtitle => 'Third-party libraries used';
+
+  @override
+  String get exportTitle => 'Export notes';
+
+  @override
+  String get exportIntro =>
+      'Export all active notes (excluding those in the trash).';
+
+  @override
+  String get exportPdfSubtitle => 'Save the notes to a .pdf file';
+
+  @override
+  String get exportTxtSubtitle => 'Save the notes to a .txt file';
+
+  @override
+  String get exportJsonSubtitle => 'Save the notes to a .json file';
+
+  @override
+  String get exportCsvSubtitle => 'Save the notes to a .csv file';
+
+  @override
+  String get exportHtmlSubtitle => 'Save the notes to a .html file';
+
+  @override
+  String get exportDownload => 'Download';
+
+  @override
+  String get settingsBackupTitle => 'Backup';
+
+  @override
+  String get settingsAutoBackup => 'Automatic backup';
+
+  @override
+  String get settingsAutoBackupSubtitle => 'Save your data automatically';
+
+  @override
+  String get settingsBackupFrequency => 'Backup frequency';
+
+  @override
+  String get settingsViewBackups => 'View backups';
+
+  @override
+  String get settingsViewBackupsSubtitle => 'Manage saved backups';
+
+  @override
+  String get settingsExportCalendarJson => 'Export calendar JSON';
+
+  @override
+  String get settingsExportCalendarJsonSubtitle =>
+      'Download the events as a .json file';
+
+  @override
+  String get settingsImportCalendarJson => 'Import calendar JSON';
+
+  @override
+  String get settingsImportCalendarJsonSubtitle =>
+      'Restore the events from a .json file';
+
+  @override
+  String get settingsExportIcs => 'Export ICS calendar';
+
+  @override
+  String get settingsExportIcsSubtitle => 'Export all events to an .ics file';
+
+  @override
+  String get settingsImportIcs => 'Import from Google Calendar';
+
+  @override
+  String get settingsImportIcsSubtitle => 'Import events from an .ics file';
+
+  @override
+  String get settingsClearCalendar => 'Clear calendar events';
+
+  @override
+  String get settingsClearCalendarSubtitle =>
+      'Removes all events from the calendar';
+
+  @override
+  String get settingsGlobalBackupTitle => 'Full backup';
+
+  @override
+  String get settingsExportFullBackup => 'Export full backup';
+
+  @override
+  String get settingsExportFullBackupSubtitle =>
+      'Download a .json file with notes, tasks and events';
+
+  @override
+  String get settingsImportFullBackup => 'Import full backup';
+
+  @override
+  String get settingsImportFullBackupSubtitle =>
+      'Restore data from a .json backup file';
+
+  @override
+  String get settingsClearAll => 'Clear all data';
+
+  @override
+  String get settingsClearAllSubtitle =>
+      'Permanently delete notes, tasks and events';
+
+  @override
+  String get settingsGoogleDriveTitle => 'Google Drive';
+
+  @override
+  String get settingsConnectDrive => 'Connect Google Drive';
+
+  @override
+  String get settingsConnectDriveSubtitle =>
+      'Sync backups with your Google account';
+
+  @override
+  String get settingsAccountTitle => 'Account';
+
+  @override
+  String get settingsDeleteAccount => 'Delete account';
+
+  @override
+  String get settingsDeleteAccountSubtitle =>
+      'Permanently delete the account and all its data';
+
+  @override
+  String get settingsInfoSubtitle => 'About the app and its version';
+
+  @override
+  String get settingsNotesDataTitle => 'Notes data';
+
+  @override
+  String get settingsStatisticsSubtitle =>
+      'See all the information about your notes';
+
+  @override
+  String get settingsExportNotesSubtitle =>
+      'Export all notes in several formats';
+
+  @override
+  String get settingsExportNotesJson => 'Export notes JSON';
+
+  @override
+  String get settingsExportNotesJsonSubtitle =>
+      'Download the notes as a .json file';
+
+  @override
+  String get settingsImportNotesJson => 'Import notes JSON';
+
+  @override
+  String get settingsImportNotesJsonSubtitle =>
+      'Restore the notes from a .json file';
+
+  @override
+  String get settingsClearNotes => 'Clear notes';
+
+  @override
+  String get settingsClearNotesSubtitle => 'Removes all notes';
+
+  @override
+  String get settingsLayout => 'Layout';
+
+  @override
+  String get settingsLayoutGrid => 'Grid';
+
+  @override
+  String get settingsLayoutList => 'List';
+
+  @override
+  String get settingsFabMenu => '+ button menu';
+
+  @override
+  String get settingsFabMenuOn =>
+      'Choose between note, checklist, task, audio and template';
+
+  @override
+  String get settingsFabMenuOff => 'The + button creates a new note right away';
+
+  @override
+  String get settingsExportTasksJson => 'Export tasks JSON';
+
+  @override
+  String get settingsExportTasksJsonSubtitle =>
+      'Download the tasks as a .json file';
+
+  @override
+  String get settingsImportTasksJson => 'Import tasks JSON';
+
+  @override
+  String get settingsImportTasksJsonSubtitle =>
+      'Restore the tasks from a .json file';
+
+  @override
+  String get settingsClearTasks => 'Clear tasks';
+
+  @override
+  String get settingsClearTasksSubtitle => 'Removes all tasks';
+
+  @override
+  String get settingsShowCompleted => 'Show completed tasks';
+
+  @override
+  String get settingsShowCompletedSubtitle =>
+      'Show the tasks marked as completed';
+
+  @override
+  String get settingsGroupByPriority => 'Group by priority';
+
+  @override
+  String get settingsGroupByPrioritySubtitle =>
+      'Sort tasks by priority (starred at the top)';
+
+  @override
+  String get settingsRestoreBackup => 'Restore backup';
+
+  @override
+  String get settingsReplaceAllConfirm =>
+      'Your current data (notes, tasks and events) will be replaced with the backup. Continue?';
+
+  @override
+  String get settingsBackupReadFailed => 'Unable to read the backup.';
+
+  @override
+  String get settingsBackupRestored => 'Backup restored successfully.';
+
+  @override
+  String get settingsNoBackups => 'No backups available';
+
+  @override
+  String get settingsBackupsAvailable => 'Available backups';
+
+  @override
+  String get settingsImport => 'Import';
+
+  @override
+  String get settingsBackupExported => 'Backup exported';
+
+  @override
+  String get settingsBackupSavedIn => 'Backup saved in:\n';
+
+  @override
+  String get settingsImportBackupTitle => 'Import backup';
+
+  @override
+  String get settingsBackupImported => 'Backup imported successfully.';
+
+  @override
+  String get settingsClearAllConfirm =>
+      'All data (notes, tasks and events) will be permanently deleted. This cannot be undone. Continue?';
+
+  @override
+  String get settingsAllCleared => 'All data has been deleted.';
+
+  @override
+  String get settingsDeleteAll => 'Delete all';
+
+  @override
+  String get settingsNotesExported => 'Notes exported';
+
+  @override
+  String get settingsNotesSavedIn => 'Notes saved in:\n';
+
+  @override
+  String get settingsImportNotesTitle => 'Import notes';
+
+  @override
+  String get settingsReplaceNotesConfirm =>
+      'Your current notes will be replaced with the ones in the file. Continue?';
+
+  @override
+  String get settingsNotesImported => 'Notes imported successfully.';
+
+  @override
+  String get settingsClearNotesConfirm =>
+      'All notes will be permanently deleted. Continue?';
+
+  @override
+  String get settingsNotesCleared => 'All notes have been deleted.';
+
+  @override
+  String get settingsTasksExported => 'Tasks exported';
+
+  @override
+  String get settingsTasksSavedIn => 'Tasks saved in:\n';
+
+  @override
+  String get settingsImportTasksTitle => 'Import tasks';
+
+  @override
+  String get settingsReplaceTasksConfirm =>
+      'Your current tasks will be replaced with the ones in the file. Continue?';
+
+  @override
+  String get settingsTasksImported => 'Tasks imported successfully.';
+
+  @override
+  String get settingsClearTasksConfirm =>
+      'All tasks will be permanently deleted. Continue?';
+
+  @override
+  String get settingsTasksCleared => 'All tasks have been deleted.';
+
+  @override
+  String get settingsCalendarExported => 'Calendar exported';
+
+  @override
+  String get settingsCalendarSavedIn => 'Calendar saved in:\n';
+
+  @override
+  String get settingsImportCalendarTitle => 'Import calendar';
+
+  @override
+  String get settingsReplaceCalendarConfirm =>
+      'Your current events will be replaced with the ones in the file. Continue?';
+
+  @override
+  String get settingsCalendarImported => 'Calendar imported successfully.';
+
+  @override
+  String get settingsClearEventsTitle => 'Clear events';
+
+  @override
+  String get settingsClearCalendarConfirm =>
+      'All calendar events will be permanently deleted. Continue?';
+
+  @override
+  String get settingsCalendarCleared => 'All events have been deleted.';
+
+  @override
+  String get settingsNoEventsToExport => 'No events to export.';
+
+  @override
+  String get settingsIcsDownloaded => 'ICS calendar downloaded';
+
+  @override
+  String get settingsIcsExported => 'ICS calendar exported';
+
+  @override
+  String get settingsNoEventsInFile => 'No events found in the file.';
+
+  @override
+  String get settingsDeleteAccountConfirm =>
+      'The account and all its data (notes, tasks and events) will be permanently deleted from all devices. This cannot be undone: if you want to keep your data, export a full backup first. Continue?';
+
+  @override
+  String get settingsConfirmPassword => 'Confirm your password';
+
+  @override
+  String get settingsDeleteAccountFailed =>
+      'Unable to delete the account. Check your connection and try again.';
+
+  @override
+  String get settingsAccountDeleted => 'Account deleted.';
+
+  @override
+  String get settingsDriveComingSoon =>
+      'Google Drive sync will be available in a future version.';
+
+  @override
+  String commonErrorDetail(String error) {
+    return 'Error: $error';
+  }
+
+  @override
+  String settingsImportError(String error) {
+    return 'Import error: $error';
+  }
+
+  @override
+  String settingsBackupsLoadError(String error) {
+    return 'Error loading backups: $error';
+  }
+
+  @override
+  String settingsIcsSavedIn(String path) {
+    return 'ICS calendar saved in:\n$path';
+  }
+
+  @override
+  String settingsIcsImported(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count events imported into the calendar.',
+      one: '1 event imported into the calendar.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String infoVersion(String version, int build) {
+    return 'Version $version (build $build)';
+  }
+
+  @override
+  String get infoDescription =>
+      'Noteep is an app for taking notes, creating checklists and managing your ideas quickly and easily. It supports light and dark themes, custom text styles, labels, archive and much more.';
+
+  @override
+  String statsCompletedOf(int completed, int total) {
+    return 'Completed: $completed / $total';
+  }
+
+  @override
+  String exportPdfError(String error) {
+    return 'PDF error: $error';
+  }
+
+  @override
+  String get exportEmptyNote => '(empty note)';
+
+  @override
+  String exportModified(String date) {
+    return 'Modified: $date';
+  }
+
+  @override
+  String exportLabels(String labels) {
+    return 'Labels: $labels';
+  }
+
+  @override
+  String get exportDateTimePattern => 'd MMM y \'at\' HH:mm';
+
+  @override
+  String get exportCsvHeader =>
+      'id,title,content,type,labels,pinned,created,modified';
+
+  @override
+  String exportHtmlHeading(String date) {
+    return 'Notes export – $date';
+  }
 }

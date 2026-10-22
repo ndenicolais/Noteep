@@ -9,12 +9,13 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
 
 /// Formats the time range of an event, or "Tutto il giorno" for all-day events.
-String formatEventTimeRange(CalendarEventModel event) {
-  if (event.isAllDay) return 'Tutto il giorno';
+String formatEventTimeRange(AppLocalizations l, CalendarEventModel event) {
+  if (event.isAllDay) return l.calendarAllDay;
   return '${DateFormat('HH:mm').format(event.startTime)} – '
       '${DateFormat('HH:mm').format(event.endTime)}';
 }
@@ -39,8 +40,10 @@ class CalendarEventListTile extends StatelessWidget {
     return ListTile(
       dense: dense,
       leading: _buildLeading(colorScheme),
-      title: Text(event.title.isEmpty ? '(senza titolo)' : event.title),
-      subtitle: Text(formatEventTimeRange(event)),
+      title: Text(
+        event.title.isEmpty ? context.l10n.commonUntitledParens : event.title,
+      ),
+      subtitle: Text(formatEventTimeRange(context.l10n, event)),
       onTap: onTap,
     );
   }

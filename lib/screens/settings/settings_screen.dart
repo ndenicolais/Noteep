@@ -121,7 +121,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
     return NavScaffold(
       section: DrawerSection.settings,
-      titleWidget: const Text('Impostazioni'),
+      titleWidget: Text(context.l10n.navSettings),
       body: ListView.separated(
         padding: const EdgeInsets.only(bottom: AppSpacing.xxl),
         itemCount: sections.length,
@@ -172,7 +172,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       context,
       title: confirmTitle,
       message: confirmMessage,
-      confirmLabel: 'Importa',
+      confirmLabel: context.l10n.settingsImport,
     );
     if (!confirmed) return;
     if (!context.mounted) return;
@@ -187,7 +187,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       notifyOnError(importData(decoded), context);
       _showSnack(context, successMessage);
     } catch (e) {
-      _showSnack(context, 'Errore durante l\'importazione: $e', seconds: 4);
+      _showSnack(context, context.l10n.settingsImportError('$e'), seconds: 4);
     }
   }
 
@@ -197,13 +197,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     required String message,
     required Future<void> Function() onConfirm,
     required String successMessage,
-    String deleteLabel = 'Elimina',
+    String? deleteLabel,
   }) async {
     final confirmed = await showAppConfirmDialog(
       context,
       title: title,
       message: message,
-      confirmLabel: deleteLabel,
+      confirmLabel: deleteLabel ?? context.l10n.commonDelete,
       destructive: true,
     );
     if (!confirmed || !context.mounted) return;
@@ -216,27 +216,25 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   Future<void> _exportFullBackup(BuildContext context) => _exportJson(
     context,
     fileNamePrefix: 'noteep_backup',
-    exportedMessage: 'Backup esportato',
-    savedMessagePrefix: 'Backup salvato in:\n',
+    exportedMessage: context.l10n.settingsBackupExported,
+    savedMessagePrefix: context.l10n.settingsBackupSavedIn,
     buildData: _actions.fullBackupExport,
   );
 
   Future<void> _importFullBackup(BuildContext context) => _importJson(
     context,
-    confirmTitle: 'Importa backup',
-    confirmMessage:
-        'I dati attuali (note, task ed eventi) verranno sostituiti con quelli del backup. Continuare?',
-    successMessage: 'Backup importato con successo.',
+    confirmTitle: context.l10n.settingsImportBackupTitle,
+    confirmMessage: context.l10n.settingsReplaceAllConfirm,
+    successMessage: context.l10n.settingsBackupImported,
     importData: _actions.importFullBackup,
   );
 
   void _confirmClearAll(BuildContext context) => _confirmClear(
     context,
-    title: 'Cancella tutti i dati',
-    message:
-        'Tutti i dati (note, task ed eventi) verranno eliminati definitivamente. Questa operazione è irreversibile. Continuare?',
-    successMessage: 'Tutti i dati sono stati eliminati.',
-    deleteLabel: 'Elimina tutto',
+    title: context.l10n.settingsClearAll,
+    message: context.l10n.settingsClearAllConfirm,
+    successMessage: context.l10n.settingsAllCleared,
+    deleteLabel: context.l10n.settingsDeleteAll,
     onConfirm: _actions.clearAll,
   );
 
@@ -245,25 +243,24 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   Future<void> _exportNotesJson(BuildContext context) => _exportJson(
     context,
     fileNamePrefix: 'noteep_notes',
-    exportedMessage: 'Note esportate',
-    savedMessagePrefix: 'Note salvate in:\n',
+    exportedMessage: context.l10n.settingsNotesExported,
+    savedMessagePrefix: context.l10n.settingsNotesSavedIn,
     buildData: _actions.notesExport,
   );
 
   Future<void> _importNotesJson(BuildContext context) => _importJson(
     context,
-    confirmTitle: 'Importa note',
-    confirmMessage:
-        'Le note attuali verranno sostituite con quelle del file. Continuare?',
-    successMessage: 'Note importate con successo.',
+    confirmTitle: context.l10n.settingsImportNotesTitle,
+    confirmMessage: context.l10n.settingsReplaceNotesConfirm,
+    successMessage: context.l10n.settingsNotesImported,
     importData: _actions.importNotes,
   );
 
   void _confirmClearNotes(BuildContext context) => _confirmClear(
     context,
-    title: 'Cancella note',
-    message: 'Tutte le note verranno eliminate definitivamente. Continuare?',
-    successMessage: 'Tutte le note sono state eliminate.',
+    title: context.l10n.settingsClearNotes,
+    message: context.l10n.settingsClearNotesConfirm,
+    successMessage: context.l10n.settingsNotesCleared,
     onConfirm: _actions.clearNotes,
   );
 
@@ -272,25 +269,24 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   Future<void> _exportTasksJson(BuildContext context) => _exportJson(
     context,
     fileNamePrefix: 'noteep_tasks',
-    exportedMessage: 'Task esportati',
-    savedMessagePrefix: 'Task salvati in:\n',
+    exportedMessage: context.l10n.settingsTasksExported,
+    savedMessagePrefix: context.l10n.settingsTasksSavedIn,
     buildData: _actions.tasksExport,
   );
 
   Future<void> _importTasksJson(BuildContext context) => _importJson(
     context,
-    confirmTitle: 'Importa task',
-    confirmMessage:
-        'I task attuali verranno sostituiti con quelli del file. Continuare?',
-    successMessage: 'Task importati con successo.',
+    confirmTitle: context.l10n.settingsImportTasksTitle,
+    confirmMessage: context.l10n.settingsReplaceTasksConfirm,
+    successMessage: context.l10n.settingsTasksImported,
     importData: _actions.importTasks,
   );
 
   void _confirmClearTasks(BuildContext context) => _confirmClear(
     context,
-    title: 'Cancella task',
-    message: 'Tutti i task verranno eliminati definitivamente. Continuare?',
-    successMessage: 'Tutti i task sono stati eliminati.',
+    title: context.l10n.settingsClearTasks,
+    message: context.l10n.settingsClearTasksConfirm,
+    successMessage: context.l10n.settingsTasksCleared,
     onConfirm: _actions.clearTasks,
   );
 
@@ -299,33 +295,31 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   Future<void> _exportCalendarJson(BuildContext context) => _exportJson(
     context,
     fileNamePrefix: 'noteep_calendar',
-    exportedMessage: 'Calendario esportato',
-    savedMessagePrefix: 'Calendario salvato in:\n',
+    exportedMessage: context.l10n.settingsCalendarExported,
+    savedMessagePrefix: context.l10n.settingsCalendarSavedIn,
     buildData: _actions.calendarExport,
   );
 
   Future<void> _importCalendarJson(BuildContext context) => _importJson(
     context,
-    confirmTitle: 'Importa calendario',
-    confirmMessage:
-        'Gli eventi attuali verranno sostituiti con quelli del file. Continuare?',
-    successMessage: 'Calendario importato con successo.',
+    confirmTitle: context.l10n.settingsImportCalendarTitle,
+    confirmMessage: context.l10n.settingsReplaceCalendarConfirm,
+    successMessage: context.l10n.settingsCalendarImported,
     importData: _actions.importCalendar,
   );
 
   void _confirmClearCalendar(BuildContext context) => _confirmClear(
     context,
-    title: 'Cancella eventi',
-    message:
-        'Tutti gli eventi del calendario verranno eliminati definitivamente. Continuare?',
-    successMessage: 'Tutti gli eventi sono stati eliminati.',
+    title: context.l10n.settingsClearEventsTitle,
+    message: context.l10n.settingsClearCalendarConfirm,
+    successMessage: context.l10n.settingsCalendarCleared,
     onConfirm: _actions.clearCalendar,
   );
 
   Future<void> _exportIcsFile(BuildContext context) async {
     final content = _actions.icsExport();
     if (content == null) {
-      _showSnack(context, 'Nessun evento da esportare.');
+      _showSnack(context, context.l10n.settingsNoEventsToExport);
       return;
     }
     final savedPath = await DataExportService.exportIcs(
@@ -336,10 +330,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     _showSnack(
       context,
       kIsWeb
-          ? 'Calendario ICS scaricato'
+          ? context.l10n.settingsIcsDownloaded
           : savedPath != null
-          ? 'Calendario ICS salvato in:\n$savedPath'
-          : 'Calendario ICS esportato',
+          ? context.l10n.settingsIcsSavedIn(savedPath)
+          : context.l10n.settingsIcsExported,
     );
   }
 
@@ -350,11 +344,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
     final result = _actions.importIcs(content);
     if (result.count == 0) {
-      _showSnack(context, 'Nessun evento trovato nel file.');
+      _showSnack(context, context.l10n.settingsNoEventsInFile);
       return;
     }
     notifyOnError(result.saved, context);
-    _showSnack(context, '${result.count} eventi importati nel calendario.');
+    _showSnack(context, context.l10n.settingsIcsImported(result.count));
   }
 
   // -- Account ---------------------------------------------------------------
@@ -364,10 +358,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     if (user == null) return;
     final confirmed = await showAppConfirmDialog(
       context,
-      title: 'Elimina account',
-      message:
-          'L\'account e tutti i suoi dati (note, task ed eventi) verranno eliminati definitivamente da tutti i dispositivi. Questa operazione è irreversibile: se vuoi conservare i dati, esporta prima un backup completo. Continuare?',
-      confirmLabel: 'Elimina account',
+      title: context.l10n.settingsDeleteAccount,
+      message: context.l10n.settingsDeleteAccountConfirm,
+      confirmLabel: context.l10n.settingsDeleteAccount,
       destructive: true,
     );
     if (!confirmed || !context.mounted) return;
@@ -376,9 +369,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     if (usesPasswordSignIn(user)) {
       password = await showAppTextInputDialog(
         context,
-        title: 'Conferma la password',
-        hintText: 'Password',
-        confirmLabel: 'Elimina account',
+        title: context.l10n.settingsConfirmPassword,
+        hintText: context.l10n.commonPassword,
+        confirmLabel: context.l10n.settingsDeleteAccount,
         obscureText: true,
       );
       if (password == null || !context.mounted) return;
@@ -405,8 +398,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     } on FirebaseAuthException catch (e) {
       error = authErrorMessage(l10n, e);
     } catch (_) {
-      error =
-          'Impossibile eliminare l\'account. Controlla la connessione e riprova.';
+      error = l10n.settingsDeleteAccountFailed;
     }
     navigator.pop();
 
@@ -418,7 +410,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       // Signed out: drop the pushed screens so the login screen is visible.
       navigator.popUntil((route) => route.isFirst);
       messenger.showSnackBar(
-        const SnackBar(content: Text('Account eliminato.')),
+        SnackBar(content: Text(l10n.settingsAccountDeleted)),
       );
     }
   }
@@ -427,19 +419,19 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
 
   void _showGoogleDriveComingSoon(BuildContext context) => showAppMessageDialog(
     context,
-    title: 'Google Drive',
-    message:
-        'La sincronizzazione con Google Drive sarà disponibile in una prossima versione.',
+    title: context.l10n.settingsGoogleDriveTitle,
+    message: context.l10n.settingsDriveComingSoon,
   );
 
   String _getFrequencyLabel(BackupFrequency frequency) {
+    final l10n = context.l10n;
     switch (frequency) {
       case BackupFrequency.daily:
-        return 'Giornaliero';
+        return l10n.recurrenceDaily;
       case BackupFrequency.weekly:
-        return 'Settimanale';
+        return l10n.recurrenceWeekly;
       case BackupFrequency.monthly:
-        return 'Mensile';
+        return l10n.recurrenceMonthly;
     }
   }
 }

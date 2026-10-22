@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../l10n/l10n.dart';
 import '../core/constants/app_version.dart';
 import '../core/routing/app_router.dart';
 import '../theme/app_spacing.dart';
@@ -26,7 +27,7 @@ class InfoScreen extends StatelessWidget {
     final tt = Theme.of(context).textTheme;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Info app')),
+      appBar: AppBar(title: Text(context.l10n.infoTitle)),
       body: ListView(
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.xl,
@@ -45,37 +46,34 @@ class InfoScreen extends StatelessWidget {
           ),
           Center(
             child: Text(
-              'Versione $appVersion (build $appBuildNumber)',
+              context.l10n.infoVersion(appVersion, appBuildNumber),
               style: tt.bodySmall?.copyWith(color: cs.onSurfaceVariant),
             ),
           ),
           const SizedBox(height: AppSpacing.xxl),
 
           // ── Descrizione ──────────────────────────────────────────────────
-          const SectionHeader('Descrizione', padding: EdgeInsets.zero),
-          const SizedBox(height: AppSpacing.sm),
-          Text(
-            'Noteep è un\'app per prendere note, creare liste di controllo '
-            'e gestire le tue idee in modo semplice e veloce. '
-            'Supporta temi chiaro e scuro, stili di testo personalizzati, '
-            'etichette, archivio e molto altro.',
-            style: tt.bodyMedium,
+          SectionHeader(
+            context.l10n.infoDescriptionTitle,
+            padding: EdgeInsets.zero,
           ),
+          const SizedBox(height: AppSpacing.sm),
+          Text(context.l10n.infoDescription, style: tt.bodyMedium),
           const SizedBox(height: AppSpacing.xl),
 
           // ── Funzionalità ─────────────────────────────────────────────────
-          const SectionHeader('Funzionalità', padding: EdgeInsets.zero),
+          SectionHeader(
+            context.l10n.infoFeaturesTitle,
+            padding: EdgeInsets.zero,
+          ),
           const SizedBox(height: AppSpacing.sm),
           ...[
-            (Icons.note_outlined, 'Note di testo con formattazione'),
-            (Icons.checklist_outlined, 'Liste di controllo interattive'),
-            (Icons.label_outline, 'Etichette personalizzate'),
-            (Icons.archive_outlined, 'Archivio e cestino'),
-            (Icons.dark_mode_outlined, 'Tema chiaro, scuro e di sistema'),
-            (
-              Icons.upload_file_outlined,
-              'Esportazione in PDF, TXT, JSON, CSV, HTML',
-            ),
+            (Icons.note_outlined, context.l10n.infoFeatureNotes),
+            (Icons.checklist_outlined, context.l10n.infoFeatureChecklists),
+            (Icons.label_outline, context.l10n.infoFeatureLabels),
+            (Icons.archive_outlined, context.l10n.infoFeatureArchive),
+            (Icons.dark_mode_outlined, context.l10n.infoFeatureTheme),
+            (Icons.upload_file_outlined, context.l10n.infoFeatureExport),
           ].map(
             (item) => Padding(
               padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
@@ -91,7 +89,7 @@ class InfoScreen extends StatelessWidget {
           const SizedBox(height: AppSpacing.xl),
 
           // ── Tecnologie ───────────────────────────────────────────────────
-          const SectionHeader('Tecnologie', padding: EdgeInsets.zero),
+          SectionHeader(context.l10n.infoTechTitle, padding: EdgeInsets.zero),
           const SizedBox(height: AppSpacing.sm),
           Wrap(
             spacing: 8,
@@ -107,13 +105,13 @@ class InfoScreen extends StatelessWidget {
           const SizedBox(height: AppSpacing.xl),
 
           // ── Guida ────────────────────────────────────────────────────────
-          const SectionHeader('Guida', padding: EdgeInsets.zero),
+          SectionHeader(context.l10n.infoGuideTitle, padding: EdgeInsets.zero),
           const SizedBox(height: AppSpacing.sm),
           ListTile(
             contentPadding: EdgeInsets.zero,
             leading: Icon(Icons.school_outlined, color: cs.primary),
-            title: const Text('Guida introduttiva'),
-            subtitle: const Text('Rivedi la presentazione dell\'app'),
+            title: Text(context.l10n.infoGuideOpen),
+            subtitle: Text(context.l10n.infoGuideSubtitle),
             trailing: const Icon(Icons.chevron_right),
             onTap: () => AppNav.openOnboarding(context),
           ),
@@ -121,13 +119,16 @@ class InfoScreen extends StatelessWidget {
           const SizedBox(height: AppSpacing.xl),
 
           // ── Changelog ────────────────────────────────────────────────────
-          const SectionHeader('Changelog', padding: EdgeInsets.zero),
+          SectionHeader(
+            context.l10n.infoChangelogTitle,
+            padding: EdgeInsets.zero,
+          ),
           const SizedBox(height: AppSpacing.sm),
           ListTile(
             contentPadding: EdgeInsets.zero,
             leading: Icon(Icons.history_outlined, color: cs.primary),
-            title: const Text('Visualizza changelog'),
-            subtitle: const Text('Le modifiche di ogni versione'),
+            title: Text(context.l10n.infoChangelogOpen),
+            subtitle: Text(context.l10n.infoChangelogSubtitle),
             trailing: const Icon(Icons.chevron_right),
             onTap: () => showChangelogDialog(context),
           ),
@@ -135,13 +136,16 @@ class InfoScreen extends StatelessWidget {
           const SizedBox(height: AppSpacing.xl),
 
           // ── Licenze ──────────────────────────────────────────────────────
-          const SectionHeader('Licenze open source', padding: EdgeInsets.zero),
+          SectionHeader(
+            context.l10n.infoLicensesTitle,
+            padding: EdgeInsets.zero,
+          ),
           const SizedBox(height: AppSpacing.sm),
           ListTile(
             contentPadding: EdgeInsets.zero,
             leading: Icon(Icons.article_outlined, color: cs.primary),
-            title: const Text('Visualizza licenze'),
-            subtitle: const Text('Librerie di terze parti utilizzate'),
+            title: Text(context.l10n.infoLicensesOpen),
+            subtitle: Text(context.l10n.infoLicensesSubtitle),
             trailing: const Icon(Icons.chevron_right),
             onTap:
                 () => showLicensePage(

@@ -10,6 +10,7 @@
 
 import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
 import '../../theme/app_font_sizes.dart';
@@ -43,7 +44,7 @@ class CalendarMultiDayView extends StatelessWidget {
       (i) => startDay.add(Duration(days: i)),
     );
     final rangeLabel =
-        '${DateFormat('d MMM', 'it_IT').format(startDay)} – ${DateFormat('d MMM yyyy', 'it_IT').format(endDay)}';
+        '${DateFormat('d MMM').format(startDay)} – ${DateFormat('d MMM yyyy').format(endDay)}';
 
     return Column(
       children: [
@@ -83,7 +84,7 @@ class CalendarMultiDayView extends StatelessWidget {
                     day.year == now.year &&
                     day.month == now.month &&
                     day.day == now.day;
-                final dayName = DateFormat('E', 'it_IT').format(day);
+                final dayName = DateFormat('E').format(day);
                 return Expanded(
                   child: Column(
                     children: [
@@ -184,7 +185,7 @@ class CalendarMultiDayView extends StatelessWidget {
                               ),
                               child: Text(
                                 event.title.isEmpty
-                                    ? '(senza titolo)'
+                                    ? context.l10n.commonUntitledParens
                                     : event.title,
                                 style: TextStyle(
                                   fontSize: 9,

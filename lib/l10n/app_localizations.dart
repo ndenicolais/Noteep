@@ -1735,6 +1735,1398 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Annuale'**
   String get recurrenceYearly;
+
+  /// No description provided for @commonSave.
+  ///
+  /// In it, this message translates to:
+  /// **'Salva'**
+  String get commonSave;
+
+  /// No description provided for @commonRestore.
+  ///
+  /// In it, this message translates to:
+  /// **'Ripristina'**
+  String get commonRestore;
+
+  /// No description provided for @commonUntitledParens.
+  ///
+  /// In it, this message translates to:
+  /// **'(senza titolo)'**
+  String get commonUntitledParens;
+
+  /// No description provided for @commonTabNotes.
+  ///
+  /// In it, this message translates to:
+  /// **'Note'**
+  String get commonTabNotes;
+
+  /// No description provided for @commonTabTasks.
+  ///
+  /// In it, this message translates to:
+  /// **'Task'**
+  String get commonTabTasks;
+
+  /// No description provided for @commonTabEvents.
+  ///
+  /// In it, this message translates to:
+  /// **'Eventi'**
+  String get commonTabEvents;
+
+  /// No description provided for @commonToday.
+  ///
+  /// In it, this message translates to:
+  /// **'Oggi'**
+  String get commonToday;
+
+  /// No description provided for @calendarSearchHint.
+  ///
+  /// In it, this message translates to:
+  /// **'Cerca eventi...'**
+  String get calendarSearchHint;
+
+  /// No description provided for @calendarChangeView.
+  ///
+  /// In it, this message translates to:
+  /// **'Cambia visualizzazione'**
+  String get calendarChangeView;
+
+  /// No description provided for @calendarViewDay.
+  ///
+  /// In it, this message translates to:
+  /// **'Giorno'**
+  String get calendarViewDay;
+
+  /// No description provided for @calendarViewWeek.
+  ///
+  /// In it, this message translates to:
+  /// **'Settimana'**
+  String get calendarViewWeek;
+
+  /// No description provided for @calendarViewMonth.
+  ///
+  /// In it, this message translates to:
+  /// **'Mese'**
+  String get calendarViewMonth;
+
+  /// No description provided for @calendarViewYear.
+  ///
+  /// In it, this message translates to:
+  /// **'Anno'**
+  String get calendarViewYear;
+
+  /// No description provided for @calendarViewSchedule.
+  ///
+  /// In it, this message translates to:
+  /// **'Programma'**
+  String get calendarViewSchedule;
+
+  /// No description provided for @calendarViewSevenDays.
+  ///
+  /// In it, this message translates to:
+  /// **'7 giorni'**
+  String get calendarViewSevenDays;
+
+  /// No description provided for @calendarPreviousDay.
+  ///
+  /// In it, this message translates to:
+  /// **'Giorno precedente'**
+  String get calendarPreviousDay;
+
+  /// No description provided for @calendarNextDay.
+  ///
+  /// In it, this message translates to:
+  /// **'Giorno successivo'**
+  String get calendarNextDay;
+
+  /// No description provided for @calendarPreviousMonth.
+  ///
+  /// In it, this message translates to:
+  /// **'Mese precedente'**
+  String get calendarPreviousMonth;
+
+  /// No description provided for @calendarNextMonth.
+  ///
+  /// In it, this message translates to:
+  /// **'Mese successivo'**
+  String get calendarNextMonth;
+
+  /// No description provided for @calendarPreviousYear.
+  ///
+  /// In it, this message translates to:
+  /// **'Anno precedente'**
+  String get calendarPreviousYear;
+
+  /// No description provided for @calendarNextYear.
+  ///
+  /// In it, this message translates to:
+  /// **'Anno successivo'**
+  String get calendarNextYear;
+
+  /// No description provided for @calendarNoEventsDay.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessun evento per questo giorno'**
+  String get calendarNoEventsDay;
+
+  /// No description provided for @calendarNoEventsScheduled.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessun evento in programma'**
+  String get calendarNoEventsScheduled;
+
+  /// No description provided for @calendarNoEventsFound.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessun evento trovato'**
+  String get calendarNoEventsFound;
+
+  /// No description provided for @calendarAdd.
+  ///
+  /// In it, this message translates to:
+  /// **'Aggiungi'**
+  String get calendarAdd;
+
+  /// No description provided for @calendarAllDay.
+  ///
+  /// In it, this message translates to:
+  /// **'Tutto il giorno'**
+  String get calendarAllDay;
+
+  /// No description provided for @calendarBirthday.
+  ///
+  /// In it, this message translates to:
+  /// **'Compleanno'**
+  String get calendarBirthday;
+
+  /// No description provided for @calendarNameDay.
+  ///
+  /// In it, this message translates to:
+  /// **'Onomastico'**
+  String get calendarNameDay;
+
+  /// No description provided for @calendarRecurrence.
+  ///
+  /// In it, this message translates to:
+  /// **'Ricorrenza'**
+  String get calendarRecurrence;
+
+  /// No description provided for @calendarEventTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Evento'**
+  String get calendarEventTitle;
+
+  /// No description provided for @calendarDeleteEvent.
+  ///
+  /// In it, this message translates to:
+  /// **'Elimina evento'**
+  String get calendarDeleteEvent;
+
+  /// No description provided for @calendarDeleteEventConfirm.
+  ///
+  /// In it, this message translates to:
+  /// **'Vuoi spostare questo evento nel cestino?'**
+  String get calendarDeleteEventConfirm;
+
+  /// No description provided for @calendarEventTrashed.
+  ///
+  /// In it, this message translates to:
+  /// **'Evento spostato nel cestino'**
+  String get calendarEventTrashed;
+
+  /// No description provided for @calendarReminder.
+  ///
+  /// In it, this message translates to:
+  /// **'Promemoria'**
+  String get calendarReminder;
+
+  /// No description provided for @calendarTitleHint.
+  ///
+  /// In it, this message translates to:
+  /// **'Titolo'**
+  String get calendarTitleHint;
+
+  /// No description provided for @calendarDescriptionHint.
+  ///
+  /// In it, this message translates to:
+  /// **'Descrizione'**
+  String get calendarDescriptionHint;
+
+  /// No description provided for @calendarReminderNotificationTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Promemoria evento'**
+  String get calendarReminderNotificationTitle;
+
+  /// No description provided for @calendarReminderNotificationBody.
+  ///
+  /// In it, this message translates to:
+  /// **'Hai un promemoria per questo evento'**
+  String get calendarReminderNotificationBody;
+
+  /// No description provided for @eventRecurrenceNone.
+  ///
+  /// In it, this message translates to:
+  /// **'Non ripetere'**
+  String get eventRecurrenceNone;
+
+  /// No description provided for @eventRecurrenceDaily.
+  ///
+  /// In it, this message translates to:
+  /// **'Giornalmente'**
+  String get eventRecurrenceDaily;
+
+  /// No description provided for @eventRecurrenceWeekly.
+  ///
+  /// In it, this message translates to:
+  /// **'Settimanalmente'**
+  String get eventRecurrenceWeekly;
+
+  /// No description provided for @eventRecurrenceMonthly.
+  ///
+  /// In it, this message translates to:
+  /// **'Mensilmente'**
+  String get eventRecurrenceMonthly;
+
+  /// No description provided for @eventRecurrenceYearly.
+  ///
+  /// In it, this message translates to:
+  /// **'Annualmente'**
+  String get eventRecurrenceYearly;
+
+  /// No description provided for @remindersUpcoming.
+  ///
+  /// In it, this message translates to:
+  /// **'In arrivo'**
+  String get remindersUpcoming;
+
+  /// No description provided for @remindersPast.
+  ///
+  /// In it, this message translates to:
+  /// **'Scaduti'**
+  String get remindersPast;
+
+  /// No description provided for @remindersEmpty.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessun promemoria'**
+  String get remindersEmpty;
+
+  /// No description provided for @remindersEmptyHint.
+  ///
+  /// In it, this message translates to:
+  /// **'Aggiungi un promemoria aprendo\nuna nota o un task.'**
+  String get remindersEmptyHint;
+
+  /// No description provided for @remindersUntitledNote.
+  ///
+  /// In it, this message translates to:
+  /// **'Nota senza titolo'**
+  String get remindersUntitledNote;
+
+  /// No description provided for @remindersUntitledTask.
+  ///
+  /// In it, this message translates to:
+  /// **'Task senza titolo'**
+  String get remindersUntitledTask;
+
+  /// No description provided for @archiveEmptyNotes.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessuna nota archiviata'**
+  String get archiveEmptyNotes;
+
+  /// No description provided for @archiveEmptyTasks.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessun task archiviato'**
+  String get archiveEmptyTasks;
+
+  /// No description provided for @archiveEmptyEvents.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessun evento archiviato'**
+  String get archiveEmptyEvents;
+
+  /// No description provided for @trashEmptyAction.
+  ///
+  /// In it, this message translates to:
+  /// **'Svuota'**
+  String get trashEmptyAction;
+
+  /// No description provided for @trashAutoDeleteInfo.
+  ///
+  /// In it, this message translates to:
+  /// **'Gli elementi vengono eliminati definitivamente dopo 7 giorni.'**
+  String get trashAutoDeleteInfo;
+
+  /// No description provided for @trashEmptyTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Svuota cestino'**
+  String get trashEmptyTitle;
+
+  /// No description provided for @trashEmptyConfirm.
+  ///
+  /// In it, this message translates to:
+  /// **'Tutti gli elementi nel cestino verranno eliminati definitivamente.'**
+  String get trashEmptyConfirm;
+
+  /// No description provided for @trashEmptyNotes.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessuna nota nel cestino'**
+  String get trashEmptyNotes;
+
+  /// No description provided for @trashEmptyTasks.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessun task nel cestino'**
+  String get trashEmptyTasks;
+
+  /// No description provided for @trashEmptyEvents.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessun evento nel cestino'**
+  String get trashEmptyEvents;
+
+  /// No description provided for @trashExpiresSoon.
+  ///
+  /// In it, this message translates to:
+  /// **'Scade tra poco (eliminazione automatica)'**
+  String get trashExpiresSoon;
+
+  /// No description provided for @trashExpiresToday.
+  ///
+  /// In it, this message translates to:
+  /// **'Scade oggi'**
+  String get trashExpiresToday;
+
+  /// No description provided for @trashExpiresInDays.
+  ///
+  /// In it, this message translates to:
+  /// **'{count, plural, =1{Scade tra 1 giorno} other{Scade tra {count} giorni}}'**
+  String trashExpiresInDays(int count);
+
+  /// No description provided for @trashDeleteForever.
+  ///
+  /// In it, this message translates to:
+  /// **'Elimina definitivamente'**
+  String get trashDeleteForever;
+
+  /// No description provided for @trashDeleteForeverConfirm.
+  ///
+  /// In it, this message translates to:
+  /// **'La nota verrà eliminata in modo permanente.'**
+  String get trashDeleteForeverConfirm;
+
+  /// No description provided for @labelsNew.
+  ///
+  /// In it, this message translates to:
+  /// **'Nuova etichetta'**
+  String get labelsNew;
+
+  /// No description provided for @labelsNameHint.
+  ///
+  /// In it, this message translates to:
+  /// **'Nome etichetta'**
+  String get labelsNameHint;
+
+  /// No description provided for @labelsEmpty.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessuna etichetta'**
+  String get labelsEmpty;
+
+  /// No description provided for @labelsEmptyHint.
+  ///
+  /// In it, this message translates to:
+  /// **'Crea una nuova etichetta o aggiungila da una nota.'**
+  String get labelsEmptyHint;
+
+  /// No description provided for @labelsRename.
+  ///
+  /// In it, this message translates to:
+  /// **'Rinomina'**
+  String get labelsRename;
+
+  /// No description provided for @labelsRenameTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Rinomina etichetta'**
+  String get labelsRenameTitle;
+
+  /// No description provided for @labelsDeleteTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Elimina etichetta'**
+  String get labelsDeleteTitle;
+
+  /// No description provided for @labelsDeleteConfirm.
+  ///
+  /// In it, this message translates to:
+  /// **'L\'etichetta \"{tag}\" verrà rimossa da tutte le note.'**
+  String labelsDeleteConfirm(String tag);
+
+  /// No description provided for @statsTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Statistiche'**
+  String get statsTitle;
+
+  /// No description provided for @statsNotesActive.
+  ///
+  /// In it, this message translates to:
+  /// **'Attive'**
+  String get statsNotesActive;
+
+  /// No description provided for @statsNotesArchived.
+  ///
+  /// In it, this message translates to:
+  /// **'Archiviate'**
+  String get statsNotesArchived;
+
+  /// No description provided for @statsNotesTrashed.
+  ///
+  /// In it, this message translates to:
+  /// **'Eliminate'**
+  String get statsNotesTrashed;
+
+  /// No description provided for @statsActive.
+  ///
+  /// In it, this message translates to:
+  /// **'Attivi'**
+  String get statsActive;
+
+  /// No description provided for @statsArchived.
+  ///
+  /// In it, this message translates to:
+  /// **'Archiviati'**
+  String get statsArchived;
+
+  /// No description provided for @statsTrashed.
+  ///
+  /// In it, this message translates to:
+  /// **'Eliminati'**
+  String get statsTrashed;
+
+  /// No description provided for @statsBirthdays.
+  ///
+  /// In it, this message translates to:
+  /// **'Compleanni'**
+  String get statsBirthdays;
+
+  /// No description provided for @statsNameDays.
+  ///
+  /// In it, this message translates to:
+  /// **'Onomastici'**
+  String get statsNameDays;
+
+  /// No description provided for @statsTotal.
+  ///
+  /// In it, this message translates to:
+  /// **'Totali'**
+  String get statsTotal;
+
+  /// No description provided for @statsNotesDistribution.
+  ///
+  /// In it, this message translates to:
+  /// **'Distribuzione note'**
+  String get statsNotesDistribution;
+
+  /// No description provided for @statsNoNotes.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessuna nota presente'**
+  String get statsNoNotes;
+
+  /// No description provided for @statsTasksDistribution.
+  ///
+  /// In it, this message translates to:
+  /// **'Distribuzione task'**
+  String get statsTasksDistribution;
+
+  /// No description provided for @statsNoTasks.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessun task presente'**
+  String get statsNoTasks;
+
+  /// No description provided for @statsTaskCompletion.
+  ///
+  /// In it, this message translates to:
+  /// **'Completamento task'**
+  String get statsTaskCompletion;
+
+  /// No description provided for @statsNoData.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessun dato'**
+  String get statsNoData;
+
+  /// No description provided for @statsNoTasksShort.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessun task'**
+  String get statsNoTasksShort;
+
+  /// No description provided for @statsTotalSingular.
+  ///
+  /// In it, this message translates to:
+  /// **'Totale'**
+  String get statsTotalSingular;
+
+  /// No description provided for @infoTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Info app'**
+  String get infoTitle;
+
+  /// No description provided for @infoDescriptionTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Descrizione'**
+  String get infoDescriptionTitle;
+
+  /// No description provided for @infoFeaturesTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Funzionalità'**
+  String get infoFeaturesTitle;
+
+  /// No description provided for @infoFeatureNotes.
+  ///
+  /// In it, this message translates to:
+  /// **'Note di testo con formattazione'**
+  String get infoFeatureNotes;
+
+  /// No description provided for @infoFeatureChecklists.
+  ///
+  /// In it, this message translates to:
+  /// **'Liste di controllo interattive'**
+  String get infoFeatureChecklists;
+
+  /// No description provided for @infoFeatureLabels.
+  ///
+  /// In it, this message translates to:
+  /// **'Etichette personalizzate'**
+  String get infoFeatureLabels;
+
+  /// No description provided for @infoFeatureArchive.
+  ///
+  /// In it, this message translates to:
+  /// **'Archivio e cestino'**
+  String get infoFeatureArchive;
+
+  /// No description provided for @infoFeatureTheme.
+  ///
+  /// In it, this message translates to:
+  /// **'Tema chiaro, scuro e di sistema'**
+  String get infoFeatureTheme;
+
+  /// No description provided for @infoFeatureExport.
+  ///
+  /// In it, this message translates to:
+  /// **'Esportazione in PDF, TXT, JSON, CSV, HTML'**
+  String get infoFeatureExport;
+
+  /// No description provided for @infoTechTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Tecnologie'**
+  String get infoTechTitle;
+
+  /// No description provided for @infoGuideTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Guida'**
+  String get infoGuideTitle;
+
+  /// No description provided for @infoGuideOpen.
+  ///
+  /// In it, this message translates to:
+  /// **'Guida introduttiva'**
+  String get infoGuideOpen;
+
+  /// No description provided for @infoGuideSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Rivedi la presentazione dell\'app'**
+  String get infoGuideSubtitle;
+
+  /// No description provided for @infoChangelogTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Novità'**
+  String get infoChangelogTitle;
+
+  /// No description provided for @infoChangelogOpen.
+  ///
+  /// In it, this message translates to:
+  /// **'Visualizza le novità'**
+  String get infoChangelogOpen;
+
+  /// No description provided for @infoChangelogSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Le modifiche di ogni versione'**
+  String get infoChangelogSubtitle;
+
+  /// No description provided for @infoLicensesTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Licenze open source'**
+  String get infoLicensesTitle;
+
+  /// No description provided for @infoLicensesOpen.
+  ///
+  /// In it, this message translates to:
+  /// **'Visualizza licenze'**
+  String get infoLicensesOpen;
+
+  /// No description provided for @infoLicensesSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Librerie di terze parti utilizzate'**
+  String get infoLicensesSubtitle;
+
+  /// No description provided for @exportTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Esporta note'**
+  String get exportTitle;
+
+  /// No description provided for @exportIntro.
+  ///
+  /// In it, this message translates to:
+  /// **'Esporta tutte le note attive (escluse quelle nel cestino).'**
+  String get exportIntro;
+
+  /// No description provided for @exportPdfSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Salva le note in un file .pdf'**
+  String get exportPdfSubtitle;
+
+  /// No description provided for @exportTxtSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Salva le note in un file .txt'**
+  String get exportTxtSubtitle;
+
+  /// No description provided for @exportJsonSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Salva le note in un file .json'**
+  String get exportJsonSubtitle;
+
+  /// No description provided for @exportCsvSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Salva le note in un file .csv'**
+  String get exportCsvSubtitle;
+
+  /// No description provided for @exportHtmlSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Salva le note in un file .html'**
+  String get exportHtmlSubtitle;
+
+  /// No description provided for @exportDownload.
+  ///
+  /// In it, this message translates to:
+  /// **'Scarica'**
+  String get exportDownload;
+
+  /// No description provided for @settingsBackupTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Backup'**
+  String get settingsBackupTitle;
+
+  /// No description provided for @settingsAutoBackup.
+  ///
+  /// In it, this message translates to:
+  /// **'Backup automatico'**
+  String get settingsAutoBackup;
+
+  /// No description provided for @settingsAutoBackupSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Salva automaticamente i tuoi dati'**
+  String get settingsAutoBackupSubtitle;
+
+  /// No description provided for @settingsBackupFrequency.
+  ///
+  /// In it, this message translates to:
+  /// **'Frequenza backup'**
+  String get settingsBackupFrequency;
+
+  /// No description provided for @settingsViewBackups.
+  ///
+  /// In it, this message translates to:
+  /// **'Visualizza backup'**
+  String get settingsViewBackups;
+
+  /// No description provided for @settingsViewBackupsSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Gestisci i backup salvati'**
+  String get settingsViewBackupsSubtitle;
+
+  /// No description provided for @settingsExportCalendarJson.
+  ///
+  /// In it, this message translates to:
+  /// **'Esporta calendario JSON'**
+  String get settingsExportCalendarJson;
+
+  /// No description provided for @settingsExportCalendarJsonSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Scarica gli eventi come file .json'**
+  String get settingsExportCalendarJsonSubtitle;
+
+  /// No description provided for @settingsImportCalendarJson.
+  ///
+  /// In it, this message translates to:
+  /// **'Importa calendario JSON'**
+  String get settingsImportCalendarJson;
+
+  /// No description provided for @settingsImportCalendarJsonSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Ripristina gli eventi da un file .json'**
+  String get settingsImportCalendarJsonSubtitle;
+
+  /// No description provided for @settingsExportIcs.
+  ///
+  /// In it, this message translates to:
+  /// **'Esporta calendario ICS'**
+  String get settingsExportIcs;
+
+  /// No description provided for @settingsExportIcsSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Esporta tutti gli eventi in un file .ics'**
+  String get settingsExportIcsSubtitle;
+
+  /// No description provided for @settingsImportIcs.
+  ///
+  /// In it, this message translates to:
+  /// **'Importa da Google Calendar'**
+  String get settingsImportIcs;
+
+  /// No description provided for @settingsImportIcsSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Importa eventi da un file .ics'**
+  String get settingsImportIcsSubtitle;
+
+  /// No description provided for @settingsClearCalendar.
+  ///
+  /// In it, this message translates to:
+  /// **'Cancella eventi calendario'**
+  String get settingsClearCalendar;
+
+  /// No description provided for @settingsClearCalendarSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Rimuove tutti gli eventi dal calendario'**
+  String get settingsClearCalendarSubtitle;
+
+  /// No description provided for @settingsGlobalBackupTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Backup globale'**
+  String get settingsGlobalBackupTitle;
+
+  /// No description provided for @settingsExportFullBackup.
+  ///
+  /// In it, this message translates to:
+  /// **'Esporta backup completo'**
+  String get settingsExportFullBackup;
+
+  /// No description provided for @settingsExportFullBackupSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Scarica un file .json con note, task ed eventi'**
+  String get settingsExportFullBackupSubtitle;
+
+  /// No description provided for @settingsImportFullBackup.
+  ///
+  /// In it, this message translates to:
+  /// **'Importa backup completo'**
+  String get settingsImportFullBackup;
+
+  /// No description provided for @settingsImportFullBackupSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Ripristina dati da un file .json di backup'**
+  String get settingsImportFullBackupSubtitle;
+
+  /// No description provided for @settingsClearAll.
+  ///
+  /// In it, this message translates to:
+  /// **'Cancella tutti i dati'**
+  String get settingsClearAll;
+
+  /// No description provided for @settingsClearAllSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Elimina definitivamente note, task ed eventi'**
+  String get settingsClearAllSubtitle;
+
+  /// No description provided for @settingsGoogleDriveTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Google Drive'**
+  String get settingsGoogleDriveTitle;
+
+  /// No description provided for @settingsConnectDrive.
+  ///
+  /// In it, this message translates to:
+  /// **'Collega Google Drive'**
+  String get settingsConnectDrive;
+
+  /// No description provided for @settingsConnectDriveSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Sincronizza i backup con il tuo account Google'**
+  String get settingsConnectDriveSubtitle;
+
+  /// No description provided for @settingsAccountTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Account'**
+  String get settingsAccountTitle;
+
+  /// No description provided for @settingsDeleteAccount.
+  ///
+  /// In it, this message translates to:
+  /// **'Elimina account'**
+  String get settingsDeleteAccount;
+
+  /// No description provided for @settingsDeleteAccountSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Elimina definitivamente l\'account e tutti i suoi dati'**
+  String get settingsDeleteAccountSubtitle;
+
+  /// No description provided for @settingsInfoSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Informazioni sull\'app e sulla versione'**
+  String get settingsInfoSubtitle;
+
+  /// No description provided for @settingsNotesDataTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Dati note'**
+  String get settingsNotesDataTitle;
+
+  /// No description provided for @settingsStatisticsSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Visualizza tutte le informazioni sulle tue note'**
+  String get settingsStatisticsSubtitle;
+
+  /// No description provided for @settingsExportNotesSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Esporta tutte le note in diversi formati'**
+  String get settingsExportNotesSubtitle;
+
+  /// No description provided for @settingsExportNotesJson.
+  ///
+  /// In it, this message translates to:
+  /// **'Esporta note JSON'**
+  String get settingsExportNotesJson;
+
+  /// No description provided for @settingsExportNotesJsonSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Scarica le note come file .json'**
+  String get settingsExportNotesJsonSubtitle;
+
+  /// No description provided for @settingsImportNotesJson.
+  ///
+  /// In it, this message translates to:
+  /// **'Importa note JSON'**
+  String get settingsImportNotesJson;
+
+  /// No description provided for @settingsImportNotesJsonSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Ripristina le note da un file .json'**
+  String get settingsImportNotesJsonSubtitle;
+
+  /// No description provided for @settingsClearNotes.
+  ///
+  /// In it, this message translates to:
+  /// **'Cancella note'**
+  String get settingsClearNotes;
+
+  /// No description provided for @settingsClearNotesSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Rimuove tutte le note'**
+  String get settingsClearNotesSubtitle;
+
+  /// No description provided for @settingsLayout.
+  ///
+  /// In it, this message translates to:
+  /// **'Layout'**
+  String get settingsLayout;
+
+  /// No description provided for @settingsLayoutGrid.
+  ///
+  /// In it, this message translates to:
+  /// **'Griglia'**
+  String get settingsLayoutGrid;
+
+  /// No description provided for @settingsLayoutList.
+  ///
+  /// In it, this message translates to:
+  /// **'Lista'**
+  String get settingsLayoutList;
+
+  /// No description provided for @settingsFabMenu.
+  ///
+  /// In it, this message translates to:
+  /// **'Menu del pulsante +'**
+  String get settingsFabMenu;
+
+  /// No description provided for @settingsFabMenuOn.
+  ///
+  /// In it, this message translates to:
+  /// **'Scegli tra nota, lista, task, audio e modello'**
+  String get settingsFabMenuOn;
+
+  /// No description provided for @settingsFabMenuOff.
+  ///
+  /// In it, this message translates to:
+  /// **'Il pulsante + crea subito una nuova nota'**
+  String get settingsFabMenuOff;
+
+  /// No description provided for @settingsExportTasksJson.
+  ///
+  /// In it, this message translates to:
+  /// **'Esporta task JSON'**
+  String get settingsExportTasksJson;
+
+  /// No description provided for @settingsExportTasksJsonSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Scarica i task come file .json'**
+  String get settingsExportTasksJsonSubtitle;
+
+  /// No description provided for @settingsImportTasksJson.
+  ///
+  /// In it, this message translates to:
+  /// **'Importa task JSON'**
+  String get settingsImportTasksJson;
+
+  /// No description provided for @settingsImportTasksJsonSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Ripristina i task da un file .json'**
+  String get settingsImportTasksJsonSubtitle;
+
+  /// No description provided for @settingsClearTasks.
+  ///
+  /// In it, this message translates to:
+  /// **'Cancella task'**
+  String get settingsClearTasks;
+
+  /// No description provided for @settingsClearTasksSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Rimuove tutti i task'**
+  String get settingsClearTasksSubtitle;
+
+  /// No description provided for @settingsShowCompleted.
+  ///
+  /// In it, this message translates to:
+  /// **'Mostra task completati'**
+  String get settingsShowCompleted;
+
+  /// No description provided for @settingsShowCompletedSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Visualizza i task marcati come completati'**
+  String get settingsShowCompletedSubtitle;
+
+  /// No description provided for @settingsGroupByPriority.
+  ///
+  /// In it, this message translates to:
+  /// **'Raggruppa per priorità'**
+  String get settingsGroupByPriority;
+
+  /// No description provided for @settingsGroupByPrioritySubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Ordina task per priorità (speciali in alto)'**
+  String get settingsGroupByPrioritySubtitle;
+
+  /// No description provided for @settingsRestoreBackup.
+  ///
+  /// In it, this message translates to:
+  /// **'Ripristina backup'**
+  String get settingsRestoreBackup;
+
+  /// No description provided for @settingsReplaceAllConfirm.
+  ///
+  /// In it, this message translates to:
+  /// **'I dati attuali (note, task ed eventi) verranno sostituiti con quelli del backup. Continuare?'**
+  String get settingsReplaceAllConfirm;
+
+  /// No description provided for @settingsBackupReadFailed.
+  ///
+  /// In it, this message translates to:
+  /// **'Impossibile leggere il backup.'**
+  String get settingsBackupReadFailed;
+
+  /// No description provided for @settingsBackupRestored.
+  ///
+  /// In it, this message translates to:
+  /// **'Backup ripristinato con successo.'**
+  String get settingsBackupRestored;
+
+  /// No description provided for @settingsNoBackups.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessun backup disponibile'**
+  String get settingsNoBackups;
+
+  /// No description provided for @settingsBackupsAvailable.
+  ///
+  /// In it, this message translates to:
+  /// **'Backup disponibili'**
+  String get settingsBackupsAvailable;
+
+  /// No description provided for @settingsImport.
+  ///
+  /// In it, this message translates to:
+  /// **'Importa'**
+  String get settingsImport;
+
+  /// No description provided for @settingsBackupExported.
+  ///
+  /// In it, this message translates to:
+  /// **'Backup esportato'**
+  String get settingsBackupExported;
+
+  /// No description provided for @settingsBackupSavedIn.
+  ///
+  /// In it, this message translates to:
+  /// **'Backup salvato in:\n'**
+  String get settingsBackupSavedIn;
+
+  /// No description provided for @settingsImportBackupTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Importa backup'**
+  String get settingsImportBackupTitle;
+
+  /// No description provided for @settingsBackupImported.
+  ///
+  /// In it, this message translates to:
+  /// **'Backup importato con successo.'**
+  String get settingsBackupImported;
+
+  /// No description provided for @settingsClearAllConfirm.
+  ///
+  /// In it, this message translates to:
+  /// **'Tutti i dati (note, task ed eventi) verranno eliminati definitivamente. Questa operazione è irreversibile. Continuare?'**
+  String get settingsClearAllConfirm;
+
+  /// No description provided for @settingsAllCleared.
+  ///
+  /// In it, this message translates to:
+  /// **'Tutti i dati sono stati eliminati.'**
+  String get settingsAllCleared;
+
+  /// No description provided for @settingsDeleteAll.
+  ///
+  /// In it, this message translates to:
+  /// **'Elimina tutto'**
+  String get settingsDeleteAll;
+
+  /// No description provided for @settingsNotesExported.
+  ///
+  /// In it, this message translates to:
+  /// **'Note esportate'**
+  String get settingsNotesExported;
+
+  /// No description provided for @settingsNotesSavedIn.
+  ///
+  /// In it, this message translates to:
+  /// **'Note salvate in:\n'**
+  String get settingsNotesSavedIn;
+
+  /// No description provided for @settingsImportNotesTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Importa note'**
+  String get settingsImportNotesTitle;
+
+  /// No description provided for @settingsReplaceNotesConfirm.
+  ///
+  /// In it, this message translates to:
+  /// **'Le note attuali verranno sostituite con quelle del file. Continuare?'**
+  String get settingsReplaceNotesConfirm;
+
+  /// No description provided for @settingsNotesImported.
+  ///
+  /// In it, this message translates to:
+  /// **'Note importate con successo.'**
+  String get settingsNotesImported;
+
+  /// No description provided for @settingsClearNotesConfirm.
+  ///
+  /// In it, this message translates to:
+  /// **'Tutte le note verranno eliminate definitivamente. Continuare?'**
+  String get settingsClearNotesConfirm;
+
+  /// No description provided for @settingsNotesCleared.
+  ///
+  /// In it, this message translates to:
+  /// **'Tutte le note sono state eliminate.'**
+  String get settingsNotesCleared;
+
+  /// No description provided for @settingsTasksExported.
+  ///
+  /// In it, this message translates to:
+  /// **'Task esportati'**
+  String get settingsTasksExported;
+
+  /// No description provided for @settingsTasksSavedIn.
+  ///
+  /// In it, this message translates to:
+  /// **'Task salvati in:\n'**
+  String get settingsTasksSavedIn;
+
+  /// No description provided for @settingsImportTasksTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Importa task'**
+  String get settingsImportTasksTitle;
+
+  /// No description provided for @settingsReplaceTasksConfirm.
+  ///
+  /// In it, this message translates to:
+  /// **'I task attuali verranno sostituiti con quelli del file. Continuare?'**
+  String get settingsReplaceTasksConfirm;
+
+  /// No description provided for @settingsTasksImported.
+  ///
+  /// In it, this message translates to:
+  /// **'Task importati con successo.'**
+  String get settingsTasksImported;
+
+  /// No description provided for @settingsClearTasksConfirm.
+  ///
+  /// In it, this message translates to:
+  /// **'Tutti i task verranno eliminati definitivamente. Continuare?'**
+  String get settingsClearTasksConfirm;
+
+  /// No description provided for @settingsTasksCleared.
+  ///
+  /// In it, this message translates to:
+  /// **'Tutti i task sono stati eliminati.'**
+  String get settingsTasksCleared;
+
+  /// No description provided for @settingsCalendarExported.
+  ///
+  /// In it, this message translates to:
+  /// **'Calendario esportato'**
+  String get settingsCalendarExported;
+
+  /// No description provided for @settingsCalendarSavedIn.
+  ///
+  /// In it, this message translates to:
+  /// **'Calendario salvato in:\n'**
+  String get settingsCalendarSavedIn;
+
+  /// No description provided for @settingsImportCalendarTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Importa calendario'**
+  String get settingsImportCalendarTitle;
+
+  /// No description provided for @settingsReplaceCalendarConfirm.
+  ///
+  /// In it, this message translates to:
+  /// **'Gli eventi attuali verranno sostituiti con quelli del file. Continuare?'**
+  String get settingsReplaceCalendarConfirm;
+
+  /// No description provided for @settingsCalendarImported.
+  ///
+  /// In it, this message translates to:
+  /// **'Calendario importato con successo.'**
+  String get settingsCalendarImported;
+
+  /// No description provided for @settingsClearEventsTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Cancella eventi'**
+  String get settingsClearEventsTitle;
+
+  /// No description provided for @settingsClearCalendarConfirm.
+  ///
+  /// In it, this message translates to:
+  /// **'Tutti gli eventi del calendario verranno eliminati definitivamente. Continuare?'**
+  String get settingsClearCalendarConfirm;
+
+  /// No description provided for @settingsCalendarCleared.
+  ///
+  /// In it, this message translates to:
+  /// **'Tutti gli eventi sono stati eliminati.'**
+  String get settingsCalendarCleared;
+
+  /// No description provided for @settingsNoEventsToExport.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessun evento da esportare.'**
+  String get settingsNoEventsToExport;
+
+  /// No description provided for @settingsIcsDownloaded.
+  ///
+  /// In it, this message translates to:
+  /// **'Calendario ICS scaricato'**
+  String get settingsIcsDownloaded;
+
+  /// No description provided for @settingsIcsExported.
+  ///
+  /// In it, this message translates to:
+  /// **'Calendario ICS esportato'**
+  String get settingsIcsExported;
+
+  /// No description provided for @settingsNoEventsInFile.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessun evento trovato nel file.'**
+  String get settingsNoEventsInFile;
+
+  /// No description provided for @settingsDeleteAccountConfirm.
+  ///
+  /// In it, this message translates to:
+  /// **'L\'account e tutti i suoi dati (note, task ed eventi) verranno eliminati definitivamente da tutti i dispositivi. Questa operazione è irreversibile: se vuoi conservare i dati, esporta prima un backup completo. Continuare?'**
+  String get settingsDeleteAccountConfirm;
+
+  /// No description provided for @settingsConfirmPassword.
+  ///
+  /// In it, this message translates to:
+  /// **'Conferma la password'**
+  String get settingsConfirmPassword;
+
+  /// No description provided for @settingsDeleteAccountFailed.
+  ///
+  /// In it, this message translates to:
+  /// **'Impossibile eliminare l\'account. Controlla la connessione e riprova.'**
+  String get settingsDeleteAccountFailed;
+
+  /// No description provided for @settingsAccountDeleted.
+  ///
+  /// In it, this message translates to:
+  /// **'Account eliminato.'**
+  String get settingsAccountDeleted;
+
+  /// No description provided for @settingsDriveComingSoon.
+  ///
+  /// In it, this message translates to:
+  /// **'La sincronizzazione con Google Drive sarà disponibile in una prossima versione.'**
+  String get settingsDriveComingSoon;
+
+  /// No description provided for @commonErrorDetail.
+  ///
+  /// In it, this message translates to:
+  /// **'Errore: {error}'**
+  String commonErrorDetail(String error);
+
+  /// No description provided for @settingsImportError.
+  ///
+  /// In it, this message translates to:
+  /// **'Errore durante l\'importazione: {error}'**
+  String settingsImportError(String error);
+
+  /// No description provided for @settingsBackupsLoadError.
+  ///
+  /// In it, this message translates to:
+  /// **'Errore nel caricamento dei backup: {error}'**
+  String settingsBackupsLoadError(String error);
+
+  /// No description provided for @settingsIcsSavedIn.
+  ///
+  /// In it, this message translates to:
+  /// **'Calendario ICS salvato in:\n{path}'**
+  String settingsIcsSavedIn(String path);
+
+  /// No description provided for @settingsIcsImported.
+  ///
+  /// In it, this message translates to:
+  /// **'{count, plural, =1{1 evento importato nel calendario.} other{{count} eventi importati nel calendario.}}'**
+  String settingsIcsImported(int count);
+
+  /// No description provided for @infoVersion.
+  ///
+  /// In it, this message translates to:
+  /// **'Versione {version} (build {build})'**
+  String infoVersion(String version, int build);
+
+  /// No description provided for @infoDescription.
+  ///
+  /// In it, this message translates to:
+  /// **'Noteep è un\'app per prendere note, creare liste di controllo e gestire le tue idee in modo semplice e veloce. Supporta temi chiaro e scuro, stili di testo personalizzati, etichette, archivio e molto altro.'**
+  String get infoDescription;
+
+  /// No description provided for @statsCompletedOf.
+  ///
+  /// In it, this message translates to:
+  /// **'Completati: {completed} / {total}'**
+  String statsCompletedOf(int completed, int total);
+
+  /// No description provided for @exportPdfError.
+  ///
+  /// In it, this message translates to:
+  /// **'Errore PDF: {error}'**
+  String exportPdfError(String error);
+
+  /// No description provided for @exportEmptyNote.
+  ///
+  /// In it, this message translates to:
+  /// **'(nota vuota)'**
+  String get exportEmptyNote;
+
+  /// No description provided for @exportModified.
+  ///
+  /// In it, this message translates to:
+  /// **'Modificata: {date}'**
+  String exportModified(String date);
+
+  /// No description provided for @exportLabels.
+  ///
+  /// In it, this message translates to:
+  /// **'Etichette: {labels}'**
+  String exportLabels(String labels);
+
+  /// No description provided for @exportDateTimePattern.
+  ///
+  /// In it, this message translates to:
+  /// **'d MMM y \'alle\' HH:mm'**
+  String get exportDateTimePattern;
+
+  /// No description provided for @exportCsvHeader.
+  ///
+  /// In it, this message translates to:
+  /// **'id,titolo,contenuto,tipo,etichette,fissata,creata,modificata'**
+  String get exportCsvHeader;
+
+  /// No description provided for @exportHtmlHeading.
+  ///
+  /// In it, this message translates to:
+  /// **'Export note – {date}'**
+  String exportHtmlHeading(String date);
 }
 
 class _AppLocalizationsDelegate

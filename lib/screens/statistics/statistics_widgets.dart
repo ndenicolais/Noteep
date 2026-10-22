@@ -10,6 +10,7 @@
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import '../../theme/app_radius.dart';
 import '../../theme/app_spacing.dart';
 
@@ -168,7 +169,7 @@ class _StatsPieChartState extends State<StatsPieChart> {
     if (total == 0) {
       return Center(
         child: Text(
-          'Nessun dato',
+          context.l10n.statsNoData,
           style: TextStyle(color: Theme.of(context).colorScheme.outline),
         ),
       );
@@ -264,7 +265,7 @@ class TaskCompletionBar extends StatelessWidget {
     if (total == 0) {
       return Center(
         child: Text(
-          'Nessun task',
+          context.l10n.statsNoTasksShort,
           style: TextStyle(color: Theme.of(context).colorScheme.outline),
         ),
       );
@@ -279,7 +280,7 @@ class TaskCompletionBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Completati: $completed / $total',
+              context.l10n.statsCompletedOf(completed, total),
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             Text(
@@ -346,7 +347,9 @@ class TaskCompletionBar extends StatelessWidget {
                     showTitles: true,
                     getTitlesWidget:
                         (v, _) => Text(
-                          v == 0 ? 'Totale' : 'Completati',
+                          v == 0
+                              ? context.l10n.statsTotalSingular
+                              : context.l10n.tasksCompletedSection,
                           style: const TextStyle(fontSize: 11),
                         ),
                   ),

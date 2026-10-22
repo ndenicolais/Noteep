@@ -10,6 +10,7 @@
 
 import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
 import '../../theme/app_font_sizes.dart';
@@ -34,7 +35,7 @@ class CalendarSearchResultsView extends StatelessWidget {
             Icon(Icons.event_busy, size: 64, color: colorScheme.outlineVariant),
             const SizedBox(height: AppSpacing.lg),
             Text(
-              'Nessun evento trovato',
+              context.l10n.calendarNoEventsFound,
               style: TextStyle(
                 color: colorScheme.outline,
                 fontSize: AppFontSizes.lg,
@@ -52,16 +53,17 @@ class CalendarSearchResultsView extends StatelessWidget {
       itemCount: sorted.length,
       itemBuilder: (context, i) {
         final event = sorted[i];
-        final dayOfWeek = DateFormat('EEEE', 'it_IT').format(event.startTime);
-        final dateStr = DateFormat(
-          'd MMMM yyyy',
-          'it_IT',
-        ).format(event.startTime);
-        final timeStr = formatEventTimeRange(event);
+        final dayOfWeek = DateFormat('EEEE').format(event.startTime);
+        final dateStr = DateFormat('d MMMM yyyy').format(event.startTime);
+        final timeStr = formatEventTimeRange(context.l10n, event);
 
         return ListTile(
           leading: _buildLeading(context, event, colorScheme),
-          title: Text(event.title.isEmpty ? '(senza titolo)' : event.title),
+          title: Text(
+            event.title.isEmpty
+                ? context.l10n.commonUntitledParens
+                : event.title,
+          ),
           subtitle: Text('$dayOfWeek, $dateStr • $timeStr'),
           onTap: () => AppNav.openEvent(context, event),
         );
@@ -116,7 +118,7 @@ class CalendarSearchResultsView extends StatelessWidget {
             ),
           ),
           Text(
-            DateFormat('MMM', 'it_IT').format(event.startTime),
+            DateFormat('MMM').format(event.startTime),
             style: TextStyle(
               fontSize: AppFontSizes.xs,
               color: colorScheme.onPrimaryContainer,

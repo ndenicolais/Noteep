@@ -10,6 +10,7 @@
 
 import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
 import '../../theme/app_font_sizes.dart';
@@ -50,7 +51,7 @@ class CalendarScheduleView extends StatelessWidget {
             Icon(Icons.event_busy, size: 64, color: colorScheme.outlineVariant),
             const SizedBox(height: AppSpacing.lg),
             Text(
-              'Nessun evento in programma',
+              context.l10n.calendarNoEventsScheduled,
               style: TextStyle(
                 color: colorScheme.outline,
                 fontSize: AppFontSizes.lg,
@@ -74,7 +75,9 @@ class CalendarScheduleView extends StatelessWidget {
         final dayEvents = grouped[day]!;
         final isToday = day.isAtSameMomentAs(today);
         final dayLabel =
-            isToday ? 'Oggi' : DateFormat('EEEE, d MMMM', 'it_IT').format(day);
+            isToday
+                ? context.l10n.commonToday
+                : DateFormat('EEEE, d MMMM').format(day);
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,

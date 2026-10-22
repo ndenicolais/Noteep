@@ -10,6 +10,7 @@
 
 import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
 import '../../theme/app_spacing.dart';
@@ -24,7 +25,7 @@ void showDayEventsBottomSheet(
   List<CalendarEventModel> events,
 ) {
   final colorScheme = Theme.of(context).colorScheme;
-  final dateStr = DateFormat('EEEE, d MMMM yyyy', 'it_IT').format(day);
+  final dateStr = DateFormat('EEEE, d MMMM yyyy').format(day);
 
   showAppSheet(
     context,
@@ -76,7 +77,7 @@ void showDayEventsBottomSheet(
                         AppNav.openEvent(context, newEvent);
                       },
                       icon: const Icon(Icons.add, size: 18),
-                      label: const Text('Aggiungi'),
+                      label: Text(context.l10n.calendarAdd),
                     ),
                   ],
                 ),
@@ -87,7 +88,7 @@ void showDayEventsBottomSheet(
                     events.isEmpty
                         ? Center(
                           child: Text(
-                            'Nessun evento per questo giorno',
+                            context.l10n.calendarNoEventsDay,
                             style: TextStyle(color: colorScheme.outline),
                           ),
                         )

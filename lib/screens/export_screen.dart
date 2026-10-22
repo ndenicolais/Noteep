@@ -11,6 +11,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import '../l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
@@ -29,7 +30,7 @@ class ExportScreen extends ConsumerWidget {
     final activeNotes = ref.watch(activeNotesProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Esporta note')),
+      appBar: AppBar(title: Text(context.l10n.exportTitle)),
       body: ListView(
         children: [
           Padding(
@@ -40,7 +41,7 @@ class ExportScreen extends ConsumerWidget {
               AppSpacing.sm,
             ),
             child: Text(
-              'Esporta tutte le note attive (escluse quelle nel cestino).',
+              context.l10n.exportIntro,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
@@ -49,31 +50,31 @@ class ExportScreen extends ConsumerWidget {
           _ExportTile(
             icon: Icons.picture_as_pdf_outlined,
             label: 'PDF',
-            subtitle: 'Salva le note in un file .pdf',
+            subtitle: context.l10n.exportPdfSubtitle,
             onTap: () => _exportPdf(context, activeNotes),
           ),
           _ExportTile(
             icon: Icons.text_snippet_outlined,
             label: 'TXT',
-            subtitle: 'Salva le note in un file .txt',
+            subtitle: context.l10n.exportTxtSubtitle,
             onTap: () => _exportText(context, activeNotes),
           ),
           _ExportTile(
             icon: Icons.data_object,
             label: 'JSON',
-            subtitle: 'Salva le note in un file .json',
+            subtitle: context.l10n.exportJsonSubtitle,
             onTap: () => _exportJson(context, activeNotes),
           ),
           _ExportTile(
             icon: Icons.table_chart_outlined,
             label: 'CSV',
-            subtitle: 'Salva le note in un file .csv',
+            subtitle: context.l10n.exportCsvSubtitle,
             onTap: () => _exportCsv(context, activeNotes),
           ),
           _ExportTile(
             icon: Icons.html,
             label: 'HTML',
-            subtitle: 'Salva le note in un file .html',
+            subtitle: context.l10n.exportHtmlSubtitle,
             onTap: () => _exportHtml(context, activeNotes),
           ),
           const SizedBox(height: AppSpacing.xxl),
@@ -85,8 +86,9 @@ class ExportScreen extends ConsumerWidget {
   // ── Export helpers ──────────────────────────────────────────────────────────
 
   Future<void> _exportPdf(BuildContext context, List<NoteModel> notes) async {
+    final l10n = context.l10n;
     final doc = pw.Document();
-    final dateFormat = DateFormat("d MMM y 'alle' HH:mm", 'it');
+    final dateFormat = DateFormat(l10n.exportDateTimePattern);
     for (final note in notes) {
       doc.addPage(
         pw.Page(
@@ -105,10 +107,12 @@ class ExportScreen extends ConsumerWidget {
                     ),
                     pw.SizedBox(height: AppSpacing.sm),
                   ],
-                  pw.Text(note.content.isEmpty ? '(nota vuota)' : note.content),
+                  pw.Text(
+                    note.content.isEmpty ? l10n.exportEmptyNote : note.content,
+                  ),
                   pw.SizedBox(height: 6),
                   pw.Text(
-                    'Modificata: ${dateFormat.format(note.updatedAt)}',
+                    l10n.exportModified(dateFormat.format(note.updatedAt)),
                     style: const pw.TextStyle(
                       fontSize: 9,
                       color: PdfColors.grey600,
@@ -116,7 +120,7 @@ class ExportScreen extends ConsumerWidget {
                   ),
                   if (note.tags.isNotEmpty)
                     pw.Text(
-                      'Etichette: ${note.tags.join(', ')}',
+                      l10n.exportLabels(note.tags.join(', ')),
                       style: const pw.TextStyle(
                         fontSize: 9,
                         color: PdfColors.grey600,
@@ -137,18 +141,19 @@ class ExportScreen extends ConsumerWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('Errore PDF: $e')));
+        ).showSnackBar(SnackBar(content: Text(l10n.exportPdfError('$e'))));
       }
     }
   }
 
   Future<void> _exportText(BuildContext context, List<NoteModel> notes) async {
-    final fmt = DateFormat('d MMM y HH:mm', 'it');
+    final l10n = context.l10n;
+    final fmt = DateFormat('d MMM y HH:mm');
     final buf = StringBuffer();
     for (final n in notes) {
       if (n.title.isNotEmpty) buf.writeln('=== ${n.title} ===');
-      buf.writeln(n.content.isEmpty ? '(nota vuota)' : n.content);
-      buf.writeln('Modificata: ${fmt.format(n.updatedAt)}');
+      buf.writeln(n.content.isEmpty ? l10n.exportEmptyNote : n.content);
+      buf.writeln(l10n.exportModified(fmt.format(n.updatedAt)));
       buf.writeln('---\n');
     }
     await _saveOrDownload(
@@ -161,13 +166,14 @@ class ExportScreen extends ConsumerWidget {
   }
 
   Future<void> _exportJson(BuildContext context, List<NoteModel> notes) async {
+    final l10n = context.l10n;
     final list =
         notes
             .map(
               (n) => {
                 'id': n.id,
                 'title': n.title,
-                'content': n.content.isEmpty ? '(nota vuota)' : n.content,
+                'content': n.content.isEmpty ? l10n.exportEmptyNote : n.content,
                 'type': n.type.name,
                 'tags': n.tags,
                 'isPinned': n.isPinned,
@@ -187,16 +193,17 @@ class ExportScreen extends ConsumerWidget {
   }
 
   Future<void> _exportCsv(BuildContext context, List<NoteModel> notes) async {
+    final l10n = context.l10n;
     String esc(String s) =>
         '"${s.replaceAll('"', '""').replaceAll('\n', ' ')}"';
     final buf = StringBuffer();
-    buf.writeln('id,titolo,contenuto,tipo,etichette,fissata,creata,modificata');
+    buf.writeln(l10n.exportCsvHeader);
     for (final n in notes) {
       buf.writeln(
         [
           esc(n.id),
           esc(n.title),
-          esc(n.content.isEmpty ? '(nota vuota)' : n.content),
+          esc(n.content.isEmpty ? l10n.exportEmptyNote : n.content),
           esc(n.type.name),
           esc(n.tags.join(';')),
           n.isPinned ? '1' : '0',
@@ -215,11 +222,12 @@ class ExportScreen extends ConsumerWidget {
   }
 
   Future<void> _exportHtml(BuildContext context, List<NoteModel> notes) async {
-    final fmt = DateFormat('d MMM y HH:mm', 'it');
+    final l10n = context.l10n;
+    final fmt = DateFormat('d MMM y HH:mm');
     final buf =
         StringBuffer()..writeln(
           '''<!DOCTYPE html>
-<html lang="it">
+<html lang="${l10n.localeName}">
 <head>
   <meta charset="UTF-8">
   <title>Note Export</title>
@@ -232,7 +240,7 @@ class ExportScreen extends ConsumerWidget {
   </style>
 </head>
 <body>
-  <h1>Export note – ${DateFormat('d MMM y', 'it').format(DateTime.now())}</h1>''',
+  <h1>${l10n.exportHtmlHeading(DateFormat('d MMM y').format(DateTime.now()))}</h1>''',
         );
 
     for (final n in notes) {
@@ -241,7 +249,7 @@ class ExportScreen extends ConsumerWidget {
         buf.writeln('    <h2>${_he(n.title)}</h2>');
       }
       buf.writeln(
-        '    <p>${_he(n.content.isEmpty ? '(nota vuota)' : n.content)}</p>',
+        '    <p>${_he(n.content.isEmpty ? l10n.exportEmptyNote : n.content)}</p>',
       );
       if (n.tags.isNotEmpty) {
         buf.write('    <p>');
@@ -251,7 +259,7 @@ class ExportScreen extends ConsumerWidget {
         buf.writeln('</p>');
       }
       buf.writeln(
-        '    <p class="meta">Modificata: ${fmt.format(n.updatedAt)}</p>',
+        '    <p class="meta">${_he(l10n.exportModified(fmt.format(n.updatedAt)))}</p>',
       );
       buf.writeln('  </article>');
     }
@@ -318,7 +326,7 @@ class _ExportTile extends StatelessWidget {
       trailing: IconButton(
         icon: const Icon(Icons.download),
         onPressed: onTap,
-        tooltip: 'Scarica',
+        tooltip: context.l10n.exportDownload,
       ),
     );
   }

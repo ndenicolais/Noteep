@@ -11,6 +11,7 @@
 import '../../core/routing/app_router.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/calendar_model.dart';
 import '../../providers/calendar_provider.dart';
@@ -113,28 +114,27 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
     }
   }
 
-  String get _currentViewLabel {
-    switch (_currentView) {
+  String _viewLabel(_CalendarViewMode mode) {
+    final l10n = context.l10n;
+    switch (mode) {
       case _CalendarViewMode.day:
-        return 'Giorno';
+        return l10n.calendarViewDay;
       case _CalendarViewMode.week:
-        return 'Settimana';
+        return l10n.calendarViewWeek;
       case _CalendarViewMode.month:
-        return 'Mese';
+        return l10n.calendarViewMonth;
       case _CalendarViewMode.year:
-        return 'Anno';
+        return l10n.calendarViewYear;
       case _CalendarViewMode.schedule:
-        return 'Programma';
+        return l10n.calendarViewSchedule;
       case _CalendarViewMode.sevenDays:
-        return '7 giorni';
+        return l10n.calendarViewSevenDays;
     }
   }
 
-  PopupMenuItem<_CalendarViewMode> _viewMenuItem(
-    _CalendarViewMode mode,
-    String label,
-    String shortcut,
-  ) {
+  /// The hint on the right is the label's first letter.
+  PopupMenuItem<_CalendarViewMode> _viewMenuItem(_CalendarViewMode mode) {
+    final label = _viewLabel(mode);
     return PopupMenuItem<_CalendarViewMode>(
       value: mode,
       child: Row(
@@ -143,7 +143,7 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
           Text(label),
           const SizedBox(width: AppSpacing.xl),
           Text(
-            shortcut,
+            label[0].toUpperCase(),
             style: TextStyle(
               fontSize: AppFontSizes.sm,
               color: Theme.of(context).colorScheme.outline,
@@ -166,27 +166,23 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
       titleWidget: CalendarSearchBar(
         controller: _searchController,
         provider: calendarSearchQueryProvider,
-        hintText: 'Cerca eventi...',
+        hintText: context.l10n.calendarSearchHint,
       ),
       appBarActions: [
         if (!isSearching) ...[
           IconButton(
             icon: const Icon(Icons.today_outlined),
             onPressed: _goToToday,
-            tooltip: 'Oggi',
+            tooltip: context.l10n.commonToday,
           ),
           PopupMenuButton<_CalendarViewMode>(
             initialValue: _currentView,
             onSelected: (mode) => setState(() => _currentView = mode),
-            tooltip: 'Cambia visualizzazione',
+            tooltip: context.l10n.calendarChangeView,
             itemBuilder:
                 (_) => [
-                  _viewMenuItem(_CalendarViewMode.day, 'Giorno', 'G'),
-                  _viewMenuItem(_CalendarViewMode.week, 'Settimana', 'W'),
-                  _viewMenuItem(_CalendarViewMode.month, 'Mese', 'M'),
-                  _viewMenuItem(_CalendarViewMode.year, 'Anno', 'A'),
-                  _viewMenuItem(_CalendarViewMode.schedule, 'Programma', 'P'),
-                  _viewMenuItem(_CalendarViewMode.sevenDays, '7 giorni', '7'),
+                  for (final mode in _CalendarViewMode.values)
+                    _viewMenuItem(mode),
                 ],
             child: Padding(
               padding: const EdgeInsets.symmetric(
@@ -197,7 +193,7 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    _currentViewLabel,
+                    _viewLabel(_currentView),
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       color: Theme.of(context).colorScheme.onSurface,

@@ -9,6 +9,7 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'package:flutter/material.dart';
+import '../../l10n/l10n.dart';
 import '../../providers/settings/backup_provider.dart';
 import '../../widgets/shared/action_tile.dart';
 import '../../widgets/shared/section_header.dart';
@@ -35,24 +36,24 @@ class SettingsBackupSection extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SectionHeader('Backup'),
+        SectionHeader(context.l10n.settingsBackupTitle),
         SwitchListTile(
-          title: const Text('Backup automatico'),
-          subtitle: const Text('Salva automaticamente i tuoi dati'),
+          title: Text(context.l10n.settingsAutoBackup),
+          subtitle: Text(context.l10n.settingsAutoBackupSubtitle),
           value: backupSettings.enabled,
           onChanged: onToggleEnabled,
         ),
         if (backupSettings.enabled)
           ListTile(
-            title: const Text('Frequenza backup'),
+            title: Text(context.l10n.settingsBackupFrequency),
             subtitle: Text(frequencyLabel),
             trailing: const Icon(Icons.chevron_right),
             onTap: onShowFrequencySheet,
           ),
         ActionTile(
           icon: Icons.backup,
-          title: 'Visualizza backup',
-          subtitle: 'Gestisci i backup salvati',
+          title: context.l10n.settingsViewBackups,
+          subtitle: context.l10n.settingsViewBackupsSubtitle,
           onTap: onShowBackupsSheet,
         ),
       ],
