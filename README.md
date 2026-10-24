@@ -119,19 +119,19 @@ Export notes to **PDF** format (rendered with the `pdf` / `printing` packages); 
 | Export notes | Opens the PDF export screen |
 | Statistics | Opens the statistics screen |
 | Delete account | Re-authenticate, then permanently delete account and all data |
-| App info | Version, build number, changelog, author |
+| About Noteep | Version, main features, source code / GitHub / contact links, changelog, privacy policy, licenses, author |
 
 ### Home Screen Widget
 Android home screen widget support via `home_widget`.
 
 ### Onboarding
-On first launch, before signing in, a short swipeable introduction presents notes, tasks, calendar, reminders and backup. It can be skipped and replayed anytime from **Info app → Guida introduttiva**.
+On first launch, before signing in, a short swipeable introduction presents notes, tasks, calendar, reminders and backup. It can be skipped and replayed anytime from **Info su Noteep → Guida introduttiva**.
 
 ### Changelog
-After an update, a "Changelog" dialog lists what changed since the last version the user saw (nothing is shown on a fresh install). The full history is always available from **Info app**.
+After an update, a "Changelog" dialog lists what changed since the last version the user saw (nothing is shown on a fresh install). The full history is always available from **Info su Noteep → Novità**.
 
 ### Privacy Policy
-The privacy policy ([`PRIVACY.md`](PRIVACY.md)) is also readable inside the app, offline and in every app language, from **Info app → Informativa sulla privacy**.
+The privacy policy ([`PRIVACY.md`](PRIVACY.md)) is also readable inside the app, offline and in every app language, from **Info su Noteep → Informativa sulla privacy**.
 
 ---
 
@@ -353,7 +353,7 @@ Same timestamp fields as `NoteModel` and `TaskModel`, plus `startTime`, `endTime
 | `CalendarEventEditorScreen` | `/event` | Create or edit a calendar event |
 | `ExportScreen` | `/export` | PDF export |
 | `StatisticsScreen` | `/statistics` | Usage statistics |
-| `InfoScreen` | `/info` | App version and author info |
+| `InfoScreen` | `/info` | About screen: version, features, links, credits |
 | `PrivacyPolicyScreen` | `/privacy-policy` | Localized privacy policy (from Info) |
 
 ### Navigation
