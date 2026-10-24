@@ -68,10 +68,7 @@ class AppBootstrap {
     // Strings and dates built before the first frame (notification channel,
     // home widget) use this; MaterialApp.builder then keeps it in sync.
     Intl.defaultLocale = startupLanguageCode(prefs);
-    await _optional('notifications', () async {
-      await NotificationService.instance.init();
-      await NotificationService.instance.requestPermissions();
-    });
+    await _optional('notifications', NotificationService.instance.init);
     await _optional('home widget', WidgetService.instance.init);
     return prefs;
   }

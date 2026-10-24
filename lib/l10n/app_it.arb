@@ -686,6 +686,7 @@
   "changelog_v2_0_0_bullet_34": "Nuova informativa sulla privacy, leggibile direttamente nell'app da Info su Noteep, in italiano e in inglese.",
   "changelog_v2_0_0_bullet_35": "Schermata Info su Noteep rinnovata: funzionalità principali in evidenza e nuovi link al codice sorgente, al profilo GitHub e al contatto dello sviluppatore.",
   "changelog_v2_0_0_bullet_36": "Il ripristino del backup e l'importazione del calendario sono più sicuri: un file selezionato non può più essere usato per accedere ad altri file del dispositivo.",
+  "changelog_v2_0_0_bullet_37": "Il permesso per le notifiche non viene più chiesto all'apertura dell'app, ma solo la prima volta che imposti un promemoria.",
   "infoPrivacyOpen": "Informativa sulla privacy",
   "privacyPolicyTitle": "Informativa sulla privacy",
   "privacyPolicyIntro": "Noteep è un'app per note, task e calendario. Questa informativa spiega quali dati tratta, perché e come puoi controllarli. Noteep non mostra pubblicità, non usa strumenti di analisi o di tracciamento e non vende né cede i tuoi dati.",

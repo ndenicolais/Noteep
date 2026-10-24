@@ -76,6 +76,10 @@ class NotificationService {
     final tzDate = tz.TZDateTime.from(scheduledAt, tz.local);
     if (tzDate.isBefore(tz.TZDateTime.now(tz.local))) return;
 
+    // Asked here, when the user sets a reminder, rather than at startup:
+    // Android shows the dialog only if the permission is not granted yet.
+    await requestPermissions();
+
     // The channel name is updated by Android on every schedule, so it
     // follows the current language.
     final l10n = currentL10n();

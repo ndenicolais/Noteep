@@ -1729,6 +1729,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Restoring a backup and importing a calendar are safer: a selected file can no longer be used to reach other files on the device.';
 
   @override
+  String get changelog_v2_0_0_bullet_37 =>
+      'Notification permission is no longer asked when the app opens, only the first time you set a reminder.';
+
+  @override
   String get infoPrivacyOpen => 'Privacy policy';
 
   @override

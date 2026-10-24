@@ -1737,6 +1737,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Il ripristino del backup e l\'importazione del calendario sono più sicuri: un file selezionato non può più essere usato per accedere ad altri file del dispositivo.';
 
   @override
+  String get changelog_v2_0_0_bullet_37 =>
+      'Il permesso per le notifiche non viene più chiesto all\'apertura dell\'app, ma solo la prima volta che imposti un promemoria.';
+
+  @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';
 
   @override

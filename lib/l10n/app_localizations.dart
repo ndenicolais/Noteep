@@ -3194,6 +3194,12 @@ abstract class AppLocalizations {
   /// **'Il ripristino del backup e l\'importazione del calendario sono più sicuri: un file selezionato non può più essere usato per accedere ad altri file del dispositivo.'**
   String get changelog_v2_0_0_bullet_36;
 
+  /// No description provided for @changelog_v2_0_0_bullet_37.
+  ///
+  /// In it, this message translates to:
+  /// **'Il permesso per le notifiche non viene più chiesto all\'apertura dell\'app, ma solo la prima volta che imposti un promemoria.'**
+  String get changelog_v2_0_0_bullet_37;
+
   /// No description provided for @infoPrivacyOpen.
   ///
   /// In it, this message translates to:
