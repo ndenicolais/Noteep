@@ -535,7 +535,7 @@ flutter test
 | `google_sign_in` | ^6.2.2 | Google OAuth |
 | `shared_preferences` | ^2.3.4 | Local settings storage |
 | `flutter_local_notifications` | ^18.0.1 | Local notifications |
-| `flutter_timezone` | ^3.0.0 | Timezone detection |
+| `flutter_timezone` | ^5.1.1 | Timezone detection |
 | `timezone` | ^0.9.4 | Timezone data |
 | `record` | ^6.0.0 | Audio recording |
 | `just_audio` | ^0.9.39 | Audio playback |
@@ -547,8 +547,8 @@ flutter test
 | `home_widget` | ^0.9.1 | Android home screen widget |
 | `archive` | ^3.6.1 | ZIP backup |
 | `background_fetch` | ^1.3.0 | Background auto-backup |
-| `share_plus` | ^10.1.4 | Share sheet |
-| `file_picker` | ^8.1.7 | File picker (ICS, backup) |
+| `share_plus` | ^13.3.1 | Share sheet |
+| `file_picker` | ^13.2.0 | File picker (ICS, backup) |
 | `flutter_markdown` | ^0.7.6 | Markdown rendering |
 | `url_launcher` | ^6.3.3 | Open note links in the browser |
 | `path_provider` | ^2.1.4 | File system paths |

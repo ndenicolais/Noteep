@@ -3188,6 +3188,12 @@ abstract class AppLocalizations {
   /// **'Schermata Info su Noteep rinnovata: funzionalità principali in evidenza e nuovi link al codice sorgente, al profilo GitHub e al contatto dello sviluppatore.'**
   String get changelog_v2_0_0_bullet_35;
 
+  /// No description provided for @changelog_v2_0_0_bullet_36.
+  ///
+  /// In it, this message translates to:
+  /// **'Il ripristino del backup e l\'importazione del calendario sono più sicuri: un file selezionato non può più essere usato per accedere ad altri file del dispositivo.'**
+  String get changelog_v2_0_0_bullet_36;
+
   /// No description provided for @infoPrivacyOpen.
   ///
   /// In it, this message translates to:

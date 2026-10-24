@@ -35,14 +35,14 @@ dependencies:
 
   # Notifications & Reminders
   flutter_local_notifications: ^18.0.1
-  flutter_timezone: ^3.0.0
+  flutter_timezone: ^5.1.1
   timezone: ^0.9.4
 
   # Share
-  share_plus: ^10.1.4
+  share_plus: ^13.3.1
 
   # File Picker
-  file_picker: ^8.1.7
+  file_picker: ^13.2.0
 
   # Markdown
   flutter_markdown: ^0.7.6

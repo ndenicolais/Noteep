@@ -1725,6 +1725,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Redesigned About Noteep screen: main features at a glance and new links to the source code, the GitHub profile and the developer contact.';
 
   @override
+  String get changelog_v2_0_0_bullet_36 =>
+      'Restoring a backup and importing a calendar are safer: a selected file can no longer be used to reach other files on the device.';
+
+  @override
   String get infoPrivacyOpen => 'Privacy policy';
 
   @override

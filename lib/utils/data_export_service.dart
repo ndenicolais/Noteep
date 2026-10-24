@@ -34,14 +34,12 @@ class DataExportService {
   /// Opens a file picker for a single `.json` file and returns its decoded
   /// content, or null if the user cancelled or picked an empty file.
   static Future<Map<String, dynamic>?> pickAndDecodeJson() async {
-    final result = await FilePicker.platform.pickFiles(
+    final picked = await FilePicker.pickFile(
       type: FileType.custom,
       allowedExtensions: ['json'],
-      withData: true,
     );
-    if (result == null || result.files.isEmpty) return null;
-    final bytes = result.files.first.bytes;
-    if (bytes == null) return null;
+    if (picked == null) return null;
+    final bytes = await picked.readAsBytes();
     return jsonDecode(utf8.decode(bytes)) as Map<String, dynamic>;
   }
 
@@ -55,14 +53,12 @@ class DataExportService {
   /// Opens a file picker for a single `.ics` file and returns its decoded
   /// text content, or null if the user cancelled or picked an empty file.
   static Future<String?> pickIcsContent() async {
-    final result = await FilePicker.platform.pickFiles(
+    final picked = await FilePicker.pickFile(
       type: FileType.custom,
       allowedExtensions: ['ics'],
-      withData: true,
     );
-    if (result == null || result.files.isEmpty) return null;
-    final bytes = result.files.first.bytes;
-    if (bytes == null) return null;
+    if (picked == null) return null;
+    final bytes = await picked.readAsBytes();
     return utf8.decode(bytes);
   }
 }

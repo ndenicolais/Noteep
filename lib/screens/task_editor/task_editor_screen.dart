@@ -287,7 +287,7 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
 
     final text = parts.join('\n\n');
     if (text.isEmpty) return;
-    Share.share(text);
+    SharePlus.instance.share(ShareParams(text: text));
   }
 
   // ─── Reminder ─────────────────────────────────────────────────────────────

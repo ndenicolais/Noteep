@@ -195,7 +195,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
     ].join('\n\n');
 
     if (text.isEmpty) return;
-    Share.share(text);
+    SharePlus.instance.share(ShareParams(text: text));
   }
 
   // ─── Reminder ─────────────────────────────────────────────────────────────

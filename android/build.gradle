@@ -5,9 +5,10 @@ allprojects {
     }
 }
 
-rootProject.buildDir = "../build"
+def newBuildDir = rootProject.layout.buildDirectory.dir("../../build").get()
+rootProject.layout.buildDirectory.value(newBuildDir)
 subprojects {
-    project.buildDir = "${rootProject.buildDir}/${project.name}"
+    project.layout.buildDirectory.value(newBuildDir.dir(project.name))
 }
 subprojects {
     project.evaluationDependsOn(":app")
@@ -21,8 +22,8 @@ subprojects {
 subprojects {
     if (project.path == ":home_widget") {
         tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
-            kotlinOptions {
-                jvmTarget = "11"
+            compilerOptions {
+                jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
             }
         }
         // Keep the Java side consistent with the Kotlin bump above. The
@@ -42,5 +43,5 @@ subprojects {
 }
 
 tasks.register("clean", Delete) {
-    delete rootProject.buildDir
+    delete rootProject.layout.buildDirectory
 }

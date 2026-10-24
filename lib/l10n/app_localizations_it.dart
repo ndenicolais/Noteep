@@ -1733,6 +1733,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Schermata Info su Noteep rinnovata: funzionalità principali in evidenza e nuovi link al codice sorgente, al profilo GitHub e al contatto dello sviluppatore.';
 
   @override
+  String get changelog_v2_0_0_bullet_36 =>
+      'Il ripristino del backup e l\'importazione del calendario sono più sicuri: un file selezionato non può più essere usato per accedere ad altri file del dispositivo.';
+
+  @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';
 
   @override

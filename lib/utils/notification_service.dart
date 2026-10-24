@@ -26,7 +26,7 @@ class NotificationService {
   Future<void> init() async {
     tz_data.initializeTimeZones();
     final localTz = await FlutterTimezone.getLocalTimezone();
-    tz.setLocalLocation(tz.getLocation(localTz));
+    tz.setLocalLocation(tz.getLocation(localTz.identifier));
 
     const androidSettings = AndroidInitializationSettings(
       '@mipmap/launcher_icon',
