@@ -1,5 +1,5 @@
 // Noteep — Copyright © 2026 Nicola De Nicolais — All Rights Reserved.
-// Licensed under the GNU GPL v3 with Additional Commercial Restrictions.
+// Licensed under a source-available, non-commercial license. See LICENSE.
 
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter/widgets.dart';

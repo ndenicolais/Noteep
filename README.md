@@ -3,7 +3,7 @@
 **Version:** 2.0.0  
 **Author:** Nicola De Nicolais  
 **Contact:** ndn21dev@gmail.com  
-**License:** GNU GPL v3 with Additional Commercial Restrictions
+**License:** Source-available, non-commercial — see [LICENSE](LICENSE)
 
 > A digital notebook — notes, tasks, and calendar events in one place, synced via Firebase.
 
@@ -569,8 +569,8 @@ Noteep has no ads, analytics or tracking. Account and content are stored on Fire
 
 Copyright © 2026 Nicola De Nicolais — All Rights Reserved.
 
-Licensed under the **GNU General Public License v3** with Additional Commercial Restrictions.  
-Commercial use — including publishing or monetising on any app store — requires explicit written permission from the copyright holder.
+Released under a **source-available, non-commercial** license — see [LICENSE](LICENSE) for details.  
+Commercial use, including publishing on any app store, requires the author's written permission.
 
 Contact: ndn21dev@gmail.com  
 GitHub: https://github.com/ndenicolais
