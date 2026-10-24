@@ -66,3 +66,5 @@ images/screenshots/*_raw.png
 
 # Local helper scripts and tooling
 /tool/
+# Dart debug symbols from obfuscated release builds (deploy_android.ps1)
+/symbols/
