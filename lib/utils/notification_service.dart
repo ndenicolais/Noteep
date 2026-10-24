@@ -29,7 +29,7 @@ class NotificationService {
     tz.setLocalLocation(tz.getLocation(localTz));
 
     const androidSettings = AndroidInitializationSettings(
-      '@mipmap/ic_launcher',
+      '@mipmap/launcher_icon',
     );
     const iosSettings = DarwinInitializationSettings(
       requestAlertPermission: true,
@@ -91,7 +91,7 @@ class NotificationService {
           channelDescription: l10n.notificationChannelDescription,
           importance: Importance.high,
           priority: Priority.high,
-          icon: '@mipmap/ic_launcher',
+          icon: '@mipmap/launcher_icon',
         ),
         iOS: const DarwinNotificationDetails(),
       ),

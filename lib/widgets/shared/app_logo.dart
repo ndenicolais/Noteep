@@ -29,7 +29,7 @@ class AppLogo extends StatelessWidget {
         borderRadius: BorderRadius.circular(size * 0.28),
       ),
       child: Image.asset(
-        'assets/images/app_logo_icon.png',
+        'assets/images/app_logo.png',
         semanticLabel: context.l10n.appLogoLabel,
       ),
     );
