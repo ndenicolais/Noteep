@@ -3169,6 +3169,180 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Il widget per la schermata Home ora si aggiorna davvero con il numero di note e task e con l\'ultima nota modificata, nella lingua dell\'app.'**
   String get changelog_v2_0_0_bullet_33;
+
+  /// No description provided for @changelog_v2_0_0_bullet_34.
+  ///
+  /// In it, this message translates to:
+  /// **'Nuova informativa sulla privacy, leggibile direttamente nell\'app da Info app, in italiano e in inglese.'**
+  String get changelog_v2_0_0_bullet_34;
+
+  /// No description provided for @infoPrivacyTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Privacy'**
+  String get infoPrivacyTitle;
+
+  /// No description provided for @infoPrivacyOpen.
+  ///
+  /// In it, this message translates to:
+  /// **'Informativa sulla privacy'**
+  String get infoPrivacyOpen;
+
+  /// No description provided for @infoPrivacySubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Quali dati usa Noteep e come controllarli'**
+  String get infoPrivacySubtitle;
+
+  /// No description provided for @privacyPolicyTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Informativa sulla privacy'**
+  String get privacyPolicyTitle;
+
+  /// No description provided for @privacyPolicyIntro.
+  ///
+  /// In it, this message translates to:
+  /// **'Noteep è un\'app per note, task e calendario. Questa informativa spiega quali dati tratta, perché e come puoi controllarli. Noteep non mostra pubblicità, non usa strumenti di analisi o di tracciamento e non vende né cede i tuoi dati.'**
+  String get privacyPolicyIntro;
+
+  /// No description provided for @privacyPolicyLastUpdated.
+  ///
+  /// In it, this message translates to:
+  /// **'Ultimo aggiornamento: {date}'**
+  String privacyPolicyLastUpdated(String date);
+
+  /// No description provided for @privacyPolicyOnlineVersion.
+  ///
+  /// In it, this message translates to:
+  /// **'Versione online'**
+  String get privacyPolicyOnlineVersion;
+
+  /// No description provided for @privacyPolicyOnlineVersionSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Leggi l\'informativa sul web'**
+  String get privacyPolicyOnlineVersionSubtitle;
+
+  /// No description provided for @policy_section_controller_title.
+  ///
+  /// In it, this message translates to:
+  /// **'1. Titolare del trattamento'**
+  String get policy_section_controller_title;
+
+  /// No description provided for @policy_section_controller_text.
+  ///
+  /// In it, this message translates to:
+  /// **'Il titolare del trattamento è {name}, sviluppatore di Noteep. Per qualsiasi domanda sulla privacy o per esercitare i tuoi diritti puoi scrivere a {email}.'**
+  String policy_section_controller_text(String name, String email);
+
+  /// No description provided for @policy_section_data_title.
+  ///
+  /// In it, this message translates to:
+  /// **'2. Dati che raccogliamo'**
+  String get policy_section_data_title;
+
+  /// No description provided for @policy_section_data_text.
+  ///
+  /// In it, this message translates to:
+  /// **'• Account: l\'indirizzo email con cui ti registri; la password è gestita da Firebase Authentication e non è mai visibile allo sviluppatore. Se accedi con Google, Google condivide con Firebase nome, email, foto del profilo e identificativo del tuo account Google. Firebase registra anche la data di creazione dell\'account e dell\'ultimo accesso.\n• Contenuti: note (titolo, testo, liste di controllo, etichette, colori e stile, promemoria, collegamenti tra note, cronologia delle modifiche), task ed elenchi (sottotask, scadenze, ricorrenze, priorità) ed eventi del calendario.\n• Note audio: le registrazioni restano solo sul dispositivo; con la nota vengono sincronizzati soltanto nome, durata e percorso del file.\n• Sul dispositivo: preferenze dell\'app (lingua, tema, layout, ordinamento, etichette personalizzate, opzioni di note e task, guida introduttiva e novità già viste, impostazioni dei backup), i backup automatici, una copia dei dati per l\'uso offline, i promemoria programmati e i dati mostrati dal widget della schermata Home (numero di note e task, titolo dell\'ultima nota). Sul web le preferenze sono salvate nel browser.'**
+  String get policy_section_data_text;
+
+  /// No description provided for @policy_section_use_title.
+  ///
+  /// In it, this message translates to:
+  /// **'3. Come usiamo i dati'**
+  String get policy_section_use_title;
+
+  /// No description provided for @policy_section_use_text.
+  ///
+  /// In it, this message translates to:
+  /// **'I dati servono solo a far funzionare Noteep: accedere al tuo account, salvare i tuoi contenuti e sincronizzarli tra i tuoi dispositivi, inviarti i promemoria che imposti e creare i backup. La tua email viene usata solo per l\'accesso e, se lo chiedi, per inviarti il link per reimpostare la password. Nessuna profilazione, nessuna pubblicità, nessuna analisi statistica né segnalazione automatica degli errori.'**
+  String get policy_section_use_text;
+
+  /// No description provided for @policy_section_storage_title.
+  ///
+  /// In it, this message translates to:
+  /// **'4. Dove sono conservati'**
+  String get policy_section_storage_title;
+
+  /// No description provided for @policy_section_storage_text.
+  ///
+  /// In it, this message translates to:
+  /// **'Account e contenuti sono conservati su Google Firebase (Firebase Authentication e Cloud Firestore), servizi forniti da Google. I server possono trovarsi anche fuori dall\'Unione europea: in questo caso il trasferimento avviene con le garanzie previste dai termini di Google Firebase. I dati viaggiano cifrati e le regole di sicurezza del database fanno sì che solo il tuo account possa leggere e modificare i tuoi contenuti. Lo sviluppatore non consulta i tuoi contenuti e non li condivide con nessuno.'**
+  String get policy_section_storage_text;
+
+  /// No description provided for @policy_section_device_title.
+  ///
+  /// In it, this message translates to:
+  /// **'5. Elaborazione sul dispositivo'**
+  String get policy_section_device_title;
+
+  /// No description provided for @policy_section_device_text.
+  ///
+  /// In it, this message translates to:
+  /// **'Alcune funzioni lavorano solo sul dispositivo e non inviano nulla allo sviluppatore né a terzi:\n• registrazione e riproduzione delle note audio;\n• esportazione delle note in PDF, TXT, JSON, CSV e HTML, esportazione e importazione di backup e calendari (ICS);\n• backup automatici, salvati in una cartella privata dell\'app (al massimo gli ultimi 30);\n• statistiche, promemoria e widget della schermata Home.\nI file che esporti o condividi finiscono dove scegli tu (ad esempio una cartella o un\'altra app).'**
+  String get policy_section_device_text;
+
+  /// No description provided for @policy_section_permissions_title.
+  ///
+  /// In it, this message translates to:
+  /// **'6. Permessi'**
+  String get policy_section_permissions_title;
+
+  /// No description provided for @policy_section_permissions_text.
+  ///
+  /// In it, this message translates to:
+  /// **'Su Android Noteep usa questi permessi:\n• Microfono: solo per registrare le note audio, quando avvii una registrazione.\n• Notifiche: per mostrarti i promemoria.\n• Sveglie e promemoria esatti: per far scattare i promemoria all\'orario impostato.\n• Avvio all\'accensione: per riprogrammare i promemoria dopo il riavvio del telefono.\n• Mantenere attivo il dispositivo e vibrazione: per consegnare i promemoria anche in standby.\n• Servizio in primo piano: richiesto dal componente di Android che esegue le attività in background, come l\'aggiornamento del widget della schermata Home.\n• Internet e stato della rete: per sincronizzare i dati con Firebase e capire quando sei offline.\nNoteep non accede a posizione, contatti, fotocamera, foto o file del telefono: i file da importare li scegli tu dal selettore di sistema.'**
+  String get policy_section_permissions_text;
+
+  /// No description provided for @policy_section_retention_title.
+  ///
+  /// In it, this message translates to:
+  /// **'7. Conservazione e cancellazione'**
+  String get policy_section_retention_title;
+
+  /// No description provided for @policy_section_retention_text.
+  ///
+  /// In it, this message translates to:
+  /// **'I tuoi dati restano finché mantieni l\'account. Gli elementi nel cestino vengono eliminati definitivamente dopo 7 giorni. Puoi eliminare l\'account e tutti i dati da Impostazioni > Account > Elimina account: vengono cancellati l\'account e i contenuti su Firebase e, su questo dispositivo, i promemoria e i backup automatici. Prima puoi esportare tutto da Impostazioni > Backup globale. Eventuali copie residue nei sistemi di Google vengono rimosse nei tempi previsti da Firebase. Uscire dall\'account non cancella i dati; disinstallando l\'app vengono rimossi i dati salvati sul dispositivo, comprese le note audio. Puoi anche chiedere la cancellazione scrivendo a {email}.'**
+  String policy_section_retention_text(String email);
+
+  /// No description provided for @policy_section_rights_title.
+  ///
+  /// In it, this message translates to:
+  /// **'8. I tuoi diritti'**
+  String get policy_section_rights_title;
+
+  /// No description provided for @policy_section_rights_text.
+  ///
+  /// In it, this message translates to:
+  /// **'In base al GDPR hai diritto di:\n• accedere ai tuoi dati ed esportarli (anche direttamente dall\'app);\n• correggerli;\n• cancellarli;\n• chiedere informazioni su come vengono trattati.\nPer esercitarli scrivi a {email}. Hai anche il diritto di presentare reclamo all\'autorità di controllo del tuo Paese (in Italia il Garante per la protezione dei dati personali).'**
+  String policy_section_rights_text(String email);
+
+  /// No description provided for @policy_section_children_title.
+  ///
+  /// In it, this message translates to:
+  /// **'9. Minori'**
+  String get policy_section_children_title;
+
+  /// No description provided for @policy_section_children_text.
+  ///
+  /// In it, this message translates to:
+  /// **'Noteep non è rivolta ai minori di 14 anni, l\'età minima in Italia per acconsentire da soli ai servizi online. Sotto questa età puoi usarla solo con il consenso di un genitore o di chi ne fa le veci. Nei Paesi che prevedono un\'età diversa vale quella stabilita dalla legge locale.'**
+  String get policy_section_children_text;
+
+  /// No description provided for @policy_section_changes_title.
+  ///
+  /// In it, this message translates to:
+  /// **'10. Modifiche'**
+  String get policy_section_changes_title;
+
+  /// No description provided for @policy_section_changes_text.
+  ///
+  /// In it, this message translates to:
+  /// **'Se questa informativa cambia, la nuova versione sarà disponibile nell\'app (Info app > Informativa sulla privacy) e online, con la data dell\'ultimo aggiornamento.'**
+  String get policy_section_changes_text;
 }
 
 class _AppLocalizationsDelegate

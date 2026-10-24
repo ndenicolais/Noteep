@@ -674,5 +674,65 @@
     }
   },
   "widgetNoRecentNote": "Nessuna nota recente",
-  "changelog_v2_0_0_bullet_33": "Il widget per la schermata Home ora si aggiorna davvero con il numero di note e task e con l'ultima nota modificata, nella lingua dell'app."
+  "changelog_v2_0_0_bullet_33": "Il widget per la schermata Home ora si aggiorna davvero con il numero di note e task e con l'ultima nota modificata, nella lingua dell'app.",
+  "changelog_v2_0_0_bullet_34": "Nuova informativa sulla privacy, leggibile direttamente nell'app da Info app, in italiano e in inglese.",
+  "infoPrivacyTitle": "Privacy",
+  "infoPrivacyOpen": "Informativa sulla privacy",
+  "infoPrivacySubtitle": "Quali dati usa Noteep e come controllarli",
+  "privacyPolicyTitle": "Informativa sulla privacy",
+  "privacyPolicyIntro": "Noteep è un'app per note, task e calendario. Questa informativa spiega quali dati tratta, perché e come puoi controllarli. Noteep non mostra pubblicità, non usa strumenti di analisi o di tracciamento e non vende né cede i tuoi dati.",
+  "privacyPolicyLastUpdated": "Ultimo aggiornamento: {date}",
+  "@privacyPolicyLastUpdated": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "privacyPolicyOnlineVersion": "Versione online",
+  "privacyPolicyOnlineVersionSubtitle": "Leggi l'informativa sul web",
+  "policy_section_controller_title": "1. Titolare del trattamento",
+  "policy_section_controller_text": "Il titolare del trattamento è {name}, sviluppatore di Noteep. Per qualsiasi domanda sulla privacy o per esercitare i tuoi diritti puoi scrivere a {email}.",
+  "@policy_section_controller_text": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "policy_section_data_title": "2. Dati che raccogliamo",
+  "policy_section_data_text": "• Account: l'indirizzo email con cui ti registri; la password è gestita da Firebase Authentication e non è mai visibile allo sviluppatore. Se accedi con Google, Google condivide con Firebase nome, email, foto del profilo e identificativo del tuo account Google. Firebase registra anche la data di creazione dell'account e dell'ultimo accesso.\n• Contenuti: note (titolo, testo, liste di controllo, etichette, colori e stile, promemoria, collegamenti tra note, cronologia delle modifiche), task ed elenchi (sottotask, scadenze, ricorrenze, priorità) ed eventi del calendario.\n• Note audio: le registrazioni restano solo sul dispositivo; con la nota vengono sincronizzati soltanto nome, durata e percorso del file.\n• Sul dispositivo: preferenze dell'app (lingua, tema, layout, ordinamento, etichette personalizzate, opzioni di note e task, guida introduttiva e novità già viste, impostazioni dei backup), i backup automatici, una copia dei dati per l'uso offline, i promemoria programmati e i dati mostrati dal widget della schermata Home (numero di note e task, titolo dell'ultima nota). Sul web le preferenze sono salvate nel browser.",
+  "policy_section_use_title": "3. Come usiamo i dati",
+  "policy_section_use_text": "I dati servono solo a far funzionare Noteep: accedere al tuo account, salvare i tuoi contenuti e sincronizzarli tra i tuoi dispositivi, inviarti i promemoria che imposti e creare i backup. La tua email viene usata solo per l'accesso e, se lo chiedi, per inviarti il link per reimpostare la password. Nessuna profilazione, nessuna pubblicità, nessuna analisi statistica né segnalazione automatica degli errori.",
+  "policy_section_storage_title": "4. Dove sono conservati",
+  "policy_section_storage_text": "Account e contenuti sono conservati su Google Firebase (Firebase Authentication e Cloud Firestore), servizi forniti da Google. I server possono trovarsi anche fuori dall'Unione europea: in questo caso il trasferimento avviene con le garanzie previste dai termini di Google Firebase. I dati viaggiano cifrati e le regole di sicurezza del database fanno sì che solo il tuo account possa leggere e modificare i tuoi contenuti. Lo sviluppatore non consulta i tuoi contenuti e non li condivide con nessuno.",
+  "policy_section_device_title": "5. Elaborazione sul dispositivo",
+  "policy_section_device_text": "Alcune funzioni lavorano solo sul dispositivo e non inviano nulla allo sviluppatore né a terzi:\n• registrazione e riproduzione delle note audio;\n• esportazione delle note in PDF, TXT, JSON, CSV e HTML, esportazione e importazione di backup e calendari (ICS);\n• backup automatici, salvati in una cartella privata dell'app (al massimo gli ultimi 30);\n• statistiche, promemoria e widget della schermata Home.\nI file che esporti o condividi finiscono dove scegli tu (ad esempio una cartella o un'altra app).",
+  "policy_section_permissions_title": "6. Permessi",
+  "policy_section_permissions_text": "Su Android Noteep usa questi permessi:\n• Microfono: solo per registrare le note audio, quando avvii una registrazione.\n• Notifiche: per mostrarti i promemoria.\n• Sveglie e promemoria esatti: per far scattare i promemoria all'orario impostato.\n• Avvio all'accensione: per riprogrammare i promemoria dopo il riavvio del telefono.\n• Mantenere attivo il dispositivo e vibrazione: per consegnare i promemoria anche in standby.\n• Servizio in primo piano: richiesto dal componente di Android che esegue le attività in background, come l'aggiornamento del widget della schermata Home.\n• Internet e stato della rete: per sincronizzare i dati con Firebase e capire quando sei offline.\nNoteep non accede a posizione, contatti, fotocamera, foto o file del telefono: i file da importare li scegli tu dal selettore di sistema.",
+  "policy_section_retention_title": "7. Conservazione e cancellazione",
+  "policy_section_retention_text": "I tuoi dati restano finché mantieni l'account. Gli elementi nel cestino vengono eliminati definitivamente dopo 7 giorni. Puoi eliminare l'account e tutti i dati da Impostazioni > Account > Elimina account: vengono cancellati l'account e i contenuti su Firebase e, su questo dispositivo, i promemoria e i backup automatici. Prima puoi esportare tutto da Impostazioni > Backup globale. Eventuali copie residue nei sistemi di Google vengono rimosse nei tempi previsti da Firebase. Uscire dall'account non cancella i dati; disinstallando l'app vengono rimossi i dati salvati sul dispositivo, comprese le note audio. Puoi anche chiedere la cancellazione scrivendo a {email}.",
+  "@policy_section_retention_text": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "policy_section_rights_title": "8. I tuoi diritti",
+  "policy_section_rights_text": "In base al GDPR hai diritto di:\n• accedere ai tuoi dati ed esportarli (anche direttamente dall'app);\n• correggerli;\n• cancellarli;\n• chiedere informazioni su come vengono trattati.\nPer esercitarli scrivi a {email}. Hai anche il diritto di presentare reclamo all'autorità di controllo del tuo Paese (in Italia il Garante per la protezione dei dati personali).",
+  "@policy_section_rights_text": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "policy_section_children_title": "9. Minori",
+  "policy_section_children_text": "Noteep non è rivolta ai minori di 14 anni, l'età minima in Italia per acconsentire da soli ai servizi online. Sotto questa età puoi usarla solo con il consenso di un genitore o di chi ne fa le veci. Nei Paesi che prevedono un'età diversa vale quella stabilita dalla legge locale.",
+  "policy_section_changes_title": "10. Modifiche",
+  "policy_section_changes_text": "Se questa informativa cambia, la nuova versione sarà disponibile nell'app (Info app > Informativa sulla privacy) e online, con la data dell'ultimo aggiornamento."
 }

@@ -23,6 +23,7 @@
 - [Theme & Styling](#theme--styling)
 - [Getting Started](#getting-started)
 - [Dependencies](#dependencies)
+- [Privacy](#privacy)
 - [License](#license)
 
 ---
@@ -129,6 +130,9 @@ On first launch, before signing in, a short swipeable introduction presents note
 ### Changelog
 After an update, a "Changelog" dialog lists what changed since the last version the user saw (nothing is shown on a fresh install). The full history is always available from **Info app**.
 
+### Privacy Policy
+The privacy policy ([`PRIVACY.md`](PRIVACY.md)) is also readable inside the app, offline and in every app language, from **Info app → Informativa sulla privacy**.
+
 ---
 
 ## Architecture
@@ -163,6 +167,8 @@ UI Widget
 lib/
 ├── main.dart                     # App entry point, Firebase init, routing
 ├── core/
+│   ├── constants/
+│   │   └── app_info.dart         # Developer contact, privacy policy date and URL
 │   └── routing/
 │       └── app_router.dart       # AppRoutes, AppRouter, typed AppNav helpers
 ├── models/
@@ -196,6 +202,7 @@ lib/
 │   ├── reminders_screen.dart
 │   ├── export_screen.dart        # PDF export
 │   ├── info_screen.dart
+│   ├── privacy_policy_screen.dart # In-app privacy policy
 │   ├── onboarding_screen.dart    # First-launch introduction
 │   ├── unknown_route_screen.dart # "Page not found" for unknown routes
 │   ├── note_template_screen.dart
@@ -347,6 +354,7 @@ Same timestamp fields as `NoteModel` and `TaskModel`, plus `startTime`, `endTime
 | `ExportScreen` | `/export` | PDF export |
 | `StatisticsScreen` | `/statistics` | Usage statistics |
 | `InfoScreen` | `/info` | App version and author info |
+| `PrivacyPolicyScreen` | `/privacy-policy` | Localized privacy policy (from Info) |
 
 ### Navigation
 The `AppDrawer` (slide-in from the left) is present on all main screens and provides direct access to every top-level route. All routes are resolved by `AppRouter` (`lib/core/routing/app_router.dart`); screens navigate through typed `AppNav` helpers, and unknown routes show a "page not found" screen.
@@ -548,6 +556,12 @@ flutter test
 | `flutter_localizations` | SDK | Italian/English UI (`gen-l10n`) and Material/Cupertino widgets (pickers, menus) in the same language |
 | `uuid` | ^4.5.1 | UUID generation |
 | `fake_cloud_firestore` *(dev)* | latest | Firestore fake for provider/widget tests |
+
+---
+
+## Privacy
+
+Noteep has no ads, analytics or tracking. Account and content are stored on Firebase (Authentication + Cloud Firestore); audio notes, backups and preferences stay on the device. Full text: [`PRIVACY.md`](PRIVACY.md).
 
 ---
 

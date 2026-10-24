@@ -1707,4 +1707,109 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_33 =>
       'The home screen widget now really updates with the number of notes and tasks and the last edited note, in the app\'s language.';
+
+  @override
+  String get changelog_v2_0_0_bullet_34 =>
+      'New privacy policy, readable directly in the app from App info, in Italian and English.';
+
+  @override
+  String get infoPrivacyTitle => 'Privacy';
+
+  @override
+  String get infoPrivacyOpen => 'Privacy policy';
+
+  @override
+  String get infoPrivacySubtitle =>
+      'Which data Noteep uses and how to control it';
+
+  @override
+  String get privacyPolicyTitle => 'Privacy policy';
+
+  @override
+  String get privacyPolicyIntro =>
+      'Noteep is an app for notes, tasks and calendar. This policy explains which data it processes, why, and how you can control it. Noteep shows no ads, uses no analytics or tracking tools, and does not sell or hand over your data.';
+
+  @override
+  String privacyPolicyLastUpdated(String date) {
+    return 'Last updated: $date';
+  }
+
+  @override
+  String get privacyPolicyOnlineVersion => 'Online version';
+
+  @override
+  String get privacyPolicyOnlineVersionSubtitle => 'Read the policy on the web';
+
+  @override
+  String get policy_section_controller_title => '1. Data controller';
+
+  @override
+  String policy_section_controller_text(String name, String email) {
+    return 'The data controller is $name, developer of Noteep. For any privacy question or to exercise your rights you can write to $email.';
+  }
+
+  @override
+  String get policy_section_data_title => '2. Data we collect';
+
+  @override
+  String get policy_section_data_text =>
+      '• Account: the email address you sign up with; the password is handled by Firebase Authentication and is never visible to the developer. If you sign in with Google, Google shares your name, email, profile photo and Google account ID with Firebase. Firebase also records when the account was created and when you last signed in.\n• Content: notes (title, text, checklists, labels, colors and style, reminders, links between notes, edit history), tasks and lists (subtasks, due dates, recurrence, priority) and calendar events.\n• Audio notes: recordings stay on your device only; just the file name, duration and path are synced with the note.\n• On your device: app preferences (language, theme, layout, sorting, custom labels, note and task options, intro guide and what\'s new already seen, backup settings), automatic backups, a copy of your data for offline use, scheduled reminders and the data shown by the Home screen widget (number of notes and tasks, title of the latest note). On the web, preferences are saved in the browser.';
+
+  @override
+  String get policy_section_use_title => '3. How we use data';
+
+  @override
+  String get policy_section_use_text =>
+      'Data is used only to make Noteep work: signing in to your account, saving your content and syncing it across your devices, sending you the reminders you set and creating backups. Your email is used only to sign in and, if you ask, to send you a password reset link. No profiling, no ads, no analytics and no automatic crash reporting.';
+
+  @override
+  String get policy_section_storage_title => '4. Where it is stored';
+
+  @override
+  String get policy_section_storage_text =>
+      'Account and content are stored on Google Firebase (Firebase Authentication and Cloud Firestore), services provided by Google. Servers may also be located outside the European Union: in that case the transfer takes place with the safeguards provided by the Google Firebase terms. Data travels encrypted and the database security rules make sure only your account can read and change your content. The developer does not look at your content and does not share it with anyone.';
+
+  @override
+  String get policy_section_device_title => '5. On-device processing';
+
+  @override
+  String get policy_section_device_text =>
+      'Some features work only on your device and send nothing to the developer or to third parties:\n• recording and playing audio notes;\n• exporting notes to PDF, TXT, JSON, CSV and HTML, exporting and importing backups and calendars (ICS);\n• automatic backups, saved in a private app folder (at most the latest 30);\n• statistics, reminders and the Home screen widget.\nFiles you export or share go wherever you choose (for example a folder or another app).';
+
+  @override
+  String get policy_section_permissions_title => '6. Permissions';
+
+  @override
+  String get policy_section_permissions_text =>
+      'On Android Noteep uses these permissions:\n• Microphone: only to record audio notes, when you start a recording.\n• Notifications: to show you reminders.\n• Alarms and exact reminders: to fire reminders at the time you set.\n• Run at startup: to schedule reminders again after the phone restarts.\n• Keep the device awake and vibration: to deliver reminders even in standby.\n• Foreground service: required by the Android component that runs background work, such as updating the Home screen widget.\n• Internet and network state: to sync data with Firebase and detect when you are offline.\nNoteep does not access your location, contacts, camera, photos or phone files: you pick the files to import yourself from the system picker.';
+
+  @override
+  String get policy_section_retention_title => '7. Retention and deletion';
+
+  @override
+  String policy_section_retention_text(String email) {
+    return 'Your data is kept as long as you keep your account. Items in the trash are permanently deleted after 7 days. You can delete your account and all your data from Settings > Account > Delete account: the account and the content on Firebase are deleted and, on this device, reminders and automatic backups too. Before that you can export everything from Settings > Full backup. Any residual copies in Google\'s systems are removed within the time frames set by Firebase. Signing out does not delete data; uninstalling the app removes the data saved on the device, audio notes included. You can also ask for deletion by writing to $email.';
+  }
+
+  @override
+  String get policy_section_rights_title => '8. Your rights';
+
+  @override
+  String policy_section_rights_text(String email) {
+    return 'Under the GDPR you have the right to:\n• access your data and export it (also directly from the app);\n• correct it;\n• erase it;\n• ask for information on how it is processed.\nTo exercise them write to $email. You also have the right to lodge a complaint with the supervisory authority of your country (in Italy, the Garante per la protezione dei dati personali).';
+  }
+
+  @override
+  String get policy_section_children_title => '9. Children';
+
+  @override
+  String get policy_section_children_text =>
+      'Noteep is not intended for children under 14, the minimum age in Italy to consent to online services on their own. Below that age you may use it only with the consent of a parent or guardian. In countries that set a different age, the one set by local law applies.';
+
+  @override
+  String get policy_section_changes_title => '10. Changes';
+
+  @override
+  String get policy_section_changes_text =>
+      'If this policy changes, the new version will be available in the app (App info > Privacy policy) and online, with the date of the last update.';
 }

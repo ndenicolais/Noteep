@@ -135,6 +135,23 @@ class InfoScreen extends StatelessWidget {
           const Divider(height: 1),
           const SizedBox(height: AppSpacing.xl),
 
+          // ── Privacy ──────────────────────────────────────────────────────
+          SectionHeader(
+            context.l10n.infoPrivacyTitle,
+            padding: EdgeInsets.zero,
+          ),
+          const SizedBox(height: AppSpacing.sm),
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: Icon(Icons.privacy_tip_outlined, color: cs.primary),
+            title: Text(context.l10n.infoPrivacyOpen),
+            subtitle: Text(context.l10n.infoPrivacySubtitle),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => AppNav.openPrivacyPolicy(context),
+          ),
+          const Divider(height: 1),
+          const SizedBox(height: AppSpacing.xl),
+
           // ── Licenze ──────────────────────────────────────────────────────
           SectionHeader(
             context.l10n.infoLicensesTitle,
