@@ -49,7 +49,7 @@ class NoteepWidget : AppWidgetProvider() {
                 launchIntent,
                 android.app.PendingIntent.FLAG_UPDATE_CURRENT or android.app.PendingIntent.FLAG_IMMUTABLE
             )
-            views.setOnClickPendingIntent(android.R.id.content, pendingIntent)
+            views.setOnClickPendingIntent(R.id.widget_root, pendingIntent)
         }
 
         appWidgetManager.updateAppWidget(appWidgetId, views)

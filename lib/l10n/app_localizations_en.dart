@@ -1733,6 +1733,14 @@ class AppLocalizationsEn extends AppLocalizations {
       'Notification permission is no longer asked when the app opens, only the first time you set a reminder.';
 
   @override
+  String get changelog_v2_0_0_bullet_38 =>
+      'New home screen widgets: Quick actions, with buttons to create a note, a task or an event, and the single New note, New task and New event widgets.';
+
+  @override
+  String get changelog_v2_0_0_bullet_39 =>
+      'Tapping the Noteep home screen widget now opens the app.';
+
+  @override
   String get infoPrivacyOpen => 'Privacy policy';
 
   @override

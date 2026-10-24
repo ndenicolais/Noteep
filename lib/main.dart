@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'core/routing/app_router.dart';
+import 'core/routing/home_widget_launch_handler.dart';
 import 'core/routing/notification_launch_handler.dart';
 import 'l10n/l10n.dart';
 import 'providers/auth_provider.dart';
@@ -93,7 +94,9 @@ class NotesApp extends ConsumerWidget {
         data:
             (user) =>
                 user != null
-                    ? NotificationLaunchHandler(child: const HomeScreen())
+                    ? NotificationLaunchHandler(
+                      child: const HomeWidgetLaunchHandler(child: HomeScreen()),
+                    )
                     : ref.watch(onboardingSeenProvider)
                     ? const LoginScreen()
                     : const OnboardingScreen(),

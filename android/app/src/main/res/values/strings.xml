@@ -7,4 +7,14 @@
     <string name="widget_task_count_empty">0 tasks</string>
     <string name="widget_no_notes">No recent notes</string>
     <string name="widget_tap_to_open">Tap to open</string>
+    <string name="widget_summary_label">Noteep summary</string>
+    <string name="widget_summary_description">Note and task counts and your latest note</string>
+    <string name="widget_quick_actions_label">Quick actions</string>
+    <string name="widget_quick_actions_description">Create a note, a task or an event in one tap</string>
+    <string name="widget_new_note">New note</string>
+    <string name="widget_new_task">New task</string>
+    <string name="widget_new_event">New event</string>
+    <string name="widget_new_note_description">Create a new note in one tap</string>
+    <string name="widget_new_task_description">Create a new task in one tap</string>
+    <string name="widget_new_event_description">Create a new event in one tap</string>
 </resources>

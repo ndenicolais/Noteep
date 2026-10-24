@@ -1741,6 +1741,14 @@ class AppLocalizationsIt extends AppLocalizations {
       'Il permesso per le notifiche non viene più chiesto all\'apertura dell\'app, ma solo la prima volta che imposti un promemoria.';
 
   @override
+  String get changelog_v2_0_0_bullet_38 =>
+      'Nuovi widget per la schermata Home: Azioni rapide, con i pulsanti per creare una nota, un task o un evento, e i widget singoli Nuova nota, Nuovo task e Nuovo evento.';
+
+  @override
+  String get changelog_v2_0_0_bullet_39 =>
+      'Toccare il widget Noteep nella schermata Home ora apre l\'app.';
+
+  @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';
 
   @override

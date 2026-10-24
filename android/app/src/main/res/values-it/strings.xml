@@ -6,4 +6,14 @@
     <string name="widget_task_count_empty">0 task</string>
     <string name="widget_no_notes">Nessuna nota recente</string>
     <string name="widget_tap_to_open">Tocca per aprire</string>
+    <string name="widget_summary_label">Riepilogo Noteep</string>
+    <string name="widget_summary_description">Numero di note e task e la tua ultima nota</string>
+    <string name="widget_quick_actions_label">Azioni rapide</string>
+    <string name="widget_quick_actions_description">Crea una nota, un task o un evento con un tocco</string>
+    <string name="widget_new_note">Nuova nota</string>
+    <string name="widget_new_task">Nuovo task</string>
+    <string name="widget_new_event">Nuovo evento</string>
+    <string name="widget_new_note_description">Crea una nuova nota con un tocco</string>
+    <string name="widget_new_task_description">Crea un nuovo task con un tocco</string>
+    <string name="widget_new_event_description">Crea un nuovo evento con un tocco</string>
 </resources>

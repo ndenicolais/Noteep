@@ -121,8 +121,11 @@ Export notes to **PDF** format (rendered with the `pdf` / `printing` packages); 
 | Delete account | Re-authenticate, then permanently delete account and all data |
 | About Noteep | Version, main features, source code / GitHub / contact links, changelog, privacy policy, licenses, author |
 
-### Home Screen Widget
-Android home screen widget support via `home_widget`.
+### Home Screen Widgets
+Android home screen widgets (via `home_widget`):
+- **Noteep summary** — note and task counts and the latest note; tap to open the app.
+- **Quick actions** — New note, New task and New event buttons in one widget.
+- **New note / New task / New event** — 1×1 single-button widgets, for whoever only needs one action.
 
 ### Onboarding
 On first launch, before signing in, a short swipeable introduction presents notes, tasks, calendar, reminders and backup. It can be skipped and replayed anytime from **Info su Noteep → Guida introduttiva**.

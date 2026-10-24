@@ -3200,6 +3200,18 @@ abstract class AppLocalizations {
   /// **'Il permesso per le notifiche non viene più chiesto all\'apertura dell\'app, ma solo la prima volta che imposti un promemoria.'**
   String get changelog_v2_0_0_bullet_37;
 
+  /// No description provided for @changelog_v2_0_0_bullet_38.
+  ///
+  /// In it, this message translates to:
+  /// **'Nuovi widget per la schermata Home: Azioni rapide, con i pulsanti per creare una nota, un task o un evento, e i widget singoli Nuova nota, Nuovo task e Nuovo evento.'**
+  String get changelog_v2_0_0_bullet_38;
+
+  /// No description provided for @changelog_v2_0_0_bullet_39.
+  ///
+  /// In it, this message translates to:
+  /// **'Toccare il widget Noteep nella schermata Home ora apre l\'app.'**
+  String get changelog_v2_0_0_bullet_39;
+
   /// No description provided for @infoPrivacyOpen.
   ///
   /// In it, this message translates to:
