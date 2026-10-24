@@ -20,3 +20,12 @@ final privacyPolicyUpdatedAt = DateTime(2026, 10, 24);
 final uriPrivacyPolicy = Uri.parse(
   'https://github.com/ndenicolais/Noteep/blob/master/PRIVACY.md',
 );
+
+/// Links of the Info screen.
+final uriSourceCode = Uri.parse('https://github.com/ndenicolais/Noteep');
+final uriDeveloperGithub = Uri.parse('https://github.com/ndenicolais');
+final uriContactMail = Uri(
+  scheme: 'mailto',
+  path: developerEmail,
+  query: 'subject=Noteep',
+);

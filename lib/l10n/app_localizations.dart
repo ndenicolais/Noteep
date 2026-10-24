@@ -2279,14 +2279,20 @@ abstract class AppLocalizations {
   /// No description provided for @infoTitle.
   ///
   /// In it, this message translates to:
-  /// **'Info app'**
+  /// **'Info su Noteep'**
   String get infoTitle;
 
-  /// No description provided for @infoDescriptionTitle.
+  /// No description provided for @infoTagline.
   ///
   /// In it, this message translates to:
-  /// **'Descrizione'**
-  String get infoDescriptionTitle;
+  /// **'Note, attività e promemoria in un unico posto'**
+  String get infoTagline;
+
+  /// No description provided for @infoAboutTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Cos\'è Noteep'**
+  String get infoAboutTitle;
 
   /// No description provided for @infoFeaturesTitle.
   ///
@@ -2294,53 +2300,89 @@ abstract class AppLocalizations {
   /// **'Funzionalità'**
   String get infoFeaturesTitle;
 
-  /// No description provided for @infoFeatureNotes.
+  /// No description provided for @infoFeatureNotesTitle.
   ///
   /// In it, this message translates to:
-  /// **'Note di testo con formattazione'**
-  String get infoFeatureNotes;
+  /// **'Note'**
+  String get infoFeatureNotesTitle;
 
-  /// No description provided for @infoFeatureChecklists.
+  /// No description provided for @infoFeatureNotesText.
   ///
   /// In it, this message translates to:
-  /// **'Liste di controllo interattive'**
-  String get infoFeatureChecklists;
+  /// **'Testo formattato, liste di controllo e note vocali'**
+  String get infoFeatureNotesText;
 
-  /// No description provided for @infoFeatureLabels.
+  /// No description provided for @infoFeatureTasksTitle.
   ///
   /// In it, this message translates to:
-  /// **'Etichette personalizzate'**
-  String get infoFeatureLabels;
+  /// **'Attività e calendario'**
+  String get infoFeatureTasksTitle;
 
-  /// No description provided for @infoFeatureArchive.
+  /// No description provided for @infoFeatureTasksText.
   ///
   /// In it, this message translates to:
-  /// **'Archivio e cestino'**
-  String get infoFeatureArchive;
+  /// **'Organizza impegni ed eventi giorno per giorno'**
+  String get infoFeatureTasksText;
 
-  /// No description provided for @infoFeatureTheme.
+  /// No description provided for @infoFeatureRemindersTitle.
   ///
   /// In it, this message translates to:
-  /// **'Tema chiaro, scuro e di sistema'**
-  String get infoFeatureTheme;
+  /// **'Promemoria'**
+  String get infoFeatureRemindersTitle;
 
-  /// No description provided for @infoFeatureExport.
+  /// No description provided for @infoFeatureRemindersText.
   ///
   /// In it, this message translates to:
-  /// **'Esportazione in PDF, TXT, JSON, CSV, HTML'**
-  String get infoFeatureExport;
+  /// **'Notifiche puntuali e widget nella schermata Home'**
+  String get infoFeatureRemindersText;
 
-  /// No description provided for @infoTechTitle.
+  /// No description provided for @infoFeatureSyncTitle.
   ///
   /// In it, this message translates to:
-  /// **'Tecnologie'**
-  String get infoTechTitle;
+  /// **'Sincronizzazione e backup'**
+  String get infoFeatureSyncTitle;
 
-  /// No description provided for @infoGuideTitle.
+  /// No description provided for @infoFeatureSyncText.
   ///
   /// In it, this message translates to:
-  /// **'Guida'**
-  String get infoGuideTitle;
+  /// **'Dati sul tuo account, backup ed esportazione in PDF, TXT, JSON, CSV e HTML'**
+  String get infoFeatureSyncText;
+
+  /// No description provided for @infoLinksTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Link'**
+  String get infoLinksTitle;
+
+  /// No description provided for @infoLinkSource.
+  ///
+  /// In it, this message translates to:
+  /// **'Codice sorgente'**
+  String get infoLinkSource;
+
+  /// No description provided for @infoLinkDeveloper.
+  ///
+  /// In it, this message translates to:
+  /// **'Profilo GitHub'**
+  String get infoLinkDeveloper;
+
+  /// No description provided for @infoLinkContact.
+  ///
+  /// In it, this message translates to:
+  /// **'Contatta lo sviluppatore'**
+  String get infoLinkContact;
+
+  /// No description provided for @infoLinkError.
+  ///
+  /// In it, this message translates to:
+  /// **'Impossibile aprire il link'**
+  String get infoLinkError;
+
+  /// No description provided for @infoMadeBy.
+  ///
+  /// In it, this message translates to:
+  /// **'Realizzato da {name}'**
+  String infoMadeBy(String name);
 
   /// No description provided for @infoGuideOpen.
   ///
@@ -2348,47 +2390,17 @@ abstract class AppLocalizations {
   /// **'Guida introduttiva'**
   String get infoGuideOpen;
 
-  /// No description provided for @infoGuideSubtitle.
-  ///
-  /// In it, this message translates to:
-  /// **'Rivedi la presentazione dell\'app'**
-  String get infoGuideSubtitle;
-
   /// No description provided for @infoChangelogTitle.
   ///
   /// In it, this message translates to:
   /// **'Novità'**
   String get infoChangelogTitle;
 
-  /// No description provided for @infoChangelogOpen.
-  ///
-  /// In it, this message translates to:
-  /// **'Visualizza le novità'**
-  String get infoChangelogOpen;
-
-  /// No description provided for @infoChangelogSubtitle.
-  ///
-  /// In it, this message translates to:
-  /// **'Le modifiche di ogni versione'**
-  String get infoChangelogSubtitle;
-
   /// No description provided for @infoLicensesTitle.
   ///
   /// In it, this message translates to:
   /// **'Licenze open source'**
   String get infoLicensesTitle;
-
-  /// No description provided for @infoLicensesOpen.
-  ///
-  /// In it, this message translates to:
-  /// **'Visualizza licenze'**
-  String get infoLicensesOpen;
-
-  /// No description provided for @infoLicensesSubtitle.
-  ///
-  /// In it, this message translates to:
-  /// **'Librerie di terze parti utilizzate'**
-  String get infoLicensesSubtitle;
 
   /// No description provided for @exportTitle.
   ///
@@ -2611,12 +2623,6 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Elimina definitivamente l\'account e tutti i suoi dati'**
   String get settingsDeleteAccountSubtitle;
-
-  /// No description provided for @settingsInfoSubtitle.
-  ///
-  /// In it, this message translates to:
-  /// **'Informazioni sull\'app e sulla versione'**
-  String get settingsInfoSubtitle;
 
   /// No description provided for @settingsNotesDataTitle.
   ///
@@ -3077,7 +3083,7 @@ abstract class AppLocalizations {
   /// No description provided for @infoDescription.
   ///
   /// In it, this message translates to:
-  /// **'Noteep è un\'app per prendere note, creare liste di controllo e gestire le tue idee in modo semplice e veloce. Supporta temi chiaro e scuro, stili di testo personalizzati, etichette, archivio e molto altro.'**
+  /// **'Noteep raccoglie note, liste di controllo, attività ed eventi del calendario, sincronizzati sul tuo account e disponibili su ogni dispositivo.'**
   String get infoDescription;
 
   /// No description provided for @statsCompletedOf.
@@ -3173,26 +3179,20 @@ abstract class AppLocalizations {
   /// No description provided for @changelog_v2_0_0_bullet_34.
   ///
   /// In it, this message translates to:
-  /// **'Nuova informativa sulla privacy, leggibile direttamente nell\'app da Info app, in italiano e in inglese.'**
+  /// **'Nuova informativa sulla privacy, leggibile direttamente nell\'app da Info su Noteep, in italiano e in inglese.'**
   String get changelog_v2_0_0_bullet_34;
 
-  /// No description provided for @infoPrivacyTitle.
+  /// No description provided for @changelog_v2_0_0_bullet_35.
   ///
   /// In it, this message translates to:
-  /// **'Privacy'**
-  String get infoPrivacyTitle;
+  /// **'Schermata Info su Noteep rinnovata: funzionalità principali in evidenza e nuovi link al codice sorgente, al profilo GitHub e al contatto dello sviluppatore.'**
+  String get changelog_v2_0_0_bullet_35;
 
   /// No description provided for @infoPrivacyOpen.
   ///
   /// In it, this message translates to:
   /// **'Informativa sulla privacy'**
   String get infoPrivacyOpen;
-
-  /// No description provided for @infoPrivacySubtitle.
-  ///
-  /// In it, this message translates to:
-  /// **'Quali dati usa Noteep e come controllarli'**
-  String get infoPrivacySubtitle;
 
   /// No description provided for @privacyPolicyTitle.
   ///

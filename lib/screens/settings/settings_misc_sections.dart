@@ -8,6 +8,7 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
+import '../../core/constants/app_version.dart';
 import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import '../../l10n/l10n.dart';
@@ -70,7 +71,7 @@ class SettingsInfoSection extends StatelessWidget {
     return ActionTile(
       icon: Icons.info_outline,
       title: context.l10n.infoTitle,
-      subtitle: context.l10n.settingsInfoSubtitle,
+      subtitle: context.l10n.infoVersion(appVersion, appBuildNumber),
       onTap: () => AppNav.openInfo(context),
     );
   }

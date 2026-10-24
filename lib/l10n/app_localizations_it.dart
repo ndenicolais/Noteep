@@ -1189,61 +1189,73 @@ class AppLocalizationsIt extends AppLocalizations {
   String get statsTotalSingular => 'Totale';
 
   @override
-  String get infoTitle => 'Info app';
+  String get infoTitle => 'Info su Noteep';
 
   @override
-  String get infoDescriptionTitle => 'Descrizione';
+  String get infoTagline => 'Note, attività e promemoria in un unico posto';
+
+  @override
+  String get infoAboutTitle => 'Cos\'è Noteep';
 
   @override
   String get infoFeaturesTitle => 'Funzionalità';
 
   @override
-  String get infoFeatureNotes => 'Note di testo con formattazione';
+  String get infoFeatureNotesTitle => 'Note';
 
   @override
-  String get infoFeatureChecklists => 'Liste di controllo interattive';
+  String get infoFeatureNotesText =>
+      'Testo formattato, liste di controllo e note vocali';
 
   @override
-  String get infoFeatureLabels => 'Etichette personalizzate';
+  String get infoFeatureTasksTitle => 'Attività e calendario';
 
   @override
-  String get infoFeatureArchive => 'Archivio e cestino';
+  String get infoFeatureTasksText =>
+      'Organizza impegni ed eventi giorno per giorno';
 
   @override
-  String get infoFeatureTheme => 'Tema chiaro, scuro e di sistema';
+  String get infoFeatureRemindersTitle => 'Promemoria';
 
   @override
-  String get infoFeatureExport => 'Esportazione in PDF, TXT, JSON, CSV, HTML';
+  String get infoFeatureRemindersText =>
+      'Notifiche puntuali e widget nella schermata Home';
 
   @override
-  String get infoTechTitle => 'Tecnologie';
+  String get infoFeatureSyncTitle => 'Sincronizzazione e backup';
 
   @override
-  String get infoGuideTitle => 'Guida';
+  String get infoFeatureSyncText =>
+      'Dati sul tuo account, backup ed esportazione in PDF, TXT, JSON, CSV e HTML';
+
+  @override
+  String get infoLinksTitle => 'Link';
+
+  @override
+  String get infoLinkSource => 'Codice sorgente';
+
+  @override
+  String get infoLinkDeveloper => 'Profilo GitHub';
+
+  @override
+  String get infoLinkContact => 'Contatta lo sviluppatore';
+
+  @override
+  String get infoLinkError => 'Impossibile aprire il link';
+
+  @override
+  String infoMadeBy(String name) {
+    return 'Realizzato da $name';
+  }
 
   @override
   String get infoGuideOpen => 'Guida introduttiva';
 
   @override
-  String get infoGuideSubtitle => 'Rivedi la presentazione dell\'app';
-
-  @override
   String get infoChangelogTitle => 'Novità';
 
   @override
-  String get infoChangelogOpen => 'Visualizza le novità';
-
-  @override
-  String get infoChangelogSubtitle => 'Le modifiche di ogni versione';
-
-  @override
   String get infoLicensesTitle => 'Licenze open source';
-
-  @override
-  String get infoLicensesOpen => 'Visualizza licenze';
-
-  @override
-  String get infoLicensesSubtitle => 'Librerie di terze parti utilizzate';
 
   @override
   String get exportTitle => 'Esporta note';
@@ -1365,9 +1377,6 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get settingsDeleteAccountSubtitle =>
       'Elimina definitivamente l\'account e tutti i suoi dati';
-
-  @override
-  String get settingsInfoSubtitle => 'Informazioni sull\'app e sulla versione';
 
   @override
   String get settingsNotesDataTitle => 'Dati note';
@@ -1638,7 +1647,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get infoDescription =>
-      'Noteep è un\'app per prendere note, creare liste di controllo e gestire le tue idee in modo semplice e veloce. Supporta temi chiaro e scuro, stili di testo personalizzati, etichette, archivio e molto altro.';
+      'Noteep raccoglie note, liste di controllo, attività ed eventi del calendario, sincronizzati sul tuo account e disponibili su ogni dispositivo.';
 
   @override
   String statsCompletedOf(int completed, int total) {
@@ -1717,16 +1726,14 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get changelog_v2_0_0_bullet_34 =>
-      'Nuova informativa sulla privacy, leggibile direttamente nell\'app da Info app, in italiano e in inglese.';
+      'Nuova informativa sulla privacy, leggibile direttamente nell\'app da Info su Noteep, in italiano e in inglese.';
 
   @override
-  String get infoPrivacyTitle => 'Privacy';
+  String get changelog_v2_0_0_bullet_35 =>
+      'Schermata Info su Noteep rinnovata: funzionalità principali in evidenza e nuovi link al codice sorgente, al profilo GitHub e al contatto dello sviluppatore.';
 
   @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';
-
-  @override
-  String get infoPrivacySubtitle => 'Quali dati usa Noteep e come controllarli';
 
   @override
   String get privacyPolicyTitle => 'Informativa sulla privacy';
