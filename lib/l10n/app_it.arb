@@ -691,6 +691,7 @@
   "changelog_v2_0_0_bullet_39": "Toccare il widget Noteep nella schermata Home ora apre l'app.",
   "changelog_v2_0_0_bullet_40": "Dopo aver reinstallato l'app non devi più accedere di nuovo a ogni riapertura: l'accesso resta attivo.",
   "changelog_v2_0_0_bullet_41": "I promemoria funzionano di nuovo: impostarne uno non mostra più l'errore \"Impossibile pianificare il promemoria\" e la notifica arriva all'orario scelto.",
+  "changelog_v2_0_0_bullet_42": "Quando scrivi titoli, note, task, sottotask, eventi ed etichette la prima lettera ora è maiuscola in automatico.",
   "infoPrivacyOpen": "Informativa sulla privacy",
   "privacyPolicyTitle": "Informativa sulla privacy",
   "privacyPolicyIntro": "Noteep è un'app per note, task e calendario. Questa informativa spiega quali dati tratta, perché e come puoi controllarli. Noteep non mostra pubblicità, non usa strumenti di analisi o di tracciamento e non vende né cede i tuoi dati.",

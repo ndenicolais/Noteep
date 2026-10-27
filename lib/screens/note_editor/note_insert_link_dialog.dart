@@ -66,6 +66,7 @@ class _InsertLinkDialogState extends State<_InsertLinkDialog> {
         children: [
           TextField(
             controller: _textController,
+            textCapitalization: TextCapitalization.sentences,
             autofocus: widget.initialText.isEmpty,
             textInputAction: TextInputAction.next,
             decoration: InputDecoration(labelText: l10n.editorLinkText),

@@ -273,6 +273,7 @@ class _CalendarEventEditorScreenState
             // Titolo (Obbligatorio)
             TextField(
               controller: _titleController,
+              textCapitalization: TextCapitalization.sentences,
               style: const TextStyle(
                 fontSize: AppFontSizes.headline,
                 fontWeight: FontWeight.bold,
@@ -298,6 +299,7 @@ class _CalendarEventEditorScreenState
             // Descrizione (Opzionale)
             TextField(
               controller: _descriptionController,
+              textCapitalization: TextCapitalization.sentences,
               style: const TextStyle(fontSize: AppFontSizes.lg),
               maxLines: null,
               minLines: 4,

@@ -117,6 +117,7 @@ class _LabelTile extends ConsumerWidget {
       hintText: context.l10n.labelsNameHint,
       confirmLabel: context.l10n.commonSave,
       initialValue: tag,
+      textCapitalization: TextCapitalization.sentences,
     );
     if (newName == null || newName == tag) return;
     ref.read(notesProvider.notifier).renameTag(tag, newName);

@@ -115,6 +115,7 @@ class TaskAddSubtaskField extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: controller,
+              textCapitalization: TextCapitalization.sentences,
               decoration: InputDecoration(
                 hintText: context.l10n.taskEditorAddSubtaskHint,
                 border: OutlineInputBorder(

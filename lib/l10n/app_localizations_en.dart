@@ -1749,6 +1749,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Reminders work again: setting one no longer shows the \"Unable to schedule the reminder\" error and the notification arrives at the set time.';
 
   @override
+  String get changelog_v2_0_0_bullet_42 =>
+      'When typing titles, notes, tasks, subtasks, events and labels, the first letter is now capitalized automatically.';
+
+  @override
   String get infoPrivacyOpen => 'Privacy policy';
 
   @override

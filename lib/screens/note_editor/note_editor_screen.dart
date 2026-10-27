@@ -545,6 +545,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
                 ),
                 child: TextField(
                   controller: _titleController,
+                  textCapitalization: TextCapitalization.sentences,
                   focusNode: _titleFocusNode,
                   style: _titleStyle(context),
                   maxLines: null,
@@ -593,6 +594,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
                         ),
                         child: TextField(
                           controller: _contentController,
+                          textCapitalization: TextCapitalization.sentences,
                           focusNode: _contentFocusNode,
                           style: _contentStyle(context),
                           maxLines: null,

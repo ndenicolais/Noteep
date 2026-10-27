@@ -54,6 +54,7 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
       title: tabContext.l10n.tasksNewTask,
       hintText: tabContext.l10n.tasksNewTaskHint,
       confirmLabel: tabContext.l10n.tasksAdd,
+      textCapitalization: TextCapitalization.sentences,
     );
     if (title == null || !tabContext.mounted) return;
     // New tasks land in the tab they were created from.
@@ -73,6 +74,7 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
       title: context.l10n.tasksNewList,
       hintText: context.l10n.tasksListNameHint,
       confirmLabel: context.l10n.tasksCreate,
+      textCapitalization: TextCapitalization.sentences,
     );
     if (name == null) return;
     ref.read(taskListsProvider.notifier).addList(TaskListModel(name: name));

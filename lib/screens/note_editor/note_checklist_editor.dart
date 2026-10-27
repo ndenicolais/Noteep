@@ -46,6 +46,7 @@ class NoteChecklistEditor extends StatelessWidget {
               ),
               Expanded(
                 child: TextField(
+                  textCapitalization: TextCapitalization.sentences,
                   controller: TextEditingController(text: item.text)
                     ..selection = TextSelection.fromPosition(
                       TextPosition(offset: item.text.length),

@@ -3224,6 +3224,12 @@ abstract class AppLocalizations {
   /// **'I promemoria funzionano di nuovo: impostarne uno non mostra più l\'errore \"Impossibile pianificare il promemoria\" e la notifica arriva all\'orario scelto.'**
   String get changelog_v2_0_0_bullet_41;
 
+  /// No description provided for @changelog_v2_0_0_bullet_42.
+  ///
+  /// In it, this message translates to:
+  /// **'Quando scrivi titoli, note, task, sottotask, eventi ed etichette la prima lettera ora è maiuscola in automatico.'**
+  String get changelog_v2_0_0_bullet_42;
+
   /// No description provided for @infoPrivacyOpen.
   ///
   /// In it, this message translates to:

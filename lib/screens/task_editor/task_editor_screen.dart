@@ -450,6 +450,7 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
               ),
               child: TextField(
                 controller: _titleController,
+                textCapitalization: TextCapitalization.sentences,
                 focusNode: _titleFocusNode,
                 style: const TextStyle(
                   fontSize: 20,
@@ -481,6 +482,7 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
                 child: TextField(
                   controller: _descriptionController,
+                  textCapitalization: TextCapitalization.sentences,
                   focusNode: _descriptionFocusNode,
                   maxLines: null,
                   textAlignVertical: TextAlignVertical.top,
