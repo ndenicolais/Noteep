@@ -1753,6 +1753,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Dopo aver reinstallato l\'app non devi più accedere di nuovo a ogni riapertura: l\'accesso resta attivo.';
 
   @override
+  String get changelog_v2_0_0_bullet_41 =>
+      'I promemoria funzionano di nuovo: impostarne uno non mostra più l\'errore \"Impossibile pianificare il promemoria\" e la notifica arriva all\'orario scelto.';
+
+  @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';
 
   @override

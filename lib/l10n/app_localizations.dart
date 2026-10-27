@@ -3218,6 +3218,12 @@ abstract class AppLocalizations {
   /// **'Dopo aver reinstallato l\'app non devi più accedere di nuovo a ogni riapertura: l\'accesso resta attivo.'**
   String get changelog_v2_0_0_bullet_40;
 
+  /// No description provided for @changelog_v2_0_0_bullet_41.
+  ///
+  /// In it, this message translates to:
+  /// **'I promemoria funzionano di nuovo: impostarne uno non mostra più l\'errore \"Impossibile pianificare il promemoria\" e la notifica arriva all\'orario scelto.'**
+  String get changelog_v2_0_0_bullet_41;
+
   /// No description provided for @infoPrivacyOpen.
   ///
   /// In it, this message translates to:

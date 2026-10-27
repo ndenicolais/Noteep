@@ -49,6 +49,8 @@ android {
             signingConfig = keystorePropertiesFile.exists()
                     ? signingConfigs.release
                     : signingConfigs.debug
+            // Gson keep rules needed by flutter_local_notifications.
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
 }
