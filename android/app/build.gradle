@@ -65,7 +65,7 @@ flutter {
 
 dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
-    implementation 'com.google.firebase:firebase-auth:22.3.0'
-    implementation 'com.google.android.gms:play-services-auth:19.0.0'
-    implementation platform('com.google.firebase:firebase-bom:33.1.1')
+    // Firebase (BoM) and Google Sign-In native libraries come from the
+    // FlutterFire and google_sign_in plugins: don't pin versions here, or
+    // they compete with the plugins' own.
 }
