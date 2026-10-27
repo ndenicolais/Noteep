@@ -139,6 +139,7 @@ class DataActions {
     'tasks',
     'task_lists',
     'calendar_events',
+    'labels',
   ];
 
   /// Deletes every Firestore document of the signed-in user, including the

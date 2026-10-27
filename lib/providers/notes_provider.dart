@@ -217,7 +217,8 @@ class NotesNotifier extends Notifier<List<NoteModel>>
     );
   }
 
-  /// Renames a tag across all notes that have it.
+  /// Renames a tag across all notes that have it. A note that already has
+  /// [newTag] keeps it only once.
   Future<void> renameTag(String oldTag, String newTag) async {
     if (newTag.trim().isEmpty || oldTag == newTag) return;
     final affected = state.where((n) => n.tags.contains(oldTag)).toList();
@@ -225,7 +226,10 @@ class NotesNotifier extends Notifier<List<NoteModel>>
     final updates = {
       for (final n in affected)
         n.id: n.copyWith(
-          tags: n.tags.map((t) => t == oldTag ? newTag.trim() : t).toList(),
+          tags:
+              {
+                for (final t in n.tags) t == oldTag ? newTag.trim() : t,
+              }.toList(),
         ),
     };
     await mutate(

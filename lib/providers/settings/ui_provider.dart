@@ -10,6 +10,7 @@
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core_providers.dart';
+import '../labels_provider.dart';
 import '../notes_provider.dart';
 import '../tasks_provider.dart';
 import '../../models/note_model.dart';
@@ -154,57 +155,42 @@ final filteredTasksProvider = Provider<List<TaskModel>>((ref) {
   }).toList();
 });
 
+/// Every label name, sorted: the ones in [labelsProvider] plus any found
+/// only on notes.
 final allTagsProvider = Provider<List<String>>((ref) {
   final notes = ref.watch(notesProvider);
-  final customLabels = ref.watch(customLabelsProvider);
+  final labels = ref.watch(labelsProvider);
   final tags = <String>{};
   for (final n in notes) {
     tags.addAll(n.tags);
   }
-  tags.addAll(customLabels);
+  tags.addAll(labels.map((l) => l.name));
   return tags.toList()..sort();
 });
 
-// --- Custom Labels (standalone, not tied to any note) ---
-
-const _kCustomLabelsKey = 'custom_labels';
-
-class CustomLabelsNotifier extends Notifier<List<String>> {
-  @override
-  List<String> build() =>
-      ref.watch(sharedPreferencesProvider).getStringList(_kCustomLabelsKey) ??
-      [];
-
-  Future<void> _save() async {
-    await ref
-        .read(sharedPreferencesProvider)
-        .setStringList(_kCustomLabelsKey, state);
+/// Number of notes (archived ones included, trashed ones excluded) using
+/// each label.
+final tagNoteCountsProvider = Provider<Map<String, int>>((ref) {
+  final counts = <String, int>{};
+  for (final n in ref.watch(notesProvider)) {
+    if (n.deletedAt != null) continue;
+    for (final t in n.tags) {
+      counts[t] = (counts[t] ?? 0) + 1;
+    }
   }
+  return counts;
+});
 
-  void addLabel(String label) {
-    final trimmed = label.trim();
-    if (trimmed.isEmpty || state.contains(trimmed)) return;
-    state = [...state, trimmed];
-    _save();
-  }
-
-  void renameLabel(String oldLabel, String newLabel) {
-    final trimmed = newLabel.trim();
-    if (!state.contains(oldLabel) || trimmed.isEmpty) return;
-    state = state.map((l) => l == oldLabel ? trimmed : l).toList();
-    _save();
-  }
-
-  void deleteLabel(String label) {
-    state = state.where((l) => l != label).toList();
-    _save();
-  }
-}
-
-final customLabelsProvider =
-    NotifierProvider<CustomLabelsNotifier, List<String>>(
-      CustomLabelsNotifier.new,
-    );
+/// Notes not in the trash with label [tag], archived ones last.
+final notesWithTagProvider = Provider.autoDispose
+    .family<List<NoteModel>, String>((ref, tag) {
+      final active = ref.watch(activeNotesProvider);
+      final archived = ref.watch(archivedNotesProvider);
+      return [
+        ...active.where((n) => n.tags.contains(tag)),
+        ...archived.where((n) => n.tags.contains(tag)),
+      ];
+    });
 
 // --- Notes FAB ---
 
