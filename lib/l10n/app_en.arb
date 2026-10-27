@@ -519,6 +519,7 @@
   "changelog_v2_0_0_bullet_37": "Notification permission is no longer asked when the app opens, only the first time you set a reminder.",
   "changelog_v2_0_0_bullet_38": "New home screen widgets: Quick actions, with buttons to create a note, a task or an event, and the single New note, New task and New event widgets.",
   "changelog_v2_0_0_bullet_39": "Tapping the Noteep home screen widget now opens the app.",
+  "changelog_v2_0_0_bullet_40": "After reinstalling the app you no longer have to sign in again every time you reopen it: you stay signed in.",
   "infoPrivacyOpen": "Privacy policy",
   "privacyPolicyTitle": "Privacy policy",
   "privacyPolicyIntro": "Noteep is an app for notes, tasks and calendar. This policy explains which data it processes, why, and how you can control it. Noteep shows no ads, uses no analytics or tracking tools, and does not sell or hand over your data.",

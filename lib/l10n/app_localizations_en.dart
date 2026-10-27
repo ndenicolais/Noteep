@@ -1741,6 +1741,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Tapping the Noteep home screen widget now opens the app.';
 
   @override
+  String get changelog_v2_0_0_bullet_40 =>
+      'After reinstalling the app you no longer have to sign in again every time you reopen it: you stay signed in.';
+
+  @override
   String get infoPrivacyOpen => 'Privacy policy';
 
   @override

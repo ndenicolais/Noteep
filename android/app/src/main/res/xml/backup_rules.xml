@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Auto Backup rules for Android 6-11 (android:fullBackupContent).
+
+    Firebase Auth encrypts the signed-in user with an Android Keystore key,
+    which is never backed up. If these files are restored on a reinstall,
+    Firebase can neither read nor overwrite them, so every new sign-in is lost
+    when the app process restarts. The file names are
+    "<prefix>.<base64("[DEFAULT]")>+<base64(mobilesdk_app_id)>.xml": update them
+    if the Firebase app id in google-services.json changes.
+-->
+<full-backup-content>
+    <exclude domain="sharedpref" path="com.google.firebase.auth.api.Store.W0RFRkFVTFRd+MToyOTUwMjg4MTE0OTg6YW5kcm9pZDoxOGQ3OTdmNDM1YjJlZGRlM2FkOTkz.xml" />
+    <exclude domain="sharedpref" path="com.google.firebase.auth.api.crypto.W0RFRkFVTFRd+MToyOTUwMjg4MTE0OTg6YW5kcm9pZDoxOGQ3OTdmNDM1YjJlZGRlM2FkOTkz.xml" />
+</full-backup-content>

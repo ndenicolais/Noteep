@@ -689,6 +689,7 @@
   "changelog_v2_0_0_bullet_37": "Il permesso per le notifiche non viene più chiesto all'apertura dell'app, ma solo la prima volta che imposti un promemoria.",
   "changelog_v2_0_0_bullet_38": "Nuovi widget per la schermata Home: Azioni rapide, con i pulsanti per creare una nota, un task o un evento, e i widget singoli Nuova nota, Nuovo task e Nuovo evento.",
   "changelog_v2_0_0_bullet_39": "Toccare il widget Noteep nella schermata Home ora apre l'app.",
+  "changelog_v2_0_0_bullet_40": "Dopo aver reinstallato l'app non devi più accedere di nuovo a ogni riapertura: l'accesso resta attivo.",
   "infoPrivacyOpen": "Informativa sulla privacy",
   "privacyPolicyTitle": "Informativa sulla privacy",
   "privacyPolicyIntro": "Noteep è un'app per note, task e calendario. Questa informativa spiega quali dati tratta, perché e come puoi controllarli. Noteep non mostra pubblicità, non usa strumenti di analisi o di tracciamento e non vende né cede i tuoi dati.",

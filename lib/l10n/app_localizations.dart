@@ -3212,6 +3212,12 @@ abstract class AppLocalizations {
   /// **'Toccare il widget Noteep nella schermata Home ora apre l\'app.'**
   String get changelog_v2_0_0_bullet_39;
 
+  /// No description provided for @changelog_v2_0_0_bullet_40.
+  ///
+  /// In it, this message translates to:
+  /// **'Dopo aver reinstallato l\'app non devi più accedere di nuovo a ogni riapertura: l\'accesso resta attivo.'**
+  String get changelog_v2_0_0_bullet_40;
+
   /// No description provided for @infoPrivacyOpen.
   ///
   /// In it, this message translates to:

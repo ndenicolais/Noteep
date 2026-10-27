@@ -1749,6 +1749,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Toccare il widget Noteep nella schermata Home ora apre l\'app.';
 
   @override
+  String get changelog_v2_0_0_bullet_40 =>
+      'Dopo aver reinstallato l\'app non devi più accedere di nuovo a ogni riapertura: l\'accesso resta attivo.';
+
+  @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';
 
   @override
