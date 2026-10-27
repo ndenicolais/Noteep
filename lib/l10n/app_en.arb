@@ -348,6 +348,26 @@
   "labelsRenameTitle": "Rename label",
   "labelsDeleteTitle": "Delete label",
   "labelsDeleteConfirm": "The label \"{tag}\" will be removed from all notes.",
+  "labelsNoteCount": "{count, plural, =0{No notes} =1{1 note} other{{count} notes}}",
+  "@labelsNoteCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "labelNotesEmpty": "No notes with this label",
+  "editorLabels": "Labels",
+  "editorLabelsSearchHint": "Search or create a label...",
+  "editorLabelsCreate": "Create \"{name}\"",
+  "@editorLabelsCreate": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "editorLabelsEmpty": "No labels: type a name to create one.",
   "statsTitle": "Statistics",
   "statsNotesActive": "Active",
   "statsNotesArchived": "Archived",
@@ -526,6 +546,7 @@
   "changelog_v2_0_0_bullet_41": "Reminders work again: setting one no longer shows the \"Unable to schedule the reminder\" error and the notification arrives at the set time.",
   "changelog_v2_0_0_bullet_42": "When typing titles, notes, tasks, subtasks, events and labels, the first letter is now capitalized automatically.",
   "changelog_v2_0_0_bullet_43": "Calendar events can have a single time: the end time is now optional and you can choose it yourself.",
+  "changelog_v2_0_0_bullet_44": "More useful labels: add them to a note from the editor menu, and tap a label in the Labels section to see the notes that use it. They are now saved to your account, so you find them on every device.",
   "infoPrivacyOpen": "Privacy policy",
   "privacyPolicyTitle": "Privacy policy",
   "privacyPolicyIntro": "Noteep is an app for notes, tasks and calendar. This policy explains which data it processes, why, and how you can control it. Noteep shows no ads, uses no analytics or tracking tools, and does not sell or hand over your data.",

@@ -1144,6 +1144,36 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
+  String labelsNoteCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count note',
+      one: '1 nota',
+      zero: 'Nessuna nota',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get labelNotesEmpty => 'Nessuna nota con questa etichetta';
+
+  @override
+  String get editorLabels => 'Etichette';
+
+  @override
+  String get editorLabelsSearchHint => 'Cerca o crea un\'etichetta...';
+
+  @override
+  String editorLabelsCreate(String name) {
+    return 'Crea \"$name\"';
+  }
+
+  @override
+  String get editorLabelsEmpty =>
+      'Nessuna etichetta: scrivi un nome per crearne una.';
+
+  @override
   String get statsTitle => 'Statistiche';
 
   @override
@@ -1772,6 +1802,10 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_43 =>
       'Gli eventi del calendario possono avere un solo orario: l\'ora di fine ora è facoltativa e puoi sceglierla tu.';
+
+  @override
+  String get changelog_v2_0_0_bullet_44 =>
+      'Etichette più utili: aggiungile a una nota dal menu dell\'editor e tocca un\'etichetta nella sezione Etichette per vedere le note che la usano. Ora sono salvate nel tuo account, quindi le ritrovi su ogni dispositivo.';
 
   @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';

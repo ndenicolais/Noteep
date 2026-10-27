@@ -414,6 +414,26 @@
       }
     }
   },
+  "labelsNoteCount": "{count, plural, =0{Nessuna nota} =1{1 nota} other{{count} note}}",
+  "@labelsNoteCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "labelNotesEmpty": "Nessuna nota con questa etichetta",
+  "editorLabels": "Etichette",
+  "editorLabelsSearchHint": "Cerca o crea un'etichetta...",
+  "editorLabelsCreate": "Crea \"{name}\"",
+  "@editorLabelsCreate": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "editorLabelsEmpty": "Nessuna etichetta: scrivi un nome per crearne una.",
   "statsTitle": "Statistiche",
   "statsNotesActive": "Attive",
   "statsNotesArchived": "Archiviate",
@@ -696,6 +716,7 @@
   "changelog_v2_0_0_bullet_41": "I promemoria funzionano di nuovo: impostarne uno non mostra più l'errore \"Impossibile pianificare il promemoria\" e la notifica arriva all'orario scelto.",
   "changelog_v2_0_0_bullet_42": "Quando scrivi titoli, note, task, sottotask, eventi ed etichette la prima lettera ora è maiuscola in automatico.",
   "changelog_v2_0_0_bullet_43": "Gli eventi del calendario possono avere un solo orario: l'ora di fine ora è facoltativa e puoi sceglierla tu.",
+  "changelog_v2_0_0_bullet_44": "Etichette più utili: aggiungile a una nota dal menu dell'editor e tocca un'etichetta nella sezione Etichette per vedere le note che la usano. Ora sono salvate nel tuo account, quindi le ritrovi su ogni dispositivo.",
   "infoPrivacyOpen": "Informativa sulla privacy",
   "privacyPolicyTitle": "Informativa sulla privacy",
   "privacyPolicyIntro": "Noteep è un'app per note, task e calendario. Questa informativa spiega quali dati tratta, perché e come puoi controllarli. Noteep non mostra pubblicità, non usa strumenti di analisi o di tracciamento e non vende né cede i tuoi dati.",

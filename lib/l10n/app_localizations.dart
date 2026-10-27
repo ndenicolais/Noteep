@@ -2186,6 +2186,42 @@ abstract class AppLocalizations {
   /// **'L\'etichetta \"{tag}\" verrà rimossa da tutte le note.'**
   String labelsDeleteConfirm(String tag);
 
+  /// No description provided for @labelsNoteCount.
+  ///
+  /// In it, this message translates to:
+  /// **'{count, plural, =0{Nessuna nota} =1{1 nota} other{{count} note}}'**
+  String labelsNoteCount(int count);
+
+  /// No description provided for @labelNotesEmpty.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessuna nota con questa etichetta'**
+  String get labelNotesEmpty;
+
+  /// No description provided for @editorLabels.
+  ///
+  /// In it, this message translates to:
+  /// **'Etichette'**
+  String get editorLabels;
+
+  /// No description provided for @editorLabelsSearchHint.
+  ///
+  /// In it, this message translates to:
+  /// **'Cerca o crea un\'etichetta...'**
+  String get editorLabelsSearchHint;
+
+  /// No description provided for @editorLabelsCreate.
+  ///
+  /// In it, this message translates to:
+  /// **'Crea \"{name}\"'**
+  String editorLabelsCreate(String name);
+
+  /// No description provided for @editorLabelsEmpty.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessuna etichetta: scrivi un nome per crearne una.'**
+  String get editorLabelsEmpty;
+
   /// No description provided for @statsTitle.
   ///
   /// In it, this message translates to:
@@ -3253,6 +3289,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Gli eventi del calendario possono avere un solo orario: l\'ora di fine ora è facoltativa e puoi sceglierla tu.'**
   String get changelog_v2_0_0_bullet_43;
+
+  /// No description provided for @changelog_v2_0_0_bullet_44.
+  ///
+  /// In it, this message translates to:
+  /// **'Etichette più utili: aggiungile a una nota dal menu dell\'editor e tocca un\'etichetta nella sezione Etichette per vedere le note che la usano. Ora sono salvate nel tuo account, quindi le ritrovi su ogni dispositivo.'**
+  String get changelog_v2_0_0_bullet_44;
 
   /// No description provided for @infoPrivacyOpen.
   ///

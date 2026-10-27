@@ -20,6 +20,7 @@ import '../../models/note_model.dart';
 import '../../models/change_history.dart';
 import '../../providers/notes_provider.dart';
 import '../../providers/notes_undo_redo_provider.dart';
+import '../../providers/settings/ui_provider.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_font_sizes.dart';
 import '../../theme/app_spacing.dart';
@@ -38,6 +39,8 @@ import 'note_editor_app_bar.dart';
 import 'note_editor_bottom_bar.dart';
 import 'note_editor_controller.dart';
 import 'note_insert_link_dialog.dart';
+import 'note_labels_section.dart';
+import 'note_labels_sheet.dart';
 import 'note_link_sheet.dart';
 import 'note_linked_notes_section.dart';
 
@@ -319,6 +322,28 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
     );
   }
 
+  // ─── Labels ───────────────────────────────────────────────────────────────
+
+  void _showLabelsSheet() {
+    showAppSheet(
+      context,
+      isScrollControlled: true,
+      builder:
+          (_) => NoteLabelsSheet(
+            allLabels: ref.read(allTagsProvider),
+            selected: _note.tags,
+            onToggle: (tag) {
+              _controller.toggleTag(tag);
+              _save();
+            },
+            onCreate: (name) {
+              notifyOnError(_controller.createTag(name), context);
+              _save();
+            },
+          ),
+    );
+  }
+
   // ─── Web links ────────────────────────────────────────────────────────────
 
   /// Inserts a Markdown link at the cursor (replacing the selection, which
@@ -514,6 +539,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
             onInsertLink: _insertLink,
             onUndo: _performUndo,
             onRedo: _performRedo,
+            onLabels: _showLabelsSheet,
             onPin: () {
               _controller.updateNote((n) => n.copyWith(isPinned: !n.isPinned));
               _save();
@@ -604,6 +630,11 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
                             border: InputBorder.none,
                           ),
                         ),
+                      ),
+                    if (_note.tags.isNotEmpty)
+                      NoteLabelsSection(
+                        tags: _note.tags,
+                        onTap: _showLabelsSheet,
                       ),
                     if (_note.linkedNoteIds.isNotEmpty)
                       NoteLinkedNotesSection(linkedNotes: linkedNotes),

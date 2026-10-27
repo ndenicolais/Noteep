@@ -17,6 +17,7 @@ import '../../screens/calendar/calendar_event_editor_screen.dart';
 import '../../screens/calendar/calendar_screen.dart';
 import '../../screens/export_screen.dart';
 import '../../screens/info_screen.dart';
+import '../../screens/label_notes_screen.dart';
 import '../../screens/labels_screen.dart';
 import '../../screens/note_editor/note_editor_screen.dart';
 import '../../screens/onboarding_screen.dart';
@@ -45,6 +46,7 @@ abstract final class AppRoutes {
   static const note = '/note';
   static const task = '/task';
   static const event = '/event';
+  static const label = '/label';
   static const statistics = '/statistics';
   static const export = '/export';
   static const info = '/info';
@@ -115,6 +117,8 @@ abstract final class AppRouter {
         (_) => TaskEditorScreen(task: args),
       AppRoutes.event when args is CalendarEventModel =>
         (_) => CalendarEventEditorScreen(event: args),
+      AppRoutes.label when args is String =>
+        (_) => LabelNotesScreen(label: args),
       _ => null,
     };
   }
@@ -174,6 +178,9 @@ abstract final class AppNav {
     BuildContext context,
     CalendarEventModel event,
   ) => Navigator.pushNamed(context, AppRoutes.event, arguments: event);
+
+  static Future<void> openLabel(BuildContext context, String label) =>
+      Navigator.pushNamed(context, AppRoutes.label, arguments: label);
 
   static Future<void> openTasks(BuildContext context) =>
       Navigator.pushNamed(context, AppRoutes.tasks);

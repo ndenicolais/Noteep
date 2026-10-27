@@ -12,6 +12,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/audio_note.dart';
 import '../../models/note_model.dart';
+import '../../providers/labels_provider.dart';
 import '../../providers/notes_provider.dart';
 import '../../providers/notes_undo_redo_provider.dart';
 import '../../core/routing/notification_target.dart';
@@ -137,6 +138,29 @@ class NoteEditorController extends ChangeNotifier {
       notifyListeners();
     }
     return redone;
+  }
+
+  // ─── Labels ───────────────────────────────────────────────────────────────
+
+  /// Adds [tag] to the note, or removes it if the note already has it.
+  void toggleTag(String tag) {
+    updateNote(
+      (n) => n.copyWith(
+        tags:
+            n.tags.contains(tag)
+                ? n.tags.where((t) => t != tag).toList()
+                : [...n.tags, tag],
+      ),
+    );
+  }
+
+  /// Creates the label [name] (if new) and adds it to the note. Returns the
+  /// label creation write.
+  Future<void> createTag(String name) {
+    final trimmed = name.trim();
+    if (trimmed.isEmpty) return Future.value();
+    if (!_note.tags.contains(trimmed)) toggleTag(trimmed);
+    return _ref.read(labelsProvider.notifier).add(trimmed);
   }
 
   // ─── Audio notes ──────────────────────────────────────────────────────────

@@ -1140,6 +1140,35 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String labelsNoteCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count notes',
+      one: '1 note',
+      zero: 'No notes',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get labelNotesEmpty => 'No notes with this label';
+
+  @override
+  String get editorLabels => 'Labels';
+
+  @override
+  String get editorLabelsSearchHint => 'Search or create a label...';
+
+  @override
+  String editorLabelsCreate(String name) {
+    return 'Create \"$name\"';
+  }
+
+  @override
+  String get editorLabelsEmpty => 'No labels: type a name to create one.';
+
+  @override
   String get statsTitle => 'Statistics';
 
   @override
@@ -1764,6 +1793,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_43 =>
       'Calendar events can have a single time: the end time is now optional and you can choose it yourself.';
+
+  @override
+  String get changelog_v2_0_0_bullet_44 =>
+      'More useful labels: add them to a note from the editor menu, and tap a label in the Labels section to see the notes that use it. They are now saved to your account, so you find them on every device.';
 
   @override
   String get infoPrivacyOpen => 'Privacy policy';

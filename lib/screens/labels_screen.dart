@@ -11,12 +11,15 @@
 import 'package:flutter/material.dart';
 import '../l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../core/routing/app_router.dart';
+import '../providers/labels_provider.dart';
 import '../providers/notes_provider.dart';
 import '../providers/settings/ui_provider.dart';
 import '../theme/app_font_sizes.dart';
 import '../theme/app_spacing.dart';
 import '../widgets/nav_scaffold.dart';
 import '../widgets/shared/app_dialogs.dart';
+import '../widgets/shared/error_feedback.dart';
 
 class LabelsScreen extends ConsumerWidget {
   const LabelsScreen({super.key});
@@ -29,7 +32,8 @@ class LabelsScreen extends ConsumerWidget {
       confirmLabel: context.l10n.tasksCreate,
       textCapitalization: TextCapitalization.sentences,
     );
-    if (name != null) ref.read(customLabelsProvider.notifier).addLabel(name);
+    if (name == null || !context.mounted) return;
+    notifyOnError(ref.read(labelsProvider.notifier).add(name), context);
   }
 
   @override
@@ -89,9 +93,12 @@ class _LabelTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final count = ref.watch(tagNoteCountsProvider.select((c) => c[tag] ?? 0));
     return ListTile(
       leading: const Icon(Icons.label_outline),
       title: Text(tag),
+      subtitle: Text(context.l10n.labelsNoteCount(count)),
+      onTap: () => AppNav.openLabel(context, tag),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -119,9 +126,14 @@ class _LabelTile extends ConsumerWidget {
       initialValue: tag,
       textCapitalization: TextCapitalization.sentences,
     );
-    if (newName == null || newName == tag) return;
-    ref.read(notesProvider.notifier).renameTag(tag, newName);
-    ref.read(customLabelsProvider.notifier).renameLabel(tag, newName);
+    if (newName == null || newName == tag || !context.mounted) return;
+    notifyOnError(
+      Future.wait([
+        ref.read(notesProvider.notifier).renameTag(tag, newName),
+        ref.read(labelsProvider.notifier).rename(tag, newName),
+      ]),
+      context,
+    );
   }
 
   Future<void> _confirmDelete(BuildContext context, WidgetRef ref) async {
@@ -132,8 +144,13 @@ class _LabelTile extends ConsumerWidget {
       confirmLabel: context.l10n.commonDelete,
       destructive: true,
     );
-    if (!confirmed) return;
-    ref.read(notesProvider.notifier).deleteTag(tag);
-    ref.read(customLabelsProvider.notifier).deleteLabel(tag);
+    if (!confirmed || !context.mounted) return;
+    notifyOnError(
+      Future.wait([
+        ref.read(notesProvider.notifier).deleteTag(tag),
+        ref.read(labelsProvider.notifier).delete(tag),
+      ]),
+      context,
+    );
   }
 }

@@ -16,7 +16,7 @@ import '../../providers/notes_undo_redo_provider.dart';
 import '../../theme/app_spacing.dart';
 
 /// App bar for [NoteEditorScreen]: undo/redo, insert link, markdown toggle and the
-/// pin/archive/share overflow menu.
+/// labels/share/pin/archive overflow menu.
 class NoteEditorAppBar extends ConsumerWidget implements PreferredSizeWidget {
   const NoteEditorAppBar({
     super.key,
@@ -29,6 +29,7 @@ class NoteEditorAppBar extends ConsumerWidget implements PreferredSizeWidget {
     required this.onInsertLink,
     required this.onUndo,
     required this.onRedo,
+    required this.onLabels,
     required this.onPin,
     required this.onArchive,
     required this.onShare,
@@ -43,6 +44,7 @@ class NoteEditorAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final VoidCallback onInsertLink;
   final VoidCallback onUndo;
   final VoidCallback onRedo;
+  final VoidCallback onLabels;
   final VoidCallback onPin;
   final VoidCallback onArchive;
   final VoidCallback onShare;
@@ -96,6 +98,8 @@ class NoteEditorAppBar extends ConsumerWidget implements PreferredSizeWidget {
         PopupMenuButton<String>(
           onSelected: (v) {
             switch (v) {
+              case 'labels':
+                onLabels();
               case 'pin':
                 onPin();
               case 'archive':
@@ -106,6 +110,16 @@ class NoteEditorAppBar extends ConsumerWidget implements PreferredSizeWidget {
           },
           itemBuilder:
               (_) => [
+                PopupMenuItem(
+                  value: 'labels',
+                  child: Row(
+                    children: [
+                      const Icon(Icons.label_outline),
+                      const SizedBox(width: AppSpacing.md),
+                      Text(context.l10n.editorLabels),
+                    ],
+                  ),
+                ),
                 PopupMenuItem(
                   value: 'share',
                   child: Row(
