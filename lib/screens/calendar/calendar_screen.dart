@@ -216,10 +216,7 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           final now = DateTime.now();
-          final newEvent = CalendarEventModel(
-            startTime: now,
-            endTime: now.add(const Duration(hours: 1)),
-          );
+          final newEvent = CalendarEventModel(startTime: now, endTime: now);
           AppNav.openEvent(context, newEvent);
         },
         child: const Icon(Icons.add),

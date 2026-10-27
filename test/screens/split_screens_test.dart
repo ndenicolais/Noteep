@@ -151,6 +151,14 @@ void main() {
                     child: CalendarEventDetailsSection(
                       event: event,
                       onPickDateTime: () {},
+                      onPickEndTime: () {},
+                      onClearEndTime:
+                          () => setState(
+                            () =>
+                                event = event.copyWith(
+                                  endTime: event.startTime,
+                                ),
+                          ),
                       onChanged: (e) => setState(() => event = e),
                     ),
                   ),
@@ -158,7 +166,14 @@ void main() {
           ),
         ),
       );
-      expect(find.text('09:00 - 10:00'), findsOneWidget);
+      expect(find.text('09:00 – 10:00'), findsOneWidget);
+      expect(find.text('10:00'), findsOneWidget);
+
+      await tester.tap(find.byTooltip('Rimuovi ora di fine'));
+      await tester.pump();
+      expect(event.hasEndTime, isFalse);
+      expect(find.text('09:00'), findsOneWidget);
+      expect(find.text('Nessuna'), findsOneWidget);
 
       await tester.tap(find.text('Compleanno'));
       await tester.pump();
@@ -167,8 +182,15 @@ void main() {
       await tester.tap(find.text('Tutto il giorno'));
       await tester.pump();
       expect(event.isAllDay, isTrue);
-      // Subtitle switches too.
+      // Subtitle switches too, and the end time row is hidden.
       expect(find.text('Tutto il giorno'), findsNWidgets(2));
+      expect(find.text('Ora di fine'), findsNothing);
+
+      // Back to a timed event: starts without an end.
+      await tester.tap(find.text('Tutto il giorno').last);
+      await tester.pump();
+      expect(event.isAllDay, isFalse);
+      expect(event.hasEndTime, isFalse);
 
       await tester.tap(find.text('Ricorrenza'));
       await tester.pumpAndSettle();

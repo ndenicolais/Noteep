@@ -90,10 +90,7 @@ class _HomeWidgetLaunchHandlerState extends State<HomeWidgetLaunchHandler> {
         final now = DateTime.now();
         AppNav.openEvent(
           context,
-          CalendarEventModel(
-            startTime: now,
-            endTime: now.add(const Duration(hours: 1)),
-          ),
+          CalendarEventModel(startTime: now, endTime: now),
         );
     }
   }

@@ -72,7 +72,7 @@ void showDayEventsBottomSheet(
                         Navigator.pop(ctx);
                         final newEvent = CalendarEventModel(
                           startTime: day,
-                          endTime: day.add(const Duration(hours: 1)),
+                          endTime: day,
                         );
                         AppNav.openEvent(context, newEvent);
                       },

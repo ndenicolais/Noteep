@@ -1892,6 +1892,24 @@ abstract class AppLocalizations {
   /// **'Tutto il giorno'**
   String get calendarAllDay;
 
+  /// No description provided for @calendarEndTime.
+  ///
+  /// In it, this message translates to:
+  /// **'Ora di fine'**
+  String get calendarEndTime;
+
+  /// No description provided for @calendarNoEndTime.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessuna'**
+  String get calendarNoEndTime;
+
+  /// No description provided for @calendarRemoveEndTime.
+  ///
+  /// In it, this message translates to:
+  /// **'Rimuovi ora di fine'**
+  String get calendarRemoveEndTime;
+
   /// No description provided for @calendarBirthday.
   ///
   /// In it, this message translates to:
@@ -3229,6 +3247,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Quando scrivi titoli, note, task, sottotask, eventi ed etichette la prima lettera ora è maiuscola in automatico.'**
   String get changelog_v2_0_0_bullet_42;
+
+  /// No description provided for @changelog_v2_0_0_bullet_43.
+  ///
+  /// In it, this message translates to:
+  /// **'Gli eventi del calendario possono avere un solo orario: l\'ora di fine ora è facoltativa e puoi sceglierla tu.'**
+  String get changelog_v2_0_0_bullet_43;
 
   /// No description provided for @infoPrivacyOpen.
   ///

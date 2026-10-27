@@ -978,6 +978,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calendarAllDay => 'All day';
 
   @override
+  String get calendarEndTime => 'End time';
+
+  @override
+  String get calendarNoEndTime => 'None';
+
+  @override
+  String get calendarRemoveEndTime => 'Remove end time';
+
+  @override
   String get calendarBirthday => 'Birthday';
 
   @override
@@ -1751,6 +1760,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_42 =>
       'When typing titles, notes, tasks, subtasks, events and labels, the first letter is now capitalized automatically.';
+
+  @override
+  String get changelog_v2_0_0_bullet_43 =>
+      'Calendar events can have a single time: the end time is now optional and you can choose it yourself.';
 
   @override
   String get infoPrivacyOpen => 'Privacy policy';

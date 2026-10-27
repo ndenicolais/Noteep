@@ -980,6 +980,15 @@ class AppLocalizationsIt extends AppLocalizations {
   String get calendarAllDay => 'Tutto il giorno';
 
   @override
+  String get calendarEndTime => 'Ora di fine';
+
+  @override
+  String get calendarNoEndTime => 'Nessuna';
+
+  @override
+  String get calendarRemoveEndTime => 'Rimuovi ora di fine';
+
+  @override
   String get calendarBirthday => 'Compleanno';
 
   @override
@@ -1759,6 +1768,10 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_42 =>
       'Quando scrivi titoli, note, task, sottotask, eventi ed etichette la prima lettera ora è maiuscola in automatico.';
+
+  @override
+  String get changelog_v2_0_0_bullet_43 =>
+      'Gli eventi del calendario possono avere un solo orario: l\'ora di fine ora è facoltativa e puoi sceglierla tu.';
 
   @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';

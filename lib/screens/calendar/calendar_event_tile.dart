@@ -13,11 +13,13 @@ import '../../l10n/l10n.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
 
-/// Formats the time range of an event, or "Tutto il giorno" for all-day events.
+/// Formats the time range of an event (a single time when it has no end),
+/// or "Tutto il giorno" for all-day events.
 String formatEventTimeRange(AppLocalizations l, CalendarEventModel event) {
   if (event.isAllDay) return l.calendarAllDay;
-  return '${DateFormat('HH:mm').format(event.startTime)} – '
-      '${DateFormat('HH:mm').format(event.endTime)}';
+  final start = DateFormat('HH:mm').format(event.startTime);
+  if (!event.hasEndTime) return start;
+  return '$start – ${DateFormat('HH:mm').format(event.endTime)}';
 }
 
 /// A single-line list tile shared by the day, schedule and day-events-sheet

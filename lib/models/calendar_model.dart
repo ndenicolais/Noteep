@@ -16,6 +16,7 @@ class CalendarEventModel {
   String title;
   String description;
   DateTime startTime;
+  // Equal to [startTime] for a timed event with a single time (no end).
   DateTime endTime;
   bool isAllDay;
   bool isBirthday;
@@ -54,6 +55,8 @@ class CalendarEventModel {
        tags = tags ?? [],
        createdAt = createdAt ?? DateTime.now(),
        updatedAt = updatedAt ?? DateTime.now();
+
+  bool get hasEndTime => !isAllDay && endTime.isAfter(startTime);
 
   CalendarEventModel copyWith({
     String? title,

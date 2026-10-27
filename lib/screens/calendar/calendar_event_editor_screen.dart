@@ -130,6 +130,35 @@ class _CalendarEventEditorScreenState
     }
   }
 
+  Future<void> _pickEndTime() async {
+    final start = _event.startTime;
+    final selectedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(
+        _event.hasEndTime
+            ? _event.endTime
+            : start.add(const Duration(hours: 1)),
+      ),
+    );
+    if (selectedTime == null || !mounted) return;
+
+    var end = DateTime(
+      start.year,
+      start.month,
+      start.day,
+      selectedTime.hour,
+      selectedTime.minute,
+    );
+    // An end earlier than the start means the event goes past midnight;
+    // an end equal to the start means a single time (no end).
+    if (end.isBefore(start)) end = end.add(const Duration(days: 1));
+    setState(() => _event = _event.copyWith(endTime: end));
+  }
+
+  void _clearEndTime() {
+    setState(() => _event = _event.copyWith(endTime: _event.startTime));
+  }
+
   Future<void> _confirmDelete() async {
     final confirmed = await showAppConfirmDialog(
       context,
@@ -292,6 +321,8 @@ class _CalendarEventEditorScreenState
             CalendarEventDetailsSection(
               event: _event,
               onPickDateTime: _openDateTimePicker,
+              onPickEndTime: _pickEndTime,
+              onClearEndTime: _clearEndTime,
               onChanged: (e) => setState(() => _event = e),
             ),
             const SizedBox(height: AppSpacing.lg),

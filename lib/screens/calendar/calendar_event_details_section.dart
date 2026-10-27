@@ -15,27 +15,32 @@ import '../../models/calendar_model.dart';
 import '../../theme/app_spacing.dart';
 import '../../utils/recurrence.dart';
 import '../../widgets/shared/app_dialogs.dart';
+import 'calendar_event_tile.dart';
 
 /// Date/time, all-day, birthday, name-day and recurrence of an event.
 ///
 /// Edits are reported through [onChanged] with the updated event; picking
 /// the date/time is delegated to [onPickDateTime] (it chains two pickers
-/// and keeps the duration, which the screen owns).
+/// and keeps the duration, which the screen owns) and the optional end time
+/// to [onPickEndTime] / [onClearEndTime].
 class CalendarEventDetailsSection extends StatelessWidget {
   const CalendarEventDetailsSection({
     super.key,
     required this.event,
     required this.onPickDateTime,
+    required this.onPickEndTime,
+    required this.onClearEndTime,
     required this.onChanged,
   });
 
   final CalendarEventModel event;
   final VoidCallback onPickDateTime;
+  final VoidCallback onPickEndTime;
+  final VoidCallback onClearEndTime;
   final ValueChanged<CalendarEventModel> onChanged;
 
   @override
   Widget build(BuildContext context) {
-    final time = DateFormat('HH:mm');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -43,18 +48,41 @@ class CalendarEventDetailsSection extends StatelessWidget {
           contentPadding: EdgeInsets.zero,
           leading: const Icon(Icons.calendar_today_outlined),
           title: Text(DateFormat('EEEE, dd MMMM yyyy').format(event.startTime)),
-          subtitle: Text(
-            event.isAllDay
-                ? context.l10n.calendarAllDay
-                : '${time.format(event.startTime)} - ${time.format(event.endTime)}',
-          ),
+          subtitle: Text(formatEventTimeRange(context.l10n, event)),
           onTap: onPickDateTime,
         ),
+        if (!event.isAllDay)
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.schedule_outlined),
+            title: Text(context.l10n.calendarEndTime),
+            subtitle: Text(
+              event.hasEndTime
+                  ? DateFormat('HH:mm').format(event.endTime)
+                  : context.l10n.calendarNoEndTime,
+            ),
+            trailing:
+                event.hasEndTime
+                    ? IconButton(
+                      icon: const Icon(Icons.close),
+                      tooltip: context.l10n.calendarRemoveEndTime,
+                      onPressed: onClearEndTime,
+                    )
+                    : null,
+            onTap: onPickEndTime,
+          ),
         const SizedBox(height: AppSpacing.sm),
         _Toggle(
           title: context.l10n.calendarAllDay,
           value: event.isAllDay,
-          onChanged: (v) => onChanged(event.copyWith(isAllDay: v)),
+          // Back to a timed event: start without an end (the all-day end is
+          // the next midnight, not a meaningful end time).
+          onChanged:
+              (v) => onChanged(
+                v
+                    ? event.copyWith(isAllDay: true)
+                    : event.copyWith(isAllDay: false, endTime: event.startTime),
+              ),
         ),
         const SizedBox(height: AppSpacing.sm),
         _Toggle(
