@@ -56,7 +56,7 @@ Noteep is a full-featured Flutter note-taking and productivity app. It combines 
 | Archive | Moves note out of the main list without deleting it |
 | Soft-delete / Trash | Moves note to Trash; auto-purged after **7 days** |
 | Reminders | Schedule a local notification for any note |
-| Tags / Labels | Add multiple tags per note; manage (rename, delete) all tags from the Labels screen |
+| Tags / Labels | Add labels to a note from the editor menu (or create new ones on the fly); the Labels screen shows how many notes use each label, opens the notes with a label, and renames or deletes it. Labels are synced to the account |
 | Note linking | Cross-reference notes by linking their IDs |
 | Reorder | Drag-and-drop reordering in both grid and list layouts |
 | Search | Real-time full-text search across title and content |
@@ -202,6 +202,7 @@ lib/
 │   ├── archive_screen.dart
 │   ├── trash_screen.dart
 │   ├── labels_screen.dart        # Tag management
+│   ├── label_notes_screen.dart   # Notes with one label
 │   ├── reminders_screen.dart
 │   ├── export_screen.dart        # PDF export
 │   ├── info_screen.dart
@@ -350,6 +351,7 @@ Same timestamp fields as `NoteModel` and `TaskModel`, plus `startTime`, `endTime
 | `RemindersScreen` | `/reminders` | All upcoming reminders |
 | `CalendarWorkspaceView` | `/calendar` | Full calendar with event editor |
 | `LabelsScreen` | `/labels` | Manage tags |
+| `LabelNotesScreen` | `/label` | Notes with one label |
 | `ArchiveScreen` | `/archive` | Archived notes and tasks |
 | `TrashScreen` | `/trash` | Trashed items (7-day auto-purge) |
 | `SettingsScreen` | `/settings` | App preferences and backup |
