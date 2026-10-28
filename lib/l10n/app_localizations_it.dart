@@ -1061,6 +1061,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get remindersUntitledTask => 'Task senza titolo';
 
   @override
+  String get remindersClearPast => 'Cancella scaduti';
+
+  @override
+  String get remindersPastCleared => 'Promemoria scaduti rimossi';
+
+  @override
   String get archiveEmptyNotes => 'Nessuna nota archiviata';
 
   @override
@@ -1806,6 +1812,10 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_44 =>
       'Etichette più utili: aggiungile a una nota dal menu dell\'editor e tocca un\'etichetta nella sezione Etichette per vedere le note che la usano. Ora sono salvate nel tuo account, quindi le ritrovi su ogni dispositivo.';
+
+  @override
+  String get changelog_v2_0_0_bullet_45 =>
+      'Nella sezione Promemoria puoi rimuovere in un colpo tutti i promemoria scaduti, e se ne togli uno per sbaglio basta toccare Annulla per rimetterlo.';
 
   @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';

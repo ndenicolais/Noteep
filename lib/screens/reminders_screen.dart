@@ -16,11 +16,12 @@ import 'package:intl/intl.dart';
 import '../models/note_model.dart';
 import '../models/task_model.dart';
 import '../providers/notes_provider.dart';
+import '../providers/reminders_actions.dart';
 import '../providers/tasks_provider.dart';
 import '../theme/app_font_sizes.dart';
 import '../theme/app_spacing.dart';
-import '../utils/notification_service.dart';
 import '../widgets/nav_scaffold.dart';
+import '../widgets/shared/error_feedback.dart';
 import '../widgets/shared/item_card.dart';
 import '../widgets/shared/section_header.dart';
 
@@ -105,6 +106,11 @@ class RemindersScreen extends ConsumerWidget {
                       context.l10n.remindersPast,
                       icon: Icons.history,
                       padding: SectionHeader.inlinePadding,
+                      trailing: TextButton.icon(
+                        icon: const Icon(Icons.clear_all, size: 18),
+                        label: Text(context.l10n.remindersClearPast),
+                        onPressed: () => _clearPast(context, ref, past),
+                      ),
                     ),
                     ...past.map(
                       (item) => _ReminderCard(item: item, past: true),
@@ -112,6 +118,28 @@ class RemindersScreen extends ConsumerWidget {
                   ],
                 ],
               ),
+    );
+  }
+
+  void _clearPast(
+    BuildContext context,
+    WidgetRef ref,
+    List<_ReminderItem> past,
+  ) {
+    final notes = [
+      for (final i in past)
+        if (i is _NoteReminder) i.note,
+    ];
+    final tasks = [
+      for (final i in past)
+        if (i is _TaskReminder) i.task,
+    ];
+    final actions = ref.read(remindersActionsProvider);
+    notifyWithUndo(
+      actions.clear(notes: notes, tasks: tasks),
+      context,
+      message: context.l10n.remindersPastCleared,
+      onUndo: () => actions.restore(notes: notes, tasks: tasks),
     );
   }
 }
@@ -219,25 +247,14 @@ class _ReminderCard extends ConsumerWidget {
   }
 
   void _removeReminder(BuildContext context, WidgetRef ref) {
-    if (item is _NoteReminder) {
-      final note = (item as _NoteReminder).note;
-      ref
-          .read(notesProvider.notifier)
-          .updateNote(note.copyWith(clearReminder: true));
-      NotificationService.instance.cancelNotification(
-        NotificationService.idForNote(note.id),
-      );
-    } else {
-      final task = (item as _TaskReminder).task;
-      ref
-          .read(tasksProvider.notifier)
-          .updateTask(task.copyWith(clearReminder: true));
-      NotificationService.instance.cancelNotification(
-        NotificationService.idForTask(task.id),
-      );
-    }
-    ScaffoldMessenger.of(
+    final notes = [if (item case _NoteReminder(:final note)) note];
+    final tasks = [if (item case _TaskReminder(:final task)) task];
+    final actions = ref.read(remindersActionsProvider);
+    notifyWithUndo(
+      actions.clear(notes: notes, tasks: tasks),
       context,
-    ).showSnackBar(SnackBar(content: Text(context.l10n.commonReminderRemoved)));
+      message: context.l10n.commonReminderRemoved,
+      onUndo: () => actions.restore(notes: notes, tasks: tasks),
+    );
   }
 }

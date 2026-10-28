@@ -8,6 +8,8 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz_data;
 import '../core/routing/notification_target.dart';
 import '../l10n/l10n.dart';
+import '../models/note_model.dart';
+import '../models/task_model.dart';
 
 class NotificationService {
   NotificationService._();
@@ -105,6 +107,51 @@ class NotificationService {
       payload: target.encode(),
     );
   }
+
+  /// Schedules the reminder of [note] at [NoteModel.reminder] (no-op if it is
+  /// null or in the past).
+  Future<void> scheduleNoteReminder(NoteModel note) async {
+    final reminder = note.reminder;
+    if (reminder == null) return;
+    final l10n = currentL10n();
+    await scheduleNotification(
+      id: idForNote(note.id),
+      title:
+          note.title.isEmpty
+              ? l10n.editorReminderNotificationTitle
+              : note.title,
+      body:
+          note.content.isEmpty
+              ? l10n.editorReminderNotificationBody
+              : _preview(note.content),
+      scheduledAt: reminder,
+      target: NotificationTarget.note(note.id),
+    );
+  }
+
+  /// Schedules the reminder of [task] at [TaskModel.reminder] (no-op if it is
+  /// null or in the past).
+  Future<void> scheduleTaskReminder(TaskModel task) async {
+    final reminder = task.reminder;
+    if (reminder == null) return;
+    final l10n = currentL10n();
+    await scheduleNotification(
+      id: idForTask(task.id),
+      title:
+          task.title.isEmpty
+              ? l10n.taskEditorReminderNotificationTitle
+              : task.title,
+      body:
+          task.description.isEmpty
+              ? l10n.taskEditorReminderNotificationBody
+              : _preview(task.description),
+      scheduledAt: reminder,
+      target: NotificationTarget.task(task.id),
+    );
+  }
+
+  static String _preview(String text) =>
+      text.substring(0, text.length > 80 ? 80 : text.length);
 
   Future<void> cancelNotification(int id) async {
     await _plugin.cancel(id);

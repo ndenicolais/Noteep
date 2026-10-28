@@ -88,6 +88,7 @@ final List<ChangelogEntry> changelogEntries = [
       ChangelogItem(ChangeType.improved, (l) => l.changelog_v2_0_0_bullet_42),
       ChangelogItem(ChangeType.improved, (l) => l.changelog_v2_0_0_bullet_43),
       ChangelogItem(ChangeType.improved, (l) => l.changelog_v2_0_0_bullet_44),
+      ChangelogItem(ChangeType.improved, (l) => l.changelog_v2_0_0_bullet_45),
     ],
   ),
 ];

@@ -233,7 +233,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
     _save();
 
     try {
-      await _controller.scheduleReminderNotification(context.l10n, scheduled);
+      await _controller.scheduleReminderNotification(scheduled);
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

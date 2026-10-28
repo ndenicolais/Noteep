@@ -2048,6 +2048,18 @@ abstract class AppLocalizations {
   /// **'Task senza titolo'**
   String get remindersUntitledTask;
 
+  /// No description provided for @remindersClearPast.
+  ///
+  /// In it, this message translates to:
+  /// **'Cancella scaduti'**
+  String get remindersClearPast;
+
+  /// No description provided for @remindersPastCleared.
+  ///
+  /// In it, this message translates to:
+  /// **'Promemoria scaduti rimossi'**
+  String get remindersPastCleared;
+
   /// No description provided for @archiveEmptyNotes.
   ///
   /// In it, this message translates to:
@@ -3295,6 +3307,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Etichette più utili: aggiungile a una nota dal menu dell\'editor e tocca un\'etichetta nella sezione Etichette per vedere le note che la usano. Ora sono salvate nel tuo account, quindi le ritrovi su ogni dispositivo.'**
   String get changelog_v2_0_0_bullet_44;
+
+  /// No description provided for @changelog_v2_0_0_bullet_45.
+  ///
+  /// In it, this message translates to:
+  /// **'Nella sezione Promemoria puoi rimuovere in un colpo tutti i promemoria scaduti, e se ne togli uno per sbaglio basta toccare Annulla per rimetterlo.'**
+  String get changelog_v2_0_0_bullet_45;
 
   /// No description provided for @infoPrivacyOpen.
   ///

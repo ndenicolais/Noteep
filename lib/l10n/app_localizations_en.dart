@@ -1058,6 +1058,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get remindersUntitledTask => 'Untitled task';
 
   @override
+  String get remindersClearPast => 'Clear past';
+
+  @override
+  String get remindersPastCleared => 'Past reminders removed';
+
+  @override
   String get archiveEmptyNotes => 'No archived notes';
 
   @override
@@ -1797,6 +1803,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_44 =>
       'More useful labels: add them to a note from the editor menu, and tap a label in the Labels section to see the notes that use it. They are now saved to your account, so you find them on every device.';
+
+  @override
+  String get changelog_v2_0_0_bullet_45 =>
+      'In the Reminders section you can remove all past reminders at once, and if you remove one by mistake just tap Undo to bring it back.';
 
   @override
   String get infoPrivacyOpen => 'Privacy policy';

@@ -21,6 +21,7 @@ class SectionHeader extends StatelessWidget {
     this.icon,
     this.muted = false,
     this.padding = listPadding,
+    this.trailing,
   });
 
   /// Inset for a header above full-width list tiles.
@@ -40,6 +41,9 @@ class SectionHeader extends StatelessWidget {
   /// Uses the outline color instead of primary, for secondary groupings.
   final bool muted;
   final EdgeInsetsGeometry padding;
+
+  /// Optional action at the end of the row (e.g. a "clear" button).
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +68,7 @@ class SectionHeader extends StatelessWidget {
                 ),
               ),
             ),
+            if (trailing != null) trailing!,
           ],
         ),
       ),
