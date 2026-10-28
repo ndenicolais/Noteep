@@ -511,7 +511,7 @@ Screens use `ColorScheme` roles (`primary`, `surface`, `secondaryContainer`, `su
 
 Named routes with `MaterialApp.onGenerateRoute: AppRouter.onGenerateRoute` (`lib/core/routing/app_router.dart`). Screens call the typed helpers in `AppNav` (`openNote`, `openTask`, `openEvent`, `openLabel`, `openTasks`, `openStatistics`, `openExport`, `openInfo`, `openOnboarding`, `openPrivacyPolicy`). Detail routes with a missing or wrongly typed argument, and unknown names, go to `AppRouter.onUnknownRoute` → `UnknownRouteScreen` instead of crashing.
 
-Drawer sections (`AppRouter.sectionRoutes`) use `FadeThroughPageRoute` (fade + scale 0.92 → 1, 300 ms, instant with reduced motion) because they are siblings, not a drill-down; detail screens use `MaterialPageRoute`. The drawer returns to Home with `popUntil` on the root.
+Drawer sections (`AppRouter.sectionRoutes`) use `FadeThroughPageRoute` (an opaque scaffold-colored backdrop fades in over the first 30%, hiding Home and the previous section below it; then the page fades + scales 0.92 → 1; 300 ms, instant with reduced motion) because they are siblings, not a drill-down; detail screens use `MaterialPageRoute`. The drawer returns to Home with `popUntil` on the root.
 
 | Route | Screen | Description |
 |---|---|---|

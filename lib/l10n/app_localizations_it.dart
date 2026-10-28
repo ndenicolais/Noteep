@@ -1834,6 +1834,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Nella pagina delle licenze open source ora compaiono anche quelle dei caratteri usati dall\'app.';
 
   @override
+  String get changelog_v2_0_0_bullet_54 =>
+      'Il passaggio da una sezione all\'altra del menu è più pulito: durante l\'animazione non si intravedono più le pagine sottostanti.';
+
+  @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';
 
   @override

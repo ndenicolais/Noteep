@@ -714,6 +714,7 @@
   "changelog_v2_0_0_bullet_51": "I task fissati compaiono in cima all'elenco, con l'icona della puntina accanto al titolo.",
   "changelog_v2_0_0_bullet_52": "Dagli eventi del calendario è stato tolto il pulsante per fissarli, che non aveva effetto: nel calendario gli eventi sono già ordinati per data e ora.",
   "changelog_v2_0_0_bullet_53": "Nella pagina delle licenze open source ora compaiono anche quelle dei caratteri usati dall'app.",
+  "changelog_v2_0_0_bullet_54": "Il passaggio da una sezione all'altra del menu è più pulito: durante l'animazione non si intravedono più le pagine sottostanti.",
   "infoPrivacyOpen": "Informativa sulla privacy",
   "privacyPolicyTitle": "Informativa sulla privacy",
   "privacyPolicyIntro": "Noteep è un'app per note, task e calendario. Questa informativa spiega quali dati tratta, perché e come puoi controllarli. Noteep non mostra pubblicità, non usa strumenti di analisi o di tracciamento e non vende né cede i tuoi dati.",

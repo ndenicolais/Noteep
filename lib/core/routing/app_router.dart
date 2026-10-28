@@ -124,8 +124,10 @@ abstract final class AppRouter {
   }
 }
 
-/// Material "fade through": the new page fades in while scaling up
-/// slightly, after a short delay that lets the old page start fading out.
+/// Material "fade through": a solid background first fades in over the old
+/// page, then the new page fades in on it while scaling up slightly. The
+/// background hides every route below (Home stays under the sections), so
+/// pages never show through each other mid-transition.
 /// Instant when the platform asks to reduce motion.
 class FadeThroughPageRoute<T> extends PageRouteBuilder<T> {
   FadeThroughPageRoute({required this.builder, super.settings})
@@ -135,23 +137,31 @@ class FadeThroughPageRoute<T> extends PageRouteBuilder<T> {
         pageBuilder: (context, _, _) => builder(context),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           if (MediaQuery.disableAnimationsOf(context)) return child;
+          final cover = CurvedAnimation(
+            parent: animation,
+            curve: const Interval(0, 0.3, curve: Curves.easeIn),
+          );
           final incoming = CurvedAnimation(
             parent: animation,
             curve: const Interval(0.3, 1, curve: Curves.easeOut),
           );
-          final outgoing = CurvedAnimation(
-            parent: secondaryAnimation,
-            curve: const Interval(0, 0.3, curve: Curves.easeIn),
-          );
-          return FadeTransition(
-            opacity: incoming,
-            child: ScaleTransition(
-              scale: Tween<double>(begin: 0.92, end: 1).animate(incoming),
-              child: FadeTransition(
-                opacity: ReverseAnimation(outgoing),
-                child: child,
+          return Stack(
+            fit: StackFit.expand,
+            children: [
+              FadeTransition(
+                opacity: cover,
+                child: ColoredBox(
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                ),
               ),
-            ),
+              FadeTransition(
+                opacity: incoming,
+                child: ScaleTransition(
+                  scale: Tween<double>(begin: 0.92, end: 1).animate(incoming),
+                  child: child,
+                ),
+              ),
+            ],
           );
         },
       );

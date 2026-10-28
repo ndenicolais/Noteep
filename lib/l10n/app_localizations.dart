@@ -3338,6 +3338,12 @@ abstract class AppLocalizations {
   /// **'Nella pagina delle licenze open source ora compaiono anche quelle dei caratteri usati dall\'app.'**
   String get changelog_v2_0_0_bullet_53;
 
+  /// No description provided for @changelog_v2_0_0_bullet_54.
+  ///
+  /// In it, this message translates to:
+  /// **'Il passaggio da una sezione all\'altra del menu è più pulito: durante l\'animazione non si intravedono più le pagine sottostanti.'**
+  String get changelog_v2_0_0_bullet_54;
+
   /// No description provided for @infoPrivacyOpen.
   ///
   /// In it, this message translates to:

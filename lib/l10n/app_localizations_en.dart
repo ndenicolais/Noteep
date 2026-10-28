@@ -1825,6 +1825,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'The open-source licenses page now also lists the licenses of the fonts used by the app.';
 
   @override
+  String get changelog_v2_0_0_bullet_54 =>
+      'Switching between menu sections is smoother: the pages underneath no longer show through during the animation.';
+
+  @override
   String get infoPrivacyOpen => 'Privacy policy';
 
   @override

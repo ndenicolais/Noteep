@@ -554,6 +554,7 @@
   "changelog_v2_0_0_bullet_51": "Pinned tasks now appear at the top of the list, with a pin icon next to the title.",
   "changelog_v2_0_0_bullet_52": "The pin button has been removed from calendar events, where it had no effect: events in the calendar are already ordered by date and time.",
   "changelog_v2_0_0_bullet_53": "The open-source licenses page now also lists the licenses of the fonts used by the app.",
+  "changelog_v2_0_0_bullet_54": "Switching between menu sections is smoother: the pages underneath no longer show through during the animation.",
   "infoPrivacyOpen": "Privacy policy",
   "privacyPolicyTitle": "Privacy policy",
   "privacyPolicyIntro": "Noteep is an app for notes, tasks and calendar. This policy explains which data it processes, why, and how you can control it. Noteep shows no ads, uses no analytics or tracking tools, and does not sell or hand over your data.",
