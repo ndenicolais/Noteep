@@ -1,304 +1,720 @@
-# Documentazione Tecnica — Noteep
+# Noteep — Full documentation
 
-Documentazione tecnica dell'app per chi sviluppa/manutiene il codice. Per la descrizione delle funzionalità lato utente vedi `README.md`.
-
----
-
-## 1. Panoramica architetturale
-
-Noteep è un'app Flutter (note + task + calendario) con backend **Firebase** (Auth + Firestore) e state management **Riverpod** (`flutter_riverpod`, `Notifier`/`NotifierProvider` dichiarati a mano).
-
-Principi chiave:
-- **Un notifier per collezione dati** (`NotesNotifier`, `TasksNotifier`, `TaskListsNotifier`, `CalendarNotifier`), ciascuno legato a `users/{uid}/{collection}` su Firestore.
-- **Optimistic update con rollback**: ogni notifier ha un helper privato `_mutate(apply, persist)` che aggiorna lo stato locale subito, poi tenta la scrittura su Firestore; se questa fallisce, lo stato torna a quello precedente e l'eccezione viene rilanciata.
-- **Provider derivati** (`Provider` semplici, non notifier) per viste filtrate/ordinate: `activeNotesProvider`, `archivedNotesProvider`, `trashedNotesProvider`, `filteredNotesProvider`, e i loro equivalenti per task/eventi.
-- **Cestino con auto-purge**: le entità non vengono mai cancellate direttamente da un'azione "elimina" nella UI, ma marcate con `deletedAt` (soft-delete); un job dentro `_load()` di ogni notifier elimina definitivamente ciò che è in cestino da più di 7 giorni.
-- **Undo/redo per-entità**: `note_editor` e `task_editor` hanno ciascuno un provider `family` (`noteChangeHistoryProvider(noteId)` / `taskChangeHistoryProvider(taskId)`) che tiene uno stack di comandi (`NoteChange`/`TaskChange`, pattern Command) applicati/annullati tramite le classi statiche `NoteUndoRedoManager`/`TaskUndoRedoManager`.
-- **Errore di caricamento distinto da "vuoto"**: `_load()` di `NotesNotifier`/`TasksNotifier` è avvolto in un try/catch che scrive su `notesLoadErrorProvider`/`tasksLoadErrorProvider` (`ValueStateProvider<Object?>`, scritto dal notifier via `ref`); le liste (Home/Tasks/Archive) leggono questo provider per mostrare un messaggio di errore di sincronizzazione invece del generico empty-state quando il primo caricamento da Firestore fallisce.
-- **Loading iniziale distinto da "vuoto"**: `notesLoadingProvider`/`tasksLoadingProvider` (`ValueStateProvider<bool>`, iniziano `true`) sono impostati a `false` in un blocco `finally` di `_load()` (`_onLoadDone`). Home/Tasks mostrano uno skeleton loader (`NotesSkeleton` / `ListSkeleton`) al posto dell'empty-state quando la lista è vuota ma il primo caricamento è ancora in corso.
-- **Ricarica manuale (pull-to-refresh)**: `NotesNotifier`/`TasksNotifier`/`TaskListsNotifier` espongono `reload()`, che rilegge la collezione da Firestore e **sostituisce** lo stato (`_load(replace: true)`), a differenza del caricamento iniziale che fa merge. Serve a recuperare dopo un errore di sincronizzazione o a vedere modifiche fatte da un altro dispositivo; le scritture locali ancora in volo sono comunque incluse nei risultati di Firestore.
+> Copyright © 2026 Nicola De Nicolais — source-available, non-commercial license (see [LICENSE](LICENSE)).
 
 ---
 
-## 2. Struttura del progetto (`lib/`)
+## Table of contents
+
+1. [App overview](#1-app-overview)
+2. [Architecture and tech stack](#2-architecture-and-tech-stack)
+3. [Project structure](#3-project-structure)
+4. [Data models](#4-data-models)
+   - [Security rules](#security-rules)
+5. [Screens and features](#5-screens-and-features)
+6. [State management](#6-state-management)
+7. [Services](#7-services)
+8. [Theme and style](#8-theme-and-style)
+9. [Navigation](#9-navigation)
+10. [Localization](#10-localization)
+11. [Dependencies](#11-dependencies)
+12. [System requirements](#12-system-requirements)
+13. [Build and distribution](#13-build-and-distribution)
+
+---
+
+## 1. App overview
+
+Noteep is a digital notebook for Android and the web: notes, tasks and calendar events in one place, synced to the user's account through Firebase.
+
+- Sign in with email/password or Google; first launch shows an onboarding.
+- Write text notes (Markdown preview, web links) and checklists, styled per note (font, size, colors), with audio recordings, labels, links to other notes and reminders.
+- Organize notes in a reorderable masonry grid or a list, sort and search them, start from a template.
+- Manage tasks in custom lists, with subtasks, due dates, recurrence, a "special" flag and reminders.
+- Plan events in a calendar (day, multi-day, month, year and schedule views), with recurrence, birthdays and name days, ICS import/export.
+- See all reminders in one screen, browse notes by label, archive and restore items, recover deleted ones from the trash for 7 days.
+- Export notes (PDF, TXT, JSON, CSV, HTML), back up and restore data (manual JSON and automatic local backups), read statistics.
+- Use five Android Home screen widgets (summary and quick actions).
+
+Languages: Italian and English (see [Localization](#10-localization)). Themes: light, dark or system (see [Theme and style](#8-theme-and-style)).
+
+---
+
+## 2. Architecture and tech stack
+
+| Component | Technology |
+|---|---|
+| Framework | Flutter (Android + Web) |
+| State management | [flutter_riverpod](https://pub.dev/packages/flutter_riverpod) (`Notifier`/`NotifierProvider` declared by hand, no code generation) |
+| Authentication | [firebase_auth](https://pub.dev/packages/firebase_auth), [google_sign_in](https://pub.dev/packages/google_sign_in) |
+| Database | [cloud_firestore](https://pub.dev/packages/cloud_firestore) with offline persistence |
+| Local persistence | [shared_preferences](https://pub.dev/packages/shared_preferences) (settings), [path_provider](https://pub.dev/packages/path_provider) (audio files, automatic backups) |
+| Notifications | [flutter_local_notifications](https://pub.dev/packages/flutter_local_notifications), [timezone](https://pub.dev/packages/timezone), [flutter_timezone](https://pub.dev/packages/flutter_timezone) |
+| Audio | [record](https://pub.dev/packages/record) (recording), [just_audio](https://pub.dev/packages/just_audio) (playback) |
+| Markdown | [flutter_markdown](https://pub.dev/packages/flutter_markdown) |
+| Charts | [fl_chart](https://pub.dev/packages/fl_chart) |
+| PDF and sharing | [pdf](https://pub.dev/packages/pdf), [printing](https://pub.dev/packages/printing), [share_plus](https://pub.dev/packages/share_plus) |
+| Files and backups | [file_picker](https://pub.dev/packages/file_picker), [archive](https://pub.dev/packages/archive) |
+| Home screen widgets | [home_widget](https://pub.dev/packages/home_widget) + native Kotlin `AppWidgetProvider`s |
+| Links | [url_launcher](https://pub.dev/packages/url_launcher) |
+| Ids, dates | [uuid](https://pub.dev/packages/uuid), [intl](https://pub.dev/packages/intl) |
+
+**Pattern.** Models (`lib/models/`) are plain classes with `copyWith` and `toJson`/`fromJson`. One Riverpod notifier per Firestore collection owns the list of that collection for the signed-in user and exposes the CRUD methods. Derived `Provider`s compute filtered and sorted views. Screens read providers and call notifier methods; logic that does not need a `BuildContext` lives in action classes behind providers (`DataActions`, `BackupRestorer`, `RemindersActions`) or in plain services in `lib/utils/` that do not depend on Riverpod. Every write is an optimistic update: the state changes first, then Firestore is written, and a failure rolls the state back (see [State management](#6-state-management)).
+
+---
+
+## 3. Project structure
+
+```
+noteep/
+├── android/              # Android app: Gradle config, manifest, Kotlin widgets, signing
+├── web/                  # Web entry point, favicon, PWA manifest and icons
+├── assets/
+│   ├── fonts/            # Bundled note fonts (see Theme and style)
+│   └── images/           # In-app logo and launcher icon sources
+├── design/app-icon/      # Icon sources: SVGs and the monochrome logo (not bundled)
+├── images/icons/         # Store, OAuth and web icons (not bundled)
+├── lib/                  # Dart code (below)
+├── test/                 # Unit and widget tests, mirrors lib/
+├── firestore.rules       # Firestore security rules (see Security rules)
+├── firebase.json, .firebaserc   # Firebase CLI config, project `noteep`
+├── l10n.yaml             # gen-l10n config
+├── PRIVACY.md            # Privacy policy (IT + EN)
+└── DOCUMENTATION.md, README.md, LICENSE
+```
 
 ```
 lib/
-├── main.dart                  # bootstrap app, auth gate, collega AppRouter
-├── firebase_options.dart      # config Firebase Android + Web (git-ignored)
-├── core/constants/            # app_version.dart (versione, allineata a pubspec), changelog.dart (voci Changelog), app_info.dart (nome/email sviluppatore, data e URL della privacy policy)
-├── l10n/                      # app_it.arb (template) + app_en.arb → app_localizations*.dart generati da gen-l10n; l10n.dart (context.l10n)
-├── core/routing/              # app_router.dart: AppRoutes, AppRouter (onGenerateRoute/onUnknownRoute), AppNav; notification_target.dart + notification_launch_handler.dart (deep link dalle notifiche); home_widget_action.dart + home_widget_launch_handler.dart (azioni dai widget Android)
-├── models/                    # classi dati immutabili-per-copyWith + (to/from)Json
-├── providers/                 # Riverpod: un file per dominio, + providers/settings/
-├── screens/                   # una sottocartella per feature-schermata complessa,
-│                               # file singoli per le schermate più semplici
-├── theme/                     # palette, tipografia, raggi, ThemeData
-├── utils/                     # servizi stateless/singleton, non legati a Riverpod
-└── widgets/                   # widget riusabili cross-schermata
+├── main.dart             # Bootstrap, auth gate, MaterialApp
+├── firebase_options.dart # Firebase config (git-ignored, generated by flutterfire configure)
+├── core/
+│   ├── constants/        # app_version.dart, changelog.dart, app_info.dart (developer, URLs, privacy date)
+│   └── routing/          # AppRoutes, AppRouter, AppNav; notification and Home widget deep links
+├── l10n/                 # ARB files, generated AppLocalizations, l10n.dart helpers
+├── models/               # Data classes
+├── providers/            # Riverpod providers, one file per domain
+│   └── settings/         # Settings, backup and data-management providers
+├── screens/              # One file per simple screen, one folder per complex screen
+├── theme/                # Colors, font sizes, spacing, radii, ThemeData
+├── utils/                # Services without Riverpod (notifications, backup, ICS, audio, widgets…)
+└── widgets/              # Widgets shared across screens
+    ├── shared/           # Design-system components
+    └── style_editor/     # Note style editor
 ```
 
-Le schermate con più stato/logica (`calendar`, `note_editor`, `settings`, `task_editor`) sono organizzate come sottocartella: un file "orchestratore" (`*_screen.dart`) che possiede lo stato e delega la UI a widget figli nello stesso folder (vedi §5).
+**Complex screens** (`auth/`, `calendar/`, `note_editor/`, `settings/`, `statistics/`, `task_editor/`, `tasks/`, `home/`) are folders: a `*_screen.dart` orchestrator owns the state and the `BuildContext` work (dialogs, sheets, snackbars) and delegates rendering to child widgets in the same folder.
+
+**Conventions**
+
+- File names are the snake_case of their main class.
+- Shared building blocks live in `widgets/shared/` and must be reused instead of rebuilt per screen (see [Theme and style](#8-theme-and-style)).
+- Navigation always goes through `AppNav` helpers, never `Navigator.push(MaterialPageRoute(...))` (see [Navigation](#9-navigation)).
+- Free-text fields (note title/content, checklist items, task and event fields, link text, list and label names) use `TextCapitalization.sentences`; search, URL, email and password fields do not. `showAppTextInputDialog` defaults to `none`, so it must be passed explicitly.
+- UI never deletes for good: delete actions call `softDelete`, and the notifiers' hard-delete methods are used only by trash purge and data management.
 
 ---
 
-## 3. Modelli dati (`lib/models/`)
+## 4. Data models
 
-Tutti i modelli seguono lo stesso pattern: costruttore con default sensati, `copyWith`, `toJson`/`fromJson` (per Firestore/backup), id generato con `uuid` se non fornito.
+All models generate an `id` with `uuid` when none is given, have `copyWith` (with `clear*` flags for nullable fields) and serialize dates as ISO 8601 strings. Parsing is **lenient**: missing fields fall back to defaults (`''`, `false`, `[]`, `RecurrenceType.none`), unknown enum values fall back to the first value. The only required fields are `startTime`/`endTime` of an event.
 
-| File | Classe | Campi principali |
+Firestore stores one document per item, with the model `id` as document id, under `users/{uid}/<collection>`.
+
+### NoteModel
+
+A note or a checklist. Collection: `users/{uid}/notes`.
+
+| Field | Type | Description |
 |---|---|---|
-| `note_model.dart` | `NoteModel` | `title`, `content`, `type` (`note`\|`checklist`), `style` (`NoteStyle`), `checklistItems[]`, `audioNotes[]`, `isArchived`, `isPinned`, `reminder`, `linkedNoteIds[]`, `tags[]`, `createdAt`/`updatedAt`/`deletedAt` |
-| `note_model.dart` | `NoteStyle` | font family/size, colori testo/sfondo, bold/italic/strikethrough, con override separati per il titolo |
-| `note_model.dart` | `ChecklistItem` | `text`, `isChecked` |
-| `task_model.dart` | `TaskModel` | `title`, `description`, `isCompleted`, `dueDate`, `isPinned`, `isSpecial`, `isArchived`, `listId` (FK a `TaskListModel`), `recurrence`, `reminder`, `tags[]`, `subtasks[]`, timestamp |
-| `task_list_model.dart` | `TaskListModel` | `name`, timestamp — elenco custom mostrato come tab in `TasksScreen` |
-| `label_model.dart` | `LabelModel` | `name`, `createdAt` — etichetta creata dall'utente, esiste anche se nessuna nota la usa; le note la referenziano per nome in `tags[]` |
-| `subtask_model.dart` | `SubtaskModel` | `title`, `isCompleted`, timestamp |
-| `calendar_model.dart` | `CalendarEventModel` | `title`, `description`, `startTime`/`endTime` (ora di fine facoltativa: `endTime == startTime` = orario unico, getter `hasEndTime`; i nuovi eventi nascono senza fine), `isAllDay`, `isBirthday`, `isNameDay`, `isPinned`, `isArchived`, `recurrence`, `recurrenceEndDate` (da RRULE UNTIL/COUNT import ICS), `reminder`, `tags[]`, timestamp |
-| `audio_note.dart` | `AudioNote` | `filename`, `filepath`, `duration`, `createdAt`, `transcription?` |
-| `change_history.dart` | `NoteChange` (astratta) | Pattern Command: `NoteTitleChange`, `NoteTextChange` — ciascuna con `apply`/`undo`. Solo titolo e testo sono annullabili; le classi per stile, checklist e audio sono state rimosse perché mai usate. |
-| `task_change_history.dart` | `TaskChange` (astratta) | Equivalente per task: `TaskTitleChange`, `TaskDescriptionChange` (le altre classi, mai usate, sono state rimosse). |
-| `note_template.dart` | `NoteTemplate` + `noteTemplates(AppLocalizations)` | 6 template predefiniti (riunione, diario, progetto, spesa, viaggio, brainstorming) nella lingua dell'UI (chiavi `template*`; le voci delle checklist sono una stringa separata da `
-`), usati da `note_template_screen.dart` |
+| `id` | `String` | UUID |
+| `title`, `content` | `String` | Content is Markdown for text notes |
+| `type` | `NoteType` | `note` or `checklist` (stored by name) |
+| `style` | `NoteStyle` | Per-note text style (below) |
+| `checklistItems` | `List<ChecklistItem>` | `id`, `text`, `isChecked` |
+| `audioNotes` | `List<AudioNote>` | Recordings attached to the note (below) |
+| `isArchived`, `isPinned` | `bool` | |
+| `reminder` | `DateTime?` | Scheduled local notification |
+| `linkedNoteIds` | `List<String>` | Ids of linked notes |
+| `tags` | `List<String>` | Label **names** (see `LabelModel`) |
+| `createdAt`, `updatedAt` | `DateTime` | |
+| `deletedAt` | `DateTime?` | Set when moved to the trash; purged after 7 days |
 
-`RecurrenceType` (`none`/`daily`/`weekly`/`monthly`/`yearly`) è definito in `utils/recurrence.dart` ed è condiviso tra `TaskModel` e `CalendarEventModel`.
+**NoteStyle**: `fontFamily` (default `Exo 2`), `fontSize` (default 16), `backgroundColor?`, `fontColor?`, `isBold`, `isItalic`, `isStrikethrough`, and optional title overrides `titleFontColor`, `titleFontFamily`, `titleFontSize`, `titleIsBold`, `titleIsItalic` (null = same as content). Colors are stored as ARGB ints; null fields are omitted.
 
----
+**AudioNote**: `id`, `filename`, `filepath` (file in the app documents folder `audio_notes/`, device-local), `duration` (stored in milliseconds), `createdAt`, `transcription?`.
 
-## 4. Gestione dello stato — Provider Riverpod (`lib/providers/`)
+### TaskModel
 
-**Nessun uso di code-gen** (`@riverpod`/`riverpod_generator`): tutti i provider sono dichiarati manualmente con `NotifierProvider`/`Provider`/`StreamProvider`/`FutureProvider`; nessun `StateNotifierProvider`/`StateProvider` legacy. I valori semplici impostati dall'esterno (ricerca, flag di loading/errore) usano `valueStateProvider<T>(iniziale)` di `core_providers.dart` (`ValueStateNotifier<T>` con `set(value)`, perché `state` di un `Notifier` è protetto). I notifier dati (`NotesNotifier`/`TasksNotifier`/`TaskListsNotifier`/`CalendarNotifier`) in `build()` guardano `currentUidProvider` e `firestoreProvider`, avviano `_load()` e restituiscono `[]`: al cambio utente la stessa istanza viene ricostruita e un fetch ancora in volo per l'utente precedente viene scartato (confronto dell'uid dopo l'`await`). Le dipendenze di code-gen (`riverpod_annotation`/`riverpod_generator`/`build_runner`) sono state rimosse perché inutilizzate (vedi §11).
+A to-do item. Collection: `users/{uid}/tasks`.
 
-### Grafo di dipendenza principale
-
-```
-authStateProvider (StreamProvider<User?>, da FirebaseAuth.authStateChanges)
-  └── currentUserProvider (Provider<User?>)
-        └── currentUidProvider (Provider<String>, '' se non loggato)
-        ├── notesProvider
-        ├── tasksProvider
-        ├── taskListsProvider  ──(chiama esplicitamente)──> tasksProvider.notifier.clearListReferences()
-        └── calendarProvider
-
-firestoreProvider (FirebaseFirestore.instance) ── usato dai notifier dati
-
-sharedPreferencesProvider (dichiarato in core_providers.dart, iniettato in main.dart)
-  └── usato da: themeModeProvider, homeLayoutProvider, sortOrderProvider,
-      taskSortOrderProvider, customLabelsProvider, showCompletedTasksProvider,
-      groupTasksByPriorityProvider, backupSettingsProvider
-```
-
-### Granularità dei rebuild
-
-Le liste principali osservano solo **quali** elementi mostrare e in che ordine, mentre ogni riga osserva il proprio elemento:
-- `IdList` (`core_providers.dart`): lista di id immutabile con `==` per contenuto, così un `Provider<IdList>` notifica solo su aggiunte/rimozioni/riordini (Riverpod notifica quando `previous != next`).
-- Home: `HomeScreen` guarda `filteredNoteIdsProvider` (id di `filteredNotesProvider`); `ReorderableGridView`/`ReorderableListViewWidget` ricevono `noteIds` e ogni cella è un `Consumer` su `noteByIdProvider(id)`. Il riordino legge `filteredNotesProvider` solo al momento del drop.
-- Tasks: `TaskListView` fa `ref.watch(source.select(...))` restituendo un record `(active: IdList, completed: IdList)` (i record confrontano i campi per valore), le righe sono `_TaskRow` su `taskByIdProvider(id)`.
-- `noteByIdProvider`/`taskByIdProvider` (`autoDispose.family`) fanno `select` su `notesByIdProvider`/`tasksByIdProvider` (mappa id→elemento ricalcolata una volta per mutazione): i notifier lasciano invariate le istanze degli elementi non toccati, quindi la select non notifica per loro.
-
-Risultato: modificare il contenuto di una nota/task senza cambiarne posizione o appartenenza ai filtri ricostruisce solo la sua card. Con ordinamento per data di modifica, o se la modifica cambia l'esito della ricerca, cambiano anche gli id e la lista si ricostruisce come prima. Archivio, Cestino, Statistiche e Calendario guardano ancora le liste intere (schermate secondarie, meno modifiche puntuali).
-
-### Provider per file
-
-| File | Provider esportati | Note |
+| Field | Type | Description |
 |---|---|---|
-| `core_providers.dart` | `sharedPreferencesProvider`, `firestoreProvider`, `ValueStateNotifier<T>` + `valueStateProvider<T>()` / typedef `ValueStateProvider<T>` | Dipendenze trasversali: SharedPreferences (override in `main.dart`), istanza Firestore (override nei test con `FakeFirebaseFirestore`), sostituto `Notifier` dello `StateProvider`. |
-| `notes_provider.dart` | `notesProvider` (`NotesNotifier`), `notesByIdProvider`, `noteByIdProvider(id)`, `notesLoadingProvider`, `notesLoadErrorProvider`, `activeNotesProvider`, `archivedNotesProvider`, `trashedNotesProvider` | CRUD note + tag (`renameTag`/`deleteTag`, una rinomina verso un'etichetta già presente sulla nota non la duplica) + `reorderNotes`. |
-| `labels_provider.dart` | `labelsProvider` (`LabelsNotifier`), `legacyLabelsPrefsKey` | Etichette su Firestore in `users/{uid}/labels` (una per documento), così seguono l'account su altri dispositivi. `add`/`addAll` (trim, niente vuote o doppioni), `rename` (se il nuovo nome esiste già le due si fondono), `delete`; le note che la usano vanno aggiornate a parte con `renameTag`/`deleteTag`. Al primo caricamento sposta su Firestore le etichette che le versioni precedenti salvavano solo in locale (`SharedPreferences`, chiave `custom_labels`) e poi cancella la chiave; la migrazione è condivisa tra caricamenti sovrapposti per non duplicarle. |
-| `tasks_provider.dart` | `tasksProvider` (`TasksNotifier`), `tasksByIdProvider`, `taskByIdProvider(id)`, `taskListsProvider` (`TaskListsNotifier`), `activeTasksProvider`, `specialTasksProvider`, `archivedTasksProvider`, `trashedTasksProvider`, `taskListTasksProvider(listId)` | `TaskListsNotifier` mantiene un `Ref` per invocare `tasksProvider.notifier.clearListReferences()` quando un elenco viene eliminato. |
-| `calendar_provider.dart` | `calendarProvider` (`CalendarNotifier`), `activeEventsProvider`, `archivedEventsProvider`, `trashedEventsProvider`, `calendarSearchQueryProvider`, `filteredCalendarEventsProvider` | Stesso pattern CRUD + cestino di notes/tasks. |
-| `sync_provider.dart` | `syncStatusProvider` (`SyncStatusNotifier`, stato `SyncStatus{queued, failures}`), mixin `FirestoreListMutations<T>` | **Scritture offline.** Il mixin è usato da `NotesNotifier`/`TasksNotifier`/`TaskListsNotifier`/`CalendarNotifier` e fornisce `mutate(apply, persist)` (optimistic update) e `commitInChunks(ops)` (batch da 500, committati insieme e non in sequenza: offline vengono accodati tutti subito). Con la persistenza attiva il future di una scrittura Firestore si completa solo all'ack del server, mai mentre si è offline: `mutate` aspetta al massimo `writeGrace` (3 s); un errore entro la finestra fa rollback + `rethrow` come prima, oltre la finestra la scrittura passa a `SyncStatusNotifier.track` (contatore `queued`) e il chiamante prosegue (niente spinner di salvataggio bloccati). Se il server la rifiuta più tardi Firestore ripristina la propria cache, `failures` cresce e il notifier chiama `reload()`. Anche la pulizia del cestino (>7 giorni) passa da `mutate` e al caricamento non è più attesa, così offline non blocca il flag di loading. |
-| `auth_provider.dart` | `firebaseAuthProvider`, `authStateProvider`, `currentUserProvider`, `currentUidProvider`, `authNotifierProvider` (`AuthNotifier`, stato `AsyncValue<void>`) | Google Sign-In, email/password, reset password, sign-out. `deleteAccount({password})`: ri-autenticazione (password se presente, altrimenti flusso Google; `false` se annullato) **prima** di toccare i dati, poi `DataActions.wipeRemoteData` → `User.delete()` → `wipeLocalData` → sign-out Google. `usesPasswordSignIn(User)` dice se chiedere la password (provider `password` collegato). `authErrorMessage(AppLocalizations, FirebaseAuthException)` mappa i codici errore Firebase nei messaggi localizzati `authError*`. |
-| `audio_provider.dart` | `recordingStateProvider` (`RecordingStateNotifier`) | Stato registrazione audio (`isRecording`, `currentDuration`, `errorMessage`, `lastRecordedNote`), isolato dagli altri notifier. |
-| `notes_undo_redo_provider.dart` | `noteChangeHistoryProvider` (family, autoDispose) | Stack undo/redo per nota; consumato tramite `NoteUndoRedoManager` (classe statica) da `note_editor_screen.dart`. |
-| `tasks_undo_redo_provider.dart` | `taskChangeHistoryProvider` (family, autoDispose) | Equivalente per task, `TaskUndoRedoManager`. |
-| `settings/theme_provider.dart` | `themeModeProvider` (`ThemeModeNotifier`) | Estende `PersistedEnumNotifier`, persiste su SharedPreferences by-name. |
-| `settings/locale_provider.dart` | `appLanguageProvider` (`AppLanguageNotifier`) | `AppLanguage` `system`\|`it`\|`en` (chiave `app_language`, default `system`), via `PersistedEnumNotifier`; `.locale` dà il `Locale` da forzare su `MaterialApp` (`null` per `system`). |
-| `settings/ui_provider.dart` | `filteredNoteIdsProvider`, `homeLayoutProvider`, `sortOrderProvider`, `taskSortOrderProvider`, `notesFabMenuProvider`, `showCompletedTasksProvider`, `groupTasksByPriorityProvider`, `onboardingSeenProvider`, `searchQueryProvider`, `taskSearchQueryProvider`, `filteredNotesProvider`, `filteredTasksProvider`, `allTagsProvider` (etichette di `labelsProvider` + quelle trovate solo sulle note, ordinate), `tagNoteCountsProvider` (note per etichetta, cestino escluso), `notesWithTagProvider(tag)` (note con l'etichetta: attive e poi archiviate) | Contiene anche la classe base `PersistedEnumNotifier<T extends Enum>`, riusata da più notifier enum-based per persistere lo stato by-name (robusto a riordini futuri dell'enum). |
-| `settings/backup_provider.dart` | `backupSettingsProvider` (`BackupSettingsNotifier`), `backupStatusProvider` (`BackupStatusNotifier`), `availableBackupsProvider` (`FutureProvider`) | Frequenza/abilitazione backup automatico + stato UI dell'ultima operazione di backup. |
-| `settings/backup_restore.dart` | `backupRestorerProvider` (`BackupRestorer`), classe `FullBackupData` | `FullBackupData.fromJson` (layout piatto del backup `.json`) e `.fromZipContents` (layout annidato restituito da `BackupService.restoreBackup`) parsano tutte le sezioni prima di toccare i provider; `BackupRestorer.apply` chiama `replaceAll` su note/task/liste/calendario (sezioni assenti invariate; `replaceAll` di ogni notifier cancella anche da Firestore i documenti non presenti nella nuova lista, altrimenti ricomparirebbero al caricamento successivo), `readZip(path)` legge un backup automatico senza applicarlo. Usato dall'import `.json` completo e dal ripristino dei backup automatici. |
-| `reminders_actions.dart` | `remindersActionsProvider` (`RemindersActions`) | Logica della schermata Promemoria: `clear(notes, tasks)` toglie il promemoria e annulla la notifica; `restore(notes, tasks)` (per "Annulla") rimette il promemoria originale sulla versione corrente di ogni elemento ancora presente e ripianifica le notifiche future con `scheduleNoteReminder`/`scheduleTaskReminder`. |
-| `settings/data_actions.dart` | `dataActionsProvider` (`DataActions`) | Logica dati della schermata Impostazioni: payload di export JSON (note, task+liste, calendario, backup completo con `appVersion`), import JSON per sezione (legge solo le chiavi della sezione, parsing sincrono via `FullBackupData` che lancia prima di toccare i provider, poi `BackupRestorer.apply`), `icsExport`/`importIcs` (restituisce `(count, saved)`), `clearNotes`/`clearTasks`/`clearCalendar`/`clearAll`. Gli import e i clear aggiornano subito lo stato e restituiscono il future di persistenza. Per l'eliminazione account: `wipeRemoteData` legge dal **server** (`Source.server`, fallisce offline invece di cancellare a metà) tutte le sottocollezioni di `users/{uid}` e le elimina insieme al documento `users/{uid}`, anche i documenti non caricati nello stato; `wipeLocalData` (best-effort) annulla le notifiche programmate e, fuori dal web, elimina i backup automatici locali. |
+| `id` | `String` | UUID |
+| `title`, `description` | `String` | |
+| `isCompleted`, `isPinned`, `isSpecial`, `isArchived` | `bool` | `isSpecial` = shown in the "Special" tab |
+| `dueDate` | `DateTime?` | |
+| `listId` | `String?` | `TaskListModel.id`; null = no list |
+| `recurrence` | `RecurrenceType` | `none`, `daily`, `weekly`, `monthly`, `yearly` |
+| `reminder` | `DateTime?` | |
+| `tags` | `List<String>` | |
+| `subtasks` | `List<SubtaskModel>` | `id`, `title`, `isCompleted`, `createdAt`, `updatedAt` |
+| `createdAt`, `updatedAt` | `DateTime` | |
+| `deletedAt` | `DateTime?` | Trash timestamp |
 
----
+### TaskListModel
 
-## 5. Schermate (`lib/screens/`)
+A user-defined task list, shown as a tab in Tasks. Collection: `users/{uid}/task_lists`. Fields: `id`, `name`, `createdAt`, `updatedAt`. Deleting a list clears `listId` on its tasks.
 
-### Schermate complesse (una sottocartella ciascuna, orchestratore + widget figli)
+### LabelModel
 
-- **`calendar/`** — `calendar_screen.dart` (`CalendarWorkspaceView`) possiede `_focusedDay`/`_focusedMonth`/`_currentView` e delega il rendering a: `calendar_day_view.dart`, `calendar_multi_day_view.dart` (Settimana/7 giorni), `calendar_month_view.dart`, `calendar_year_view.dart`, `calendar_schedule_view.dart` (Programma, look-ahead 90 giorni), `calendar_search_results_view.dart`. Tile evento condivisa in `calendar_event_tile.dart` (`CalendarEventListTile`), bottom sheet eventi-del-giorno in `calendar_day_events_sheet.dart`. Editor evento in `calendar_event_editor_screen.dart`.
-- **`note_editor/`** — `note_editor_screen.dart` possiede i `TextEditingController`/`FocusNode`, lo stato di sola-UI (`_isApplyingUndoRedo`, `_markdownMode`, `_lastTitle`/`_lastContent`) e tutta la UI con `BuildContext` (dialog, bottom sheet, picker, snackbar); delega stato-nota e persistenza a `note_editor_controller.dart` (`NoteEditorController extends ChangeNotifier`, istanziato in `initState` e osservato via `addListener`), che possiede `NoteModel _note`/`_isNew`/`_isSaving`/`_softDeleted` ed esporta `save`, `updateNote`, `scheduleReminderNotification`/`cancelReminderNotification`, `performUndo`/`performRedo`, `toggleTag`/`createTag` (crea l'etichetta in `labelsProvider` e la aggiunge alla nota), `addAudioNote`/`removeAudioNote`, `delete`. La UI delega il rendering a `note_editor_app_bar.dart`, `note_editor_bottom_bar.dart`, `note_labels_section.dart`, `note_labels_sheet.dart`, `note_linked_notes_section.dart`, `note_audio_notes_section.dart`, `note_audio_player_tile.dart`, `note_audio_recorder_sheet.dart`, `note_checklist_editor.dart`, `note_link_sheet.dart`, `note_insert_link_dialog.dart`. **Link web**: il pulsante "Inserisci link" dell'app bar, accanto all'anteprima Markdown (solo note di testo) apre `showInsertLinkDialog` (testo facoltativo + indirizzo, precompilato con la selezione) e inserisce `[testo](url)` al cursore, o in fondo se in anteprima; nell'anteprima `MarkdownBody` usa `onTapLink` → `openExternalLink`. Gli URL scritti senza sintassi Markdown (`https://…`, `www.…`) diventano link nell'anteprima grazie all'autolink del set `gitHubFlavored`, default di `flutter_markdown`. **Etichette**: dal menu ⋮ dell'app bar (la barra in basso è già piena sui telefoni da 360 dp) "Etichette" apre `NoteLabelsSheet`: campo che filtra le etichette (`allTagsProvider`) e, se il nome non esiste, propone "Crea …"; una checkbox per etichetta. Le etichette della nota compaiono come chip sotto il contenuto (`NoteLabelsSection`), toccandole si riapre lo sheet. Il banner promemoria (`ReminderBanner`) è condiviso con `task_editor/` tramite `lib/widgets/reminder_banner.dart`.
-- **`calendar/` — editor eventi** — `calendar_event_editor_screen.dart` (stato evento, controller, salvataggio su pop, picker data/ora, picker/rimozione ora di fine — una fine prima dell'inizio passa al giorno dopo, una uguale all'inizio = nessuna fine — e promemoria) + `calendar_event_editor_bars.dart` (`CalendarEventEditorAppBar` pin/archivia, `CalendarEventEditorBottomBar` elimina/promemoria/chiudi), `calendar_event_details_section.dart` (`CalendarEventDetailsSection`: data/ora via `formatEventTimeRange` — solo l'ora d'inizio se non c'è fine —, riga "Ora di fine" nascosta per gli eventi tutto il giorno, tutto il giorno (disattivarlo azzera la fine), compleanno, onomastico, ricorrenza; le modifiche risalgono con `onChanged(evento)`); il banner promemoria è il `ReminderBanner` condiviso.
-- **`task_editor/`** — `task_editor_screen.dart`, stesso schema: `task_editor_app_bar.dart`, `task_editor_bottom_bar.dart`, `task_info_section.dart` (data scadenza/ricorrenza/elenco), `task_subtasks_section.dart`.
-- **`settings/`** — `settings_screen.dart` gestisce solo i flussi UI di export/import/clear (dialoghi di conferma, file picker, SnackBar, errori di persistenza via `notifyOnError`) e delega i dati a `DataActions` (`providers/settings/data_actions.dart`); ogni sezione della UI è un widget dedicato (`settings_appearance_section.dart` — Sistema/Chiaro/Scuro, `settings_language_section.dart` — Sistema/Italiano/English, entrambe con `SegmentedChoice`, `settings_notes_prefs_section.dart`, `settings_tasks_prefs_section.dart`, `settings_backup_section.dart`, `settings_notes_data_section.dart`, `settings_tasks_data_section.dart`, `settings_calendar_data_section.dart`, `settings_global_backup_section.dart`, `settings_misc_sections.dart` — Account, Info), più `settings_backup_sheets.dart` per le bottom sheet di frequenza/storico backup (dallo storico: tocco o menu "Ripristina" → conferma → `BackupRestorer.readZip` + `apply`, errori di scrittura via `notifyOnError`; menu "Elimina"). Sezione **Account** → "Elimina account": conferma distruttiva → (solo account email) dialogo password con `obscureText` → dialog di progresso non chiudibile → `AuthNotifier.deleteAccount`; gli errori diventano SnackBar (`authErrorMessage` o messaggio di connessione), in caso di successo `popUntil(isFirst)` per mostrare il login.
-- **`statistics/`** — `statistics_screen.dart` con provider locale `statisticsSummaryProvider` che aggrega note/task/eventi; componenti grafici in `statistics_widgets.dart` (`fl_chart`).
-- **`home/`** — non una sottocartella di editor ma di helper per `home_screen.dart`: `home_layout_utils.dart` (breakpoint colonne griglia `gridColumns` + `masonryColumnLength`), `reorderable_grid_view.dart` (griglia **masonry**: `SliverCrossAxisGroup` con una `SliverList` lazy per colonna, card ad altezza naturale senza `maxHeight`; la nota i va nella colonna i % cols, così l'ordine di lettura e gli indici globali del drag&drop `Draggable`/`DragTarget` restano quelli della lista) e `reorderable_list_view.dart` (drag&drop `NoteCard` in vista lista), `notes_skeleton.dart` (`NotesSkeleton`: card grigie con stesse spaziature e numero di colonne della griglia/lista reale, mostrate al primo caricamento), `speed_dial_fab.dart` (FAB espandibile crea nota/checklist/task/audio/da-template — "Task" apre l'editor di un nuovo task; usato solo se `notesFabMenuProvider` è attivo (default), altrimenti `home_screen.dart` mostra un FAB semplice che crea subito una nota; da aperto, i bottoni e lo scrim vivono in un `OverlayEntry` ancorato alla posizione del FAB via `GlobalKey`/`RenderBox`, per intercettare il tap fuori senza bloccare i bottoni stessi).
-- **Icona app** — generata partendo da un unico logo: `assets/images/app_logo.png` (1024×1024, trasparente, lampadina che riempie la tela, renderizzata da `design/app-icon/foreground.svg`). Per le icone a tema c'è anche `app_logo_mono.png`, con la spunta scavata, perché come silhouette piena sparirebbe. Lo script `tool/icons/generate_icons.ps1` (locale, `/tool/` è in `.gitignore`) usa come default lo sfondo `#3D3F4D` (`AppColors.dark`) e il logo mono. Genera in `assets/images/` `app_icon_legacy.png` (logo 64% su riquadro arrotondato), `app_icon_foreground.png` e `app_icon_monochrome.png` (62%, trasparenti), e in `images/icons/` (fuori dal bundle) `icon_512.png` (Play Store), `icon_192.png`, `oauth_logo_120.png` (Google Auth Platform → Branding) e `favicon_32.png`. Da questi `dart run flutter_launcher_icons` (dev dependency, configurazione in `pubspec.yaml`) genera la risorsa Android `@mipmap/launcher_icon`: `mipmap-*dpi/launcher_icon.png` legacy, `drawable-*dpi/ic_launcher_{foreground,monochrome}.png`, `mipmap-anydpi-v26/launcher_icon.xml` (inset 16%) e `ic_launcher_background` in `values/colors.xml`. `@mipmap/launcher_icon` è usata anche dalle notifiche (`notification_service.dart`) e dal widget Home (`layout/noteep_widget.xml`). Per cambiare l'icona: aggiornare `app_logo.png`/`app_logo_mono.png`, rilanciare lo script e poi `flutter_launcher_icons`. Web: `favicon.png` (32px) e `icons/Icon-{192,512}.png`/`Icon-maskable-{192,512}.png` dall'icona completa `design/app-icon/icon.svg` (il simbolo sta nell'80% centrale, quindi va bene anche come maskable); `manifest.json` usa `#3D3F4D` come `theme_color`/`background_color`. Il logo in app è `assets/images/app_logo.png`: lo usa l'AppBar di `nav_scaffold.dart` e, altrove, `widgets/shared/app_logo.dart` → `AppLogo({size})`, cioè il logo su riquadro arrotondato `AppColors.dark` come l'icona del launcher, usato in `LoginHeader`, nello `_SplashScreen` di `main.dart` e in `info_screen.dart` (header e pagina licenze).
-- **`auth/`** — `login_screen.dart` (orchestratore: controller, form key, azioni su `authNotifierProvider`, SnackBar errori/reset) + `login_forms.dart` (`LoginForm`, `RegisterForm`; campi email/password e pulsante di invio condivisi, toggle visibilità password con tooltip), `login_widgets.dart` (`LoginHeader`, `LoginTabBar`, `OrDivider`, `GoogleSignInButton`), `reset_password_dialog.dart` (`showResetPasswordDialog` → email o `null`; l'invio lo fa lo screen), `login_validators.dart` (`validateEmail`/`validatePassword`/`validatePasswordConfirmation`, funzioni pure che ricevono `AppLocalizations` come primo argomento).
-- **`tasks/`** — `tasks_screen.dart` (`TasksScreen`: `DefaultTabController` con tab Tutte/Speciali/+1 per `TaskListModel`, azioni AppBar, FAB nuovo task via `showAppTextInputDialog`; il task nasce nell'elenco/speciali del tab corrente) + `task_list_view.dart` (`TaskListView`: un tab, con skeleton, empty/error, pull-to-refresh), `task_item.dart` (`TaskItem`: riga con swipe, stella, menu modifica/sposta/elimina), `task_sorting.dart` (`sortTasksForDisplay(tasks, sort)` → `(active:, completed:)`, funzione pura). Provider: `tasksProvider`, `taskListsProvider`, `filteredTasksProvider`, `specialTasksProvider`, `taskListTasksProvider`, `taskSortOrderProvider`.
+A user-created label. Collection: `users/{uid}/labels`. Fields: `id`, `name`, `createdAt`. A label exists even if no note uses it; notes reference labels by name in `tags`.
 
-### Schermate singolo-file
+### CalendarEventModel
 
-| File | Scopo | Provider principali |
+A calendar event. Collection: `users/{uid}/calendar_events`.
+
+| Field | Type | Description |
 |---|---|---|
-| `home_screen.dart` | Home/root, lista o griglia note, auto-backup silenzioso su `initState` | `homeLayoutProvider`, `filteredNotesProvider`, `sortOrderProvider`, `backupSettingsProvider` |
-| `trash_screen.dart` | Cestino unificato (3 tab Note/Task/Eventi), svuota cestino | `trashedNotesProvider`/`trashedTasksProvider`/`trashedEventsProvider` |
-| `archive_screen.dart` | Archivio (3 tab) | `archivedNotesProvider`/`archivedTasksProvider`/`archivedEventsProvider` |
-| `labels_screen.dart` | Gestione etichette globali (crea/rinomina/elimina, numero di note per etichetta); il tap su un'etichetta apre `LabelNotesScreen` | `allTagsProvider`, `tagNoteCountsProvider`, `labelsProvider` |
-| `label_notes_screen.dart` | Note con un'etichetta (route `/label`, argomento `String`, `AppNav.openLabel`): attive e poi archiviate, con `NoteCard` | `notesWithTagProvider` |
-| `reminders_screen.dart` | Elenco unificato promemoria note+task, sezioni "In arrivo"/"Scaduti" (con pulsante "Cancella scaduti" nel `SectionHeader.trailing`) | legge `reminder` da note/task attivi; rimozione singola e "Cancella scaduti" passano da `RemindersActions` e mostrano lo snackbar con "Annulla" (`notifyWithUndo`) |
-| `export_screen.dart` | Esporta note attive in PDF/TXT/JSON/CSV/HTML; il contenuto dei file ("Modificata", "Etichette", intestazione CSV, titolo e `lang` dell'HTML, formato data `exportDateTimePattern`) è nella lingua dell'UI, le chiavi JSON restano fisse | `activeNotesProvider`, `downloadFile` (utils/downloader.dart) |
-| `info_screen.dart` | "Info su Noteep" statica, in `ListView` (padding 20) centrata con larghezza max 600: header (`AppLogo(96)`, nome, `infoTagline`, `infoVersion(appVersion)` (solo la versione, senza build)), card "Cos'è Noteep", sezione FUNZIONALITÀ (griglia 2×2 di card con badge icona 36×36 in `primary` al 12%, righe a pari altezza con `IntrinsicHeight`), sezione LINK (un'unica `Card` con righe separate da `Divider` rientrato: codice sorgente, profilo GitHub, email — esterni con freccia ↗, aperti con `openExternalLink` e SnackBar `infoLinkError` se falliscono — e guida introduttiva, changelog completo, privacy policy, licenze OSS — interni con chevron), crediti `infoMadeBy(developerName)`. URI in `core/constants/app_info.dart` (`uriSourceCode`, `uriDeveloperGithub`, `uriContactMail`). Il tile in Impostazioni mostra la versione come sottotitolo | nessuno |
-| `privacy_policy_screen.dart` | `PrivacyPolicyScreen` (route `/privacy-policy`, unico accesso da Info su Noteep): copia nativa e localizzata di `PRIVACY.md` — data "Ultimo aggiornamento" da `privacyPolicyUpdatedAt` formattata con `DateFormat.yMMMMd(localeName)`, intro, 10 sezioni in `Card` (chiavi ARB `policy_section_<controller\|data\|use\|storage\|device\|permissions\|retention\|rights\|children\|changes>_title/_text`, elenchi con `• ` e `
-`; nome/email da `app_info.dart` come placeholder), link "Versione online" a `uriPrivacyPolicy` via `openExternalLink` | nessuno |
-| `onboarding_screen.dart` | `OnboardingScreen({replay})`: presentazione a 5 pagine (`_pages`: icona + titolo/testo come funzioni di `AppLocalizations`; `PageView`, indicatori a puntini, "Salta"/"Avanti"/"Inizia"). Al primo avvio è la `home` al posto del login finché `onboardingSeenProvider` è `false` (chiave SharedPreferences `onboarding_seen`, impostata da "Salta"/"Inizia"); con `replay: true` è la route `/onboarding` aperta da Info app e la chiusura fa solo `pop` | `onboardingSeenProvider` |
-| `boot_error_screen.dart` | `BootErrorApp`: `MaterialApp` autonoma mostrata se l'avvio fallisce, con pulsante Riprova (vedi §9) | nessuno |
-| `note_template_screen.dart` | Bottom sheet scelta template nota | nessuno (usa `noteTemplates(context.l10n)`) |
+| `id` | `String` | UUID |
+| `title`, `description` | `String` | |
+| `startTime`, `endTime` | `DateTime` | Required. `endTime == startTime` means "no end time" (`hasEndTime` getter); new events start without one |
+| `isAllDay`, `isBirthday`, `isNameDay`, `isPinned`, `isArchived` | `bool` | |
+| `recurrence` | `RecurrenceType` | Shared with tasks |
+| `recurrenceEndDate` | `DateTime?` | Inclusive; filled from `UNTIL`/`COUNT` on ICS import |
+| `reminder` | `DateTime?` | |
+| `tags` | `List<String>` | |
+| `createdAt`, `updatedAt` | `DateTime` | |
+| `deletedAt` | `DateTime?` | Trash timestamp |
 
----
+### Non-persisted models
 
-## 6. Widget condivisi (`lib/widgets/`)
+- `NoteChange` / `TaskChange` (`change_history.dart`, `task_change_history.dart`): Command pattern for undo/redo in the editors (note title/text, task title/description).
+- `NoteTemplate` (`note_template.dart`): the six built-in templates (meeting, journal, project, shopping, travel, brainstorming), built in the UI language by `noteTemplates(AppLocalizations)`.
 
-- `nav_scaffold.dart` — Scaffold comune con drawer/AppBar per le schermate principali (`DrawerSection` enum).
-- `app_drawer.dart` — `AppDrawer`, `navigateToSection` (Home fa `popUntil` root, le altre sezioni push/pushReplacement).
-- `note_card.dart` — Card nota (home + archivio): rendering stile custom, preview checklist, menu rapido long-press (pin/archivia/cestina). **Accessibilità**: `MergeSemantics` → un solo nodo per card (testo completo + tap "Apri nota"), le voci del menu rapido sono anche `customSemanticsActions` (menu "Azioni" di TalkBack, eseguite da `_runAction`, lo stesso codice del menu); `extraSemanticsActions` permette al contenitore di aggiungerne altre (la griglia Home aggiunge "Sposta prima/dopo" come alternativa al drag&drop, con gli stessi indici di `onReorder`).
-- `sync_status_listener.dart` — `SyncStatusListener`, banner "modifiche non sincronizzate" + SnackBar di rifiuto, montato in `MaterialApp.builder` (vedi §9).
-- `reminder_banner.dart` — `ReminderBanner`, condiviso tra `note_editor` e `task_editor`.
-- `changelog_dialog.dart` — `ChangelogDialog` + `showChangelogDialog(context, {entries})` (`entries` null = storico completo): dialog "Novità" con titolo `vX.Y.Z` per versione e, sotto, le sezioni di `ChangelogEntry.sections` (Novità / Miglioramenti / Correzioni / Sicurezza, con icona e titolo localizzati; sezioni vuote nascoste) con i bullet tradotti via `ChangelogItem.textBuilder(l10n)`. Aperto in automatico da `home_screen.dart` dopo un aggiornamento (solo le voci da `ChangelogService.pendingEntries`) e manualmente da `info_screen.dart` (storico completo).
-- `sort_sheet.dart` — Bottom sheet di ordinamento condiviso note/task (`SortOrder`).
-- `shared/app_dialogs.dart` — `showAppTextInputDialog(context, title:, hintText:, confirmLabel:, obscureText:)` → testo trimmato (non trimmato con `obscureText`, per le password) o `null` (annulla/vuoto), usato per nuovo task e nuovo elenco. `showAppSheet(context, builder:, isScrollControlled:, backgroundColor:)`: wrapper di `showModalBottomSheet` usato da tutti gli sheet dell'app; avvolge il contenuto in `SafeArea(top: false)` perché con l'edge-to-edge (obbligatorio da Android 15) lo sheet arriva fino al bordo e il contenuto finirebbe sotto la barra di navigazione. `showAppConfirmDialog(context, title:, message:, confirmLabel:, cancelLabel:, destructive:)`: dialogo di conferma condiviso (Annulla + conferma; `cancelLabel` e l'`okLabel` di `showAppMessageDialog` sono nullable e di default usano `commonCancel`/`commonOk`), risolve `true` solo sul tasto di conferma; con `destructive: true` il tasto è un `FilledButton` con i colori `error`/`onError` del tema. Usato per eliminazioni (nota/task/evento dall'editor, etichetta, elenco, cestino) e per conferme di import/export/ripristino in Impostazioni.
-- `shared/skeleton.dart` — primitive per gli skeleton loader: `SkeletonPulse` (pulsazione di opacità condivisa da tutto il sottoalbero, un solo nodo semantico "Caricamento…", ferma con `MediaQuery.disableAnimations`), `SkeletonBox` (blocco arrotondato in `surfaceContainerHighest`) e `ListSkeleton` (righe cerchio + barra, usato dalla lista Tasks al primo caricamento).
-- `shared/note_hero.dart` — `NoteHero` + `NoteHeroTag`: "container transform" leggero tra `NoteCard` (`isPage: false`) e `NoteEditorScreen` (`isPage: true`, avvolge lo `Scaffold`). Lo shuttle è un rettangolo che sfuma dal colore della card a quello dell'editor e perde gli angoli arrotondati, con il contenuto dell'editor in dissolvenza (impaginato alla dimensione finale in un `OverflowBox` e ritagliato, così l'editor non viene ri-layoutato a dimensioni intermedie). Il tag confronta solo l'id della nota; il colore di ciascun lato viaggia nel tag. Disattivato con animazioni ridotte (`HeroMode`). Note nuove (senza card) e note che spariscono dalla Home (es. archiviate dall'editor) semplicemente non volano.
-- `shared/fade_switcher.dart` — `FadeSwitcher`: `AnimatedSwitcher` (250 ms, istantaneo con animazioni ridotte) con figli a riempimento pieno; anima solo quando cambia la `Key` del figlio. Ogni figlio è avvolto in un `HeroMode` con la sua chiave (disattivato per quelli uscenti, così le card griglia/lista con lo stesso tag Hero non si scontrano) e la struttura uniforme fa sì che il figlio che diventa uscente mantenga il suo stato, ad esempio la posizione di scroll. Home e Tasks lo usano per il passaggio caricamento → lista → vuoto/errore (le chiavi identificano lo stato, non i dati, così le modifiche alla lista non ri-animano).
-- `shared/search_field.dart` — Campo ricerca generico legato a un `ValueStateProvider<String>` passato come parametro. Alto 40 dentro la AppBar: la scala del testo è limitata a 1.5× (`MediaQuery.withClampedTextScaling`) per non tagliare il testo; stesso trattamento per `CalendarSearchBar`.
-- **Design system** (`shared/`, componenti da usare invece di riscrivere lo stesso widget in ogni screen):
-  - `shared/section_header.dart` — `SectionHeader(title, {icon, muted, padding, trailing})`: titolo di un gruppo di righe in `labelLarge` w600 colore primary (`muted`: outline), icona opzionale, annunciato come header da TalkBack, `trailing` opzionale a fine riga (es. "Cancella scaduti" in Promemoria). `SectionHeader.listPadding` (default, sopra tile a tutta larghezza: sezioni di Impostazioni) e `SectionHeader.inlinePadding` (dentro colonne già paddate: Promemoria, Modelli, "Completati" in Tasks); Sostituisce `SettingsSectionHeader` e i `_SectionHeader` privati di Info/Promemoria. Le intestazioni grandi di Statistiche (`titleLarge`) restano un ruolo a parte.
-  - `shared/segmented_choice.dart` — `SegmentedChoice<T>(segments, selected, onChanged)`: `SegmentedButton` a scelta singola a tutta larghezza (`expandedInsets: EdgeInsets.zero`), senza spunta di selezione, con margine orizzontale `AppSpacing.lg` come le `ListTile`; usato per tema e lingua in Impostazioni.
-  - `shared/action_tile.dart` — `ActionTile(icon, title, subtitle, onTap, {destructive, trailing})`: riga che apre una schermata o esegue un'azione (icona primary + chevron); `destructive` colora icona e titolo con `error`. Usata da tutte le sezioni di Impostazioni.
-  - `shared/item_card.dart` — `ItemCard` (Card del tema + `ListTile`, margine zero) e `ItemCardList` (lista con padding `md` e separatore `sm`): righe di task/eventi in Archivio e Cestino (`_TrashRow` con "Ripristina"), note nel Cestino, card di Promemoria.
-  - `shared/tag_chip.dart` — `TagChip(label, {dense})`: chip non interattivo in `secondaryContainer` senza bordo; `dense` per le etichette sulle `NoteCard` (la variante normale resta disponibile).
-  - `shared/app_dialogs.dart` — vedi sotto; aggiunti `initialValue`/`textCapitalization` a `showAppTextInputDialog` (rinomina etichetta) e `showAppMessageDialog` (titolo + messaggio + OK). I dialog di conferma di Impostazioni ("Cancella …") e quelli di Etichette ora passano da qui: conferme distruttive sempre come `FilledButton` error.
-- `shared/app_logo.dart` — `AppLogo({size = 84})`, logo dell'app (`assets/images/app_logo.png`) su riquadro arrotondato `AppColors.dark`, coerente con l'icona del launcher; usato da login, splash e Info.
-- `shared/empty_state.dart` — `EmptyState`, placeholder icona+messaggio condiviso dalle liste vuote/errore di Home, Tasks e Archivio, con pulsante opzionale (`actionLabel`/`actionIcon`/`onAction`). Home: "Riprova" (`notesProvider.reload`) su errore di sincronizzazione, "Crea la prima nota" solo se non esistono note attive (se la lista è vuota per la ricerca non compare); Tasks: solo "Riprova", perché il campo di aggiunta rapida è già visibile.
-- `shared/pull_to_refresh.dart` — `PullToRefresh`, `RefreshIndicator` che funziona anche con figli non scrollabili (empty/error state, avvolti in uno scroll sempre attivo a tutta altezza); con `childIsScrollable: true` il figlio deve usare `AlwaysScrollableScrollPhysics` (già impostata in `ReorderableGridView`/`ReorderableListViewWidget` e nella lista task), altrimenti una lista più corta dello schermo non si può tirare. Usato da Home (`notesProvider.reload`) e Tasks (`tasksProvider.reload` + `taskListsProvider.reload`).
-- `shared/swipe_actions.dart` — `SwipeActions` (`Dismissible` con `SwipeAction` a destra/sinistra) + `DismissBackground` (riusato anche da `trash_screen.dart`). Con `removesItem: false` la riga torna al suo posto invece di essere rimossa (un `Dismissible` "dismissed" deve uscire dall'albero): serve per azioni dopo cui l'elemento resta in lista, come completare un task. Usato da `tasks_screen.dart` (destra completa/riapre, sinistra cestino) e da `screens/home/note_swipe_actions.dart` sulla Home in vista **lista** (destra archivia, sinistra cestino; non in griglia, dove il trascinamento riordina). Tutte le azioni passano da `notifyWithUndo`.
-- `shared/error_feedback.dart` — `notifyOnError(future, context)`, wrapper per le chiamate fire-and-forget ai metodi di mutazione dei notifier (`NotesNotifier`/`TasksNotifier`/`CalendarNotifier`, che fanno rollback e `rethrow` su fallimento Firestore): mostra una snackbar d'errore se il `Future` fallisce (`message` nullable, default `commonGenericError`), con guardia `context.mounted`.
-  Contiene anche `notifyWithUndo(future, context, message:, onUndo:)`: SnackBar con azione **Annulla** per le mutazioni reversibili (sposta nel cestino → `restoreFromTrash`, archivia → `toggleArchive`), usata da `note_card.dart`, dagli editor di nota/task/evento e da `tasks_screen.dart`. Cattura lo `ScaffoldMessenger` subito, così funziona anche quando l'editor fa `pop` dopo l'eliminazione (lo SnackBar compare sulla schermata sotto); se la scrittura fallisce sostituisce lo SnackBar di annullamento con quello di errore. Gli editor non cancellano mai definitivamente: `deleteNote`/`deleteTask`/`deleteEvent` dei notifier (hard delete) non sono usati dalla UI, che passa sempre da `softDelete`; un elemento mai salvato (`_isNew`) non viene toccato.
-- `style_editor/` — `color_picker_widget.dart` (`ColorPickerWidget`, palette da `AppColors.noteSwatchesLight/Dark`), `style_editor_sheet.dart` (editor font/dimensione/stile testo di una nota), `font_family_picker.dart` (`FontFamilyPicker` + `kNoteFonts`, striscia orizzontale di chip condivisa da titolo e contenuto: `ScrollController` proprio per lo `Scrollbar` sempre visibile — senza, lo `Scrollbar` usava il `PrimaryScrollController` di un'altra lista — e altezza che cresce con la dimensione del testo di sistema).
+### Local data
 
----
-
-## 7. Servizi e utility (`lib/utils/`)
-
-Servizi stateless o singleton, non legati a Riverpod (istanziati direttamente dove servono):
-
-| File | Responsabilità |
+| Data | Where |
 |---|---|
-| `audio_service.dart` | `AudioRecordingService` — registrazione (`record`), riproduzione (`just_audio`), gestione file audio. |
-| `backup_service.dart` | `BackupService` — crea/estrae zip di backup (note+task+calendario in JSON), lista/elimina backup, retention 30 backup, traccia `last_backup_time`; `metadata.json` riporta `appVersion`. `restoreBackup` attende `extractArchiveToDisk` (asincrona) prima di leggere i JSON. Il ripristino dall'app passa da `BackupRestorer.readZip` (vedi `settings/backup_restore.dart`). |
-| `ics_export_service.dart` | Genera stringa ICS (VCALENDAR/VEVENT) da `CalendarEventModel`, incluse ricorrenze; una data di fine ricorrenza diventa `UNTIL=` (data per gli eventi tutto il giorno, fine della giornata locale in UTC per quelli con orario). |
-| `ics_import_service.dart` | Parser ICS manuale: unfolding righe, DTSTART/DTEND/RRULE/TZID, risoluzione UNTIL/COUNT, rilevamento compleanni da CATEGORIES. `COUNT=` giornaliero/settimanale è calcolato in giorni di calendario (non `Duration`, che sbaglierebbe di un giorno a cavallo del cambio d'ora); gli orari con `TZID` diventano `DateTime` locali normali (non `TZDateTime`); l'unescape è a passata singola, così `\\n` resta una barra seguita da n. |
-| `notification_service.dart` | Wrapper `flutter_local_notifications` + `timezone`: init, `requestPermissions` (chiamato da `scheduleNotification` prima di programmare, non all'avvio: il dialogo di sistema compare solo al primo promemoria e se il permesso non è già concesso), `scheduleNotification`/`cancelNotification`, `scheduleNoteReminder`/`scheduleTaskReminder` (titolo/anteprima di 80 caratteri e target da `NoteModel`/`TaskModel`, testi segnaposto con `currentL10n()`; usati da editor nota, editor task e dall'"Annulla" di Promemoria), ID deterministici (`idForNote`/`idForTask`/`idForEvent`). Ogni notifica porta un payload `NotificationTarget` (`"note:<id>"`, `"task:<id>"`, `"event:<id>"`, obbligatorio in `scheduleNotification`); il tap (`onDidReceiveNotificationResponse` ad app aperta, `getNotificationAppLaunchDetails` ad app chiusa) lo pubblica in `pendingTarget` (`ValueNotifier`). Nome e descrizione del canale Android (`notificationChannelName`/`Description`) sono passati a ogni `zonedSchedule` con `currentL10n()`, così Android li aggiorna alla lingua corrente. |
-| `link_utils.dart` | `normalizeUrl` (aggiunge `https://` se manca lo schema, `null` se non valido), `buildMarkdownLink` (escape di `[`/`]` nel testo e di spazi/parentesi nell'URL), `openExternalLink` (`url_launcher`, `LaunchMode.externalApplication`). Schemi ammessi: `http`, `https`, `mailto`, `tel`; gli altri vengono ignorati. Su Android le `<queries>` corrispondenti sono nel manifest. |
-| `recurrence.dart` | Enum `RecurrenceType` + parsing e `label(AppLocalizations)` (etichette degli eventi, chiavi `eventRecurrence*`; i task usano `recurrenceLabel` di `task_info_section.dart`), condiviso da task e calendario. |
-| `widget_service.dart` | `WidgetService` — integrazione `home_widget` Android (aggiorna il widget home screen con conteggio note/task e ultima nota; no-op su web). `scheduleSync(notes, tasks)` — chiamato dai `ref.listen` in `main.dart` — fa debounce di 500 ms, trova l'ultima nota con una scansione singola e salta la scrittura se i valori non sono cambiati. Scrive etichette già pronte nella lingua dell'UI (`currentL10n()`: `widgetNoteCount`/`widgetTaskCount` con plurale, ultima nota o `widgetNoRecentNote`), che `NoteepWidget.kt` legge come stringhe e mostra così com'è; `main.dart` risincronizza anche al cambio di `appLanguageProvider`. Le risorse Android (`res/values` in inglese, `res/values-it`) servono solo prima della prima sincronizzazione. |
-| `downloader.dart` (+ `_io.dart`/`_web.dart`/`_stub.dart`) | Export condizionale per salvare/scaricare file cross-piattaforma (`path_provider` su mobile/desktop, Blob+AnchorElement su web). |
-| `dialogs/move_to_list_dialog.dart` | `showMoveToListDialog` — dialog per spostare un task in un altro elenco. |
-| `data_export_service.dart` | `DataExportService` — encoding/scrittura JSON (`exportJson`) e file-picking+decoding JSON (`pickAndDecodeJson`), scrittura ICS (`exportIcs`) e file-picking ICS (`pickIcsContent`); usato da `settings_screen.dart` per tenere fuori dal widget l'I/O e il parsing generico (il parsing modello-specifico e l'aggiornamento dei provider restano nella schermata). |
-| `changelog_service.dart` | `ChangelogService.pendingEntries(prefs, currentVersion)` — confronta `appVersion` con `last_seen_changelog_version` su SharedPreferences: prima installazione → salva e non mostra nulla; stessa versione → nulla; altrimenti restituisce le voci più nuove di quella vista (tutto lo storico se la versione vista non è in elenco). |
-| `app_bootstrap.dart` | `AppBootstrap` — handler globali degli errori (`installErrorHandlers`) e inizializzazione dei servizi all'avvio (`init`), distinguendo servizi obbligatori e opzionali (vedi §9). |
+| Settings (theme, language, layout, sort orders, task options, onboarding, backup settings, last seen changelog) | `SharedPreferences` |
+| Audio recordings | `<documents>/audio_notes/` |
+| Automatic backups | `<documents>/noteep_backups/`, ZIP files, last 30 kept |
+
+Audio files and automatic backups stay on the device: they are not uploaded to Firestore.
+
+### Security rules
+
+The rules are versioned in [`firestore.rules`](firestore.rules) and published with `firebase deploy --only firestore:rules` (Firebase CLI, project `noteep`) or by pasting the file in Console → Firestore → Rules. The app uses no Cloud Storage and no Realtime Database.
+
+| Path | Allowed operations | Who |
+|---|---|---|
+| `users/{uid}` and every subcollection (`notes`, `tasks`, `task_lists`, `calendar_events`, `labels`) | read, write | The signed-in user whose `uid` matches the path |
+
+Everything else is denied by default. A collection added outside `users/{uid}/` needs a new rule. The app never queries Firestore before sign-in.
+
+Unauthenticated REST check (expected `403 PERMISSION_DENIED`):
+
+```
+curl.exe -s -w "\nHTTP %{http_code}\n" "https://firestore.googleapis.com/v1/projects/noteep/databases/(default)/documents/users"
+```
 
 ---
 
-## 8. Tema e stile (`lib/theme/`)
+## 5. Screens and features
 
-- `app_colors.dart` — palette centrale (`white`, `dark`, `warmYellow`, `warmBrown`) + `noteSwatchesLight`/`noteSwatchesDark` (preset colore sfondo nota, 8 colori ciascuno) + `contrastRatio`/`contrastingTextColor` (calcolo del rapporto di contrasto WCAG per scegliere il colore testo nero/bianco più leggibile su uno sfondo arbitrario, usato da `note_card.dart` e `note_editor_screen.dart`).
-- `app_font_sizes.dart` — scala dimensioni (xs 10, sm 12, md 14, lg 16, xl 18, xxl 22, headline 24, display 28).
-- `app_radius.dart` — scala raggi angoli (sm 8 → xl 20).
-- `app_spacing.dart` — scala spaziature per `EdgeInsets`/`SizedBox` (xxs 2, xs 4, sm 8, md 12, lg 16, xl 24, xxl 32). I valori fuori scala (6, 10, 14, 20, 28…) restano letterali finché non vengono riallineati.
-- `app_theme.dart` — `AppTheme.light`/`AppTheme.dark`: Material 3 via `ColorScheme.fromSeed(seedColor: warmBrown)` con override manuale dei colori principali; tipografia: `TextTheme` completo in `_textTheme` (font "Exo 2", ruoli headline/title/body/label agganciati ad `AppFontSizes`, title in `w600`; display e headlineLarge restano ai default M3) — negli screen preferire `Theme.of(context).textTheme.*` ai `fontSize` letterali, e dove serve una dimensione esplicita usare `AppFontSizes`; styling comune per AppBar (flat), Drawer, NavigationRail, Card, FAB, Chip, Slider; `dialogTheme` e `bottomSheetTheme` con raggio `AppRadius.xl`, così i singoli `showDialog`/`showModalBottomSheet` non ridichiarano la `shape`.
+### 5.1 Startup and authentication
+
+**Path:** `lib/main.dart`, `lib/screens/auth/`, `lib/screens/onboarding_screen.dart`, `lib/screens/boot_error_screen.dart`
+
+Gets the user from launch to the Home screen.
+
+**Features:**
+- Auth gate in `NotesApp`: while Firebase Auth loads, a splash with `AppLogo`; signed in → `HomeScreen`; signed out → `LoginScreen`, or `OnboardingScreen` if the onboarding has not been seen yet.
+- `LoginScreen`: tabs for sign-in and sign-up (`LoginForm`, `RegisterForm`), Google button, password reset dialog. Validators (`login_validators.dart`) are pure functions taking `AppLocalizations`. Firebase error codes become localized messages through `authErrorMessage`.
+- `OnboardingScreen({replay})`: five pages with Skip/Next/Start. On first launch it replaces the login until `onboarding_seen` is set; with `replay: true` it is the `/onboarding` route opened from Info and only pops.
+- `BootErrorApp`: standalone `MaterialApp` shown when a required startup step fails, with **Retry** that reruns the whole bootstrap (the exception is shown in debug only). It follows the device language because preferences may not be loaded.
+
+### 5.2 Home and notes
+
+**Path:** `lib/screens/home_screen.dart`, `lib/screens/home/`, `lib/screens/note_editor/`, `lib/screens/note_template_screen.dart`
+
+The list of active notes and the note editor.
+
+**Features:**
+- Grid (masonry: one lazy column per `SliverList`, natural card height, note *i* in column *i % columns*) or list layout, chosen in Settings. Drag and drop reorders notes in the grid; in the list, swipe right archives and swipe left trashes.
+- Search and sort sheet.
+- States: skeleton (`NotesSkeleton`) during the first load, empty state with "Create your first note" (hidden when the list is empty only because of a search), sync-error state with "Retry", pull to refresh (`notesProvider.reload`). Transitions between these states use `FadeSwitcher`.
+- FAB: a speed dial (note, checklist, task, audio, from template) or, if disabled in Settings, a plain FAB that creates a note.
+- Opens the "What's new" dialog after an update and runs the automatic backup when it is due.
+- Note editor: title and content with undo/redo, Markdown preview with clickable links (plain `https://` and `www.` URLs are auto-linked), "Insert link" dialog, checklists, style editor, labels sheet (filter, create, toggle; chips under the content), linked notes, audio recorder and player, reminder banner, pin/archive/delete with Undo. Persistence goes through `NoteEditorController`, which owns the note and keeps it out of the widget.
+- A `NoteHero` transition animates card → editor and back (disabled with reduced motion).
+- Note cards are a single semantic node; their quick actions are also TalkBack custom actions, and the grid adds "Move before/after" as an alternative to drag and drop.
+
+### 5.3 Tasks
+
+**Path:** `lib/screens/tasks/`, `lib/screens/task_editor/`
+
+**Features:**
+- Tabs: All, Special and one per task list. A new task is created in the current tab's list (or as special).
+- Active and completed sections (`sortTasksForDisplay`, pure function), optional "group by priority" and "show completed" settings.
+- Swipe right completes/reopens (the row stays), swipe left trashes; menu to edit, move to another list or delete; star toggles "special".
+- Skeleton on first load, error state with Retry, pull to refresh.
+- Task editor: title and description with undo/redo, due date, recurrence, list, subtasks, reminder.
+
+### 5.4 Calendar
+
+**Path:** `lib/screens/calendar/`
+
+**Features:**
+- Views: day, multi-day (week / 7 days), month, year, schedule (90-day look-ahead), search results. Month days open a bottom sheet with the day's events.
+- Event editor: date, start time, optional end time (an end before the start moves to the next day, an end equal to the start removes it), all day (clears the end), birthday, name day, recurrence, reminder, pin/archive/delete.
+- Recurring events are expanded by `calendarEventOccursOn` (monthly on the 31st skips short months, yearly on 29 February only in leap years).
+
+### 5.5 Reminders, labels, archive and trash
+
+**Path:** `lib/screens/reminders_screen.dart`, `labels_screen.dart`, `label_notes_screen.dart`, `archive_screen.dart`, `trash_screen.dart`
+
+**Features:**
+- Reminders: reminders of active notes and tasks, in "Upcoming" and "Past" sections. Removing one, or "Clear past" in the section header, goes through `RemindersActions` and offers Undo, which restores and reschedules the reminders.
+- Labels: create, rename (merges into an existing label with the same name), delete; note count per label; tapping a label opens its notes (active, then archived).
+- Archive: three tabs (notes, tasks, events).
+- Trash: three tabs, restore, delete for good, empty trash; each item shows the days left before the automatic purge.
+
+### 5.6 Statistics and export
+
+**Path:** `lib/screens/statistics/`, `lib/screens/export_screen.dart`
+
+**Features:**
+- Statistics: summary of notes, tasks and events computed by a screen-local provider, charts with `fl_chart`.
+- Export: active notes as PDF, TXT, JSON, CSV or HTML. File text (labels, headers, date format) is in the UI language; JSON keys are fixed. Mobile saves/shares the file, web downloads it.
+
+### 5.7 Settings
+
+**Path:** `lib/screens/settings/`
+
+The screen handles dialogs, file pickers and snackbars; data work is in `DataActions` and `BackupRestorer` (see [State management](#6-state-management)).
+
+**Features:**
+- Appearance (System/Light/Dark) and language (System/Italiano/English) as `SegmentedChoice`.
+- Notes and tasks preferences (layout, FAB menu, completed tasks, grouping).
+- Automatic backup: enable, frequency (daily, weekly, monthly), history with restore and delete.
+- Data per section (notes, tasks, calendar) and global: JSON export/import, ICS export/import for the calendar, clear. Imports and clears ask for confirmation; persistence errors show a snackbar.
+- Account: delete account (destructive confirmation → password for email accounts → non-dismissible progress dialog → `AuthNotifier.deleteAccount`; on success the app returns to the login).
+- Info tile with the app version.
+
+### 5.8 Info and privacy
+
+**Path:** `lib/screens/info_screen.dart`, `lib/screens/privacy_policy_screen.dart`, `lib/widgets/changelog_dialog.dart`
+
+**Features:**
+- Info: logo, name, tagline, version (without build number), "What is Noteep", feature grid, links (source code, GitHub profile, email — external; onboarding, full changelog, privacy policy, open-source licenses — internal), credits. Max width 600. External links that fail to open show a snackbar.
+- Privacy policy: native localized copy of `PRIVACY.md`, with the last-updated date from `privacyPolicyUpdatedAt` and a link to the online version.
+- Changelog dialog: one block per version with sections Added / Improved / Fixed / Security (empty ones hidden).
+
+### 5.9 Home screen widgets (Android)
+
+**Path:** `android/app/src/main/kotlin/com/ndn21/noteep/`, `lib/utils/widget_service.dart`, `lib/core/routing/home_widget_*.dart`
+
+**Features:**
+- **Summary** (`NoteepWidget`): note and task counts and the latest note, written by `WidgetService`; tapping opens the app.
+- **Quick actions** (`QuickActionsWidget`, 3×1 resizable): New note / New task / New event.
+- **New note / New task / New event** (1×1): a single button each.
+- Buttons open `MainActivity` with a `noteep://new/{note,task,event}` URI; `HomeWidgetLaunchHandler` opens an empty editor (see [Navigation](#9-navigation)).
+- All widgets are `AppWidgetProvider`s with `RemoteViews`. Picker names and descriptions are Android string resources (`res/values`, `res/values-it`).
+
+### 5.10 Shared behavior
+
+- **Drawer** (`AppDrawer`, `NavScaffold`): Notes, Tasks, Reminders, Calendar, Labels, Archive, Trash, Settings and sign out. Statistics and Export open from Settings → Notes data, Info from Settings → Info.
+- **Undo**: trash and archive actions show a snackbar with Undo (`notifyWithUndo`), which still works after the editor pops.
+- **Errors**: fire-and-forget writes go through `notifyOnError`, which shows an error snackbar if the write fails.
+- **Sync status**: `SyncStatusListener` (in `MaterialApp.builder`) shows a banner while writes are queued offline and a snackbar if the server later rejects one.
+- **Unknown routes**: `UnknownRouteScreen` ("Page not found" + "Back to home").
+- **Accessibility**: text up to 200% without overflow on a 360 dp phone; search fields clamp text scale to 1.5×; animations stop with reduced motion.
 
 ---
 
-## 9. Inizializzazione app (`lib/main.dart`) e Firebase
+## 6. State management
 
-Sequenza di avvio (logica in `utils/app_bootstrap.dart`, `main.dart` fa solo da orchestratore):
-1. `WidgetsFlutterBinding.ensureInitialized()`
-2. `AppBootstrap.installErrorHandlers()`: `PlatformDispatcher.onError` logga (solo debug) gli errori async non gestiti invece di far crashare l'app; in release `ErrorWidget.builder` sostituisce il riquadro grigio con un'icona neutra.
-3. `AppBootstrap.init()`:
-   - **obbligatori** (se falliscono l'avvio fallisce): `Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)` (saltato se già inizializzato, per il retry; `firebase_options.dart` è git-ignored come `google-services.json`: va generato in locale con `flutterfire configure`) e `SharedPreferences.getInstance()` (letto subito dopo Firebase: con le preferenze `Intl.defaultLocale = startupLanguageCode(prefs)` — scelta salvata, altrimenti lingua del dispositivo se supportata, altrimenti inglese — così il testo creato prima del primo frame è già nella lingua giusta);
-   - subito dopo `initializeApp`, `FirebaseFirestore.instance.settings = Settings(persistenceEnabled: true, cacheSizeBytes: CACHE_SIZE_UNLIMITED)`: su Android la persistenza è già il default, sul web no; con l'impostazione esplicita su entrambe le piattaforme le scritture offline restano in cache e le letture (`get()`, sorgente server-poi-cache) ricadono sulla cache;
-   - **opzionali** (errore solo loggato, l'app parte comunque): `NotificationService.init()` (senza richiesta permessi, rimandata al primo promemoria), `WidgetService.init()`, `initializeDateFormatting` per `it` ed `en` (eseguito prima di notifiche e widget; poi `MaterialApp.builder` tiene `Intl.defaultLocale` allineato alla lingua dell'UI).
-4. Successo → `runApp(ProviderScope(...))` con `sharedPreferencesProvider.overrideWithValue(prefs)`. Errore → `runApp(BootErrorApp(...))` (`screens/boot_error_screen.dart`): schermata "Impossibile avviare Noteep" con pulsante **Riprova** che rilancia l'intera sequenza (in debug mostra anche l'eccezione).
+Riverpod with `NotifierProvider`, `Provider`, `StreamProvider` and `FutureProvider`, all declared by hand. Simple values set from outside (search queries, loading and error flags) use `valueStateProvider<T>(initial)` from `core_providers.dart`. `ProviderScope` overrides `sharedPreferencesProvider` with the instance loaded at startup.
 
-**Sessione Firebase Auth e Auto Backup Android**: Firebase Auth salva l'utente in `shared_prefs/com.google.firebase.auth.api.Store.<key>.xml`, cifrato con un keyset (`…api.crypto.<key>.xml`) protetto da una chiave dell'Android Keystore, che non finisce mai nel backup. Se l'Auto Backup ripristina quei file su una reinstallazione, Firebase non riesce né a decifrarli né a sovrascriverli (`FirebearStorageCryptoHelper: Keystore cannot load the key…`) e ogni login si perde al riavvio del processo. Per questo `AndroidManifest.xml` punta a `res/xml/backup_rules.xml` (Android 6–11, `fullBackupContent`) e `res/xml/data_extraction_rules.xml` (Android 12+, cloud backup e device transfer), che escludono i due file. `<key>` è `base64("[DEFAULT]")+base64(mobilesdk_app_id)`: se cambia l'app id in `google-services.json`, vanno aggiornati i nomi. Le librerie native Firebase/Google Sign-In non sono fissate in `android/app/build.gradle`: le portano i plugin FlutterFire e `google_sign_in`.
+| Controller | Path | Responsibility |
+|---|---|---|
+| `NotesNotifier` (`notesProvider`) | `providers/notes_provider.dart` | Notes CRUD, trash, archive, reorder, `renameTag`/`deleteTag`; derived `activeNotesProvider`, `archivedNotesProvider`, `trashedNotesProvider`, `notesByIdProvider`, `noteByIdProvider(id)`, loading and error flags |
+| `TasksNotifier` (`tasksProvider`) | `providers/tasks_provider.dart` | Tasks CRUD, trash, `clearListReferences`; derived active/special/archived/trashed/by-list providers |
+| `TaskListsNotifier` (`taskListsProvider`) | `providers/tasks_provider.dart` | Task lists; deleting one calls `tasksProvider.notifier.clearListReferences()` |
+| `CalendarNotifier` (`calendarProvider`) | `providers/calendar_provider.dart` | Events CRUD and trash; search and filtered views |
+| `LabelsNotifier` (`labelsProvider`) | `providers/labels_provider.dart` | Labels on Firestore: `add`/`addAll` (trim, no empty or duplicate names), `rename` (merges), `delete`; migrates labels stored by older versions in `SharedPreferences` (`custom_labels`) once, then deletes the key |
+| `SyncStatusNotifier` (`syncStatusProvider`) | `providers/sync_provider.dart` | Counts queued offline writes and late rejections; mixin `FirestoreListMutations` used by the data notifiers |
+| `AuthNotifier` (`authNotifierProvider`) | `providers/auth_provider.dart` | Google and email sign-in, sign-up, password reset, sign-out, `deleteAccount`; `authStateProvider`, `currentUidProvider` |
+| `RecordingStateNotifier` | `providers/audio_provider.dart` | Audio recording state |
+| `noteChangeHistoryProvider(id)`, `taskChangeHistoryProvider(id)` | `providers/*_undo_redo_provider.dart` | Undo/redo stacks (limit 50), used through `NoteUndoRedoManager`/`TaskUndoRedoManager` |
+| `ThemeModeNotifier`, `AppLanguageNotifier` | `providers/settings/theme_provider.dart`, `locale_provider.dart` | Theme and language, persisted by enum name through `PersistedEnumNotifier` |
+| UI settings and filters | `providers/settings/ui_provider.dart` | Layout, sort orders, FAB menu, task options, onboarding flag, search queries, `filteredNotesProvider`, `filteredNoteIdsProvider`, `filteredTasksProvider`, `allTagsProvider`, `tagNoteCountsProvider`, `notesWithTagProvider(tag)`; base class `PersistedEnumNotifier` |
+| `BackupSettingsNotifier`, `BackupStatusNotifier`, `availableBackupsProvider` | `providers/settings/backup_provider.dart` | Automatic backup settings and status, list of local backups |
+| `BackupRestorer` (`backupRestorerProvider`) | `providers/settings/backup_restore.dart` | `FullBackupData` parsing (flat JSON and ZIP layouts), `apply` (replaces each section present), `readZip` |
+| `DataActions` (`dataActionsProvider`) | `providers/settings/data_actions.dart` | Export payloads, per-section import, ICS export/import, clear, `wipeRemoteData`/`wipeLocalData` for account deletion |
+| `RemindersActions` (`remindersActionsProvider`) | `providers/reminders_actions.dart` | Clear and restore reminders with their notifications |
 
-**Lingua**: `MaterialApp` usa `locale: ref.watch(appLanguageProvider).locale` (`null` = lingua del dispositivo), `supportedLocales`/`localizationsDelegates` di `AppLocalizations` (generato da `flutter gen-l10n` con `generate: true` in `pubspec.yaml` e `l10n.yaml`: template `lib/l10n/app_it.arb`, `nullable-getter: false`). `supportedLocales` è `[en, it]`: una lingua del dispositivo non supportata ricade sull'inglese. `MaterialApp.builder` imposta `Intl.defaultLocale` sulla lingua risolta, così i `DateFormat` senza locale esplicito la seguono. Nei widget le stringhe si leggono con `context.l10n.<chiave>` (`lib/l10n/l10n.dart`); i file generati `app_localizations*.dart` sono esclusi da `analysis_options.yaml` (le chiavi del changelog sono in snake_case). **Copertura**: tutta l'app è localizzata: Impostazioni > Aspetto/Lingua, il dialog del changelog, accesso/registrazione (`auth/`, `authErrorMessage`), onboarding, `BootErrorApp` (che non legge le preferenze e segue sempre la lingua del dispositivo), `UnknownRouteScreen`, Home e note (`home_screen.dart`, `home/`, `note_editor/`, `note_template_screen.dart`, `NoteCard`, `SortSheet`, `style_editor/`), calendario (`calendar/`: i `DateFormat` non hanno più `'it_IT'` fisso e seguono `Intl.defaultLocale`; le intestazioni dei giorni vengono da `weekdayLabels(pattern)` di `calendar_utils.dart`; `formatEventTimeRange(AppLocalizations, event)`), promemoria, archivio, cestino (scadenza con plurale ICU `trashExpiresInDays`), etichette, statistiche, esporta, info, tutte le sezioni di Impostazioni, task (`tasks/`, `task_editor/` con `recurrenceLabel(AppLocalizations, RecurrenceType)`, `utils/dialogs/move_to_list_dialog.dart`), drawer e navigation rail (`nav*`), banner di sincronizzazione e i widget di `widgets/shared/`; le chiavi comuni hanno il prefisso `common*` (anche promemoria pianificato/rimosso e "Ultima modifica", condivisi da editor note e task), quelle delle sezioni di navigazione `nav*`. Il codice senza `BuildContext` (canale delle notifiche, widget Home, titolo segnaposto nell'export ICS) usa `currentL10n()` di `lib/l10n/l10n.dart`, cioè la lingua di `Intl.defaultLocale` (inglese se non supportata). Le notifiche già pianificate restano nella lingua in cui sono state create.
+**Non-obvious behavior**
 
-**Transizioni tra schermate**: le sezioni del drawer (`AppRouter.sectionRoutes`: tasks, promemoria, calendario, etichette, archivio, cestino, impostazioni) usano `FadeThroughPageRoute` (dissolvenza + leggero zoom 0.92→1, 300 ms; nessuna animazione con `MediaQuery.disableAnimations`), perché sono sezioni sorelle e non un drill-down; le schermate di dettaglio restano `MaterialPageRoute`. Da una card all'editor della nota c'è un `NoteHero` (`lib/widgets/shared/note_hero.dart`, vedi §6).
-
-**Deep link dalle notifiche** (`lib/core/routing/`): `NotificationTarget` codifica/decodifica il payload (payload assenti o malformati, es. notifiche programmate prima di questa versione, → `null`: si apre solo l'app) e `resolve` trova l'elemento non cestinato nelle liste. `NotificationLaunchHandler` avvolge la `HomeScreen` dell'utente loggato (quindi sta sotto il `Navigator` di `MaterialApp`, nessun `navigatorKey` globale): ascolta `pendingTarget` e, con `ref.listenManual`, le liste e i flag di loading; quando l'elemento compare lo apre con `AppNav` e azzera il target. Se l'elemento non c'è a caricamento finito (note/task: `notesLoadingProvider`/`tasksLoadingProvider`; eventi, senza flag: dopo 10 s) mostra lo snackbar "Elemento del promemoria non trovato". Un tap prima del login resta in attesa finché l'utente entra.
-
-**Widget Android** (`android/app/src/main/kotlin/com/ndn21/noteep/`, `lib/core/routing/`): cinque widget per la schermata Home, tutti `AppWidgetProvider` con `RemoteViews` (niente Glance), sfondo `widget_background` e icone vettoriali `ic_widget_{note,task,event}` uguali a quelle del drawer (`lightbulb_outline`, `check_circle_outline`, `calendar_today`). **Riepilogo** (`NoteepWidget`, `noteep_widget.xml`): contatori note/task e ultima nota scritti da `WidgetService`; il tocco su tutto il widget (`widget_root`) apre l'app. **Azioni rapide** (`QuickActionsWidget`, `quick_actions_widget.xml`, 3×1 ridimensionabile): tre pulsanti Nuova nota / Nuovo task / Nuovo evento. **Nuova nota / Nuovo task / Nuovo evento** (`NewNoteWidget`/`NewTaskWidget`/`NewEventWidget`, base comune `QuickActionButtonWidget`, `new_*_widget.xml`, 1×1 fissi): un solo pulsante, per chi usa una sola azione. Tutto in `QuickActionWidgets.kt`; nome e descrizione nel selettore widget sono stringhe Android (`res/values`, `res/values-it`: `widget_*_label`, `widget_new_*`, `widget_*_description`), `previewLayout` è il layout stesso. I pulsanti aprono `MainActivity` con `HomeWidgetLaunchIntent` e un URI `noteep://new/{note,task,event}`; i PendingIntent hanno tutti request code 0 ma restano distinti perché cambia l'URI. Lato Dart `HomeWidgetAction.parse` legge l'URI e `HomeWidgetLaunchHandler` (dentro `NotificationLaunchHandler`, solo Android) apre l'editor vuoto come i pulsanti "+" dell'app: `HomeWidget.initiallyLaunchedFromHomeWidget()` per l'avvio a freddo, letto una sola volta per processo (`initialLaunchHandled`, altrimenti l'intent rimasto sull'activity riaprirebbe l'editor a ogni login), e `HomeWidget.widgetClicked` per i tocchi ad app aperta (`singleTop` → `onNewIntent`). Nel manifest `flutter_deeplinking_enabled` è `false`: senza, Flutter spingerebbe anche l'URI come route (`/event`) e comparirebbe `UnknownRouteScreen`.
-
-**Stato di sincronizzazione**: `MaterialApp.builder` avvolge l'app in `SyncStatusListener` (`lib/widgets/sync_status_listener.dart`), sotto lo `ScaffoldMessenger` radice: mostra un `MaterialBanner` "Modifiche non ancora sincronizzate…" (con "Nascondi") quando `syncStatusProvider.queued` passa da 0 a >0 e lo toglie quando torna a 0 (solo sulle transizioni, così un banner nascosto non ricompare a ogni modifica offline), e uno SnackBar quando una scrittura accodata viene poi rifiutata dal server.
-
-`NotesApp` (`ConsumerWidget`) legge `themeModeProvider` per il tema e `authStateProvider` per l'auth gate: `.when(loading: splash, error: LoginScreen, data: user != null ? HomeScreen : (onboardingSeenProvider ? LoginScreen : OnboardingScreen))`. Un `ref.listen` su note/task attivi tiene sincronizzato l'home widget Android. Tutta la navigazione passa da `core/routing/app_router.dart`: `MaterialApp` usa `AppRouter.onGenerateRoute` (un `switch` su `AppRoutes`: sezioni del drawer, Statistiche, Esporta, Info, Onboarding, Privacy policy, e gli editor nota/task/evento che richiedono un argomento tipizzato — `NoteRouteArgs`, `TaskModel`, `CalendarEventModel`) e `AppRouter.onUnknownRoute`, che mostra `UnknownRouteScreen` ("Pagina non trovata" + "Torna alla home") per nomi sconosciuti o argomenti mancanti/del tipo sbagliato invece di andare in crash. Gli screen non usano `Navigator.push(MaterialPageRoute(...))`: chiamano gli helper tipizzati `AppNav.openNote/openTask/openEvent/openTasks/openStatistics/openExport/openInfo/openOnboarding/openPrivacyPolicy`. `AppRoutes` è riesportato da `nav_scaffold.dart`. Le notifiche non hanno ancora un payload: il deep link dal tocco su un promemoria è il passo successivo.
+- **User switch**: data notifiers watch `currentUidProvider` and `firestoreProvider` in `build()`, start `_load()` and return `[]`. A fetch still running for the previous user is discarded by comparing the uid after the `await`.
+- **Optimistic writes** (`FirestoreListMutations.mutate(apply, persist)`): the state changes first. With Firestore persistence a write future completes only when the server acknowledges it, so `mutate` waits at most `writeGrace` (3 s): an error within the window rolls back and rethrows; after it, the write is tracked as queued and the caller continues (no stuck spinners offline). A late server rejection increments `failures` and triggers `reload()`.
+- **Batches**: `commitInChunks` splits into batches of 500 and commits them together, so offline they are all queued at once.
+- **Load vs reload**: the first load merges Firestore results with the current state; `reload()` replaces it.
+- **Loading and errors**: `notesLoadingProvider`/`tasksLoadingProvider` start `true` and turn `false` in a `finally`; load errors go to `notesLoadErrorProvider`/`tasksLoadErrorProvider`, so screens tell "loading", "empty" and "sync error" apart.
+- **Trash purge**: on load, items trashed more than 7 days ago are deleted through `mutate`, without blocking the loading flag.
+- **Rebuild granularity**: lists watch only ids (`IdList`, equal by content) and each row watches its item (`noteByIdProvider`, `taskByIdProvider`), so editing one note rebuilds only its card. Notifiers keep untouched item instances unchanged for this to work. Archive, Trash, Statistics and Calendar watch whole lists.
+- **Account deletion order**: re-authenticate first (password or Google; cancelling aborts), then `wipeRemoteData` (reads every subcollection from the **server**, so it fails offline instead of deleting halfway), `User.delete()`, `wipeLocalData` (best-effort: cancels notifications, deletes local backups), Google sign-out.
+- **Restore**: `FullBackupData` parses every section before any provider is touched; `replaceAll` also deletes Firestore documents not in the backup, otherwise they would come back on the next load.
 
 ---
 
-## 10. Testing (`test/`)
+## 7. Services
+
+Plain classes in `lib/utils/`, not tied to Riverpod.
+
+### 7.1 AppBootstrap
+
+**Path:** `lib/utils/app_bootstrap.dart`
+
+- `installErrorHandlers()`: `PlatformDispatcher.onError` logs (debug only) unhandled async errors instead of crashing; in release `ErrorWidget.builder` shows a neutral icon.
+- `init()`: **required** steps (failure shows `BootErrorApp`): `Firebase.initializeApp` (skipped if already done, for Retry), Firestore `Settings(persistenceEnabled: true, cacheSizeBytes: CACHE_SIZE_UNLIMITED)` (persistence is not the default on the web), `SharedPreferences`, then `Intl.defaultLocale = startupLanguageCode(prefs)` so text built before the first frame is already localized. **Optional** steps (failure only logged): `initializeDateFormatting` for `it`/`en`, `NotificationService.init()`, `WidgetService.init()`.
+
+### 7.2 NotificationService
+
+**Path:** `lib/utils/notification_service.dart`
+
+- `init()`, `scheduleNotification(...)`, `cancelNotification(id)`, `scheduleNoteReminder(note)`, `scheduleTaskReminder(task)`.
+- Deterministic ids: `idForNote`, `idForTask`, `idForEvent`. Schedules with `AndroidScheduleMode.exactAllowWhileIdle`.
+- Permissions are requested on the first scheduled reminder, not at startup.
+- Every notification carries a `NotificationTarget` payload (`note:<id>`, `task:<id>`, `event:<id>`); a tap (app open or cold start) publishes it in `pendingTarget`.
+- Channel name and description are passed on every schedule with `currentL10n()`, so Android updates them to the current language. Already scheduled notifications keep the language they were created in.
+- Tests: `test/core/notification_target_test.dart`, `notification_launch_handler_test.dart`.
+
+### 7.3 BackupService
+
+**Path:** `lib/utils/backup_service.dart`
+
+- `createBackup(...)`, `restoreBackup(path)`, `listBackups()`, `deleteBackup(path)`, `getBackupInfo(file)`, `isBackupDue(frequency)`, `getLastBackupTime()`.
+- ZIP in `<documents>/noteep_backups/` with notes, tasks, task lists and calendar as JSON plus `metadata.json` (`appVersion`); keeps the 30 most recent; `last_backup_time` in `SharedPreferences`.
+- `restoreBackup` waits for the asynchronous extraction before reading; corrupt or incomplete ZIPs return `null`.
+- The Home screen runs a silent backup at startup when `isBackupDue` says so.
+- Tests: `test/utils/backup_service_test.dart`, `test/providers/backup_restore_test.dart`.
+
+### 7.4 ICS import and export
+
+**Path:** `lib/utils/ics_import_service.dart`, `ics_export_service.dart`
+
+- Export: `VCALENDAR`/`VEVENT` with recurrences; a recurrence end becomes `UNTIL=` (a date for all-day events, end of the local day in UTC otherwise).
+- Import: hand-written parser with line unfolding, `DTSTART`/`DTEND`/`RRULE`/`TZID`, `UNTIL`/`COUNT` resolution, birthdays from `CATEGORIES`. Daily/weekly `COUNT` is computed in calendar days (a `Duration` would be off by one across a DST change); `TZID` times become plain local `DateTime`s; unescaping is single-pass, so `\\n` stays a backslash followed by `n`.
+- Tests: `test/utils/ics_service_test.dart`.
+
+### 7.5 AudioRecordingService
+
+**Path:** `lib/utils/audio_service.dart`
+
+Records with `record` into `<documents>/audio_notes/` and plays with `just_audio` (play, pause, resume, stop, seek). Errors are logged in debug and swallowed.
+
+### 7.6 WidgetService
+
+**Path:** `lib/utils/widget_service.dart`
+
+- `init()`, `scheduleSync(notes, tasks)`: no-op on the web.
+- Debounces 500 ms, finds the latest note in one pass and skips the write when nothing changed.
+- Writes ready-made localized labels (`currentL10n()`), which the Kotlin widget shows as-is; `main.dart` resyncs when the language changes. Android string resources are used only before the first sync.
+
+### 7.7 Other services
+
+| Class / file | What it does |
+|---|---|
+| `ChangelogService.pendingEntries(prefs, version)` | Compares `appVersion` with `last_seen_changelog_version`: first install → save and show nothing; same version → nothing; otherwise the newer entries (all if the seen version is unknown). Test: `test/utils/changelog_service_test.dart` |
+| `DataExportService` | JSON and ICS file writing and picking for Settings |
+| `downloader.dart` (`_io`, `_web`, `_stub`) | Conditional import: save/share a file on mobile, download it on the web |
+| `link_utils.dart` | `normalizeUrl` (adds `https://`, `null` if invalid), `buildMarkdownLink` (escapes brackets and URL characters), `openExternalLink` (external app). Allowed schemes: `http`, `https`, `mailto`, `tel`; the matching `<queries>` are in the Android manifest |
+| `recurrence.dart` | `RecurrenceType`, `recurrenceTypeFromString`, labels, `calendarEventOccursOn`. Test: `test/utils/recurrence_test.dart` |
+| `dialogs/move_to_list_dialog.dart` | Dialog to move a task to another list |
+
+### 7.8 Deep links
+
+**Path:** `lib/core/routing/`
+
+- `NotificationTarget` encodes/parses payloads (missing or malformed → `null`, the app just opens) and resolves the non-trashed item.
+- `NotificationLaunchHandler` wraps the signed-in `HomeScreen` (so it is under the `MaterialApp` navigator): it listens to `pendingTarget`, waits for the item to load and opens it with `AppNav`. If the item is still missing when loading ends (notes/tasks) or after 10 s (events), it shows "Reminder item not found". A tap before sign-in waits for the user to sign in.
+- `HomeWidgetAction.parse` reads `noteep://new/...` URIs. `HomeWidgetLaunchHandler` (Android only) handles the cold start once per process (`initialLaunchHandled`, otherwise the intent left on the activity would reopen the editor at every sign-in) and taps while the app runs (`singleTop` → `onNewIntent`).
+
+---
+
+## 8. Theme and style
+
+**Fonts.** The UI uses **Exo 2**, bundled in `assets/fonts/`. Notes can also use Montserrat, Open Sans, Dancing Script, Playfair Display and Pacifico (`kNoteFonts` in `font_family_picker.dart`). All fonts are bundled variable fonts, so they work offline.
+
+**App icon.** Source logo `assets/images/app_logo.png` (1024×1024, transparent, rendered from `design/app-icon/foreground.svg`) and `design/app-icon/app_logo_mono.png` (themed icons: the check mark is cut out, otherwise the full silhouette would disappear). The local script `tool/icons/generate_icons.ps1` (`/tool/` is git-ignored) uses background `#3D3F4D` and writes:
+
+- in `assets/images/`: `app_icon_legacy.png` (logo at 64% on a rounded square), `app_icon_foreground.png` and `app_icon_monochrome.png` (62%, transparent);
+- in `images/icons/` (not bundled): `icon_512.png` (store), `icon_192.png`, `oauth_logo_120.png` (Google Auth Platform → Branding), `favicon_32.png`.
+
+Then `dart run flutter_launcher_icons` (config in `pubspec.yaml`) generates `@mipmap/launcher_icon` (legacy, adaptive with 16% inset, monochrome), also used by notifications and the summary widget. Web icons and `favicon.png` come from `design/app-icon/icon.svg` (symbol inside the central 80%, so it also works as maskable); `web/manifest.json` uses `#3D3F4D` for `theme_color`/`background_color`. In the app, `AppLogo({size})` shows the logo on an `AppColors.dark` rounded square, like the launcher icon.
+
+**Themes.** Light, dark or system, chosen in Settings and persisted as `theme_mode_v2` by `ThemeModeNotifier`. Both are Material 3 (`AppTheme.light`/`dark` in `app_theme.dart`), from `ColorScheme.fromSeed(seedColor: warmBrown)` with the main roles overridden.
+
+| Name | Value | Usage |
+|---|---|---|
+| `AppColors.white` | `#FFFFFF` | Light surface, dark `onSurface` |
+| `AppColors.dark` | `#3D3F4D` | Dark surface, light `onSurface`, `onPrimary` in both themes, icon background |
+| `AppColors.warmBrown` | `#CCA775` | Seed; light `primary`, dark `primaryContainer`/`secondary` |
+| `AppColors.warmYellow` | `#FEDFA9` | Light `primaryContainer`/`secondary`, dark `primary` |
+| light `secondaryContainer` | `#FFF3DC` | Tag chips |
+| light `surfaceContainerHighest` | `#F5EDD8` | Skeletons, filled fields |
+| dark `secondaryContainer` | `#5A4A32` | Tag chips |
+| dark `surfaceContainerHighest` | `#4A4C5A` | Skeletons, filled fields |
+| `noteSwatchesLight` / `noteSwatchesDark` | 8 colors each | Note background presets |
+
+Screens use `ColorScheme` roles (`primary`, `surface`, `secondaryContainer`, `surfaceContainerHighest`, `error`/`onError` for destructive actions), not `AppColors` directly. On arbitrary note backgrounds the text color comes from `AppColors.contrastingTextColor`, which picks black or white by WCAG contrast ratio (≥ 4.5 on every swatch, tested in `test/theme/app_colors_test.dart`).
+
+**Scales.**
+
+| Scale | Values |
+|---|---|
+| `AppFontSizes` | xs 10, sm 12, md 14, lg 16, xl 18, xxl 22, headline 24, display 28 |
+| `AppSpacing` | xxs 2, xs 4, sm 8, md 12, lg 16, xl 24, xxl 32 |
+| `AppRadius` | sm 8 (tiles in sheets), md 12 (cards), lg 16 (small sheets), xl 20 (dialogs, full-height sheets) |
+
+`_textTheme` maps headline/title/body/label roles to `AppFontSizes` in Exo 2 (titles `w600`; display and `headlineLarge` keep the M3 defaults). Screens use `Theme.of(context).textTheme.*`, and `AppFontSizes` only when an explicit size is needed. `dialogTheme` and `bottomSheetTheme` set radius `xl`, so dialogs and sheets do not redeclare the shape. Off-scale spacing values (6, 10, 14, 20, 28) still appear as literals.
+
+**Layout.** Home grid columns depend on the width (`gridColumns` in `home_layout_utils.dart`); Info is centered with a max width of 600.
+
+**Shared components** (`lib/widgets/shared/`):
+
+| Component | Non-obvious behavior |
+|---|---|
+| `SectionHeader` | `labelLarge` w600 in `primary` (`muted`: `outline`), announced as a header; optional `trailing`; `listPadding` vs `inlinePadding` |
+| `SegmentedChoice<T>` | Full-width single-choice `SegmentedButton` without check mark |
+| `ActionTile` | Row with primary icon and chevron; `destructive` uses `error` |
+| `ItemCard` / `ItemCardList` | Card + `ListTile` rows for archive, trash and reminders |
+| `TagChip` | Non-interactive chip in `secondaryContainer`; `dense` on note cards |
+| `app_dialogs.dart` | `showAppTextInputDialog` (trimmed text or `null`; untrimmed with `obscureText`), `showAppConfirmDialog` (`true` only on confirm; `destructive` → `FilledButton` in `error`), `showAppMessageDialog`, `showAppSheet` (wraps content in `SafeArea(top: false)`: with Android 15 edge-to-edge, sheets would otherwise go under the navigation bar) |
+| `EmptyState` | Icon + message + optional action button |
+| `PullToRefresh` | Works with non-scrollable children; scrollable children need `AlwaysScrollableScrollPhysics` |
+| `SwipeActions` | `Dismissible` wrapper; `removesItem: false` puts the row back (for actions after which the item stays) |
+| `SkeletonPulse` / `SkeletonBox` / `ListSkeleton` | One shared pulse, one semantic "Loading…" node, static with reduced motion |
+| `FadeSwitcher` | 250 ms cross-fade on key change; the outgoing child keeps its state (e.g. scroll) and its `Hero`s are disabled |
+| `NoteHero` | Lightweight container transform card ↔ editor; the editor content is laid out at its final size inside an `OverflowBox` and clipped |
+| `SearchField` | Bound to a `ValueStateProvider<String>`; text scale clamped to 1.5× inside the 40 px AppBar field |
+| `error_feedback.dart` | `notifyOnError`, `notifyWithUndo` (captures the `ScaffoldMessenger` first, so it works after the editor pops; replaces the Undo snackbar with an error one if the write fails) |
+
+---
+
+## 9. Navigation
+
+Named routes with `MaterialApp.onGenerateRoute: AppRouter.onGenerateRoute` (`lib/core/routing/app_router.dart`). Screens call the typed helpers in `AppNav` (`openNote`, `openTask`, `openEvent`, `openLabel`, `openTasks`, `openStatistics`, `openExport`, `openInfo`, `openOnboarding`, `openPrivacyPolicy`). Detail routes with a missing or wrongly typed argument, and unknown names, go to `AppRouter.onUnknownRoute` → `UnknownRouteScreen` instead of crashing.
+
+Drawer sections (`AppRouter.sectionRoutes`) use `FadeThroughPageRoute` (fade + scale 0.92 → 1, 300 ms, instant with reduced motion) because they are siblings, not a drill-down; detail screens use `MaterialPageRoute`. The drawer returns to Home with `popUntil` on the root.
+
+| Route | Screen | Description |
+|---|---|---|
+| *(home)* | `HomeScreen` / `LoginScreen` / `OnboardingScreen` | Chosen by the auth gate (see [5.1](#51-startup-and-authentication)) |
+| `/note` | `NoteEditorScreen` | Argument `NoteRouteArgs(note, autoOpenRecorder)` |
+| `/tasks` | `TasksScreen` | Drawer section |
+| `/task` | `TaskEditorScreen` | Argument `TaskModel` |
+| `/calendar` | `CalendarWorkspaceView` | Drawer section |
+| `/event` | `CalendarEventEditorScreen` | Argument `CalendarEventModel` |
+| `/reminders` | `RemindersScreen` | Drawer section |
+| `/labels` | `LabelsScreen` | Drawer section |
+| `/label` | `LabelNotesScreen` | Argument `String` (label name) |
+| `/archive` | `ArchiveScreen` | Drawer section |
+| `/trash` | `TrashScreen` | Drawer section |
+| `/statistics` | `StatisticsScreen` | |
+| `/export` | `ExportScreen` | |
+| `/settings` | `SettingsScreen` | Drawer section |
+| `/info` | `InfoScreen` | |
+| `/onboarding` | `OnboardingScreen(replay: true)` | Replay from Info |
+| `/privacy-policy` | `PrivacyPolicyScreen` | From Info |
+
+Notification taps and Home widget buttons open editors through the handlers in [Deep links](#78-deep-links). In the Android manifest `flutter_deeplinking_enabled` is `false`: otherwise Flutter would also push the widget URI as a route and show `UnknownRouteScreen`.
+
+---
+
+## 10. Localization
+
+| Code | Language |
+|---|---|
+| `it` | Italian (template) |
+| `en` | English (fallback) |
+
+- ARB files in `lib/l10n/` (`app_it.arb` is the template, `app_en.arb` has the same keys). `flutter gen-l10n` (`generate: true` in `pubspec.yaml`, `l10n.yaml` with `nullable-getter: false`) generates `app_localizations*.dart`, excluded from analysis.
+- In widgets: `context.l10n.<key>`; without a `BuildContext` (notification channel, Home widget, ICS placeholders): `currentL10n()`, which follows `Intl.defaultLocale`. Pure functions take `AppLocalizations` as a parameter.
+- Language choice: `AppLanguageNotifier` (`system`, `it`, `en`; key `app_language`, default `system`). `MaterialApp.locale` is `null` for `system`; `supportedLocales` is `[en, it]`, so an unsupported device language falls back to English. `MaterialApp.builder` keeps `Intl.defaultLocale` aligned with the resolved language, so `DateFormat` without an explicit locale follows it.
+- Key prefixes: `common*` for shared strings, `nav*` for navigation sections, `changelog_v<X>_<Y>_<Z>_bullet_<N>` for changelog bullets (snake_case on purpose), `policy_section_*` for the privacy policy.
+- Exported files (PDF, TXT, CSV, HTML) use the UI language; JSON keys are fixed.
+
+---
+
+## 11. Dependencies
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:          # Material/Cupertino localizations for it/en
+    sdk: flutter
+
+  flutter_riverpod: ^2.6.1        # State management
+  uuid: ^4.5.1                    # Model ids
+  shared_preferences: ^2.3.4      # Settings
+  intl: ^0.20.2                   # Dates, plurals, gen-l10n
+  pdf: ^3.11.1                    # PDF export
+  printing: ^5.13.1               # PDF share/print
+  path_provider: ^2.1.4           # Documents folder (audio, backups, exports)
+
+  firebase_core: ^3.13.1          # Firebase init
+  firebase_auth: ^5.5.3           # Authentication
+  google_sign_in: ^6.2.2          # Google sign-in
+  cloud_firestore: ^5.6.6         # Database
+
+  archive: ^3.6.1                 # Backup ZIP files
+
+  flutter_local_notifications: ^18.0.1   # Reminders
+  flutter_timezone: ^5.1.1        # Device time zone
+  timezone: ^0.9.4                # Zoned scheduling, ICS TZID
+
+  share_plus: ^13.3.1             # Share exported files
+  file_picker: ^13.2.0            # Import JSON/ICS
+  flutter_markdown: ^0.7.6        # Markdown preview
+  fl_chart: ^0.68.0               # Statistics charts
+  home_widget: ^0.9.1             # Android Home screen widgets
+
+  record: ^6.0.0                  # Audio recording
+  just_audio: ^0.9.39             # Audio playback
+
+  url_launcher: ^6.3.3            # External links
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0           # Lint rules
+  fake_cloud_firestore: ^3.1.0    # In-memory Firestore for tests
+  flutter_launcher_icons: ^0.14.2 # Launcher icon generation
+```
+
+**Integration notes**
+
+- `flutter_local_notifications` 18 needs `coreLibraryDesugaring` and the Gson keep rules in `proguard-rules.pro` (see [Build and distribution](#13-build-and-distribution)).
+- Firebase and Google Sign-In native libraries come from the plugins; they are not pinned in `android/app/build.gradle`, or they would compete with the plugins' own.
+- `file_picker` 13 (`FilePicker.pickFile()` + `readAsBytes()`), `share_plus` 13 (`SharePlus.instance.share(ShareParams(...))`) and `flutter_timezone` 5 are the minimum versions that build with AGP 9.
+
+### Tests
+
+Run with `flutter test`. No real Firebase project is needed.
+
+- **Pure logic**: recurrence, ICS import/export round trip, changelog service and entries (`it`/`en` changelog keys match, each bullet used once), notification payloads, Home widget URIs, colors contrast, text theme, task sorting, login validators.
+- **With fakes**: data notifiers, labels, undo/redo, backup restore, `DataActions` (including account wipe isolation between users), offline sync (`FirestoreListMutations` with a short `writeGrace`) against `fake_cloud_firestore`; `BackupService` on a real temp folder with a mocked `path_provider` channel.
+- **Widget and layout**: editors, Info, boot error, router, notification and Home widget launch handlers, masonry grid, rebuild granularity, `NoteHero`, skeletons, `FadeSwitcher`, design-system components, dialogs, swipe actions, empty state; accessibility (200% text on 360×690 without overflow, card semantics and custom actions, sheets above the navigation bar).
+
+Helpers in `test/helpers/`: `createTestContainer(db)` / `firestoreOverrides(db)` override `firestoreProvider` and `currentUidProvider`; `l10n.dart` provides `testLocale` (`it`), `testSupportedLocales`, `testLocalizationsDelegates` and `itL10n`. Widget tests mount `UncontrolledProviderScope(container: ...)` to share notifiers with the test. Settings providers take `SharedPreferences.setMockInitialValues`. Derived provider notifications are asynchronous: call `await container.pump()` before asserting. Use `container.listen` to keep `autoDispose` providers alive.
+
+### Lint
+
+`flutter_lints` (`package:flutter_lints/flutter.yaml`) with no extra rules. The generated `lib/l10n/app_localizations*.dart` files are excluded (changelog keys are snake_case). CI-style check: `flutter analyze --fatal-infos --fatal-warnings`.
+
+---
+
+## 12. System requirements
+
+| Requirement | Value |
+|---|---|
+| Flutter / Dart SDK | Flutter stable, Dart `^3.7.2` |
+| Android minimum | API 24 (Android 7.0), Flutter's default `minSdk` |
+| Android target | `targetSdk` 36 (Flutter's default), `compileSdk` 37 |
+| Architectures | Release APK built for `arm64-v8a` only |
+| Web | Modern browsers; no Home screen widgets and no automatic backups (they need `dart:io`) |
+| Internet | Needed for sign-in and sync; Firestore works offline and syncs later |
+| Google Play services | Needed for Google sign-in |
+| Firebase | `android/app/google-services.json` and `lib/firebase_options.dart` (both git-ignored) |
+
+**Android permissions**
+
+| Permission | API levels | Why |
+|---|---|---|
+| `POST_NOTIFICATIONS` | 33+ | Reminders; requested on the first reminder |
+| `SCHEDULE_EXACT_ALARM` | 31–32 (`maxSdkVersion="32"`) | Exact reminders; from 33 `USE_EXACT_ALARM` covers it without asking the user |
+| `USE_EXACT_ALARM` | 33+ | Exact reminders (calendar/reminder app) |
+| `RECEIVE_BOOT_COMPLETED` | all | Reschedule reminders after a reboot |
+| `WAKE_LOCK` | all | Deliver scheduled notifications |
+| `RECORD_AUDIO` | all | Audio notes (declared by `record`, requested when recording starts) |
+| `INTERNET`, `ACCESS_NETWORK_STATE` | all | Firebase (declared by the plugins) |
+| `VIBRATE` | all | Notifications (declared by `flutter_local_notifications`) |
+| `FOREGROUND_SERVICE` | all | Background work for the Home widget (declared by WorkManager through `home_widget`) |
+
+**Auto Backup.** `AndroidManifest.xml` points to `res/xml/backup_rules.xml` (Android 6–11) and `res/xml/data_extraction_rules.xml` (12+), which exclude Firebase Auth's `shared_prefs/com.google.firebase.auth.api.Store.<key>.xml` and `…api.crypto.<key>.xml`. Their encryption key lives in the Android Keystore and is never backed up: restored copies could not be decrypted or overwritten, and every sign-in would be lost at process restart. `<key>` is `base64("[DEFAULT]") + base64(mobilesdk_app_id)`: if the app id in `google-services.json` changes, update the file names.
+
+---
+
+## 13. Build and distribution
+
+**Commands**
 
 ```bash
+flutter pub get
+flutter gen-l10n
+flutter run                                   # debug
+flutter analyze --fatal-infos --fatal-warnings
+dart format --output=none --set-exit-if-changed lib test
 flutter test
+flutter build apk --release --target-platform android-arm64 --obfuscate --split-debug-info=symbols/v<version>
+flutter build web                             # web
 ```
 
-- **`test/providers/notes_provider_test.dart`**, **`tasks_provider_test.dart`** — unit test dei notifier contro [`fake_cloud_firestore`](https://pub.dev/packages/fake_cloud_firestore) (dev dependency), leggendo `NotesNotifier`/`TasksNotifier`/`TaskListsNotifier` da un `ProviderContainer` creato con `createTestContainer(db)` (`test/helpers/test_container.dart`: override di `firestoreProvider` e `currentUidProvider`, bypassando Firebase Auth reale). I widget test di schermate localizzate passano a `MaterialApp` `testLocale` (`it`), `testSupportedLocales` e `testLocalizationsDelegates` di `test/helpers/l10n.dart` e verificano i testi italiani; `itL10n` serve alle funzioni che ricevono `AppLocalizations` (es. validatori). Senza `locale` l'ambiente di test risolve l'inglese (vedi `boot_error_screen_test.dart`). Copertura: CRUD, ciclo cestino, tag, `reorderNotes`, dipendenza incrociata `taskListsProvider → tasksProvider.clearListReferences`, provider derivati/filtrati.
-- **`test/providers/labels_provider_test.dart`** — `LabelsNotifier` contro `fake_cloud_firestore`: aggiunta (trim, vuote e doppioni scartati), rinomina con fusione, eliminazione, migrazione una sola volta delle etichette locali anche con caricamenti sovrapposti; `allTagsProvider`, `notesWithTagProvider` e `tagNoteCountsProvider`.
-- **`test/screens/note_editor_screen_test.dart`**, **`task_editor_screen_test.dart`** — widget test che montano le due schermate editor dentro un `ProviderScope` con `notesProvider`/`tasksProvider` sovrascritti allo stesso pattern fake-Firestore. Nessun progetto Firebase reale necessario per eseguire la suite.
-- **`test/utils/changelog_service_test.dart`** — unit test di `ChangelogService` con `SharedPreferences.setMockInitialValues` e una lista di voci fittizia (prima installazione, stessa versione, aggiornamento, versione sconosciuta).
-- **`test/core/constants/changelog_test.dart`** — ordine di `ChangelogEntry.sections` (secondo `ChangeType`, tipi vuoti esclusi) e coerenza dei bullet: le chiavi `changelog_v*` di `app_it.arb` e `app_en.arb` coincidono e ognuna compare una sola volta in `changelogEntries`.
-- **`test/screens/boot_error_screen_test.dart`** — widget test di `BootErrorApp` (messaggio visibile, Riprova invoca il callback).
-- **`test/screens/info_screen_test.dart`** — widget test di `InfoScreen`: header/versione/funzionalità/link/crediti visibili, nessun overflow a 320 px, apertura della pagina licenze.
-- **`test/theme/app_theme_test.dart`** — verifica che i ruoli del `TextTheme` (light e dark) seguano `AppFontSizes`, usino "Exo 2" e che i title siano `w600`.
-- **`test/screens/rebuild_granularity_test.dart`** — `IdList` (uguaglianza per contenuto), `filteredNoteIdsProvider` che non notifica su modifiche di solo contenuto, `noteByIdProvider` che notifica solo per la propria nota (e `null` dopo l'eliminazione); widget test: modificando una nota la card di un'altra nota nella griglia resta la stessa istanza di widget (non ricostruita), idem per le righe di `TaskListView`, e completare un task lo sposta tra le sezioni. Le notifiche dei provider derivati sono asincrone: nei test unitari serve `await container.pump()` prima delle asserzioni.
-- **`test/screens/reorderable_grid_view_test.dart`** — `masonryColumnLength` e griglia Home: distribuzione round-robin sulle colonne, altezza naturale delle card (una nota corta sotto un'altra corta non aspetta la fine della nota lunga accanto), drag&drop che riporta gli indici globali.
-- **`test/widgets/note_hero_test.dart`** — `NoteHero`: volo card→editor e ritorno senza eccezioni, nessun volo con animazioni ridotte, `NoteHeroTag` uguale per id indipendentemente dal colore.
-- **`test/widgets/skeleton_test.dart`** — `SkeletonPulse` (nodo semantico unico, pulsazione ferma con animazioni ridotte), `NotesSkeleton` griglia/lista senza overflow, `FadeSwitcher` (dissolvenza al cambio chiave, il figlio uscente conserva lo scroll, istantaneo con animazioni ridotte).
-- **`test/a11y/text_scale_test.dart`** — widget chiave (campi di ricerca in AppBar, empty state + banner promemoria, griglia Home con note lunghe/etichettate, style editor, vista mese calendario, editor nota e task) su un telefono 360×690 con testo di sistema al 200%: nessun overflow.
-- **`test/a11y/semantics_test.dart`** — `NoteCard` espone un nodo unico con testo, tap e azioni rapide (eseguirle modifica davvero la nota); la griglia Home espone "Sposta prima/dopo" con gli indici corretti; `showAppSheet` tiene il contenuto sopra la barra di navigazione.
-- **`test/screens/split_screens_test.dart`** — parti estratte dagli screen monolitici: validatori login, `sortTasksForDisplay` (gruppi attivi/completati, ordinamenti, input non modificato), `showAppTextInputDialog` (trim, invio da tastiera, vuoto/annulla → `null`), `CalendarEventDetailsSection` (toggle e ricorrenza aggiornano l'evento).
-- **`test/widgets/design_system_test.dart`** — `SectionHeader` (header semantico, colore primary/outline), `ActionTile` (icona/sottotitolo/chevron, tap, `destructive` in `error`, `trailing` personalizzato), `ItemCardList`/`ItemCard` (card separate e tappabili), `TagChip` dense più piccolo, `showAppTextInputDialog` con `initialValue` (testo trimmato), `showAppMessageDialog`.
-- **`test/widgets/app_dialogs_test.dart`** — widget test di `showAppConfirmDialog` (conferma → `true`, Annulla/tap fuori → `false`, `destructive` usa `FilledButton`).
-- **`test/widgets/empty_state_test.dart`** — widget test di `EmptyState` (pulsante mostrato solo con `actionLabel`, tap invoca `onAction`).
-- **`test/widgets/swipe_actions_test.dart`** — widget test di `SwipeActions` (swipe a destra con `removesItem: false` lascia la riga, swipe a sinistra la rimuove).
-- **`test/utils/recurrence_test.dart`** — unit test puri (senza widget né Firestore) di `recurrenceTypeFromString` (round-trip, fallback a `none`) e di `calendarEventOccursOn`: ogni tipo di ricorrenza, orario ignorato, nessuna occorrenza prima dell'inizio, fine ricorrenza inclusiva, mensile del 31 che salta i mesi corti, annuale del 29 febbraio solo negli anni bisestili.
-- **`test/utils/ics_service_test.dart`** — unit test di `IcsImportService`/`IcsExportService` e del round trip export→import: date tutto il giorno e UTC, `TZID` (inizializza i fusi con `timezone/data/latest.dart`), fine predefinita, eventi scartati, unfolding, unescape, HTML, compleanni, tutte le `FREQ`, `UNTIL`/`COUNT` (anche a cavallo del cambio d'ora), conservazione di `recurrenceEndDate` nel round trip.
-- **`test/utils/backup_service_test.dart`** — test di `BackupService` su una cartella temporanea reale (mock del canale `plugins.flutter.io/path_provider` + `SharedPreferences.setMockInitialValues`): round trip crea→ripristina, `metadata.json` con `appVersion`, nessuna cartella temporanea residua, zip corrotto/mancante/incompleto → `null`, retention dei 30 più recenti, ordinamento e filtro della lista, `getBackupInfo`, `deleteBackup`, soglie di `isBackupDue` per ogni frequenza.
-- **`test/providers/backup_restore_test.dart`** — `FullBackupData` (layout piatto e zip, sezioni assenti, dati malformati) e `BackupRestorer` contro `fake_cloud_firestore` con i quattro provider sovrascritti: `apply` aggiorna stato e Firestore (stato aggiornato prima della persistenza), cancella i documenti non presenti nel backup, lascia invariate le sezioni assenti; `readZip` rilegge un backup creato da `BackupService` e restituisce `null` per file mancanti o malformati.
-- **`test/providers/undo_redo_test.dart`** — stack di `NoteChangeHistoryNotifier`/`TaskChangeHistoryNotifier` (undo/redo, una nuova modifica svuota il redo, limite di 50 con scarto della più vecchia, `clear`), le quattro `*Change` usate dagli editor (titolo/testo nota, titolo/descrizione task) e `NoteUndoRedoManager`/`TaskUndoRedoManager` tramite un `Consumer` che espone il `WidgetRef` (persistenza su `fake_cloud_firestore`, nessun salvataggio di una nota non ancora memorizzata).
-- **`test/theme/app_colors_test.dart`** — `AppColors.contrastRatio` (21 nero/bianco, 1 su colori uguali, simmetria) e `contrastingTextColor`: sceglie sempre l'opzione a contrasto maggiore (anche su toni saturi medi), testo scuro sugli swatch chiari e bianco su quelli scuri, contrasto ≥ 4.5 (WCAG AA) su tutti gli swatch delle note.
-- **`test/providers/data_actions_test.dart`** — `DataActions` contro `fake_cloud_firestore`: chiavi dei payload di export e `appVersion` nel backup completo, round trip export completo → clear → import, import per sezione da un backup completo (solo la sezione richiesta), file senza la sezione, dati malformati che lanciano in modo sincrono senza modificare nulla, `icsExport`/`importIcs` (con e senza eventi), clear per sezione e `clearAll` anche su Firestore, `wipeRemoteData` che elimina anche documenti assenti dallo stato e il documento `users/{uid}` senza toccare gli altri utenti.
-- **`test/core/notification_target_test.dart`** — payload `encode`/`parse` (round-trip, payload malformati → `null`) e `resolve` (tipo giusto, esclusi cestinati/mancanti).
-- **`test/core/notification_launch_handler_test.dart`** — `NotificationLaunchHandler` con Firestore finto e route segnaposto: target pendente all'avvio, tap ad app aperta (task/evento), attesa del caricamento, snackbar per elemento mancante (note subito a loading finito, eventi dopo il timeout).
-- **`test/core/home_widget_action_test.dart`** — `HomeWidgetAction`: andata e ritorno URI, URI dei widget Kotlin, URI mancanti/sconosciuti → `null`.
-- **`test/core/home_widget_launch_handler_test.dart`** — `HomeWidgetLaunchHandler` con stream e URI iniziale finti e route segnaposto: avvio a freddo, tocchi ad app aperta per le tre azioni, URI senza azione, URI iniziale letto una sola volta tra un login e l'altro.
-- **`test/providers/sync_test.dart`** — `FirestoreListMutations` con `writeGrace` ridotto: scrittura confermata (nessuna coda), errore entro la finestra (rollback + rethrow), scrittura lenta (il chiamante prosegue, `queued` sale e poi torna a 0), rifiuto tardivo (`failures` + `reload`), `commitInChunks` oltre i 500 op; `SyncStatusListener`: banner visibile solo con scritture in coda, SnackBar sul rifiuto.
-- **`test/core/app_router_test.dart`** — `AppRouter`: ogni route di sezione costruisce il proprio screen (sezioni del drawer con `FadeThroughPageRoute`, dettagli con `MaterialPageRoute`), gli editor ricevono gli argomenti tipizzati, route di dettaglio senza argomenti o con argomenti del tipo sbagliato e nomi sconosciuti vengono rifiutati, `onUnknownRoute` mostra "Pagina non trovata" e "Torna alla home" riporta alla root.
+The local script `deploy_android.ps1` (git-ignored) runs clean, `pub get` and the release build above, and stops if `android/key.properties` is missing. Release APKs are published on GitHub as `Noteep_v<version>.apk`.
 
-Pattern riusabile per estendere la copertura ad altri provider/schermate: `createTestContainer(FakeFirebaseFirestore())` (o `firestoreOverrides(db)` dentro un `ProviderContainer` proprio), leggere i notifier con `container.read(xProvider.notifier)` e, nei widget test, montare `UncontrolledProviderScope(container: container, ...)` così test e widget condividono gli stessi notifier; `notifier.state` è leggibile dai test (`@visibleForTesting`). Per tenere vivo un provider `autoDispose` (storia undo/redo) usare `container.listen`. Oppure — per provider che dipendono da `sharedPreferencesProvider` (tutto `providers/settings/`) — usare `SharedPreferences.setMockInitialValues({})` e passare l'istanza via override nel `ProviderContainer`/`ProviderScope`.
+**Android toolchain**
+
+| Tool | Version | Notes |
+|---|---|---|
+| Android Gradle Plugin | 9.1.1 | `android/settings.gradle` |
+| Gradle | 9.3.1 | `gradle-wrapper.properties` |
+| Kotlin | 2.3.20 | `kotlin { compilerOptions { jvmTarget = JVM_17 } }` |
+| Java target | 17 | With `coreLibraryDesugaring` (`desugar_jdk_libs` 1.2.2) |
+| NDK | 28.2.13676358 | |
+| `compileSdk` / `targetSdk` | 37 / 36 | |
+
+- `gradle.properties` keeps `android.builtInKotlin=false` and `android.newDsl=false` as set by the Flutter migrator, because several plugins (`flutter_timezone`, `home_widget`, `record_android`, `share_plus`, `shared_preferences_android`) still apply the Kotlin Gradle Plugin.
+- `android/build.gradle` forces only the `home_widget` module to JVM target 11 (Kotlin via `compilerOptions`, Java via `afterEvaluate`): its Kotlin code does not compile with the default 1.8.
+- Do not force WorkManager/Glance versions: with `work-runtime` 2.9.1, R8 in AGP 9 strips `WorkDatabase_Impl` and the release crashes at startup. The versions requested by `home_widget` are used.
+- `proguard-rules.pro` keeps Gson generic signatures and `com.dexterous.flutterlocalnotifications.models.**`: without them, `zonedSchedule` fails only in release ("Missing type parameter") and reminders are never scheduled.
+
+**Firebase configuration**
+
+- `android/app/google-services.json` and `lib/firebase_options.dart` are generated locally with `flutterfire configure` and git-ignored. `DefaultFirebaseOptions.currentPlatform` throws `UnsupportedError` outside Android and Web.
+- Rules: see [Security rules](#security-rules).
+
+**APK signing**
+
+`android/key.properties` (git-ignored, like `*.jks` and `*.keystore`):
+
+```properties
+storeFile=<path to the release keystore>
+storePassword=<store password>
+keyAlias=<key alias>
+keyPassword=<key password>
+```
+
+- `android/app/build.gradle` signs `release` with `signingConfigs.release` when the file exists; without it (a fresh clone) it falls back to the debug key so `flutter run --release` still works. Published APKs must always use the release key.
+- Keep the keystore and its passwords backed up outside the repo: a lost key means users must uninstall to update.
+- Register the release key's SHA-1/SHA-256 in Firebase (Android app), in the Android API key restriction on Google Cloud, and in Play Console (`PLAY_CONSOLE_REGISTRATION.md`).
+
+**Notes**
+
+- Never commit: `key.properties`, keystores, `google-services.json`, `firebase_options.dart`, `symbols/`, `/tool/`, `deploy_android.ps1`, `CLAUDE.md`, `TASKS.md`.
+- Version source of truth: `version: X.Y.Z+N` in `pubspec.yaml` (`N` is the Android `versionCode` and always grows), mirrored by `appVersion`/`appBuildNumber` in `lib/core/constants/app_version.dart`. Each release adds a `ChangelogEntry` at the top of `changelogEntries`, with every bullet key in both ARB files (`changelog_test.dart` fails otherwise).
+- Obfuscation symbols go to `symbols/v<version>` (outside `build/`, so `flutter clean` keeps them) and are needed to read crash stack traces with `flutter symbolize`: keep them for every release.
+- Privacy policy: the same text lives in `PRIVACY.md`, in the ARB files (`PrivacyPolicyScreen`) and on the portfolio page. Update them together, with `privacyPolicyUpdatedAt` in `app_info.dart` equal to the date in `PRIVACY.md`, and before the release when adding services, analytics or permissions.
+- Local tools: `tool/icons/generate_icons.ps1` (see [Theme and style](#8-theme-and-style)).
 
 ---
 
-## 11. Note di manutenzione
+## License
 
-- **Migrazione a `Notifier` completata**: nessun `StateNotifier`/`StateProvider` resta in `lib/`, senza code-gen. Per passare a `@riverpod` andrebbero riaggiunte `riverpod_annotation`, `riverpod_generator` e `build_runner`; per Riverpod 3 il passo successivo è sostituire `AutoDisposeFamilyNotifier` (undo/redo) con la sintassi unificata della nuova versione.
-- **Blocco note rimosso**: il blocco delle singole note (`NoteLockService` su `local_auth`, campo `isLocked`) è stato tolto in attesa di una riprogettazione. Su Android non sbloccava mai, perché `local_auth` richiede che `MainActivity` estenda `FlutterFragmentActivity` e non `FlutterActivity`. I documenti Firestore delle note bloccate in passato conservano il campo `isLocked`, che ora viene ignorato: quelle note tornano visibili. Per reintrodurlo servono anche i permessi `USE_BIOMETRIC` nel manifest.
-- **Piattaforme**: solo Android e Web. Le cartelle `ios/`, `macos/`, `linux/`, `windows/` sono state rimosse e `DefaultFirebaseOptions.currentPlatform` lancia `UnsupportedError` sulle altre piattaforme.
-- **Maiuscola iniziale nei campi di testo**: i campi di testo libero (titolo/contenuto nota, voci checklist, titolo/descrizione task, sottotask, titolo/descrizione evento, testo del link, dialog di nuovo task/nuova lista e nuova/rinomina etichetta) usano `textCapitalization: TextCapitalization.sentences`. Restano senza i campi di ricerca, URL, email e password. Un nuovo campo di testo libero va aggiunto con la stessa impostazione; `showAppTextInputDialog` ha `none` come default, quindi va passata esplicitamente.
-- **Versione e changelog**: a ogni release aggiornare insieme `version:` in `pubspec.yaml` (`X.Y.Z+N`, con `N` sempre crescente: è il `versionCode` Android) e `appVersion`/`appBuildNumber` in `lib/core/constants/app_version.dart`, e aggiungere in testa a `changelogEntries` la voce della nuova versione. Ogni bullet è un `ChangelogItem(ChangeType.<added|improved|fixed|security>, (l) => l.changelog_v<X>_<Y>_<Z>_bullet_<N>)` con la chiave omonima in **entrambi** gli ARB (`lib/l10n/app_it.arb`, `app_en.arb`), poi `flutter gen-l10n`; `changelog_test.dart` fallisce se un bullet manca o è duplicato.
-- **Toolchain Android**: AGP 9.1.1, Gradle 9.3.1, Kotlin 2.3.20, `compileSdk` 37, NDK 28.2.13676358, Java/Kotlin target 17 (`kotlin { compilerOptions { jvmTarget } }`, non più `kotlinOptions`), allineata a QRation e Shox. In `gradle.properties` `android.builtInKotlin=false` e `android.newDsl=false` restano come li ha messi il migrator di Flutter, perché diversi plugin (`audio_waveforms`, `flutter_timezone`, `home_widget`, `record_android`, `share_plus`, `shared_preferences_android`) applicano ancora il Kotlin Gradle Plugin. In `android/build.gradle` il modulo `home_widget` è forzato a target 11 (Kotlin con `compilerOptions`, Java via `afterEvaluate`), perché il suo codice Kotlin non compila col default 1.8. Sotto AGP 9 servono almeno `flutter_timezone` 5 (la 3 aveva Java 11 e Kotlin 1.8 incoerenti), `file_picker` 13 (API `FilePicker.pickFile()` + `readAsBytes()`) e `share_plus` 13 (`SharePlus.instance.share(ShareParams(...))`), richiesto da `win32` 6. Non forzare versioni di WorkManager/Glance (`resolutionStrategy.force`): con `work-runtime` 2.9.1 R8 di AGP 9 elimina `WorkDatabase_Impl` e la release crasha all'avvio (`Failed to create an instance of class androidx.work.impl.WorkDatabase`); si usano le versioni chieste da `home_widget` (WorkManager 2.11.2, Glance 1.1.1). La release ha `android/app/proguard-rules.pro` (collegato in `buildTypes.release.proguardFiles`) con le regole Gson richieste da `flutter_local_notifications` 18: senza, R8 elimina le firme generiche di `TypeToken` e `zonedSchedule` fallisce solo in release ("Missing type parameter"), quindi i promemoria non vengono mai pianificati; i model `com.dexterous.flutterlocalnotifications.models.**` sono tenuti interi perché serializzati per nome di campo.
-- **Firma release Android**: `android/app/build.gradle` legge `android/key.properties` (`storeFile`, `storePassword`, `keyAlias`, `keyPassword`; git-ignored insieme a `*.jks`) e firma la build release con `signingConfigs.release`. Se il file manca ricade sulla chiave di debug, così un clone pulito builda comunque; lo script locale `deploy_android.ps1` invece si ferma se `key.properties` non esiste. Lo script builda solo `android-arm64` con `--obfuscate --split-debug-info=symbols\v<version>` (versione letta da `pubspec.yaml`): la cartella `symbols/` è fuori da `build\` per sopravvivere a `flutter clean`, è git-ignored e va conservata per ogni release perché serve a decodificare gli stack trace (`flutter symbolize`). Lo SHA-1 del keystore release va registrato su Firebase (app Android) e nella restrizione della API key Android su Google Cloud.
-- **Regole Firestore**: versionate in `firestore.rules` (con `firebase.json` + `.firebaserc`, progetto `noteep`). Ogni utente autenticato accede solo a `users/{uid}/**`, tutto il resto è negato. Deploy con `firebase deploy --only firestore:rules` (Firebase CLI) oppure copiando il file in Console → Firestore → Regole; se si aggiunge una collezione fuori da `users/{uid}/` va aggiunta anche una regola, altrimenti le letture/scritture vengono rifiutate.
-- **Privacy policy**: lo stesso testo vive in `PRIVACY.md` (IT + EN), negli ARB (`privacyPolicy*`, `policy_section_*`, mostrati da `PrivacyPolicyScreen`) e, dopo la release, nella pagina portfolio `https://ndenicolais.github.io/noteep/privacy/`. Quando cambia vanno aggiornati tutti insieme, con `privacyPolicyUpdatedAt` in `app_info.dart` uguale alla data di `PRIVACY.md`; quando la pagina portfolio è online, `uriPrivacyPolicy` (oggi `PRIVACY.md` su GitHub) va puntato lì. Va aggiornata **prima** della release se si aggiungono analytics, crash reporting, pubblicità, nuovi servizi esterni o permessi Android.
+Copyright © 2026 Nicola De Nicolais. Source-available, non-commercial license: see [LICENSE](LICENSE). Commercial use, including publishing on an app store, requires written permission.
+
+Bundled fonts (Exo 2, Montserrat, Open Sans, Dancing Script, Playfair Display, Pacifico) are Google Fonts under the SIL Open Font License 1.1. Third-party package licenses are shown in the app (Info → Open-source licenses).
+
+Author: Nicola De Nicolais — ndn21dev@gmail.com — [github.com/ndenicolais](https://github.com/ndenicolais)
