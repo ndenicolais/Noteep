@@ -12,7 +12,10 @@ import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noteep/models/note_model.dart';
+import 'package:noteep/providers/core_providers.dart';
 import 'package:noteep/providers/notes_provider.dart';
+import 'package:noteep/providers/settings/ui_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../helpers/test_container.dart';
 
 void main() {
@@ -227,6 +230,51 @@ void main() {
       expect(container.read(trashedNotesProvider).map((n) => n.title), [
         'Trashed',
       ]);
+    });
+
+    group('filteredNotesProvider puts pinned notes first', () {
+      Future<ProviderContainer> containerWithSort(SortOrder sort) async {
+        SharedPreferences.setMockInitialValues({});
+        final prefs = await SharedPreferences.getInstance();
+        final c = createTestContainer(
+          firestore,
+          overrides: [sharedPreferencesProvider.overrideWithValue(prefs)],
+        );
+        c.read(sortOrderProvider.notifier).set(sort);
+        return c;
+      }
+
+      Future<void> addNotes(ProviderContainer c) async {
+        final n = c.read(notesProvider.notifier);
+        final base = DateTime(2026, 1, 1);
+        // addNote puts each new note on top: the custom order is D, C, B, A.
+        for (final (title, day, pinned) in [
+          ('A', 1, false),
+          ('B', 2, true),
+          ('C', 3, false),
+          ('D', 4, true),
+        ]) {
+          await n.addNote(
+            NoteModel(
+              title: title,
+              isPinned: pinned,
+              createdAt: base.add(Duration(days: day)),
+            ),
+          );
+        }
+      }
+
+      for (final (sort, expected) in [
+        (SortOrder.createdNewest, ['D', 'B', 'C', 'A']),
+        (SortOrder.createdOldest, ['B', 'D', 'A', 'C']),
+        (SortOrder.custom, ['D', 'B', 'C', 'A']),
+      ]) {
+        test(sort.name, () async {
+          final c = await containerWithSort(sort);
+          await addNotes(c);
+          expect(c.read(filteredNotesProvider).map((n) => n.title), expected);
+        });
+      }
     });
   });
 }

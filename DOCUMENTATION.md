@@ -241,7 +241,7 @@ The list of active notes and the note editor.
 
 **Features:**
 - Grid (masonry: one lazy column per `SliverList`, natural card height, note *i* in column *i % columns*) or list layout, chosen in Settings. Drag and drop reorders notes in the grid; in the list, swipe right archives and swipe left trashes.
-- Search and sort sheet.
+- Search and sort sheet (created or modified date, newest or oldest first, or custom order by drag and drop). Pinned notes always come first; each group keeps the chosen order, so with the custom order a note dragged across the boundary only moves to the edge of its own group.
 - Cards show up to 8 lines of the content as plain text (`markdownToPlainText`): Markdown is rendered only in the editor preview, because `MarkdownBody` cannot be truncated to a number of lines and would make links inside the card steal the tap that opens the note.
 - States: skeleton (`NotesSkeleton`) during the first load, empty state with "Create your first note" (hidden when the list is empty only because of a search), sync-error state with "Retry", pull to refresh (`notesProvider.reload`). Transitions between these states use `FadeSwitcher`.
 - FAB: a speed dial (note, checklist, task, audio, from template) or, if disabled in Settings, a plain FAB that creates a note.

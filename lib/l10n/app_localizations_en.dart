@@ -1806,6 +1806,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'On the main screen, notes written with formatting now show clean text, without symbols such as asterisks or hash signs. The same goes for reminder previews and the list of notes to link.';
 
   @override
+  String get changelog_v2_0_0_bullet_50 =>
+      'Pinned notes now always appear at the top of the main screen, whatever sort order you choose.';
+
+  @override
   String get infoPrivacyOpen => 'Privacy policy';
 
   @override

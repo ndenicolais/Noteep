@@ -134,7 +134,13 @@ final filteredNotesProvider = Provider<List<NoteModel>>((ref) {
       break;
   }
 
-  return filtered;
+  // Pinned notes always come first, each group keeping the chosen order.
+  // With the custom order, dragging a note across the boundary only moves
+  // it to the edge of its own group.
+  return [
+    ...filtered.where((n) => n.isPinned),
+    ...filtered.where((n) => !n.isPinned),
+  ];
 });
 
 /// Ids of [filteredNotesProvider], in display order: the Home screen watches
