@@ -530,6 +530,9 @@ class AppLocalizationsIt extends AppLocalizations {
   String get notePinnedLabel => 'Nota fissata';
 
   @override
+  String get taskPinnedLabel => 'Task fissato';
+
+  @override
   String noteChecklistMore(int count) {
     return '+$count altri';
   }
@@ -1817,6 +1820,14 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_50 =>
       'Le note fissate compaiono sempre in cima alla schermata principale, qualunque sia l\'ordinamento scelto.';
+
+  @override
+  String get changelog_v2_0_0_bullet_51 =>
+      'I task fissati compaiono in cima all\'elenco, con l\'icona della puntina accanto al titolo.';
+
+  @override
+  String get changelog_v2_0_0_bullet_52 =>
+      'Dagli eventi del calendario è stato tolto il pulsante per fissarli, che non aveva effetto: nel calendario gli eventi sono già ordinati per data e ora.';
 
   @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';

@@ -12,16 +12,19 @@ import '../../models/task_model.dart';
 import '../../providers/settings/ui_provider.dart';
 
 /// Tasks as shown in a list tab: active first, then completed, each group
-/// ordered by [sort]. Returns a new list; [tasks] is left untouched.
+/// with pinned tasks on top and then ordered by [sort]. Returns a new list;
+/// [tasks] is left untouched.
 ///
-/// The completed/active tie-break is explicit instead of relying on the
-/// input order, since Dart's `List.sort` isn't guaranteed stable.
+/// The completed/active and pinned tie-breaks are explicit instead of
+/// relying on the input order, since Dart's `List.sort` isn't guaranteed
+/// stable.
 ({List<TaskModel> active, List<TaskModel> completed}) sortTasksForDisplay(
   List<TaskModel> tasks,
   SortOrder sort,
 ) {
   final sorted = List<TaskModel>.from(tasks)..sort((a, b) {
     if (a.isCompleted != b.isCompleted) return a.isCompleted ? 1 : -1;
+    if (a.isPinned != b.isPinned) return a.isPinned ? -1 : 1;
     return switch (sort) {
       SortOrder.createdNewest => b.createdAt.compareTo(a.createdAt),
       SortOrder.createdOldest => a.createdAt.compareTo(b.createdAt),

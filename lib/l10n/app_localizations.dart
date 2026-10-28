@@ -1046,6 +1046,12 @@ abstract class AppLocalizations {
   /// **'Nota fissata'**
   String get notePinnedLabel;
 
+  /// No description provided for @taskPinnedLabel.
+  ///
+  /// In it, this message translates to:
+  /// **'Task fissato'**
+  String get taskPinnedLabel;
+
   /// No description provided for @noteChecklistMore.
   ///
   /// In it, this message translates to:
@@ -3313,6 +3319,18 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Le note fissate compaiono sempre in cima alla schermata principale, qualunque sia l\'ordinamento scelto.'**
   String get changelog_v2_0_0_bullet_50;
+
+  /// No description provided for @changelog_v2_0_0_bullet_51.
+  ///
+  /// In it, this message translates to:
+  /// **'I task fissati compaiono in cima all\'elenco, con l\'icona della puntina accanto al titolo.'**
+  String get changelog_v2_0_0_bullet_51;
+
+  /// No description provided for @changelog_v2_0_0_bullet_52.
+  ///
+  /// In it, this message translates to:
+  /// **'Dagli eventi del calendario è stato tolto il pulsante per fissarli, che non aveva effetto: nel calendario gli eventi sono già ordinati per data e ora.'**
+  String get changelog_v2_0_0_bullet_52;
 
   /// No description provided for @infoPrivacyOpen.
   ///

@@ -270,12 +270,7 @@ class _CalendarEventEditorScreenState
       },
       child: Scaffold(
         appBar: CalendarEventEditorAppBar(
-          isPinned: _event.isPinned,
           isArchived: _event.isArchived,
-          onTogglePin:
-              () => setState(
-                () => _event = _event.copyWith(isPinned: !_event.isPinned),
-              ),
           onToggleArchive: () {
             setState(
               () => _event = _event.copyWith(isArchived: !_event.isArchived),

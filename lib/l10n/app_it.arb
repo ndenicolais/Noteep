@@ -158,6 +158,7 @@
   "noteOpenHint": "Apri nota",
   "noteReminderSetLabel": "Promemoria impostato",
   "notePinnedLabel": "Nota fissata",
+  "taskPinnedLabel": "Task fissato",
   "noteChecklistMore": "+{count} altri",
   "@noteChecklistMore": {
     "placeholders": {
@@ -710,6 +711,8 @@
   "changelog_v2_0_0_bullet_48": "Nelle Impostazioni tema e lingua si scelgono con dei comodi pulsanti affiancati, invece che da un elenco.",
   "changelog_v2_0_0_bullet_49": "Nella schermata principale le note scritte con la formattazione mostrano il testo pulito, senza simboli come asterischi o cancelletti. Lo stesso vale per l'anteprima dei promemoria e per l'elenco delle note da collegare.",
   "changelog_v2_0_0_bullet_50": "Le note fissate compaiono sempre in cima alla schermata principale, qualunque sia l'ordinamento scelto.",
+  "changelog_v2_0_0_bullet_51": "I task fissati compaiono in cima all'elenco, con l'icona della puntina accanto al titolo.",
+  "changelog_v2_0_0_bullet_52": "Dagli eventi del calendario è stato tolto il pulsante per fissarli, che non aveva effetto: nel calendario gli eventi sono già ordinati per data e ora.",
   "infoPrivacyOpen": "Informativa sulla privacy",
   "privacyPolicyTitle": "Informativa sulla privacy",
   "privacyPolicyIntro": "Noteep è un'app per note, task e calendario. Questa informativa spiega quali dati tratta, perché e come puoi controllarli. Noteep non mostra pubblicità, non usa strumenti di analisi o di tracciamento e non vende né cede i tuoi dati.",

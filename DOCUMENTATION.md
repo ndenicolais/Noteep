@@ -151,7 +151,7 @@ A to-do item. Collection: `users/{uid}/tasks`.
 |---|---|---|
 | `id` | `String` | UUID |
 | `title`, `description` | `String` | |
-| `isCompleted`, `isPinned`, `isSpecial`, `isArchived` | `bool` | `isSpecial` = shown in the "Special" tab |
+| `isCompleted`, `isPinned`, `isSpecial`, `isArchived` | `bool` | `isPinned` = on top of its section; `isSpecial` = starred, shown in the "Starred" tab |
 | `dueDate` | `DateTime?` | |
 | `listId` | `String?` | `TaskListModel.id`; null = no list |
 | `recurrence` | `RecurrenceType` | `none`, `daily`, `weekly`, `monthly`, `yearly` |
@@ -178,7 +178,8 @@ A calendar event. Collection: `users/{uid}/calendar_events`.
 | `id` | `String` | UUID |
 | `title`, `description` | `String` | |
 | `startTime`, `endTime` | `DateTime` | Required. `endTime == startTime` means "no end time" (`hasEndTime` getter); new events start without one |
-| `isAllDay`, `isBirthday`, `isNameDay`, `isPinned`, `isArchived` | `bool` | |
+| `isAllDay`, `isBirthday`, `isNameDay`, `isArchived` | `bool` | |
+| `isPinned` | `bool` | Not used by the UI; kept so existing documents and backups round-trip |
 | `recurrence` | `RecurrenceType` | Shared with tasks |
 | `recurrenceEndDate` | `DateTime?` | Inclusive; filled from `UNTIL`/`COUNT` on ICS import |
 | `reminder` | `DateTime?` | |
@@ -255,8 +256,8 @@ The list of active notes and the note editor.
 **Path:** `lib/screens/tasks/`, `lib/screens/task_editor/`
 
 **Features:**
-- Tabs: All, Special and one per task list. A new task is created in the current tab's list (or as special).
-- Active and completed sections (`sortTasksForDisplay`, pure function), optional "group by priority" and "show completed" settings.
+- Tabs: All, Starred and one per task list. A new task is created in the current tab's list (or starred).
+- Active and completed sections (`sortTasksForDisplay`, pure function), each with pinned tasks on top (pin icon before the title) and then the chosen sort order; optional "group by priority" and "show completed" settings. Pin (editor) sets the position, the star sets the "Starred" tab.
 - Swipe right completes/reopens (the row stays), swipe left trashes; menu to edit, move to another list or delete; star toggles "special".
 - Skeleton on first load, error state with Retry, pull to refresh.
 - Task editor: title and description with undo/redo, due date, recurrence, list, subtasks, reminder.
@@ -267,7 +268,7 @@ The list of active notes and the note editor.
 
 **Features:**
 - Views: day, multi-day (week / 7 days), month, year, schedule (90-day look-ahead), search results. Month days open a bottom sheet with the day's events.
-- Event editor: date, start time, optional end time (an end before the start moves to the next day, an end equal to the start removes it), all day (clears the end), birthday, name day, recurrence, reminder, pin/archive/delete.
+- Event editor: date, start time, optional end time (an end before the start moves to the next day, an end equal to the start removes it), all day (clears the end), birthday, name day, recurrence, reminder, archive/delete. Events cannot be pinned: calendar views are ordered by time.
 - Recurring events are expanded by `calendarEventOccursOn` (monthly on the 31st skips short months, yearly on 29 February only in leap years).
 
 ### 5.5 Reminders, labels, archive and trash

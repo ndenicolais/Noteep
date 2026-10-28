@@ -529,6 +529,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notePinnedLabel => 'Pinned note';
 
   @override
+  String get taskPinnedLabel => 'Pinned task';
+
+  @override
   String noteChecklistMore(int count) {
     return '+$count more';
   }
@@ -1808,6 +1811,14 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_50 =>
       'Pinned notes now always appear at the top of the main screen, whatever sort order you choose.';
+
+  @override
+  String get changelog_v2_0_0_bullet_51 =>
+      'Pinned tasks now appear at the top of the list, with a pin icon next to the title.';
+
+  @override
+  String get changelog_v2_0_0_bullet_52 =>
+      'The pin button has been removed from calendar events, where it had no effect: events in the calendar are already ordered by date and time.';
 
   @override
   String get infoPrivacyOpen => 'Privacy policy';

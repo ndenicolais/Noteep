@@ -11,20 +11,17 @@
 import 'package:flutter/material.dart';
 import '../../l10n/l10n.dart';
 
-/// App bar for [CalendarEventEditorScreen]: pin and archive toggles.
+/// App bar for [CalendarEventEditorScreen]: archive toggle. Events have no
+/// pin: calendar views are ordered by time.
 class CalendarEventEditorAppBar extends StatelessWidget
     implements PreferredSizeWidget {
   const CalendarEventEditorAppBar({
     super.key,
-    required this.isPinned,
     required this.isArchived,
-    required this.onTogglePin,
     required this.onToggleArchive,
   });
 
-  final bool isPinned;
   final bool isArchived;
-  final VoidCallback onTogglePin;
   final VoidCallback onToggleArchive;
 
   @override
@@ -36,14 +33,6 @@ class CalendarEventEditorAppBar extends StatelessWidget
       title: Text(context.l10n.calendarEventTitle),
       elevation: 0,
       actions: [
-        IconButton(
-          icon: Icon(isPinned ? Icons.push_pin : Icons.push_pin_outlined),
-          onPressed: onTogglePin,
-          tooltip:
-              isPinned
-                  ? context.l10n.taskEditorUnpin
-                  : context.l10n.taskEditorPin,
-        ),
         IconButton(
           icon: Icon(isArchived ? Icons.unarchive : Icons.archive_outlined),
           tooltip:

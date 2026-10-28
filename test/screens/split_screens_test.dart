@@ -63,6 +63,19 @@ void main() {
       expect(ids(modified.active), ['c', 'a']);
     });
 
+    test('puts pinned tasks first in each group', () {
+      final withPins = [
+        t('a', 1),
+        t('b', 2).copyWith(isPinned: true),
+        t('c', 3),
+        t('d', 4, done: true),
+        t('e', 5, done: true).copyWith(isPinned: true),
+      ];
+      final sorted = sortTasksForDisplay(withPins, SortOrder.createdOldest);
+      expect(ids(sorted.active), ['b', 'a', 'c']);
+      expect(ids(sorted.completed), ['e', 'd']);
+    });
+
     test('does not mutate the input', () {
       sortTasksForDisplay(tasks, SortOrder.createdNewest);
       expect(ids(tasks), ['a', 'b', 'c', 'd']);

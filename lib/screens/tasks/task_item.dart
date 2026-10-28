@@ -63,12 +63,29 @@ class TaskItem extends ConsumerWidget {
           onChanged:
               (_) => notifyOnError(notifier.toggleComplete(task.id), context),
         ),
-        title: Text(
-          task.title,
-          style: TextStyle(
-            decoration: task.isCompleted ? TextDecoration.lineThrough : null,
-            color: task.isCompleted ? Colors.grey : null,
-          ),
+        title: Row(
+          children: [
+            if (task.isPinned)
+              Padding(
+                padding: const EdgeInsets.only(right: AppSpacing.xs),
+                child: Icon(
+                  Icons.push_pin,
+                  size: 16,
+                  color: cs.primary,
+                  semanticLabel: l10n.taskPinnedLabel,
+                ),
+              ),
+            Expanded(
+              child: Text(
+                task.title,
+                style: TextStyle(
+                  decoration:
+                      task.isCompleted ? TextDecoration.lineThrough : null,
+                  color: task.isCompleted ? Colors.grey : null,
+                ),
+              ),
+            ),
+          ],
         ),
         subtitle:
             task.description.isNotEmpty
