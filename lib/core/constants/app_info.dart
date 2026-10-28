@@ -13,7 +13,7 @@ const developerEmail = 'ndn21dev@gmail.com';
 
 /// Date shown as "last updated" in the privacy policy (in-app and
 /// `PRIVACY.md`): change both together.
-final privacyPolicyUpdatedAt = DateTime(2026, 10, 24);
+final privacyPolicyUpdatedAt = DateTime(2026, 10, 28);
 
 /// Online privacy policy. Points to `PRIVACY.md` on GitHub until the
 /// portfolio page `https://ndenicolais.github.io/noteep/privacy/` is online.

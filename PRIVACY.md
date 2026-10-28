@@ -6,7 +6,7 @@
 
 ## Italiano
 
-**Ultimo aggiornamento: 24 ottobre 2026**
+**Ultimo aggiornamento: 28 ottobre 2026**
 
 Noteep è un'app per note, task e calendario. Questa informativa spiega quali dati tratta, perché e come puoi controllarli. Noteep non mostra pubblicità, non usa strumenti di analisi o di tracciamento e non vende né cede i tuoi dati.
 
@@ -17,9 +17,9 @@ Il titolare del trattamento è Nicola De Nicolais, sviluppatore di Noteep. Per q
 ### 2. Dati che raccogliamo
 
 - **Account**: l'indirizzo email con cui ti registri; la password è gestita da Firebase Authentication e non è mai visibile allo sviluppatore. Se accedi con Google, Google condivide con Firebase nome, email, foto del profilo e identificativo del tuo account Google. Firebase registra anche la data di creazione dell'account e dell'ultimo accesso.
-- **Contenuti**: note (titolo, testo, liste di controllo, etichette, colori e stile, promemoria, collegamenti tra note, cronologia delle modifiche), task ed elenchi (sottotask, scadenze, ricorrenze, priorità) ed eventi del calendario.
+- **Contenuti**: note (titolo, testo, liste di controllo, etichette, colori e stile, promemoria, collegamenti tra note, cronologia delle modifiche), task ed elenchi (sottotask, scadenze, ricorrenze, priorità), eventi del calendario ed etichette.
 - **Note audio**: le registrazioni restano solo sul dispositivo; con la nota vengono sincronizzati soltanto nome, durata e percorso del file.
-- **Sul dispositivo**: preferenze dell'app (lingua, tema, layout, ordinamento, etichette personalizzate, opzioni di note e task, guida introduttiva e novità già viste, impostazioni dei backup), i backup automatici, una copia dei dati per l'uso offline, i promemoria programmati e i dati mostrati dal widget della schermata Home (numero di note e task, titolo dell'ultima nota). Sul web le preferenze sono salvate nel browser.
+- **Sul dispositivo**: preferenze dell'app (lingua, tema, layout, ordinamento, opzioni di note e task, guida introduttiva e novità già viste, impostazioni dei backup), i backup automatici, una copia dei dati per l'uso offline, i promemoria programmati e i dati mostrati dal widget della schermata Home (numero di note e task, titolo dell'ultima nota). Sul web le preferenze sono salvate nel browser.
 
 ### 3. Come usiamo i dati
 
@@ -81,7 +81,7 @@ Se questa informativa cambia, la nuova versione sarà disponibile nell'app (*Inf
 
 ## English
 
-**Last updated: October 24, 2026**
+**Last updated: October 28, 2026**
 
 Noteep is an app for notes, tasks and calendar. This policy explains which data it processes, why, and how you can control it. Noteep shows no ads, uses no analytics or tracking tools, and does not sell or hand over your data.
 
@@ -92,9 +92,9 @@ The data controller is Nicola De Nicolais, developer of Noteep. For any privacy 
 ### 2. Data we collect
 
 - **Account**: the email address you sign up with; the password is handled by Firebase Authentication and is never visible to the developer. If you sign in with Google, Google shares your name, email, profile photo and Google account ID with Firebase. Firebase also records when the account was created and when you last signed in.
-- **Content**: notes (title, text, checklists, labels, colors and style, reminders, links between notes, edit history), tasks and lists (subtasks, due dates, recurrence, priority) and calendar events.
+- **Content**: notes (title, text, checklists, labels, colors and style, reminders, links between notes, edit history), tasks and lists (subtasks, due dates, recurrence, priority), calendar events and labels.
 - **Audio notes**: recordings stay on your device only; just the file name, duration and path are synced with the note.
-- **On your device**: app preferences (language, theme, layout, sorting, custom labels, note and task options, intro guide and what's new already seen, backup settings), automatic backups, a copy of your data for offline use, scheduled reminders and the data shown by the Home screen widget (number of notes and tasks, title of the latest note). On the web, preferences are saved in the browser.
+- **On your device**: app preferences (language, theme, layout, sorting, note and task options, intro guide and what's new already seen, backup settings), automatic backups, a copy of your data for offline use, scheduled reminders and the data shown by the Home screen widget (number of notes and tasks, title of the latest note). On the web, preferences are saved in the browser.
 
 ### 3. How we use data
 
