@@ -15,10 +15,10 @@ const developerEmail = 'ndn21dev@gmail.com';
 /// `PRIVACY.md`): change both together.
 final privacyPolicyUpdatedAt = DateTime(2026, 10, 28);
 
-/// Online privacy policy. Points to `PRIVACY.md` on GitHub until the
-/// portfolio page `https://ndenicolais.github.io/noteep/privacy/` is online.
+/// Online privacy policy: the portfolio page, which is also the privacy URL
+/// of the Google OAuth consent screen.
 final uriPrivacyPolicy = Uri.parse(
-  'https://github.com/ndenicolais/Noteep/blob/master/PRIVACY.md',
+  'https://ndenicolais.github.io/noteep/privacy/',
 );
 
 /// Links of the Info screen.

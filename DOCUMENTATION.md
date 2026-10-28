@@ -309,7 +309,7 @@ The screen handles dialogs, file pickers and snackbars; data work is in `DataAct
 
 **Features:**
 - Info: logo, name, tagline, version (without build number), "What is Noteep", feature grid, links (source code, GitHub profile, email — external; onboarding, full changelog, privacy policy, open-source licenses — internal), credits. Max width 600. External links that fail to open show a snackbar.
-- Privacy policy: native localized copy of `PRIVACY.md`, with the last-updated date from `privacyPolicyUpdatedAt` and a link to the online version.
+- Privacy policy: native localized copy of `PRIVACY.md`, with the last-updated date from `privacyPolicyUpdatedAt` and a link to the online version (`uriPrivacyPolicy`: the portfolio page `https://ndenicolais.github.io/noteep/privacy/`).
 - Changelog dialog: one block per version with sections Added / Improved / Fixed / Security (empty ones hidden).
 
 ### 5.9 Home screen widgets (Android)
@@ -711,7 +711,7 @@ keyPassword=<key password>
 - Never commit: `key.properties`, keystores, `google-services.json`, `firebase_options.dart`, `symbols/`, `/tool/`, `deploy_android.ps1`, `CLAUDE.md`, `TASKS.md`.
 - Version source of truth: `version: X.Y.Z+N` in `pubspec.yaml` (`N` is the Android `versionCode` and always grows), mirrored by `appVersion`/`appBuildNumber` in `lib/core/constants/app_version.dart`. Each release adds a `ChangelogEntry` at the top of `changelogEntries`, with every bullet key in both ARB files (`changelog_test.dart` fails otherwise).
 - Obfuscation symbols go to `symbols/v<version>` (outside `build/`, so `flutter clean` keeps them) and are needed to read crash stack traces with `flutter symbolize`: keep them for every release.
-- Privacy policy: the same text lives in `PRIVACY.md`, in the ARB files (`PrivacyPolicyScreen`) and on the portfolio page. Update them together, with `privacyPolicyUpdatedAt` in `app_info.dart` equal to the date in `PRIVACY.md`, and before the release when adding services, analytics or permissions.
+- Privacy policy: the same text lives in `PRIVACY.md`, in the ARB files (`PrivacyPolicyScreen`) and on the portfolio page `https://ndenicolais.github.io/noteep/privacy/` (built from `NOTEEP_PORTFOLIO_PAGES.md` by the site project; it is also the privacy URL of the OAuth consent screen). Update them together, with `privacyPolicyUpdatedAt` in `app_info.dart` equal to the date in `PRIVACY.md`, and before the release when adding services, analytics or permissions.
 - Local tools: `tool/icons/generate_icons.ps1` (see [Theme and style](#8-theme-and-style)).
 - README previews: `flutter test tool/preview/generate_preview_test.dart` regenerates `images/noteep_preview.png` (tilted phones) and the screens without system bars (540 px wide) in `images/screenshots/<name>.png` from `images/screenshots/<name>_raw.png` (git-ignored and kept locally). The script lives outside `test/`, so it does not run with `flutter test`. Banner order: `editor`, `calendar`, `home`, `tasks`, `stats`; raw screenshots are 1080×2392 with gesture navigation, cropped by 108 px at the top and 70 px at the bottom. Screens are taken in English, light theme, with demo data.
 
