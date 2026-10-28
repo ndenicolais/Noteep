@@ -659,6 +659,7 @@ Helpers in `test/helpers/`: `createTestContainer(db)` / `firestoreOverrides(db)`
 flutter pub get
 flutter gen-l10n
 flutter run                                   # debug
+flutter run -d chrome --web-port 5000         # web: port 5000 is the authorized OAuth origin and API key referrer
 flutter analyze --fatal-infos --fatal-warnings
 dart format --output=none --set-exit-if-changed lib test
 flutter test
