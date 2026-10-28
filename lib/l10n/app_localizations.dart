@@ -3086,12 +3086,6 @@ abstract class AppLocalizations {
   /// **'Account eliminato.'**
   String get settingsAccountDeleted;
 
-  /// No description provided for @commonErrorDetail.
-  ///
-  /// In it, this message translates to:
-  /// **'Errore: {error}'**
-  String commonErrorDetail(String error);
-
   /// No description provided for @settingsImportError.
   ///
   /// In it, this message translates to:

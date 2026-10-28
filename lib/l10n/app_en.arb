@@ -512,7 +512,6 @@
   "settingsConfirmPassword": "Confirm your password",
   "settingsDeleteAccountFailed": "Unable to delete the account. Check your connection and try again.",
   "settingsAccountDeleted": "Account deleted.",
-  "commonErrorDetail": "Error: {error}",
   "settingsImportError": "Import error: {error}",
   "settingsBackupsLoadError": "Error loading backups: {error}",
   "settingsIcsSavedIn": "ICS calendar saved in:\n{path}",

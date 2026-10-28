@@ -65,11 +65,7 @@ class _NavScaffoldState extends State<NavScaffold> {
                 widget.section == DrawerSection.tasks ||
                 widget.section == DrawerSection.calendar) ...[
               const SizedBox(width: AppSpacing.xxl),
-              Image.asset(
-                'assets/images/app_logo.png',
-                width: 24,
-                height: 24,
-              ),
+              Image.asset('assets/images/app_logo.png', width: 24, height: 24),
               const SizedBox(width: AppSpacing.xs),
               Text(
                 'Noteep',

@@ -1633,11 +1633,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsAccountDeleted => 'Account deleted.';
 
   @override
-  String commonErrorDetail(String error) {
-    return 'Error: $error';
-  }
-
-  @override
   String settingsImportError(String error) {
     return 'Import error: $error';
   }

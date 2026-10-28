@@ -585,14 +585,6 @@
   "settingsConfirmPassword": "Conferma la password",
   "settingsDeleteAccountFailed": "Impossibile eliminare l'account. Controlla la connessione e riprova.",
   "settingsAccountDeleted": "Account eliminato.",
-  "commonErrorDetail": "Errore: {error}",
-  "@commonErrorDetail": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "settingsImportError": "Errore durante l'importazione: {error}",
   "@settingsImportError": {
     "placeholders": {
