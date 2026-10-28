@@ -513,9 +513,6 @@
   "settingsImportFullBackupSubtitle": "Ripristina dati da un file .json di backup",
   "settingsClearAll": "Cancella tutti i dati",
   "settingsClearAllSubtitle": "Elimina definitivamente note, task ed eventi",
-  "settingsGoogleDriveTitle": "Google Drive",
-  "settingsConnectDrive": "Collega Google Drive",
-  "settingsConnectDriveSubtitle": "Sincronizza i backup con il tuo account Google",
   "settingsAccountTitle": "Account",
   "settingsDeleteAccount": "Elimina account",
   "settingsDeleteAccountSubtitle": "Elimina definitivamente l'account e tutti i suoi dati",
@@ -588,7 +585,6 @@
   "settingsConfirmPassword": "Conferma la password",
   "settingsDeleteAccountFailed": "Impossibile eliminare l'account. Controlla la connessione e riprova.",
   "settingsAccountDeleted": "Account eliminato.",
-  "settingsDriveComingSoon": "La sincronizzazione con Google Drive sarà disponibile in una prossima versione.",
   "commonErrorDetail": "Errore: {error}",
   "@commonErrorDetail": {
     "placeholders": {
@@ -718,6 +714,7 @@
   "changelog_v2_0_0_bullet_44": "Etichette più utili: aggiungile a una nota dal menu dell'editor e tocca un'etichetta nella sezione Etichette per vedere le note che la usano. Ora sono salvate nel tuo account, quindi le ritrovi su ogni dispositivo.",
   "changelog_v2_0_0_bullet_45": "Nella sezione Promemoria puoi rimuovere in un colpo tutti i promemoria scaduti, e se ne togli uno per sbaglio basta toccare Annulla per rimetterlo.",
   "changelog_v2_0_0_bullet_46": "In Info e nelle Impostazioni la versione dell'app è mostrata in modo più semplice, senza il numero di build.",
+  "changelog_v2_0_0_bullet_47": "Dalle Impostazioni è stata tolta la voce Google Drive, che non era ancora attiva: tornerà quando la funzione sarà pronta.",
   "infoPrivacyOpen": "Informativa sulla privacy",
   "privacyPolicyTitle": "Informativa sulla privacy",
   "privacyPolicyIntro": "Noteep è un'app per note, task e calendario. Questa informativa spiega quali dati tratta, perché e come puoi controllarli. Noteep non mostra pubblicità, non usa strumenti di analisi o di tracciamento e non vende né cede i tuoi dati.",

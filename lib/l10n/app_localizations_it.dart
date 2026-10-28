@@ -1404,16 +1404,6 @@ class AppLocalizationsIt extends AppLocalizations {
       'Elimina definitivamente note, task ed eventi';
 
   @override
-  String get settingsGoogleDriveTitle => 'Google Drive';
-
-  @override
-  String get settingsConnectDrive => 'Collega Google Drive';
-
-  @override
-  String get settingsConnectDriveSubtitle =>
-      'Sincronizza i backup con il tuo account Google';
-
-  @override
   String get settingsAccountTitle => 'Account';
 
   @override
@@ -1651,10 +1641,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settingsAccountDeleted => 'Account eliminato.';
 
   @override
-  String get settingsDriveComingSoon =>
-      'La sincronizzazione con Google Drive sarà disponibile in una prossima versione.';
-
-  @override
   String commonErrorDetail(String error) {
     return 'Errore: $error';
   }
@@ -1820,6 +1806,10 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_46 =>
       'In Info e nelle Impostazioni la versione dell\'app è mostrata in modo più semplice, senza il numero di build.';
+
+  @override
+  String get changelog_v2_0_0_bullet_47 =>
+      'Dalle Impostazioni è stata tolta la voce Google Drive, che non era ancora attiva: tornerà quando la funzione sarà pronta.';
 
   @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';

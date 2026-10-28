@@ -112,9 +112,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         onImportFullBackup: () => _importFullBackup(context),
         onClearAll: () => _confirmClearAll(context),
       ),
-      SettingsGoogleDriveSection(
-        onTap: () => _showGoogleDriveComingSoon(context),
-      ),
       SettingsAccountSection(onDeleteAccount: () => _deleteAccount(context)),
       const SettingsInfoSection(),
     ];
@@ -414,14 +411,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       );
     }
   }
-
-  // -- Misc ------------------------------------------------------------------
-
-  void _showGoogleDriveComingSoon(BuildContext context) => showAppMessageDialog(
-    context,
-    title: context.l10n.settingsGoogleDriveTitle,
-    message: context.l10n.settingsDriveComingSoon,
-  );
 
   String _getFrequencyLabel(BackupFrequency frequency) {
     final l10n = context.l10n;

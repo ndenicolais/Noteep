@@ -2654,24 +2654,6 @@ abstract class AppLocalizations {
   /// **'Elimina definitivamente note, task ed eventi'**
   String get settingsClearAllSubtitle;
 
-  /// No description provided for @settingsGoogleDriveTitle.
-  ///
-  /// In it, this message translates to:
-  /// **'Google Drive'**
-  String get settingsGoogleDriveTitle;
-
-  /// No description provided for @settingsConnectDrive.
-  ///
-  /// In it, this message translates to:
-  /// **'Collega Google Drive'**
-  String get settingsConnectDrive;
-
-  /// No description provided for @settingsConnectDriveSubtitle.
-  ///
-  /// In it, this message translates to:
-  /// **'Sincronizza i backup con il tuo account Google'**
-  String get settingsConnectDriveSubtitle;
-
   /// No description provided for @settingsAccountTitle.
   ///
   /// In it, this message translates to:
@@ -3104,12 +3086,6 @@ abstract class AppLocalizations {
   /// **'Account eliminato.'**
   String get settingsAccountDeleted;
 
-  /// No description provided for @settingsDriveComingSoon.
-  ///
-  /// In it, this message translates to:
-  /// **'La sincronizzazione con Google Drive sarà disponibile in una prossima versione.'**
-  String get settingsDriveComingSoon;
-
   /// No description provided for @commonErrorDetail.
   ///
   /// In it, this message translates to:
@@ -3319,6 +3295,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'In Info e nelle Impostazioni la versione dell\'app è mostrata in modo più semplice, senza il numero di build.'**
   String get changelog_v2_0_0_bullet_46;
+
+  /// No description provided for @changelog_v2_0_0_bullet_47.
+  ///
+  /// In it, this message translates to:
+  /// **'Dalle Impostazioni è stata tolta la voce Google Drive, che non era ancora attiva: tornerà quando la funzione sarà pronta.'**
+  String get changelog_v2_0_0_bullet_47;
 
   /// No description provided for @infoPrivacyOpen.
   ///

@@ -15,29 +15,6 @@ import '../../l10n/l10n.dart';
 import '../../widgets/shared/action_tile.dart';
 import '../../widgets/shared/section_header.dart';
 
-/// "Google Drive" section: coming-soon sync entry point.
-class SettingsGoogleDriveSection extends StatelessWidget {
-  const SettingsGoogleDriveSection({super.key, required this.onTap});
-
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SectionHeader(context.l10n.settingsGoogleDriveTitle),
-        ActionTile(
-          icon: Icons.cloud_outlined,
-          title: context.l10n.settingsConnectDrive,
-          subtitle: context.l10n.settingsConnectDriveSubtitle,
-          onTap: onTap,
-        ),
-      ],
-    );
-  }
-}
-
 /// "Account" section: permanent deletion of the account and all its data.
 class SettingsAccountSection extends StatelessWidget {
   const SettingsAccountSection({super.key, required this.onDeleteAccount});
