@@ -1811,6 +1811,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Nelle Impostazioni tema e lingua si scelgono con dei comodi pulsanti affiancati, invece che da un elenco.';
 
   @override
+  String get changelog_v2_0_0_bullet_49 =>
+      'Nella schermata principale le note scritte con la formattazione mostrano il testo pulito, senza simboli come asterischi o cancelletti. Lo stesso vale per l\'anteprima dei promemoria e per l\'elenco delle note da collegare.';
+
+  @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';
 
   @override

@@ -242,6 +242,7 @@ The list of active notes and the note editor.
 **Features:**
 - Grid (masonry: one lazy column per `SliverList`, natural card height, note *i* in column *i % columns*) or list layout, chosen in Settings. Drag and drop reorders notes in the grid; in the list, swipe right archives and swipe left trashes.
 - Search and sort sheet.
+- Cards show up to 8 lines of the content as plain text (`markdownToPlainText`): Markdown is rendered only in the editor preview, because `MarkdownBody` cannot be truncated to a number of lines and would make links inside the card steal the tap that opens the note.
 - States: skeleton (`NotesSkeleton`) during the first load, empty state with "Create your first note" (hidden when the list is empty only because of a search), sync-error state with "Retry", pull to refresh (`notesProvider.reload`). Transitions between these states use `FadeSwitcher`.
 - FAB: a speed dial (note, checklist, task, audio, from template) or, if disabled in Settings, a plain FAB that creates a note.
 - Opens the "What's new" dialog after an update and runs the automatic backup when it is due.
@@ -430,6 +431,7 @@ Records with `record` into `<documents>/audio_notes/` and plays with `just_audio
 | `DataExportService` | JSON and ICS file writing and picking for Settings |
 | `downloader.dart` (`_io`, `_web`, `_stub`) | Conditional import: save/share a file on mobile, download it on the web |
 | `link_utils.dart` | `normalizeUrl` (adds `https://`, `null` if invalid), `buildMarkdownLink` (escapes brackets and URL characters), `openExternalLink` (external app). Allowed schemes: `http`, `https`, `mailto`, `tel`; the matching `<queries>` are in the Android manifest |
+| `markdown_text.dart` | `markdownToPlainText(source)`: removes Markdown syntax (headings, emphasis, code, quotes, rules, links, images) and turns list items into `• `, keeping escaped characters and `snake_case` words literal. Used by previews that show note text unrendered: `NoteCard`, the reminder notification body and the link sheet. Test: `test/utils/markdown_text_test.dart` |
 | `recurrence.dart` | `RecurrenceType`, `recurrenceTypeFromString`, labels, `calendarEventOccursOn`. Test: `test/utils/recurrence_test.dart` |
 | `dialogs/move_to_list_dialog.dart` | Dialog to move a task to another list |
 
@@ -605,7 +607,7 @@ dev_dependencies:
 
 Run with `flutter test`. No real Firebase project is needed.
 
-- **Pure logic**: recurrence, ICS import/export round trip, changelog service and entries (`it`/`en` changelog keys match, each bullet used once), notification payloads, Home widget URIs, colors contrast, text theme, task sorting, login validators.
+- **Pure logic**: recurrence, Markdown to plain text, ICS import/export round trip, changelog service and entries (`it`/`en` changelog keys match, each bullet used once), notification payloads, Home widget URIs, colors contrast, text theme, task sorting, login validators.
 - **With fakes**: data notifiers, labels, undo/redo, backup restore, `DataActions` (including account wipe isolation between users), offline sync (`FirestoreListMutations` with a short `writeGrace`) against `fake_cloud_firestore`; `BackupService` on a real temp folder with a mocked `path_provider` channel.
 - **Widget and layout**: editors, Info, boot error, router, notification and Home widget launch handlers, masonry grid, rebuild granularity, `NoteHero`, skeletons, `FadeSwitcher`, design-system components, dialogs, swipe actions, empty state; accessibility (200% text on 360×690 without overflow, card semantics and custom actions, sheets above the navigation bar).
 
@@ -708,6 +710,7 @@ keyPassword=<key password>
 - Obfuscation symbols go to `symbols/v<version>` (outside `build/`, so `flutter clean` keeps them) and are needed to read crash stack traces with `flutter symbolize`: keep them for every release.
 - Privacy policy: the same text lives in `PRIVACY.md`, in the ARB files (`PrivacyPolicyScreen`) and on the portfolio page. Update them together, with `privacyPolicyUpdatedAt` in `app_info.dart` equal to the date in `PRIVACY.md`, and before the release when adding services, analytics or permissions.
 - Local tools: `tool/icons/generate_icons.ps1` (see [Theme and style](#8-theme-and-style)).
+- README previews: `flutter test tool/preview/generate_preview_test.dart` regenerates `images/noteep_preview.png` (tilted phones) and the screens without system bars (540 px wide) in `images/screenshots/<name>.png` from `images/screenshots/<name>_raw.png` (git-ignored and kept locally). The script lives outside `test/`, so it does not run with `flutter test`. Banner order: `editor`, `calendar`, `home`, `tasks`, `stats`; raw screenshots are 1080×2392 with gesture navigation, cropped by 108 px at the top and 70 px at the bottom. Screens are taken in English, light theme, with demo data.
 
 ---
 

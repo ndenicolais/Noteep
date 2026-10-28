@@ -19,6 +19,7 @@ import '../theme/app_colors.dart';
 import '../theme/app_font_sizes.dart';
 import '../theme/app_radius.dart';
 import '../theme/app_spacing.dart';
+import '../utils/markdown_text.dart';
 import 'shared/note_hero.dart';
 import 'shared/error_feedback.dart';
 import 'shared/tag_chip.dart';
@@ -249,7 +250,7 @@ class NoteCard extends ConsumerWidget {
                       _ChecklistPreview(note: note, textStyle: textStyle)
                     else
                       Text(
-                        note.content,
+                        markdownToPlainText(note.content),
                         style: textStyle,
                         maxLines: 8,
                         overflow: TextOverflow.ellipsis,

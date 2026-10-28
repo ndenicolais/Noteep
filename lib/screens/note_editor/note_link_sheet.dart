@@ -13,6 +13,7 @@ import '../../l10n/l10n.dart';
 import '../../models/note_model.dart';
 import '../../theme/app_font_sizes.dart';
 import '../../theme/app_spacing.dart';
+import '../../utils/markdown_text.dart';
 
 class NoteLinkSheet extends StatefulWidget {
   const NoteLinkSheet({
@@ -88,7 +89,7 @@ class _NoteLinkSheetState extends State<NoteLinkSheet> {
                       subtitle:
                           note.content.isNotEmpty
                               ? Text(
-                                note.content,
+                                markdownToPlainText(note.content),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(

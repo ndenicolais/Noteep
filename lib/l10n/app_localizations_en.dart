@@ -1802,6 +1802,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'In Settings, theme and language are now picked with handy side-by-side buttons instead of a list.';
 
   @override
+  String get changelog_v2_0_0_bullet_49 =>
+      'On the main screen, notes written with formatting now show clean text, without symbols such as asterisks or hash signs. The same goes for reminder previews and the list of notes to link.';
+
+  @override
   String get infoPrivacyOpen => 'Privacy policy';
 
   @override

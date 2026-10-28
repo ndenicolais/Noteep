@@ -10,6 +10,7 @@ import '../core/routing/notification_target.dart';
 import '../l10n/l10n.dart';
 import '../models/note_model.dart';
 import '../models/task_model.dart';
+import 'markdown_text.dart';
 
 class NotificationService {
   NotificationService._();
@@ -114,6 +115,7 @@ class NotificationService {
     final reminder = note.reminder;
     if (reminder == null) return;
     final l10n = currentL10n();
+    final content = markdownToPlainText(note.content);
     await scheduleNotification(
       id: idForNote(note.id),
       title:
@@ -121,9 +123,9 @@ class NotificationService {
               ? l10n.editorReminderNotificationTitle
               : note.title,
       body:
-          note.content.isEmpty
+          content.isEmpty
               ? l10n.editorReminderNotificationBody
-              : _preview(note.content),
+              : _preview(content),
       scheduledAt: reminder,
       target: NotificationTarget.note(note.id),
     );
