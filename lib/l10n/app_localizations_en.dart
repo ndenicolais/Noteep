@@ -1821,6 +1821,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'The pin button has been removed from calendar events, where it had no effect: events in the calendar are already ordered by date and time.';
 
   @override
+  String get changelog_v2_0_0_bullet_53 =>
+      'The open-source licenses page now also lists the licenses of the fonts used by the app.';
+
+  @override
   String get infoPrivacyOpen => 'Privacy policy';
 
   @override

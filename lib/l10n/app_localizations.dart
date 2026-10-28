@@ -3332,6 +3332,12 @@ abstract class AppLocalizations {
   /// **'Dagli eventi del calendario è stato tolto il pulsante per fissarli, che non aveva effetto: nel calendario gli eventi sono già ordinati per data e ora.'**
   String get changelog_v2_0_0_bullet_52;
 
+  /// No description provided for @changelog_v2_0_0_bullet_53.
+  ///
+  /// In it, this message translates to:
+  /// **'Nella pagina delle licenze open source ora compaiono anche quelle dei caratteri usati dall\'app.'**
+  String get changelog_v2_0_0_bullet_53;
+
   /// No description provided for @infoPrivacyOpen.
   ///
   /// In it, this message translates to:

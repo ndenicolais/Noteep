@@ -12,6 +12,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart' show Intl;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,6 +49,7 @@ class AppBootstrap {
   /// SharedPreferences) fails; optional ones (notifications, home widget,
   /// date locale) only log the failure.
   static Future<SharedPreferences> init() async {
+    registerFontLicenses();
     if (Firebase.apps.isEmpty) {
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
@@ -71,6 +73,33 @@ class AppBootstrap {
     await _optional('notifications', NotificationService.instance.init);
     await _optional('home widget', WidgetService.instance.init);
     return prefs;
+  }
+
+  /// Bundled fonts, as (package names on the licenses page, OFL text asset).
+  static const fontLicenses = [
+    ('Exo 2', 'assets/fonts/Exo2-OFL.txt'),
+    ('Montserrat', 'assets/fonts/Montserrat-OFL.txt'),
+    ('Open Sans', 'assets/fonts/OpenSans-OFL.txt'),
+    ('Dancing Script', 'assets/fonts/DancingScript-OFL.txt'),
+    ('Playfair Display', 'assets/fonts/PlayfairDisplay-OFL.txt'),
+    ('Pacifico', 'assets/fonts/Pacifico-OFL.txt'),
+  ];
+
+  static bool _fontLicensesRegistered = false;
+
+  /// Adds the SIL Open Font License of each bundled font to the licenses
+  /// page (Info → Open-source licenses), as the OFL requires. The texts are
+  /// read only when the page is opened. Safe to call again on Retry.
+  static void registerFontLicenses() {
+    if (_fontLicensesRegistered) return;
+    _fontLicensesRegistered = true;
+    LicenseRegistry.addLicense(() async* {
+      for (final (family, asset) in fontLicenses) {
+        yield LicenseEntryWithLineBreaks([
+          family,
+        ], await rootBundle.loadString(asset));
+      }
+    });
   }
 
   static Future<void> _optional(

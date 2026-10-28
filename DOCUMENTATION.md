@@ -379,7 +379,8 @@ Plain classes in `lib/utils/`, not tied to Riverpod.
 **Path:** `lib/utils/app_bootstrap.dart`
 
 - `installErrorHandlers()`: `PlatformDispatcher.onError` logs (debug only) unhandled async errors instead of crashing; in release `ErrorWidget.builder` shows a neutral icon.
-- `init()`: **required** steps (failure shows `BootErrorApp`): `Firebase.initializeApp` (skipped if already done, for Retry), Firestore `Settings(persistenceEnabled: true, cacheSizeBytes: CACHE_SIZE_UNLIMITED)` (persistence is not the default on the web), `SharedPreferences`, then `Intl.defaultLocale = startupLanguageCode(prefs)` so text built before the first frame is already localized. **Optional** steps (failure only logged): `initializeDateFormatting` for `it`/`en`, `NotificationService.init()`, `WidgetService.init()`.
+- `registerFontLicenses()`: registers the OFL text of each bundled font with `LicenseRegistry` (read lazily when the licenses page opens; only once, also on Retry). Test: `test/utils/font_licenses_test.dart`.
+- `init()`: registers the font licenses, then runs the **required** steps (failure shows `BootErrorApp`): `Firebase.initializeApp` (skipped if already done, for Retry), Firestore `Settings(persistenceEnabled: true, cacheSizeBytes: CACHE_SIZE_UNLIMITED)` (persistence is not the default on the web), `SharedPreferences`, then `Intl.defaultLocale = startupLanguageCode(prefs)` so text built before the first frame is already localized. **Optional** steps (failure only logged): `initializeDateFormatting` for `it`/`en`, `NotificationService.init()`, `WidgetService.init()`.
 
 ### 7.2 NotificationService
 
@@ -448,7 +449,7 @@ Records with `record` into `<documents>/audio_notes/` and plays with `just_audio
 
 ## 8. Theme and style
 
-**Fonts.** The UI uses **Exo 2**, bundled in `assets/fonts/`. Notes can also use Montserrat, Open Sans, Dancing Script, Playfair Display and Pacifico (`kNoteFonts` in `font_family_picker.dart`). All fonts are bundled variable fonts, so they work offline.
+**Fonts.** The UI uses **Exo 2**, bundled in `assets/fonts/`. Notes can also use Montserrat, Open Sans, Dancing Script, Playfair Display and Pacifico (`kNoteFonts` in `font_family_picker.dart`). All fonts are bundled variable fonts, so they work offline. Each one ships its SIL Open Font License text next to it (`assets/fonts/<Family>-OFL.txt`, from the google/fonts repository), and `AppBootstrap.registerFontLicenses()` adds them to the licenses page, as the OFL requires; a new font needs its OFL file and an entry in `AppBootstrap.fontLicenses`.
 
 **App icon.** Source logo `assets/images/app_logo.png` (1024×1024, transparent, rendered from `design/app-icon/foreground.svg`) and `design/app-icon/app_logo_mono.png` (themed icons: the check mark is cut out, otherwise the full silhouette would disappear). The local script `tool/icons/generate_icons.ps1` (`/tool/` is git-ignored) uses background `#3D3F4D` and writes:
 
@@ -720,6 +721,6 @@ keyPassword=<key password>
 
 Copyright © 2026 Nicola De Nicolais. Source-available, non-commercial license: see [LICENSE](LICENSE). Commercial use, including publishing on an app store, requires written permission.
 
-Bundled fonts (Exo 2, Montserrat, Open Sans, Dancing Script, Playfair Display, Pacifico) are Google Fonts under the SIL Open Font License 1.1. Third-party package licenses are shown in the app (Info → Open-source licenses).
+Bundled fonts (Exo 2, Montserrat, Open Sans, Dancing Script, Playfair Display, Pacifico) are Google Fonts under the SIL Open Font License 1.1; their license texts are in `assets/fonts/*-OFL.txt`. Font and third-party package licenses are shown in the app (Info → Open-source licenses).
 
 Author: Nicola De Nicolais — ndn21dev@gmail.com — [github.com/ndenicolais](https://github.com/ndenicolais)

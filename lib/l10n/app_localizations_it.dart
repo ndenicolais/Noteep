@@ -1830,6 +1830,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Dagli eventi del calendario è stato tolto il pulsante per fissarli, che non aveva effetto: nel calendario gli eventi sono già ordinati per data e ora.';
 
   @override
+  String get changelog_v2_0_0_bullet_53 =>
+      'Nella pagina delle licenze open source ora compaiono anche quelle dei caratteri usati dall\'app.';
+
+  @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';
 
   @override
