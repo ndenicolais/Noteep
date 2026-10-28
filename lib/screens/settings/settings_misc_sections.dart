@@ -71,7 +71,7 @@ class SettingsInfoSection extends StatelessWidget {
     return ActionTile(
       icon: Icons.info_outline,
       title: context.l10n.infoTitle,
-      subtitle: context.l10n.infoVersion(appVersion, appBuildNumber),
+      subtitle: context.l10n.infoVersion(appVersion),
       onTap: () => AppNav.openInfo(context),
     );
   }

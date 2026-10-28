@@ -1678,8 +1678,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String infoVersion(String version, int build) {
-    return 'Version $version (build $build)';
+  String infoVersion(String version) {
+    return 'Version $version';
   }
 
   @override
@@ -1807,6 +1807,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_45 =>
       'In the Reminders section you can remove all past reminders at once, and if you remove one by mistake just tap Undo to bring it back.';
+
+  @override
+  String get changelog_v2_0_0_bullet_46 =>
+      'In Info and Settings the app version is shown more simply, without the build number.';
 
   @override
   String get infoPrivacyOpen => 'Privacy policy';

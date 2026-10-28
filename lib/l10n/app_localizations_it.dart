@@ -1686,8 +1686,8 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String infoVersion(String version, int build) {
-    return 'Versione $version (build $build)';
+  String infoVersion(String version) {
+    return 'Versione $version';
   }
 
   @override
@@ -1816,6 +1816,10 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_45 =>
       'Nella sezione Promemoria puoi rimuovere in un colpo tutti i promemoria scaduti, e se ne togli uno per sbaglio basta toccare Annulla per rimetterlo.';
+
+  @override
+  String get changelog_v2_0_0_bullet_46 =>
+      'In Info e nelle Impostazioni la versione dell\'app è mostrata in modo più semplice, senza il numero di build.';
 
   @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';

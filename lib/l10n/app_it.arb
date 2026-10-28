@@ -629,14 +629,11 @@
       }
     }
   },
-  "infoVersion": "Versione {version} (build {build})",
+  "infoVersion": "Versione {version}",
   "@infoVersion": {
     "placeholders": {
       "version": {
         "type": "String"
-      },
-      "build": {
-        "type": "int"
       }
     }
   },
@@ -720,6 +717,7 @@
   "changelog_v2_0_0_bullet_43": "Gli eventi del calendario possono avere un solo orario: l'ora di fine ora è facoltativa e puoi sceglierla tu.",
   "changelog_v2_0_0_bullet_44": "Etichette più utili: aggiungile a una nota dal menu dell'editor e tocca un'etichetta nella sezione Etichette per vedere le note che la usano. Ora sono salvate nel tuo account, quindi le ritrovi su ogni dispositivo.",
   "changelog_v2_0_0_bullet_45": "Nella sezione Promemoria puoi rimuovere in un colpo tutti i promemoria scaduti, e se ne togli uno per sbaglio basta toccare Annulla per rimetterlo.",
+  "changelog_v2_0_0_bullet_46": "In Info e nelle Impostazioni la versione dell'app è mostrata in modo più semplice, senza il numero di build.",
   "infoPrivacyOpen": "Informativa sulla privacy",
   "privacyPolicyTitle": "Informativa sulla privacy",
   "privacyPolicyIntro": "Noteep è un'app per note, task e calendario. Questa informativa spiega quali dati tratta, perché e come puoi controllarli. Noteep non mostra pubblicità, non usa strumenti di analisi o di tracciamento e non vende né cede i tuoi dati.",

@@ -116,7 +116,7 @@ class _Header extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.xs),
         Text(
-          context.l10n.infoVersion(appVersion, appBuildNumber),
+          context.l10n.infoVersion(appVersion),
           style: tt.bodySmall?.copyWith(color: muted),
         ),
       ],

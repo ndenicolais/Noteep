@@ -3143,8 +3143,8 @@ abstract class AppLocalizations {
   /// No description provided for @infoVersion.
   ///
   /// In it, this message translates to:
-  /// **'Versione {version} (build {build})'**
-  String infoVersion(String version, int build);
+  /// **'Versione {version}'**
+  String infoVersion(String version);
 
   /// No description provided for @infoDescription.
   ///
@@ -3313,6 +3313,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Nella sezione Promemoria puoi rimuovere in un colpo tutti i promemoria scaduti, e se ne togli uno per sbaglio basta toccare Annulla per rimetterlo.'**
   String get changelog_v2_0_0_bullet_45;
+
+  /// No description provided for @changelog_v2_0_0_bullet_46.
+  ///
+  /// In it, this message translates to:
+  /// **'In Info e nelle Impostazioni la versione dell\'app è mostrata in modo più semplice, senza il numero di build.'**
+  String get changelog_v2_0_0_bullet_46;
 
   /// No description provided for @infoPrivacyOpen.
   ///

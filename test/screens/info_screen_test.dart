@@ -27,10 +27,7 @@ void main() {
     await _pump(tester);
     await tester.pumpAndSettle();
     expect(find.text('Noteep'), findsOneWidget);
-    expect(
-      find.text('Versione $appVersion (build $appBuildNumber)'),
-      findsOneWidget,
-    );
+    expect(find.text('Versione $appVersion'), findsOneWidget);
     expect(find.text('FUNZIONALITÀ'), findsOneWidget);
     expect(find.text('Codice sorgente'), findsOneWidget);
     expect(find.text('Realizzato da $developerName'), findsOneWidget);
