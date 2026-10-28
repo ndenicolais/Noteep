@@ -705,10 +705,11 @@ keyPassword=<key password>
 - `android/app/build.gradle` signs `release` with `signingConfigs.release` when the file exists; without it (a fresh clone) it falls back to the debug key so `flutter run --release` still works. Published APKs must always use the release key.
 - Keep the keystore and its passwords backed up outside the repo: a lost key means users must uninstall to update.
 - Register the release key's SHA-1/SHA-256 in Firebase (Android app), in the Android API key restriction on Google Cloud, and in Play Console (`PLAY_CONSOLE_REGISTRATION.md`).
+- **Android developer verification**: `android/app/src/main/assets/adi-registration.properties` holds the Play Console account snippet (only the snippet, no trailing newline) that proves ownership of the release key for the package registration. It is git-ignored (`android/.gitignore`), like in the other apps of the account, which share the same snippet: recreate it from Play Console on a new machine before building an APK to upload there.
 
 **Notes**
 
-- Never commit: `key.properties`, keystores, `google-services.json`, `firebase_options.dart`, `symbols/`, `/tool/`, `deploy_android.ps1`, `CLAUDE.md`, `TASKS.md`.
+- Never commit: `key.properties`, keystores, `google-services.json`, `firebase_options.dart`, `adi-registration.properties`, `symbols/`, `/tool/`, `deploy_android.ps1`, `CLAUDE.md`, `TASKS.md`.
 - Version source of truth: `version: X.Y.Z+N` in `pubspec.yaml` (`N` is the Android `versionCode` and always grows), mirrored by `appVersion`/`appBuildNumber` in `lib/core/constants/app_version.dart`. Each release adds a `ChangelogEntry` at the top of `changelogEntries`, with every bullet key in both ARB files (`changelog_test.dart` fails otherwise).
 - Obfuscation symbols go to `symbols/v<version>` (outside `build/`, so `flutter clean` keeps them) and are needed to read crash stack traces with `flutter symbolize`: keep them for every release.
 - Privacy policy: the same text lives in `PRIVACY.md`, in the ARB files (`PrivacyPolicyScreen`) and on the portfolio page `https://ndenicolais.github.io/noteep/privacy/` (built from `NOTEEP_PORTFOLIO_PAGES.md` by the site project; it is also the privacy URL of the OAuth consent screen). Update them together, with `privacyPolicyUpdatedAt` in `app_info.dart` equal to the date in `PRIVACY.md`, and before the release when adding services, analytics or permissions.

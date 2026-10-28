@@ -11,3 +11,6 @@ GeneratedPluginRegistrant.java
 key.properties
 **/*.keystore
 **/*.jks
+
+# Android developer verification snippet (only needed for the Play Console ownership check)
+**/adi-registration.properties
