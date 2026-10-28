@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import '../../l10n/l10n.dart';
 import '../../providers/settings/locale_provider.dart';
 import '../../widgets/shared/section_header.dart';
+import '../../widgets/shared/segmented_choice.dart';
 
 /// "Lingua" section: system/Italian/English UI language selector. Language
 /// names are written in their own language, so they are not translated.
@@ -32,26 +33,18 @@ class SettingsLanguageSection extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         SectionHeader(l10n.settingsLanguageTitle),
-        RadioGroup<AppLanguage>(
-          groupValue: language,
-          onChanged: (v) => onChanged(v!),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              RadioListTile<AppLanguage>(
-                title: Text(l10n.settingsLanguageSystem),
-                value: AppLanguage.system,
-              ),
-              const RadioListTile<AppLanguage>(
-                title: Text('Italiano'),
-                value: AppLanguage.it,
-              ),
-              const RadioListTile<AppLanguage>(
-                title: Text('English'),
-                value: AppLanguage.en,
-              ),
-            ],
-          ),
+        SegmentedChoice<AppLanguage>(
+          selected: language,
+          onChanged: onChanged,
+          segments: [
+            ButtonSegment(
+              value: AppLanguage.system,
+              icon: const Icon(Icons.smartphone),
+              label: Text(l10n.settingsLanguageSystem),
+            ),
+            const ButtonSegment(value: AppLanguage.it, label: Text('Italiano')),
+            const ButtonSegment(value: AppLanguage.en, label: Text('English')),
+          ],
         ),
       ],
     );

@@ -24,7 +24,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsLanguageTitle => 'Language';
 
   @override
-  String get settingsLanguageSystem => 'System language';
+  String get settingsLanguageSystem => 'System';
 
   @override
   String get changelog_dialog_title => 'What\'s new';
@@ -1801,6 +1801,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_47 =>
       'The Google Drive entry, which was not active yet, has been removed from Settings: it will come back once the feature is ready.';
+
+  @override
+  String get changelog_v2_0_0_bullet_48 =>
+      'In Settings, theme and language are now picked with handy side-by-side buttons instead of a list.';
 
   @override
   String get infoPrivacyOpen => 'Privacy policy';

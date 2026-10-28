@@ -24,7 +24,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settingsLanguageTitle => 'Lingua';
 
   @override
-  String get settingsLanguageSystem => 'Lingua del sistema';
+  String get settingsLanguageSystem => 'Sistema';
 
   @override
   String get changelog_dialog_title => 'Novità';
@@ -1810,6 +1810,10 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_47 =>
       'Dalle Impostazioni è stata tolta la voce Google Drive, che non era ancora attiva: tornerà quando la funzione sarà pronta.';
+
+  @override
+  String get changelog_v2_0_0_bullet_48 =>
+      'Nelle Impostazioni tema e lingua si scelgono con dei comodi pulsanti affiancati, invece che da un elenco.';
 
   @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';

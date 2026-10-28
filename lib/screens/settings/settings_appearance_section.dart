@@ -11,6 +11,7 @@
 import 'package:flutter/material.dart';
 import '../../l10n/l10n.dart';
 import '../../widgets/shared/section_header.dart';
+import '../../widgets/shared/segmented_choice.dart';
 
 /// "Aspetto" section: system/light/dark theme mode selector.
 class SettingsAppearanceSection extends StatelessWidget {
@@ -30,26 +31,26 @@ class SettingsAppearanceSection extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         SectionHeader(l10n.settingsAppearanceTitle),
-        RadioGroup<ThemeMode>(
-          groupValue: themeMode,
-          onChanged: (v) => onChanged(v!),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              RadioListTile<ThemeMode>(
-                title: Text(l10n.settingsThemeSystem),
-                value: ThemeMode.system,
-              ),
-              RadioListTile<ThemeMode>(
-                title: Text(l10n.settingsThemeLight),
-                value: ThemeMode.light,
-              ),
-              RadioListTile<ThemeMode>(
-                title: Text(l10n.settingsThemeDark),
-                value: ThemeMode.dark,
-              ),
-            ],
-          ),
+        SegmentedChoice<ThemeMode>(
+          selected: themeMode,
+          onChanged: onChanged,
+          segments: [
+            ButtonSegment(
+              value: ThemeMode.system,
+              icon: const Icon(Icons.smartphone),
+              label: Text(l10n.settingsThemeSystem),
+            ),
+            ButtonSegment(
+              value: ThemeMode.light,
+              icon: const Icon(Icons.light_mode),
+              label: Text(l10n.settingsThemeLight),
+            ),
+            ButtonSegment(
+              value: ThemeMode.dark,
+              icon: const Icon(Icons.dark_mode),
+              label: Text(l10n.settingsThemeDark),
+            ),
+          ],
         ),
       ],
     );

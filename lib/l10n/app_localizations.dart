@@ -131,7 +131,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsLanguageSystem.
   ///
   /// In it, this message translates to:
-  /// **'Lingua del sistema'**
+  /// **'Sistema'**
   String get settingsLanguageSystem;
 
   /// No description provided for @changelog_dialog_title.
@@ -3301,6 +3301,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Dalle Impostazioni è stata tolta la voce Google Drive, che non era ancora attiva: tornerà quando la funzione sarà pronta.'**
   String get changelog_v2_0_0_bullet_47;
+
+  /// No description provided for @changelog_v2_0_0_bullet_48.
+  ///
+  /// In it, this message translates to:
+  /// **'Nelle Impostazioni tema e lingua si scelgono con dei comodi pulsanti affiancati, invece che da un elenco.'**
+  String get changelog_v2_0_0_bullet_48;
 
   /// No description provided for @infoPrivacyOpen.
   ///
