@@ -203,10 +203,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loginPrivacyNotice =>
-      'By continuing you confirm you are at least 14 and have read the privacy policy.';
-
-  @override
-  String get loginPrivacyLink => 'Read the privacy policy';
+      'By continuing, you confirm that you are at least 14 years old and have read the privacy policy.';
 
   @override
   String get loginForgotPassword => 'Forgot password?';
@@ -1836,8 +1833,8 @@ class AppLocalizationsEn extends AppLocalizations {
       'Switching between menu sections is smoother: the pages underneath no longer show through during the animation.';
 
   @override
-  String get changelog_v2_0_1_bullet_1 =>
-      'The sign-in screen now lets you read the privacy policy before creating an account.';
+  String get changelog_v2_0_0_bullet_55 =>
+      'Before you sign up or continue with Google, the app shows the minimum age and a link to the privacy policy, which you can read without an account.';
 
   @override
   String get infoPrivacyOpen => 'Privacy policy';

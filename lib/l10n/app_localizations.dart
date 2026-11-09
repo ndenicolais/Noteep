@@ -428,12 +428,6 @@ abstract class AppLocalizations {
   /// **'Continuando confermi di avere almeno 14 anni e di aver letto l\'informativa sulla privacy.'**
   String get loginPrivacyNotice;
 
-  /// No description provided for @loginPrivacyLink.
-  ///
-  /// In it, this message translates to:
-  /// **'Leggi l\'informativa sulla privacy'**
-  String get loginPrivacyLink;
-
   /// No description provided for @loginForgotPassword.
   ///
   /// In it, this message translates to:
@@ -3356,11 +3350,11 @@ abstract class AppLocalizations {
   /// **'Il passaggio da una sezione all\'altra del menu è più pulito: durante l\'animazione non si intravedono più le pagine sottostanti.'**
   String get changelog_v2_0_0_bullet_54;
 
-  /// No description provided for @changelog_v2_0_1_bullet_1.
+  /// No description provided for @changelog_v2_0_0_bullet_55.
   ///
   /// In it, this message translates to:
-  /// **'Nella schermata di accesso ora puoi leggere l\'informativa sulla privacy prima di creare l\'account.'**
-  String get changelog_v2_0_1_bullet_1;
+  /// **'Prima di registrarti o di continuare con Google, l\'app mostra l\'età minima e un link all\'informativa sulla privacy, leggibile anche senza account.'**
+  String get changelog_v2_0_0_bullet_55;
 
   /// No description provided for @infoPrivacyOpen.
   ///

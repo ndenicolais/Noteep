@@ -151,9 +151,11 @@ class LoginPrivacyNotice extends StatelessWidget {
             color: theme.colorScheme.onSurfaceVariant,
           ),
         ),
+        // A real button rather than a text span: full touch target and
+        // announced as a button by screen readers.
         TextButton(
           onPressed: () => AppNav.openPrivacyPolicy(context),
-          child: Text(context.l10n.loginPrivacyLink),
+          child: Text(context.l10n.infoPrivacyOpen),
         ),
       ],
     );

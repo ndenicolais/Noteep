@@ -24,7 +24,7 @@ void main() {
     );
 
     expect(find.text(itL10n.loginPrivacyNotice), findsOneWidget);
-    await tester.tap(find.text(itL10n.loginPrivacyLink));
+    await tester.tap(find.text(itL10n.infoPrivacyOpen));
     await tester.pumpAndSettle();
     expect(find.byType(PrivacyPolicyScreen), findsOneWidget);
   });

@@ -207,9 +207,6 @@ class AppLocalizationsIt extends AppLocalizations {
       'Continuando confermi di avere almeno 14 anni e di aver letto l\'informativa sulla privacy.';
 
   @override
-  String get loginPrivacyLink => 'Leggi l\'informativa sulla privacy';
-
-  @override
   String get loginForgotPassword => 'Password dimenticata?';
 
   @override
@@ -1845,8 +1842,8 @@ class AppLocalizationsIt extends AppLocalizations {
       'Il passaggio da una sezione all\'altra del menu è più pulito: durante l\'animazione non si intravedono più le pagine sottostanti.';
 
   @override
-  String get changelog_v2_0_1_bullet_1 =>
-      'Nella schermata di accesso ora puoi leggere l\'informativa sulla privacy prima di creare l\'account.';
+  String get changelog_v2_0_0_bullet_55 =>
+      'Prima di registrarti o di continuare con Google, l\'app mostra l\'età minima e un link all\'informativa sulla privacy, leggibile anche senza account.';
 
   @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';
