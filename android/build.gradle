@@ -18,7 +18,7 @@ subprojects {
 // (see HomeWidgetBackgroundWorker.kt), one step above this project's default
 // of 1.8 — bump only that module's Kotlin compile, rather than forcing every
 // plugin to a higher target and risking new Java/Kotlin mismatches in others
-// (audio_waveforms et al. are fine left at their own defaults).
+// (the other plugins are fine left at their own defaults).
 subprojects {
     if (project.path == ":home_widget") {
         tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
