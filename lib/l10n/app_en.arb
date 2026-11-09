@@ -558,6 +558,7 @@
   "changelog_v2_0_0_bullet_54": "Switching between menu sections is smoother: the pages underneath no longer show through during the animation.",
   "changelog_v2_0_0_bullet_55": "Before you sign up or continue with Google, the app shows the minimum age and a link to the privacy policy, which you can read without an account.",
   "changelog_v2_0_0_bullet_56": "The privacy policy now states clearly that your content is stored on servers in the United States.",
+  "changelog_v2_0_0_bullet_57": "When you sign out, that account's reminders no longer go off on the phone. When you sign in, the reminders of your notes, tasks and events are scheduled again, on a new device too.",
   "infoPrivacyOpen": "Privacy policy",
   "privacyPolicyTitle": "Privacy policy",
   "privacyPolicyIntro": "Noteep is an app for notes, tasks and calendar. This policy explains which data it processes, why, and how you can control it. Noteep shows no ads, uses no analytics or tracking tools, and does not sell or hand over your data.",

@@ -8,6 +8,8 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/calendar_model.dart';
@@ -21,10 +23,17 @@ class CalendarNotifier extends Notifier<List<CalendarEventModel>>
     with FirestoreListMutations<CalendarEventModel> {
   late String _uid;
 
+  /// Completes with `true` once the first fetch for the current user has
+  /// succeeded, `false` if it failed or nobody is signed in. Recreated on
+  /// every user change; used to resync reminders after sign-in.
+  Future<bool> get initialLoad => _initialLoad.future;
+  Completer<bool> _initialLoad = Completer<bool>();
+
   @override
   List<CalendarEventModel> build() {
     _uid = ref.watch(currentUidProvider);
     ref.watch(firestoreProvider);
+    _initialLoad = Completer<bool>();
     _load().ignore();
     return [];
   }
@@ -38,10 +47,23 @@ class CalendarNotifier extends Notifier<List<CalendarEventModel>>
 
   Future<void> _load({bool replace = false}) async {
     final uid = _uid;
-    if (uid.isEmpty) return;
-    final snap = await _col.get();
+    final ready = _initialLoad;
+    if (uid.isEmpty) {
+      if (!ready.isCompleted) ready.complete(false);
+      return;
+    }
+    final QuerySnapshot<Map<String, dynamic>> snap;
+    try {
+      snap = await _col.get();
+    } catch (_) {
+      if (!ready.isCompleted) ready.complete(false);
+      rethrow;
+    }
     // The user changed while this fetch was in flight.
-    if (uid != _uid) return;
+    if (uid != _uid) {
+      if (!ready.isCompleted) ready.complete(false);
+      return;
+    }
     final events =
         snap.docs.map((doc) {
           final data = Map<String, dynamic>.from(doc.data());
@@ -56,6 +78,7 @@ class CalendarNotifier extends Notifier<List<CalendarEventModel>>
     // fetch was in flight must not be wiped out by it.
     final existingIds = state.map((e) => e.id).toSet();
     state = [...state, ...events.where((e) => !existingIds.contains(e.id))];
+    if (!ready.isCompleted) ready.complete(true);
     // Not awaited: offline the deletes stay queued.
     _purgeOldTrashFirestore().ignore();
   }

@@ -1841,6 +1841,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'The privacy policy now states clearly that your content is stored on servers in the United States.';
 
   @override
+  String get changelog_v2_0_0_bullet_57 =>
+      'When you sign out, that account\'s reminders no longer go off on the phone. When you sign in, the reminders of your notes, tasks and events are scheduled again, on a new device too.';
+
+  @override
   String get infoPrivacyOpen => 'Privacy policy';
 
   @override

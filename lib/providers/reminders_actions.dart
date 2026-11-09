@@ -8,21 +8,77 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/note_model.dart';
 import '../models/task_model.dart';
 import '../utils/notification_service.dart';
+import 'calendar_provider.dart';
 import 'notes_provider.dart';
 import 'tasks_provider.dart';
 
-/// Reminder operations behind the Reminders screen: removing reminders from
-/// notes and tasks (one or all the past ones) and undoing the removal.
+/// The plugin-backed notification service; tests override it with a fake.
+final notificationServiceProvider = Provider<NotificationService>(
+  (_) => NotificationService.instance,
+);
+
+/// Reminder operations: removing reminders from notes and tasks (one or all
+/// the past ones) and undoing the removal (Reminders screen), and keeping the
+/// reminders scheduled on this device in line with the signed-in account.
 class RemindersActions {
   RemindersActions(this._ref);
 
   final Ref _ref;
 
-  NotificationService get _notifications => NotificationService.instance;
+  NotificationService get _notifications =>
+      _ref.read(notificationServiceProvider);
+
+  /// Rebuilds the reminders scheduled on this device from the signed-in
+  /// user's data: cancels them all, then schedules the future reminders of
+  /// notes and events not in the trash and of open tasks.
+  ///
+  /// Reminders are scheduled locally when an item is edited, so without this
+  /// a new sign-in (or a second device, or a reinstall) would have none.
+  /// Waits for the first fetch of notes, tasks and events; if any of them
+  /// fails (e.g. offline with an empty cache) nothing is touched, so the
+  /// reminders already scheduled survive. No permission dialog is shown.
+  Future<void> resync() async {
+    if (kIsWeb) return;
+    try {
+      final loaded = await Future.wait([
+        _ref.read(notesProvider.notifier).initialLoad,
+        _ref.read(tasksProvider.notifier).initialLoad,
+        _ref.read(calendarProvider.notifier).initialLoad,
+      ]);
+      if (loaded.contains(false)) return;
+      final notifications = _notifications;
+      await notifications.cancelAllNotifications();
+      await Future.wait([
+        for (final note in _ref.read(notesProvider))
+          if (note.deletedAt == null)
+            notifications.scheduleNoteReminder(note, askPermission: false),
+        for (final task in _ref.read(tasksProvider))
+          if (task.deletedAt == null && !task.isCompleted)
+            notifications.scheduleTaskReminder(task, askPermission: false),
+        for (final event in _ref.read(calendarProvider))
+          if (event.deletedAt == null)
+            notifications.scheduleEventReminder(event, askPermission: false),
+      ]);
+    } catch (e) {
+      if (kDebugMode) debugPrint('Reminders resync failed: $e');
+    }
+  }
+
+  /// Cancels every reminder scheduled on this device, so the reminders of an
+  /// account that signed out do not keep firing.
+  Future<void> cancelAll() async {
+    if (kIsWeb) return;
+    try {
+      await _notifications.cancelAllNotifications();
+    } catch (e) {
+      if (kDebugMode) debugPrint('Reminders cancel failed: $e');
+    }
+  }
 
   /// Clears the reminder of [notes] and [tasks] and cancels their
   /// notifications. Returns the persistence future.

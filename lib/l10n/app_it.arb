@@ -718,6 +718,7 @@
   "changelog_v2_0_0_bullet_54": "Il passaggio da una sezione all'altra del menu è più pulito: durante l'animazione non si intravedono più le pagine sottostanti.",
   "changelog_v2_0_0_bullet_55": "Prima di registrarti o di continuare con Google, l'app mostra l'età minima e un link all'informativa sulla privacy, leggibile anche senza account.",
   "changelog_v2_0_0_bullet_56": "L'informativa sulla privacy ora indica chiaramente che i tuoi contenuti sono conservati su server negli Stati Uniti.",
+  "changelog_v2_0_0_bullet_57": "Quando esci dall'account, i suoi promemoria non suonano più sul telefono. Quando accedi, i promemoria delle tue note, task ed eventi vengono riprogrammati, anche su un nuovo dispositivo.",
   "infoPrivacyOpen": "Informativa sulla privacy",
   "privacyPolicyTitle": "Informativa sulla privacy",
   "privacyPolicyIntro": "Noteep è un'app per note, task e calendario. Questa informativa spiega quali dati tratta, perché e come puoi controllarli. Noteep non mostra pubblicità, non usa strumenti di analisi o di tracciamento e non vende né cede i tuoi dati.",

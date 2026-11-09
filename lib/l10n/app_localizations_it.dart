@@ -1850,6 +1850,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'L\'informativa sulla privacy ora indica chiaramente che i tuoi contenuti sono conservati su server negli Stati Uniti.';
 
   @override
+  String get changelog_v2_0_0_bullet_57 =>
+      'Quando esci dall\'account, i suoi promemoria non suonano più sul telefono. Quando accedi, i promemoria delle tue note, task ed eventi vengono riprogrammati, anche su un nuovo dispositivo.';
+
+  @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';
 
   @override

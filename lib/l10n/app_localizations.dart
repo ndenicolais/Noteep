@@ -3362,6 +3362,12 @@ abstract class AppLocalizations {
   /// **'L\'informativa sulla privacy ora indica chiaramente che i tuoi contenuti sono conservati su server negli Stati Uniti.'**
   String get changelog_v2_0_0_bullet_56;
 
+  /// No description provided for @changelog_v2_0_0_bullet_57.
+  ///
+  /// In it, this message translates to:
+  /// **'Quando esci dall\'account, i suoi promemoria non suonano più sul telefono. Quando accedi, i promemoria delle tue note, task ed eventi vengono riprogrammati, anche su un nuovo dispositivo.'**
+  String get changelog_v2_0_0_bullet_57;
+
   /// No description provided for @infoPrivacyOpen.
   ///
   /// In it, this message translates to:

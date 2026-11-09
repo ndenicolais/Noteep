@@ -8,6 +8,8 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/task_model.dart';
@@ -25,10 +27,17 @@ class TasksNotifier extends Notifier<List<TaskModel>>
     with FirestoreListMutations<TaskModel> {
   late String _uid;
 
+  /// Completes with `true` once the first fetch for the current user has
+  /// succeeded, `false` if it failed or nobody is signed in. Recreated on
+  /// every user change; used to resync reminders after sign-in.
+  Future<bool> get initialLoad => _initialLoad.future;
+  Completer<bool> _initialLoad = Completer<bool>();
+
   @override
   List<TaskModel> build() {
     _uid = ref.watch(currentUidProvider);
     ref.watch(firestoreProvider);
+    _initialLoad = Completer<bool>();
     _load();
     return [];
   }
@@ -48,11 +57,19 @@ class TasksNotifier extends Notifier<List<TaskModel>>
 
   Future<void> _load({bool replace = false}) async {
     final uid = _uid;
-    if (uid.isEmpty) return;
+    final ready = _initialLoad;
+    if (uid.isEmpty) {
+      if (!ready.isCompleted) ready.complete(false);
+      return;
+    }
+    var ok = false;
     try {
       final snap = await _col.get();
       // The user changed while this fetch was in flight.
-      if (uid != _uid) return;
+      if (uid != _uid) {
+        if (!ready.isCompleted) ready.complete(false);
+        return;
+      }
       final tasks =
           snap.docs.map((doc) {
             final data = Map<String, dynamic>.from(doc.data());
@@ -68,6 +85,7 @@ class TasksNotifier extends Notifier<List<TaskModel>>
         state = [...state, ...tasks.where((t) => !existingIds.contains(t.id))];
       }
       _onLoadError(null);
+      ok = true;
       // Not awaited: offline the deletes stay queued and must not hold up
       // the loading flag.
       _purgeOldTrashFirestore().ignore();
@@ -75,6 +93,7 @@ class TasksNotifier extends Notifier<List<TaskModel>>
       _onLoadError(e);
     } finally {
       _onLoadDone();
+      if (!ready.isCompleted) ready.complete(ok);
     }
   }
 

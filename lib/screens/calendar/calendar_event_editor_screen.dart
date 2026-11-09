@@ -17,7 +17,6 @@ import '../../providers/calendar_provider.dart';
 import '../../theme/app_font_sizes.dart';
 import '../../theme/app_radius.dart';
 import '../../theme/app_spacing.dart';
-import '../../core/routing/notification_target.dart';
 import '../../utils/notification_service.dart';
 import '../../widgets/shared/app_dialogs.dart';
 import '../../widgets/reminder_banner.dart';
@@ -215,23 +214,7 @@ class _CalendarEventEditorScreenState
     setState(() => _event = updated);
     _save();
 
-    final l10n = context.l10n;
-    await NotificationService.instance.scheduleNotification(
-      id: NotificationService.idForEvent(_event.id),
-      title:
-          _event.title.isEmpty
-              ? l10n.calendarReminderNotificationTitle
-              : _event.title,
-      body:
-          _event.description.isEmpty
-              ? l10n.calendarReminderNotificationBody
-              : _event.description.substring(
-                0,
-                _event.description.length > 80 ? 80 : _event.description.length,
-              ),
-      scheduledAt: scheduled,
-      target: NotificationTarget.event(_event.id),
-    );
+    await NotificationService.instance.scheduleEventReminder(_event);
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(

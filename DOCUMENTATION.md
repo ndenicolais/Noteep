@@ -215,7 +215,7 @@ Record of processing (GDPR art. 30) and the source for the data section of `PRIV
 | Audio recordings (name, duration and file path synced with the note) | `<documents>/audio_notes/` on the device | Audio notes | Until deleted or the app is uninstalled; never uploaded |
 | Settings, onboarding and changelog seen, backup settings | `SharedPreferences` (browser storage on the web) | App behavior | Until uninstall |
 | Automatic backups | `<documents>/noteep_backups/` | Local restore | Last 30 kept; removed on account deletion |
-| Scheduled reminders, Home widget data | `flutter_local_notifications`, `home_widget` storage on the device | Reminders and widgets | Until the item changes; reminders are cancelled on account deletion, not on sign-out; the widget falls back to empty counts on sign-out, because the notes and tasks providers reset with the user |
+| Scheduled reminders, Home widget data | `flutter_local_notifications`, `home_widget` storage on the device | Reminders and widgets | Until the item changes; reminders are cancelled on sign-out and account deletion and rebuilt from the account at sign-in; the widget falls back to empty counts on sign-out, because the notes and tasks providers reset with the user |
 | Exported files (PDF, TXT, JSON, CSV, HTML, ICS, backups) | Wherever the user saves or shares them | Export on request | Under the user's control |
 | Device IP address | Google servers hosting the profile photo (`photoURL`) | Showing the Google avatar | Not stored by the app |
 
@@ -375,7 +375,7 @@ Riverpod with `NotifierProvider`, `Provider`, `StreamProvider` and `FutureProvid
 | `BackupSettingsNotifier`, `BackupStatusNotifier`, `availableBackupsProvider` | `providers/settings/backup_provider.dart` | Automatic backup settings and status, list of local backups |
 | `BackupRestorer` (`backupRestorerProvider`) | `providers/settings/backup_restore.dart` | `FullBackupData` parsing (flat JSON and ZIP layouts), `apply` (replaces each section present), `readZip` |
 | `DataActions` (`dataActionsProvider`) | `providers/settings/data_actions.dart` | Export payloads, per-section import, ICS export/import, clear, `wipeRemoteData`/`wipeLocalData` for account deletion |
-| `RemindersActions` (`remindersActionsProvider`) | `providers/reminders_actions.dart` | Clear and restore reminders with their notifications |
+| `RemindersActions` (`remindersActionsProvider`) | `providers/reminders_actions.dart` | Clear and restore reminders with their notifications; `resync()` after sign-in and `cancelAll()` after sign-out (see below). `notificationServiceProvider` wraps `NotificationService.instance` so tests can fake it |
 
 **Non-obvious behavior**
 
@@ -387,6 +387,7 @@ Riverpod with `NotifierProvider`, `Provider`, `StreamProvider` and `FutureProvid
 - **Trash purge**: on load, items trashed more than 7 days ago are deleted through `mutate`, without blocking the loading flag.
 - **Rebuild granularity**: lists watch only ids (`IdList`, equal by content) and each row watches its item (`noteByIdProvider`, `taskByIdProvider`), so editing one note rebuilds only its card. Notifiers keep untouched item instances unchanged for this to work. Archive, Trash, Statistics and Calendar watch whole lists.
 - **Account deletion order**: re-authenticate first (password or Google; cancelling aborts), then `wipeRemoteData` (reads every subcollection from the **server**, so it fails offline instead of deleting halfway), `User.delete()`, `wipeLocalData` (best-effort: cancels notifications, deletes local backups), Google sign-out.
+- **Reminders follow the account**: notifications are scheduled on the device when an item is edited, so `main.dart` listens to `currentUidProvider`. On a sign-in (including the session restored at a cold start) it calls `RemindersActions.resync()`: it awaits `initialLoad` of the notes, tasks and calendar notifiers (a per-user `Completer<bool>` recreated in `build()`, `false` when the fetch fails or nobody is signed in), then cancels every notification and schedules the future reminders of notes and events not in the trash and of open tasks, without the permission dialog. If any load failed it touches nothing, so an offline start keeps the reminders already scheduled. When the uid becomes empty (sign-out, account deletion) it calls `cancelAll()`.
 - **Restore**: `FullBackupData` parses every section before any provider is touched; `replaceAll` also deletes Firestore documents not in the backup, otherwise they would come back on the next load.
 
 ---
@@ -407,12 +408,12 @@ Plain classes in `lib/utils/`, not tied to Riverpod.
 
 **Path:** `lib/utils/notification_service.dart`
 
-- `init()`, `scheduleNotification(...)`, `cancelNotification(id)`, `scheduleNoteReminder(note)`, `scheduleTaskReminder(task)`.
+- `init()`, `scheduleNotification(...)`, `cancelNotification(id)`, `cancelAllNotifications()`, `scheduleNoteReminder(note)`, `scheduleTaskReminder(task)`, `scheduleEventReminder(event)`. The schedule methods take `askPermission` (default `true`; `false` for the resync after sign-in).
 - Deterministic ids: `idForNote`, `idForTask`, `idForEvent`. Schedules with `AndroidScheduleMode.exactAllowWhileIdle`.
-- Permissions are requested on the first scheduled reminder, not at startup.
+- Permissions are requested on the first reminder the user sets, not at startup.
 - Every notification carries a `NotificationTarget` payload (`note:<id>`, `task:<id>`, `event:<id>`); a tap (app open or cold start) publishes it in `pendingTarget`.
 - Channel name and description are passed on every schedule with `currentL10n()`, so Android updates them to the current language. Already scheduled notifications keep the language they were created in.
-- Tests: `test/core/notification_target_test.dart`, `notification_launch_handler_test.dart`.
+- Tests: `test/core/notification_target_test.dart`, `notification_launch_handler_test.dart`; the resync is covered by `test/providers/reminders_resync_test.dart` with a fake service.
 
 ### 7.3 BackupService
 
@@ -631,8 +632,8 @@ dev_dependencies:
 Run with `flutter test`. No real Firebase project is needed.
 
 - **Pure logic**: recurrence, Markdown to plain text, ICS import/export round trip, changelog service and entries (`it`/`en` changelog keys match, each bullet used once), notification payloads, Home widget URIs, colors contrast, text theme, task sorting, login validators.
-- **With fakes**: data notifiers, labels, undo/redo, backup restore, `DataActions` (including account wipe isolation between users), offline sync (`FirestoreListMutations` with a short `writeGrace`) against `fake_cloud_firestore`; `BackupService` on a real temp folder with a mocked `path_provider` channel.
-- **Widget and layout**: editors, Info, boot error, router, notification and Home widget launch handlers, masonry grid, rebuild granularity, `NoteHero`, skeletons, `FadeSwitcher`, design-system components, dialogs, swipe actions, empty state; accessibility (200% text on 360×690 without overflow, card semantics and custom actions, sheets above the navigation bar).
+- **With fakes**: data notifiers, labels, undo/redo, backup restore, `DataActions` (including account wipe isolation between users), reminders resync and cancel (`RemindersActions` with a fake `NotificationService`), offline sync (`FirestoreListMutations` with a short `writeGrace`) against `fake_cloud_firestore`; `BackupService` on a real temp folder with a mocked `path_provider` channel.
+- **Widget and layout**: editors, Info, login privacy notice, boot error, router, notification and Home widget launch handlers, masonry grid, rebuild granularity, `NoteHero`, skeletons, `FadeSwitcher`, design-system components, dialogs, swipe actions, empty state; accessibility (200% text on 360×690 without overflow, card semantics and custom actions, sheets above the navigation bar).
 
 Helpers in `test/helpers/`: `createTestContainer(db)` / `firestoreOverrides(db)` override `firestoreProvider` and `currentUidProvider`; `l10n.dart` provides `testLocale` (`it`), `testSupportedLocales`, `testLocalizationsDelegates` and `itL10n`. Widget tests mount `UncontrolledProviderScope(container: ...)` to share notifiers with the test. Settings providers take `SharedPreferences.setMockInitialValues`. Derived provider notifications are asynchronous: call `await container.pump()` before asserting. Use `container.listen` to keep `autoDispose` providers alive.
 

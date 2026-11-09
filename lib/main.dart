@@ -19,6 +19,7 @@ import 'l10n/l10n.dart';
 import 'providers/auth_provider.dart';
 import 'providers/core_providers.dart';
 import 'providers/notes_provider.dart';
+import 'providers/reminders_actions.dart';
 import 'providers/tasks_provider.dart';
 import 'providers/settings/locale_provider.dart';
 import 'providers/settings/theme_provider.dart';
@@ -69,6 +70,17 @@ class NotesApp extends ConsumerWidget {
     ref.listen(activeTasksProvider, (_, _) => _syncHomeWidget(ref));
     // The widget labels are in the UI language.
     ref.listen(appLanguageProvider, (_, _) => _syncHomeWidget(ref));
+    // Reminders live on the device: rebuild them from the account after a
+    // sign-in (also on a cold start, when the restored session arrives) and
+    // cancel them after a sign-out, so another account's reminders never fire.
+    ref.listen(currentUidProvider, (previous, uid) {
+      final reminders = ref.read(remindersActionsProvider);
+      if (uid.isNotEmpty) {
+        reminders.resync();
+      } else if (previous != null && previous.isNotEmpty) {
+        reminders.cancelAll();
+      }
+    });
 
     return MaterialApp(
       title: 'Noteep',

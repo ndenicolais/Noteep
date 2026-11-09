@@ -8,6 +8,7 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tz_data;
 import '../core/routing/notification_target.dart';
 import '../l10n/l10n.dart';
+import '../models/calendar_model.dart';
 import '../models/note_model.dart';
 import '../models/task_model.dart';
 import 'markdown_text.dart';
@@ -75,13 +76,15 @@ class NotificationService {
     required String body,
     required DateTime scheduledAt,
     required NotificationTarget target,
+    bool askPermission = true,
   }) async {
     final tzDate = tz.TZDateTime.from(scheduledAt, tz.local);
     if (tzDate.isBefore(tz.TZDateTime.now(tz.local))) return;
 
     // Asked here, when the user sets a reminder, rather than at startup:
     // Android shows the dialog only if the permission is not granted yet.
-    await requestPermissions();
+    // The resync after sign-in passes false, so no dialog pops up on its own.
+    if (askPermission) await requestPermissions();
 
     // The channel name is updated by Android on every schedule, so it
     // follows the current language.
@@ -111,7 +114,10 @@ class NotificationService {
 
   /// Schedules the reminder of [note] at [NoteModel.reminder] (no-op if it is
   /// null or in the past).
-  Future<void> scheduleNoteReminder(NoteModel note) async {
+  Future<void> scheduleNoteReminder(
+    NoteModel note, {
+    bool askPermission = true,
+  }) async {
     final reminder = note.reminder;
     if (reminder == null) return;
     final l10n = currentL10n();
@@ -128,12 +134,16 @@ class NotificationService {
               : _preview(content),
       scheduledAt: reminder,
       target: NotificationTarget.note(note.id),
+      askPermission: askPermission,
     );
   }
 
   /// Schedules the reminder of [task] at [TaskModel.reminder] (no-op if it is
   /// null or in the past).
-  Future<void> scheduleTaskReminder(TaskModel task) async {
+  Future<void> scheduleTaskReminder(
+    TaskModel task, {
+    bool askPermission = true,
+  }) async {
     final reminder = task.reminder;
     if (reminder == null) return;
     final l10n = currentL10n();
@@ -149,6 +159,32 @@ class NotificationService {
               : _preview(task.description),
       scheduledAt: reminder,
       target: NotificationTarget.task(task.id),
+      askPermission: askPermission,
+    );
+  }
+
+  /// Schedules the reminder of [event] at [CalendarEventModel.reminder]
+  /// (no-op if it is null or in the past).
+  Future<void> scheduleEventReminder(
+    CalendarEventModel event, {
+    bool askPermission = true,
+  }) async {
+    final reminder = event.reminder;
+    if (reminder == null) return;
+    final l10n = currentL10n();
+    await scheduleNotification(
+      id: idForEvent(event.id),
+      title:
+          event.title.isEmpty
+              ? l10n.calendarReminderNotificationTitle
+              : event.title,
+      body:
+          event.description.isEmpty
+              ? l10n.calendarReminderNotificationBody
+              : _preview(event.description),
+      scheduledAt: reminder,
+      target: NotificationTarget.event(event.id),
+      askPermission: askPermission,
     );
   }
 
