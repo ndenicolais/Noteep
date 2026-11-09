@@ -1837,6 +1837,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Before you sign up or continue with Google, the app shows the minimum age and a link to the privacy policy, which you can read without an account.';
 
   @override
+  String get changelog_v2_0_0_bullet_56 =>
+      'The privacy policy now states clearly that your content is stored on servers in the United States.';
+
+  @override
   String get infoPrivacyOpen => 'Privacy policy';
 
   @override
@@ -1884,7 +1888,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get policy_section_storage_text =>
-      'Account and content are stored on Google Firebase (Firebase Authentication and Cloud Firestore), services provided by Google. Servers may also be located outside the European Union: in that case the transfer takes place with the safeguards provided by the Google Firebase terms. Data travels encrypted and the database security rules make sure only your account can read and change your content. The developer does not look at your content and does not share it with anyone.';
+      'Account and content are stored on Google Firebase (Firebase Authentication and Cloud Firestore), services provided by Google. Content is stored on servers in the United States and Firebase Authentication may also process data outside the European Union: the transfer takes place with the safeguards provided by the Google Firebase terms. Data travels encrypted and the database security rules make sure only your account can read and change your content. The developer does not look at your content and does not share it with anyone.';
 
   @override
   String get policy_section_device_title => '5. On-device processing';

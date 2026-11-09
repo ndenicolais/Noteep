@@ -215,7 +215,7 @@ Record of processing (GDPR art. 30) and the source for the data section of `PRIV
 | Audio recordings (name, duration and file path synced with the note) | `<documents>/audio_notes/` on the device | Audio notes | Until deleted or the app is uninstalled; never uploaded |
 | Settings, onboarding and changelog seen, backup settings | `SharedPreferences` (browser storage on the web) | App behavior | Until uninstall |
 | Automatic backups | `<documents>/noteep_backups/` | Local restore | Last 30 kept; removed on account deletion |
-| Scheduled reminders, Home widget data | `flutter_local_notifications`, `home_widget` storage on the device | Reminders and widgets | Until the item changes; reminders are cancelled on account deletion, not on sign-out; widget data is not cleared on either |
+| Scheduled reminders, Home widget data | `flutter_local_notifications`, `home_widget` storage on the device | Reminders and widgets | Until the item changes; reminders are cancelled on account deletion, not on sign-out; the widget falls back to empty counts on sign-out, because the notes and tasks providers reset with the user |
 | Exported files (PDF, TXT, JSON, CSV, HTML, ICS, backups) | Wherever the user saves or shares them | Export on request | Under the user's control |
 | Device IP address | Google servers hosting the profile photo (`photoURL`) | Showing the Google avatar | Not stored by the app |
 

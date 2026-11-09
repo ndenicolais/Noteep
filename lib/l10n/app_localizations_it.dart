@@ -1846,6 +1846,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Prima di registrarti o di continuare con Google, l\'app mostra l\'età minima e un link all\'informativa sulla privacy, leggibile anche senza account.';
 
   @override
+  String get changelog_v2_0_0_bullet_56 =>
+      'L\'informativa sulla privacy ora indica chiaramente che i tuoi contenuti sono conservati su server negli Stati Uniti.';
+
+  @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';
 
   @override
@@ -1894,7 +1898,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get policy_section_storage_text =>
-      'Account e contenuti sono conservati su Google Firebase (Firebase Authentication e Cloud Firestore), servizi forniti da Google. I server possono trovarsi anche fuori dall\'Unione europea: in questo caso il trasferimento avviene con le garanzie previste dai termini di Google Firebase. I dati viaggiano cifrati e le regole di sicurezza del database fanno sì che solo il tuo account possa leggere e modificare i tuoi contenuti. Lo sviluppatore non consulta i tuoi contenuti e non li condivide con nessuno.';
+      'Account e contenuti sono conservati su Google Firebase (Firebase Authentication e Cloud Firestore), servizi forniti da Google. I contenuti sono conservati su server negli Stati Uniti e anche Firebase Authentication può trattare i dati fuori dall\'Unione europea: il trasferimento avviene con le garanzie previste dai termini di Google Firebase. I dati viaggiano cifrati e le regole di sicurezza del database fanno sì che solo il tuo account possa leggere e modificare i tuoi contenuti. Lo sviluppatore non consulta i tuoi contenuti e non li condivide con nessuno.';
 
   @override
   String get policy_section_device_title => '5. Elaborazione sul dispositivo';

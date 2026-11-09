@@ -6,7 +6,7 @@
 
 ## Italiano
 
-**Ultimo aggiornamento: 28 ottobre 2026**
+**Ultimo aggiornamento: 9 novembre 2026**
 
 Noteep è un'app per note, task e calendario. Questa informativa spiega quali dati tratta, perché e come puoi controllarli. Noteep non mostra pubblicità, non usa strumenti di analisi o di tracciamento e non vende né cede i tuoi dati.
 
@@ -27,7 +27,7 @@ I dati servono solo a far funzionare Noteep: accedere al tuo account, salvare i 
 
 ### 4. Dove sono conservati
 
-Account e contenuti sono conservati su Google Firebase (Firebase Authentication e Cloud Firestore), servizi forniti da Google. I server possono trovarsi anche fuori dall'Unione europea: in questo caso il trasferimento avviene con le garanzie previste dai termini di Google Firebase. I dati viaggiano cifrati e le regole di sicurezza del database fanno sì che solo il tuo account possa leggere e modificare i tuoi contenuti. Lo sviluppatore non consulta i tuoi contenuti e non li condivide con nessuno.
+Account e contenuti sono conservati su Google Firebase (Firebase Authentication e Cloud Firestore), servizi forniti da Google. I contenuti sono conservati su server negli Stati Uniti e anche Firebase Authentication può trattare i dati fuori dall'Unione europea: il trasferimento avviene con le garanzie previste dai termini di Google Firebase. I dati viaggiano cifrati e le regole di sicurezza del database fanno sì che solo il tuo account possa leggere e modificare i tuoi contenuti. Lo sviluppatore non consulta i tuoi contenuti e non li condivide con nessuno.
 
 ### 5. Elaborazione sul dispositivo
 
@@ -81,7 +81,7 @@ Se questa informativa cambia, la nuova versione sarà disponibile nell'app (*Inf
 
 ## English
 
-**Last updated: October 28, 2026**
+**Last updated: November 9, 2026**
 
 Noteep is an app for notes, tasks and calendar. This policy explains which data it processes, why, and how you can control it. Noteep shows no ads, uses no analytics or tracking tools, and does not sell or hand over your data.
 
@@ -102,7 +102,7 @@ Data is used only to make Noteep work: signing in to your account, saving your c
 
 ### 4. Where it is stored
 
-Account and content are stored on Google Firebase (Firebase Authentication and Cloud Firestore), services provided by Google. Servers may also be located outside the European Union: in that case the transfer takes place with the safeguards provided by the Google Firebase terms. Data travels encrypted and the database security rules make sure only your account can read and change your content. The developer does not look at your content and does not share it with anyone.
+Account and content are stored on Google Firebase (Firebase Authentication and Cloud Firestore), services provided by Google. Content is stored on servers in the United States and Firebase Authentication may also process data outside the European Union: the transfer takes place with the safeguards provided by the Google Firebase terms. Data travels encrypted and the database security rules make sure only your account can read and change your content. The developer does not look at your content and does not share it with anyone.
 
 ### 5. On-device processing
 
