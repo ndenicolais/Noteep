@@ -10,6 +10,7 @@
 2. [Architecture and tech stack](#2-architecture-and-tech-stack)
 3. [Project structure](#3-project-structure)
 4. [Data models](#4-data-models)
+   - [Data inventory](#data-inventory)
    - [Security rules](#security-rules)
 5. [Screens and features](#5-screens-and-features)
 6. [State management](#6-state-management)
@@ -25,7 +26,7 @@
 
 ## 1. App overview
 
-Noteep is a digital notebook for Android and the web: notes, tasks and calendar events in one place, synced to the user's account through Firebase.
+Noteep is a digital notebook for Android (the web build is used only for development and is not published): notes, tasks and calendar events in one place, synced to the user's account through Firebase.
 
 - Sign in with email/password or Google; first launch shows an onboarding.
 - Write text notes (Markdown preview, web links) and checklists, styled per note (font, size, colors), with audio recordings, labels, links to other notes and reminders.
@@ -44,7 +45,7 @@ Languages: Italian and English (see [Localization](#10-localization)). Themes: l
 
 | Component | Technology |
 |---|---|
-| Framework | Flutter (Android + Web) |
+| Framework | Flutter (Android; Web for development only) |
 | State management | [flutter_riverpod](https://pub.dev/packages/flutter_riverpod) (`Notifier`/`NotifierProvider` declared by hand, no code generation) |
 | Authentication | [firebase_auth](https://pub.dev/packages/firebase_auth), [google_sign_in](https://pub.dev/packages/google_sign_in) |
 | Database | [cloud_firestore](https://pub.dev/packages/cloud_firestore) with offline persistence |
@@ -201,6 +202,26 @@ A calendar event. Collection: `users/{uid}/calendar_events`.
 | Automatic backups | `<documents>/noteep_backups/`, ZIP files, last 30 kept |
 
 Audio files and automatic backups stay on the device: they are not uploaded to Firestore.
+
+### Data inventory
+
+Record of processing (GDPR art. 30) and the source for the data section of `PRIVACY.md`. Every new field, collection, preference or network destination goes here, in the [security rules](#security-rules), in account deletion (`DataActions.wipeRemoteData` / `wipeLocalData`) and in the policy in the same task.
+
+| Data | Where | Purpose | Retention |
+|---|---|---|---|
+| Email, account creation and last sign-in dates; Google name, email, photo URL and account id (Google sign-in) | Firebase Auth (the app writes no profile document) | Account; name and photo shown in the drawer | Until the account is deleted (Settings → Account → Delete account) |
+| Password | Firebase Auth only | Email sign-in | Never read or stored by the app |
+| Notes, tasks, task lists, calendar events, labels (all fields in [Data models](#4-data-models)) | Firestore `users/{uid}/<collection>`, plus the Firestore offline cache on the device | Core features and sync between devices | Until deleted by the user (trash emptied after 7 days) or with the account |
+| Audio recordings (name, duration and file path synced with the note) | `<documents>/audio_notes/` on the device | Audio notes | Until deleted or the app is uninstalled; never uploaded |
+| Settings, onboarding and changelog seen, backup settings | `SharedPreferences` (browser storage on the web) | App behavior | Until uninstall |
+| Automatic backups | `<documents>/noteep_backups/` | Local restore | Last 30 kept; removed on account deletion |
+| Scheduled reminders, Home widget data | `flutter_local_notifications`, `home_widget` storage on the device | Reminders and widgets | Until the item changes; reminders are cancelled on account deletion, not on sign-out; widget data is not cleared on either |
+| Exported files (PDF, TXT, JSON, CSV, HTML, ICS, backups) | Wherever the user saves or shares them | Export on request | Under the user's control |
+| Device IP address | Google servers hosting the profile photo (`photoURL`) | Showing the Google avatar | Not stored by the app |
+
+Not collected: analytics, crash reports, advertising identifiers, location, contacts. Firestore lives in the multi-region **`nam5` (United States)**, chosen at project creation and not changeable; Firebase Auth may also process data outside the EU. Both rely on Google's Firebase terms, as stated in `PRIVACY.md` §4.
+
+**Incident log** (GDPR art. 33(5)): record here every personal data breach (open rules, leaked key with data access, exposed data), with date, cause, fix and whether the Garante and users were notified. None so far.
 
 ### Security rules
 
@@ -629,7 +650,7 @@ Helpers in `test/helpers/`: `createTestContainer(db)` / `firestoreOverrides(db)`
 | Android minimum | API 24 (Android 7.0), Flutter's default `minSdk` |
 | Android target | `targetSdk` 36 (Flutter's default), `compileSdk` 37 |
 | Architectures | Release APK built for `arm64-v8a` only |
-| Web | Modern browsers; no Home screen widgets and no automatic backups (they need `dart:io`) |
+| Web | Development only, not published (no Firebase Hosting): modern browsers, run on `localhost:5000`; no Home screen widgets and no automatic backups (they need `dart:io`) |
 | Internet | Needed for sign-in and sync; Firestore works offline and syncs later |
 | Google Play services | Needed for Google sign-in |
 | Firebase | `android/app/google-services.json` and `lib/firebase_options.dart` (both git-ignored) |
