@@ -61,6 +61,9 @@ deploy_android.ps1
 CLAUDE.md
 TASKS.md
 
+# App release kit guides (local reference copy)
+/guides/
+
 # Raw device screenshots (sources for tool/preview, kept locally)
 images/screenshots/*_raw.png
 
