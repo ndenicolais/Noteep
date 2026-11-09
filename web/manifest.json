@@ -1,11 +1,11 @@
 {
-    "name": "noteep",
-    "short_name": "noteep",
+    "name": "Noteep",
+    "short_name": "Noteep",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#3D3F4D",
     "theme_color": "#3D3F4D",
-    "description": "A new Flutter project.",
+    "description": "Notes, tasks and calendar in one place, synced to your account.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
