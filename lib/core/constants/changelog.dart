@@ -42,6 +42,12 @@ class ChangelogEntry {
 /// keys of `lib/l10n/app_*.arb`.
 final List<ChangelogEntry> changelogEntries = [
   ChangelogEntry(
+    version: '2.0.1',
+    items: [
+      ChangelogItem(ChangeType.improved, (l) => l.changelog_v2_0_1_bullet_1),
+    ],
+  ),
+  ChangelogEntry(
     version: '2.0.0',
     items: [
       ChangelogItem(ChangeType.added, (l) => l.changelog_v2_0_0_bullet_1),

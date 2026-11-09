@@ -230,7 +230,7 @@ Gets the user from launch to the Home screen.
 
 **Features:**
 - Auth gate in `NotesApp`: while Firebase Auth loads, a splash with `AppLogo`; signed in → `HomeScreen`; signed out → `LoginScreen`, or `OnboardingScreen` if the onboarding has not been seen yet.
-- `LoginScreen`: tabs for sign-in and sign-up (`LoginForm`, `RegisterForm`), Google button, password reset dialog. Validators (`login_validators.dart`) are pure functions taking `AppLocalizations`. Firebase error codes become localized messages through `authErrorMessage`.
+- `LoginScreen`: tabs for sign-in and sign-up (`LoginForm`, `RegisterForm`), Google button, password reset dialog. Under the buttons `LoginPrivacyNotice` states the minimum age (14) and links to the privacy policy, so it can be read before an account is created (GDPR art. 13); no checkbox, since the legal basis is the contract. Validators (`login_validators.dart`) are pure functions taking `AppLocalizations`. Firebase error codes become localized messages through `authErrorMessage`.
 - `OnboardingScreen({replay})`: five pages with Skip/Next/Start. On first launch it replaces the login until `onboarding_seen` is set; with `replay: true` it is the `/onboarding` route opened from Info and only pops.
 - `BootErrorApp`: standalone `MaterialApp` shown when a required startup step fails, with **Retry** that reruns the whole bootstrap (the exception is shown in debug only). It follows the device language because preferences may not be loaded.
 
@@ -531,7 +531,7 @@ Drawer sections (`AppRouter.sectionRoutes`) use `FadeThroughPageRoute` (an opaqu
 | `/settings` | `SettingsScreen` | Drawer section |
 | `/info` | `InfoScreen` | |
 | `/onboarding` | `OnboardingScreen(replay: true)` | Replay from Info |
-| `/privacy-policy` | `PrivacyPolicyScreen` | From Info |
+| `/privacy-policy` | `PrivacyPolicyScreen` | From Info and from the login screen (no sign-in needed) |
 
 Notification taps and Home widget buttons open editors through the handlers in [Deep links](#78-deep-links). In the Android manifest `flutter_deeplinking_enabled` is `false`: otherwise Flutter would also push the widget URI as a route and show `UnknownRouteScreen`.
 

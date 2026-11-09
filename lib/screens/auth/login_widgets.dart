@@ -2,6 +2,7 @@
 // Licensed under a source-available, non-commercial license. See LICENSE.
 
 import 'package:flutter/material.dart';
+import '../../core/routing/app_router.dart';
 import '../../l10n/l10n.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
@@ -129,6 +130,32 @@ class GoogleSignInButton extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// GDPR notice under the sign-in buttons: minimum age and a link to the
+/// privacy policy, readable before an account is created.
+class LoginPrivacyNotice extends StatelessWidget {
+  const LoginPrivacyNotice({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Column(
+      children: [
+        Text(
+          context.l10n.loginPrivacyNotice,
+          textAlign: TextAlign.center,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
+        TextButton(
+          onPressed: () => AppNav.openPrivacyPolicy(context),
+          child: Text(context.l10n.loginPrivacyLink),
+        ),
+      ],
     );
   }
 }

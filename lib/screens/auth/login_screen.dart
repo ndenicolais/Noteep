@@ -164,7 +164,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen>
                   GoogleSignInButton(
                     onPressed: isLoading ? null : _signInWithGoogle,
                   ),
-                  const SizedBox(height: AppSpacing.xl),
+                  const SizedBox(height: AppSpacing.lg),
+                  const LoginPrivacyNotice(),
+                  const SizedBox(height: AppSpacing.md),
                 ],
               ),
             ),
