@@ -1922,6 +1922,42 @@ abstract class AppLocalizations {
   /// **'Nascondi i task'**
   String get calendarHideTasks;
 
+  /// No description provided for @calendarAlerts.
+  ///
+  /// In it, this message translates to:
+  /// **'Avvisi'**
+  String get calendarAlerts;
+
+  /// No description provided for @calendarAlertDayBefore.
+  ///
+  /// In it, this message translates to:
+  /// **'Il giorno prima'**
+  String get calendarAlertDayBefore;
+
+  /// No description provided for @calendarAlertSameDay.
+  ///
+  /// In it, this message translates to:
+  /// **'Il giorno stesso'**
+  String get calendarAlertSameDay;
+
+  /// No description provided for @calendarAlertAt.
+  ///
+  /// In it, this message translates to:
+  /// **'Alle {time}'**
+  String calendarAlertAt(String time);
+
+  /// No description provided for @calendarAlertBodyToday.
+  ///
+  /// In it, this message translates to:
+  /// **'Oggi · {when}'**
+  String calendarAlertBodyToday(String when);
+
+  /// No description provided for @calendarAlertBodyTomorrow.
+  ///
+  /// In it, this message translates to:
+  /// **'Domani · {when}'**
+  String calendarAlertBodyTomorrow(String when);
+
   /// No description provided for @calendarEndTime.
   ///
   /// In it, this message translates to:
@@ -3415,6 +3451,18 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Un task con promemoria compare nel calendario all\'orario del promemoria (anche se non ha una scadenza). Tornando su Note, Task o Calendario, la barra di ricerca mostra il testo ancora attivo, così la lista non resta filtrata senza motivo apparente.'**
   String get changelog_v2_0_0_bullet_62;
+
+  /// No description provided for @changelog_v2_0_0_bullet_63.
+  ///
+  /// In it, this message translates to:
+  /// **'I task con una scadenza che include un orario (per esempio quelli importati da Google Tasks) mostrano l\'orario nel task e compaiono nel calendario a quell\'ora; cambiando la data della scadenza l\'orario resta.'**
+  String get changelog_v2_0_0_bullet_63;
+
+  /// No description provided for @changelog_v2_0_0_bullet_64.
+  ///
+  /// In it, this message translates to:
+  /// **'Tutto ciò che ha giorno e orario ti avvisa: la scadenza di un task ora chiede anche l\'ora e a quell\'ora arriva la notifica (il promemoria la segue, salvo che tu l\'abbia messo a un\'altra ora); i task importati con un orario ricevono il loro promemoria. Gli eventi hanno gli avvisi \"Il giorno prima\" e \"Il giorno stesso\", che si ripetono a ogni occorrenza degli eventi ricorrenti (alle 9:00 per quelli di tutto il giorno); i nuovi eventi avvisano il giorno stesso. I task e gli eventi futuri con orario già presenti ricevono un avviso una sola volta.'**
+  String get changelog_v2_0_0_bullet_64;
 
   /// No description provided for @infoPrivacyOpen.
   ///

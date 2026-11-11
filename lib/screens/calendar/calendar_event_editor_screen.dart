@@ -47,6 +47,11 @@ class _CalendarEventEditorScreenState
     _event = widget.event;
     // Verifichiamo se l'evento esiste già nel provider
     _isNew = ref.read(calendarProvider).every((e) => e.id != _event.id);
+    // Like Google Calendar, a new event alerts on its day by default (at its
+    // start, or 09:00 when all-day); it can be turned off in "Avvisi".
+    if (_isNew && !_event.hasAlerts) {
+      _event = _event.copyWith(alertSameDay: true);
+    }
 
     _titleController = TextEditingController(text: _event.title);
     _descriptionController = TextEditingController(text: _event.description);
@@ -84,6 +89,7 @@ class _CalendarEventEditorScreenState
     }
     notifyOnError(pending, context);
     setState(() => _event = updated);
+    NotificationService.instance.scheduleEventAlerts(updated).ignore();
   }
 
   void _openDateTimePicker() async {
@@ -171,6 +177,7 @@ class _CalendarEventEditorScreenState
     if (!_isNew) {
       final notifier = ref.read(calendarProvider.notifier);
       final id = _event.id;
+      NotificationService.instance.cancelEventAlerts(id).ignore();
       notifyWithUndo(
         notifier.softDelete(id),
         context,

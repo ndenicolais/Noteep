@@ -76,7 +76,7 @@ class NotesApp extends ConsumerWidget {
     ref.listen(currentUidProvider, (previous, uid) {
       final reminders = ref.read(remindersActionsProvider);
       if (uid.isNotEmpty) {
-        reminders.resync();
+        reminders.migrateTimedReminders(uid).whenComplete(reminders.resync);
       } else if (previous != null && previous.isNotEmpty) {
         reminders.cancelAll();
       }

@@ -40,7 +40,7 @@ Synced to your account with Firebase, with backups, PDF export, Home screen widg
 | 🎙️ **Audio notes** | Record voice notes and play them back inside a note |
 | ✅ **Tasks** | Custom lists, subtasks, due dates, recurrence, starred and pinned tasks |
 | 📅 **Calendar** | Day, week, month, year and schedule views, with recurring events, birthdays and name days, color-coded entries and your tasks' due dates |
-| ⏰ **Reminders** | Notifications for notes, tasks and events, with note and task reminders in one screen |
+| ⏰ **Reminders** | Notifications for notes, tasks and events: a time on a task alerts, events can alert the day before and on the day (also when recurring), with note and task reminders in one screen |
 | 🏷️ **Labels** | Organize notes with labels and open all the notes of a label |
 | 🗂️ **Archive and trash** | Archive what you don't need now, restore deleted items within 7 days |
 | 📊 **Statistics** | Overview of notes, tasks and events |

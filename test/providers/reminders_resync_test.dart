@@ -2,12 +2,19 @@
 // Licensed under a source-available, non-commercial license. See LICENSE.
 
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noteep/models/calendar_model.dart';
 import 'package:noteep/models/note_model.dart';
 import 'package:noteep/models/task_model.dart';
+import 'package:noteep/providers/calendar_provider.dart';
+import 'package:noteep/providers/core_providers.dart';
 import 'package:noteep/providers/reminders_actions.dart';
+import 'package:noteep/providers/tasks_provider.dart';
+import 'package:noteep/utils/event_alerts.dart';
 import 'package:noteep/utils/notification_service.dart';
+import 'package:noteep/utils/recurrence.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../helpers/test_container.dart';
 
 /// Records what would be scheduled or cancelled, without the plugin.
@@ -47,6 +54,17 @@ class _FakeNotifications implements NotificationService {
   }) async {
     askedPermission.add(askPermission);
     if (event.reminder != null) scheduled.add('event:${event.id}');
+  }
+
+  @override
+  Future<void> scheduleEventAlerts(
+    CalendarEventModel event, {
+    bool askPermission = true,
+  }) async {
+    askedPermission.add(askPermission);
+    if (upcomingEventAlerts(event, DateTime.now()).isNotEmpty) {
+      scheduled.add('alerts:${event.id}');
+    }
   }
 
   @override
@@ -130,5 +148,93 @@ void main() {
   test('cancelAll cancels every scheduled reminder', () async {
     await actions().cancelAll();
     expect(notifications.cancelAllCalls, 1);
+  });
+
+  group('migrateTimedReminders', () {
+    late SharedPreferences prefs;
+
+    setUp(() async {
+      SharedPreferences.setMockInitialValues({});
+      prefs = await SharedPreferences.getInstance();
+    });
+
+    ProviderContainer migrationContainer() => createTestContainer(
+      firestore,
+      overrides: [
+        notificationServiceProvider.overrideWithValue(notifications),
+        sharedPreferencesProvider.overrideWithValue(prefs),
+      ],
+    );
+
+    test('gives future timed tasks and events an alert, once', () async {
+      final past = DateTime.now().subtract(const Duration(days: 2));
+      final timedTask = TaskModel(title: 'Timed', dueDate: later);
+      final dayOnly = TaskModel(
+        title: 'Day only',
+        dueDate: DateTime(later.year, later.month, later.day),
+      );
+      final pastTask = TaskModel(title: 'Past', dueDate: past);
+      final custom = TaskModel(
+        title: 'Custom',
+        dueDate: later,
+        reminder: later.subtract(const Duration(hours: 1)),
+      );
+      final timedEvent = CalendarEventModel(
+        title: 'Meeting',
+        startTime: later,
+        endTime: later,
+      );
+      final allDay = CalendarEventModel(
+        title: 'Holiday',
+        startTime: later,
+        endTime: later,
+        isAllDay: true,
+      );
+      final weeklyPast = CalendarEventModel(
+        title: 'Weekly',
+        startTime: past,
+        endTime: past,
+        recurrence: RecurrenceType.weekly,
+      );
+      for (final t in [timedTask, dayOnly, pastTask, custom]) {
+        await put('tasks', t.id, t.toJson());
+      }
+      for (final e in [timedEvent, allDay, weeklyPast]) {
+        await put('calendar_events', e.id, e.toJson());
+      }
+
+      final container = migrationContainer();
+      await container
+          .read(remindersActionsProvider)
+          .migrateTimedReminders('test-uid');
+
+      final tasks = {for (final t in container.read(tasksProvider)) t.title: t};
+      expect(tasks['Timed']!.reminder, later);
+      expect(tasks['Day only']!.reminder, isNull);
+      expect(tasks['Past']!.reminder, isNull);
+      expect(tasks['Custom']!.reminder, custom.reminder);
+      final events = {
+        for (final e in container.read(calendarProvider)) e.title: e,
+      };
+      expect(events['Meeting']!.alertSameDay, isTrue);
+      expect(events['Holiday']!.alertSameDay, isFalse);
+      expect(events['Weekly']!.alertSameDay, isTrue);
+      expect(prefs.getBool('timed_reminders_migrated_test-uid'), isTrue);
+
+      // A reminder removed afterwards is not put back.
+      await container
+          .read(tasksProvider.notifier)
+          .updateTask(tasks['Timed']!.copyWith(clearReminder: true));
+      await container
+          .read(remindersActionsProvider)
+          .migrateTimedReminders('test-uid');
+      expect(
+        container
+            .read(tasksProvider)
+            .firstWhere((t) => t.title == 'Timed')
+            .reminder,
+        isNull,
+      );
+    });
   });
 }

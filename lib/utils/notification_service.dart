@@ -11,6 +11,7 @@ import '../l10n/l10n.dart';
 import '../models/calendar_model.dart';
 import '../models/note_model.dart';
 import '../models/task_model.dart';
+import 'event_alerts.dart';
 import 'markdown_text.dart';
 
 class NotificationService {
@@ -188,6 +189,52 @@ class NotificationService {
     );
   }
 
+  /// Replaces the scheduled day-before / same-day alerts of [event] with
+  /// its [upcomingEventAlerts] (none if it has no alert, or is archived or
+  /// trashed). Each alert gets its own notification id.
+  Future<void> scheduleEventAlerts(
+    CalendarEventModel event, {
+    bool askPermission = true,
+  }) async {
+    if (kIsWeb) return;
+    await cancelEventAlerts(event.id);
+    final alerts = upcomingEventAlerts(event, DateTime.now());
+    if (alerts.isEmpty) return;
+    final l10n = currentL10n();
+    final title =
+        event.title.isEmpty
+            ? l10n.calendarReminderNotificationTitle
+            : event.title;
+    for (var i = 0; i < alerts.length; i++) {
+      final alert = alerts[i];
+      final when =
+          event.isAllDay
+              ? l10n.calendarAllDay
+              : '${alert.occurrence.hour.toString().padLeft(2, '0')}:'
+                  '${alert.occurrence.minute.toString().padLeft(2, '0')}';
+      await scheduleNotification(
+        id: idForEventAlert(event.id, i),
+        title: title,
+        body:
+            alert.dayBefore
+                ? l10n.calendarAlertBodyTomorrow(when)
+                : l10n.calendarAlertBodyToday(when),
+        scheduledAt: alert.at,
+        target: NotificationTarget.event(event.id),
+        // Ask once, on the first alert, not for each of them.
+        askPermission: askPermission && i == 0,
+      );
+    }
+  }
+
+  /// Cancels every day-before / same-day alert of the event [eventId].
+  Future<void> cancelEventAlerts(String eventId) async {
+    if (kIsWeb) return;
+    for (var i = 0; i < maxEventAlerts; i++) {
+      await _plugin.cancel(idForEventAlert(eventId, i));
+    }
+  }
+
   static String _preview(String text) =>
       text.substring(0, text.length > 80 ? 80 : text.length);
 
@@ -209,4 +256,12 @@ class NotificationService {
   /// Unique int ID derived from a calendar event UUID (offset to avoid collisions).
   static int idForEvent(String eventId) =>
       (eventId.hashCode.abs() % 100000) + 200000;
+
+  /// Alerts per event: one day-before and one same-day per occurrence.
+  static const maxEventAlerts = maxAlertOccurrences * 2;
+
+  /// Id of the [index]-th recurring alert of a calendar event, in its own
+  /// range above the single reminders.
+  static int idForEventAlert(String eventId, int index) =>
+      1000000 + (eventId.hashCode.abs() % 100000) * maxEventAlerts + index;
 }

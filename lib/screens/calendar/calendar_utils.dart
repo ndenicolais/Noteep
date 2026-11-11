@@ -10,33 +10,9 @@
 
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
-import '../../utils/recurrence.dart';
 
-bool calendarEventOccursOn(CalendarEventModel event, DateTime day) {
-  final s = event.startTime;
-  final startDay = DateTime(s.year, s.month, s.day);
-  final targetDay = DateTime(day.year, day.month, day.day);
-  if (startDay.isAfter(targetDay)) return false;
-
-  final end = event.recurrenceEndDate;
-  if (end != null) {
-    final endDay = DateTime(end.year, end.month, end.day);
-    if (targetDay.isAfter(endDay)) return false;
-  }
-
-  switch (event.recurrence) {
-    case RecurrenceType.none:
-      return s.year == day.year && s.month == day.month && s.day == day.day;
-    case RecurrenceType.daily:
-      return true;
-    case RecurrenceType.weekly:
-      return s.weekday == day.weekday;
-    case RecurrenceType.monthly:
-      return s.day == day.day;
-    case RecurrenceType.yearly:
-      return s.month == day.month && s.day == day.day;
-  }
-}
+bool calendarEventOccursOn(CalendarEventModel event, DateTime day) =>
+    event.occursOn(day);
 
 /// Orders the entries of one day: all-day ones first, then by time of day
 /// (not by the full start date, which for a recurring event is its first

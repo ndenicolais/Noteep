@@ -994,6 +994,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calendarHideTasks => 'Hide tasks';
 
   @override
+  String get calendarAlerts => 'Alerts';
+
+  @override
+  String get calendarAlertDayBefore => 'The day before';
+
+  @override
+  String get calendarAlertSameDay => 'On the day';
+
+  @override
+  String calendarAlertAt(String time) {
+    return 'At $time';
+  }
+
+  @override
+  String calendarAlertBodyToday(String when) {
+    return 'Today · $when';
+  }
+
+  @override
+  String calendarAlertBodyTomorrow(String when) {
+    return 'Tomorrow · $when';
+  }
+
+  @override
   String get calendarEndTime => 'End time';
 
   @override
@@ -1872,6 +1896,14 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_62 =>
       'A task with a reminder shows up in the calendar at the reminder time (even without a due date). Back on Notes, Tasks or Calendar, the search bar shows the text still in use, so the list no longer stays filtered for no visible reason.';
+
+  @override
+  String get changelog_v2_0_0_bullet_63 =>
+      'Tasks whose due date includes a time (for example those imported from Google Tasks) show the time in the task and appear in the calendar at that hour; changing the due date keeps the time.';
+
+  @override
+  String get changelog_v2_0_0_bullet_64 =>
+      'Anything with a day and a time alerts you: a task\'s due date now asks for the time too and the notification arrives then (the reminder follows it, unless you set it to another time); imported tasks with a time get their reminder. Events have \"The day before\" and \"On the day\" alerts, repeated on every occurrence of recurring events (at 9:00 for all-day ones); new events alert on the day. Existing future tasks and events with a time get an alert once.';
 
   @override
   String get infoPrivacyOpen => 'Privacy policy';

@@ -996,6 +996,30 @@ class AppLocalizationsIt extends AppLocalizations {
   String get calendarHideTasks => 'Nascondi i task';
 
   @override
+  String get calendarAlerts => 'Avvisi';
+
+  @override
+  String get calendarAlertDayBefore => 'Il giorno prima';
+
+  @override
+  String get calendarAlertSameDay => 'Il giorno stesso';
+
+  @override
+  String calendarAlertAt(String time) {
+    return 'Alle $time';
+  }
+
+  @override
+  String calendarAlertBodyToday(String when) {
+    return 'Oggi · $when';
+  }
+
+  @override
+  String calendarAlertBodyTomorrow(String when) {
+    return 'Domani · $when';
+  }
+
+  @override
   String get calendarEndTime => 'Ora di fine';
 
   @override
@@ -1881,6 +1905,14 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_62 =>
       'Un task con promemoria compare nel calendario all\'orario del promemoria (anche se non ha una scadenza). Tornando su Note, Task o Calendario, la barra di ricerca mostra il testo ancora attivo, così la lista non resta filtrata senza motivo apparente.';
+
+  @override
+  String get changelog_v2_0_0_bullet_63 =>
+      'I task con una scadenza che include un orario (per esempio quelli importati da Google Tasks) mostrano l\'orario nel task e compaiono nel calendario a quell\'ora; cambiando la data della scadenza l\'orario resta.';
+
+  @override
+  String get changelog_v2_0_0_bullet_64 =>
+      'Tutto ciò che ha giorno e orario ti avvisa: la scadenza di un task ora chiede anche l\'ora e a quell\'ora arriva la notifica (il promemoria la segue, salvo che tu l\'abbia messo a un\'altra ora); i task importati con un orario ricevono il loro promemoria. Gli eventi hanno gli avvisi \"Il giorno prima\" e \"Il giorno stesso\", che si ripetono a ogni occorrenza degli eventi ricorrenti (alle 9:00 per quelli di tutto il giorno); i nuovi eventi avvisano il giorno stesso. I task e gli eventi futuri con orario già presenti ricevono un avviso una sola volta.';
 
   @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';

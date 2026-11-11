@@ -12,8 +12,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/note_model.dart';
 import '../models/task_model.dart';
+import '../utils/event_alerts.dart';
 import '../utils/notification_service.dart';
 import 'calendar_provider.dart';
+import 'core_providers.dart';
 import 'notes_provider.dart';
 import 'tasks_provider.dart';
 
@@ -61,11 +63,58 @@ class RemindersActions {
           if (task.deletedAt == null && !task.isCompleted)
             notifications.scheduleTaskReminder(task, askPermission: false),
         for (final event in _ref.read(calendarProvider))
-          if (event.deletedAt == null)
+          if (event.deletedAt == null) ...[
             notifications.scheduleEventReminder(event, askPermission: false),
+            // Also moves the window of recurring alerts forward.
+            notifications.scheduleEventAlerts(event, askPermission: false),
+          ],
       ]);
     } catch (e) {
       if (kDebugMode) debugPrint('Reminders resync failed: $e');
+    }
+  }
+
+  /// One-time switch to "anything with a day and a time alerts", per account
+  /// (flag in `SharedPreferences`): open tasks whose due date has a future
+  /// time and no reminder get a reminder at that time, and timed events with
+  /// an occurrence still ahead and no reminder or alert get the same-day
+  /// alert. Runs on web too (the data is shared), before [resync]; skipped,
+  /// and retried at the next start, if the first fetch fails.
+  Future<void> migrateTimedReminders(String uid) async {
+    final prefs = _ref.read(sharedPreferencesProvider);
+    final key = 'timed_reminders_migrated_$uid';
+    if (prefs.getBool(key) ?? false) return;
+    try {
+      final loaded = await Future.wait([
+        _ref.read(tasksProvider.notifier).initialLoad,
+        _ref.read(calendarProvider.notifier).initialLoad,
+      ]);
+      if (loaded.contains(false)) return;
+      final now = DateTime.now();
+      await Future.wait([
+        _ref.read(tasksProvider.notifier).updateTasks([
+          for (final t in _ref.read(tasksProvider))
+            if (t.deletedAt == null &&
+                !t.isCompleted &&
+                t.reminder == null &&
+                t.hasDueTime &&
+                t.dueDate!.isAfter(now))
+              t.copyWith(reminder: t.dueDate),
+        ]),
+        _ref.read(calendarProvider.notifier).updateEvents([
+          for (final e in _ref.read(calendarProvider))
+            if (e.deletedAt == null &&
+                !e.isArchived &&
+                !e.isAllDay &&
+                e.reminder == null &&
+                !e.hasAlerts &&
+                eventHasFutureOccurrence(e, now))
+              e.copyWith(alertSameDay: true),
+        ]),
+      ]);
+      await prefs.setBool(key, true);
+    } catch (e) {
+      if (kDebugMode) debugPrint('Timed reminders migration failed: $e');
     }
   }
 

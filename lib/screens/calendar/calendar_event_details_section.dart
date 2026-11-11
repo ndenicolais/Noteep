@@ -13,11 +13,13 @@ import '../../l10n/l10n.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
 import '../../theme/app_spacing.dart';
+import '../../utils/event_alerts.dart';
 import '../../utils/recurrence.dart';
 import '../../widgets/shared/app_dialogs.dart';
 import 'calendar_event_tile.dart';
 
-/// Date/time, all-day, birthday, name-day and recurrence of an event.
+/// Date/time, all-day, birthday, name-day, recurrence and alerts (day
+/// before / same day) of an event.
 ///
 /// Edits are reported through [onChanged] with the updated event; picking
 /// the date/time is delegated to [onPickDateTime] (it chains two pickers
@@ -105,9 +107,36 @@ class CalendarEventDetailsSection extends StatelessWidget {
           subtitle: Text(event.recurrence.label(context.l10n)),
           onTap: () => _pickRecurrence(context),
         ),
+        const SizedBox(height: AppSpacing.sm),
+        Padding(
+          padding: const EdgeInsets.only(top: AppSpacing.sm),
+          child: Text(
+            context.l10n.calendarAlerts,
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+        ),
+        _Toggle(
+          icon: Icons.notifications_outlined,
+          title: context.l10n.calendarAlertDayBefore,
+          subtitle: _alertTimeLabel(context),
+          value: event.alertDayBefore,
+          onChanged: (v) => onChanged(event.copyWith(alertDayBefore: v)),
+        ),
+        _Toggle(
+          icon: Icons.notifications_active_outlined,
+          title: context.l10n.calendarAlertSameDay,
+          subtitle: _alertTimeLabel(context),
+          value: event.alertSameDay,
+          onChanged: (v) => onChanged(event.copyWith(alertSameDay: v)),
+        ),
       ],
     );
   }
+
+  /// "Alle 09:00" for all-day events, "Alle" and the start time otherwise.
+  String _alertTimeLabel(BuildContext context) => context.l10n.calendarAlertAt(
+    DateFormat('HH:mm').format(occurrenceTime(event, event.startTime)),
+  );
 
   Future<void> _pickRecurrence(BuildContext context) async {
     final type = await showAppSheet<RecurrenceType>(
@@ -133,12 +162,14 @@ class _Toggle extends StatelessWidget {
   const _Toggle({
     this.icon,
     required this.title,
+    this.subtitle,
     required this.value,
     required this.onChanged,
   });
 
   final IconData? icon;
   final String title;
+  final String? subtitle;
   final bool value;
   final ValueChanged<bool> onChanged;
 
@@ -148,6 +179,7 @@ class _Toggle extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       secondary: icon == null ? null : Icon(icon),
       title: Text(title),
+      subtitle: subtitle == null ? null : Text(subtitle!),
       value: value,
       onChanged: (v) {
         if (v != null) onChanged(v);

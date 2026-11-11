@@ -236,6 +236,19 @@ class TasksNotifier extends Notifier<List<TaskModel>>
   /// Replaces the entire tasks collection (used for full backup restore).
   /// Tasks missing from [tasks] are deleted from Firestore too, otherwise
   /// they would reappear on the next load.
+  /// Saves several edited tasks at once (one batched write).
+  Future<void> updateTasks(List<TaskModel> updated) {
+    if (updated.isEmpty) return Future.value();
+    final byId = {for (final t in updated) t.id: t};
+    return mutate(
+      (current) => [for (final t in current) byId[t.id] ?? t],
+      () => commitInChunks([
+        for (final t in updated)
+          (WriteBatch b) => b.set(_col.doc(t.id), t.toJson()),
+      ]),
+    );
+  }
+
   Future<void> replaceAll(List<TaskModel> tasks) {
     final keep = {for (final t in tasks) t.id};
     final stale = [

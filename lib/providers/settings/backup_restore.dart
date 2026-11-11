@@ -16,6 +16,7 @@ import '../../models/task_model.dart';
 import '../../utils/backup_service.dart';
 import '../calendar_provider.dart';
 import '../notes_provider.dart';
+import '../reminders_actions.dart';
 import '../tasks_provider.dart';
 
 /// Parsed content of a full backup. A null section was absent from the
@@ -69,9 +70,10 @@ class BackupRestorer {
   final Ref _ref;
 
   /// Replaces local state synchronously; the returned future completes when
-  /// Firestore has persisted every section.
+  /// Firestore has persisted every section. The reminders scheduled on the
+  /// device are rebuilt from the new data.
   Future<void> apply(FullBackupData data) {
-    return Future.wait([
+    final saved = Future.wait([
       if (data.notes != null)
         _ref.read(notesProvider.notifier).replaceAll(data.notes!),
       if (data.tasks != null)
@@ -81,6 +83,8 @@ class BackupRestorer {
       if (data.events != null)
         _ref.read(calendarProvider.notifier).replaceAll(data.events!),
     ]).then((_) {});
+    _ref.read(remindersActionsProvider).resync().ignore();
+    return saved;
   }
 
   /// Reads and parses an automatic zip backup without applying it. Returns

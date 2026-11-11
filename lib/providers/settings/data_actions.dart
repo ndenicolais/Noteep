@@ -88,8 +88,30 @@ class DataActions {
   Future<void> importNotes(Map<String, dynamic> decoded) =>
       _import(decoded, const ['notes']);
 
-  Future<void> importTasks(Map<String, dynamic> decoded) =>
-      _import(decoded, const ['tasks', 'taskLists']);
+  /// Imported open tasks whose due date has a future time and no reminder
+  /// get a reminder at that time (e.g. from Google Tasks, where the time
+  /// alerts).
+  Future<void> importTasks(Map<String, dynamic> decoded) {
+    final data = FullBackupData.fromJson({
+      for (final k in const ['tasks', 'taskLists'])
+        if (decoded.containsKey(k)) k: decoded[k],
+    });
+    final now = DateTime.now();
+    return _restorer.apply(
+      FullBackupData(
+        taskLists: data.taskLists,
+        tasks:
+            data.tasks?.map((t) {
+              final timed =
+                  !t.isCompleted &&
+                  t.reminder == null &&
+                  t.hasDueTime &&
+                  t.dueDate!.isAfter(now);
+              return timed ? t.copyWith(reminder: t.dueDate) : t;
+            }).toList(),
+      ),
+    );
+  }
 
   Future<void> importCalendar(Map<String, dynamic> decoded) =>
       _import(decoded, const ['calendar']);

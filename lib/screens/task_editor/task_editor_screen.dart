@@ -215,21 +215,60 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
     );
   }
 
+  /// Due date, then its time: cancelling the time keeps a day-only due
+  /// date (no notification).
   void _showDatePicker() async {
+    final current = _task.dueDate;
     final date = await showDatePicker(
       context: context,
-      initialDate: _task.dueDate ?? DateTime.now(),
+      initialDate: current ?? DateTime.now(),
       firstDate: DateTime.now().subtract(const Duration(days: 365)),
       lastDate: DateTime.now().add(const Duration(days: 365)),
     );
-    if (date != null) {
-      // Keep the time of day of a due date that has one.
-      final old = _task.dueDate;
-      final due =
+    if (date == null || !mounted) return;
+    final time = await showTimePicker(
+      context: context,
+      initialTime:
           _task.hasDueTime
-              ? DateTime(date.year, date.month, date.day, old!.hour, old.minute)
-              : date;
-      setState(() => _task = _task.copyWith(dueDate: due));
+              ? TimeOfDay.fromDateTime(current!)
+              : const TimeOfDay(hour: 9, minute: 0),
+    );
+    if (!mounted) return;
+    _applyDueDate(
+      time == null
+          ? date
+          : DateTime(date.year, date.month, date.day, time.hour, time.minute),
+    );
+  }
+
+  /// Sets (or with null clears) the due date. A due date with a time is
+  /// also the reminder, like in Google Tasks: the reminder follows it unless
+  /// it was set to a different time, and goes away with it.
+  void _applyDueDate(DateTime? due) {
+    final previous = _task;
+    final followsDue =
+        previous.reminder == null ||
+        (previous.hasDueTime && previous.reminder == previous.dueDate);
+    var updated =
+        due == null
+            ? previous.copyWith(clearDueDate: true)
+            : previous.copyWith(dueDate: due);
+    if (followsDue) {
+      updated =
+          updated.hasDueTime
+              ? updated.copyWith(reminder: updated.dueDate)
+              : updated.copyWith(clearReminder: true);
+    }
+    setState(() => _task = updated);
+    if (updated.reminder == previous.reminder) return;
+    _save();
+    final notifications = NotificationService.instance;
+    if (updated.reminder == null) {
+      notifications
+          .cancelNotification(NotificationService.idForTask(updated.id))
+          .ignore();
+    } else {
+      notifications.scheduleTaskReminder(_task).ignore();
     }
   }
 
@@ -460,10 +499,7 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
             ),
             TaskInfoSection(
               task: _task,
-              onClearDueDate:
-                  () => setState(
-                    () => _task = _task.copyWith(clearDueDate: true),
-                  ),
+              onClearDueDate: () => _applyDueDate(null),
             ),
             // Campo Descrizione
             Expanded(
