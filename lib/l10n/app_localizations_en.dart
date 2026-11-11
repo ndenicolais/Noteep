@@ -1907,6 +1907,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Choosing Birthday or Name day gives the event its color right away, makes it a yearly all-day event and alerts the day before and on the day (all of it can be changed). In the Schedule view cards show only the time and, if any, the kind (Birthday or Name day).';
 
   @override
+  String get changelog_v2_0_0_bullet_66 =>
+      'The side menu now starts with Calendar, followed by Tasks, Notes and Reminders.';
+
+  @override
   String get infoPrivacyOpen => 'Privacy policy';
 
   @override

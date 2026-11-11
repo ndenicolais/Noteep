@@ -124,10 +124,15 @@ class AppDrawer extends ConsumerWidget {
               ),
             ),
             _DrawerItem(
-              icon: Icons.lightbulb_outline,
-              label: context.l10n.navNotes,
-              selected: currentSection == DrawerSection.home,
-              onTap: () => _navigateTo(context, DrawerSection.home, null),
+              icon: Icons.calendar_today_outlined,
+              label: context.l10n.navCalendar,
+              selected: currentSection == DrawerSection.calendar,
+              onTap:
+                  () => _navigateTo(
+                    context,
+                    DrawerSection.calendar,
+                    AppRoutes.calendar,
+                  ),
             ),
             _DrawerItem(
               icon: Icons.check_circle_outline,
@@ -141,6 +146,12 @@ class AppDrawer extends ConsumerWidget {
                   ),
             ),
             _DrawerItem(
+              icon: Icons.lightbulb_outline,
+              label: context.l10n.navNotes,
+              selected: currentSection == DrawerSection.home,
+              onTap: () => _navigateTo(context, DrawerSection.home, null),
+            ),
+            _DrawerItem(
               icon: Icons.notifications_outlined,
               label: context.l10n.navReminders,
               selected: currentSection == DrawerSection.reminders,
@@ -149,17 +160,6 @@ class AppDrawer extends ConsumerWidget {
                     context,
                     DrawerSection.reminders,
                     AppRoutes.reminders,
-                  ),
-            ),
-            _DrawerItem(
-              icon: Icons.calendar_today_outlined,
-              label: context.l10n.navCalendar,
-              selected: currentSection == DrawerSection.calendar,
-              onTap:
-                  () => _navigateTo(
-                    context,
-                    DrawerSection.calendar,
-                    AppRoutes.calendar,
                   ),
             ),
             _DrawerItem(

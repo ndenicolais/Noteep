@@ -360,7 +360,7 @@ The screen handles dialogs, file pickers and snackbars; data work is in `DataAct
 
 ### 5.10 Shared behavior
 
-- **Drawer** (`AppDrawer`, `NavScaffold`): Notes, Tasks, Reminders, Calendar, Labels, Archive, Trash, Settings and sign out. Statistics and Export open from Settings → Notes data, Info from Settings → Info.
+- **Drawer** (`AppDrawer`, `NavScaffold`): Calendar, Tasks, Notes, Reminders, Labels, Archive, Trash, Settings and sign out. Statistics and Export open from Settings → Notes data, Info from Settings → Info.
 - **Undo**: trash and archive actions show a snackbar with Undo (`notifyWithUndo`), which still works after the editor pops.
 - **Errors**: fire-and-forget writes go through `notifyOnError`, which shows an error snackbar if the write fails.
 - **Sync status**: `SyncStatusListener` (in `MaterialApp.builder`) shows a banner while writes are queued offline and a snackbar if the server later rejects one.

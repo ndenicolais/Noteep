@@ -3464,6 +3464,12 @@ abstract class AppLocalizations {
   /// **'Scegliendo Compleanno o Onomastico, l\'evento prende subito il suo colore, diventa annuale e di tutto il giorno e avvisa il giorno prima e il giorno stesso (puoi cambiare tutto). Nella vista Programma le schede mostrano solo l\'orario e, se c\'è, il tipo (Compleanno o Onomastico).'**
   String get changelog_v2_0_0_bullet_65;
 
+  /// No description provided for @changelog_v2_0_0_bullet_66.
+  ///
+  /// In it, this message translates to:
+  /// **'Il menu laterale ora parte da Calendario, seguito da Task, Note e Promemoria.'**
+  String get changelog_v2_0_0_bullet_66;
+
   /// No description provided for @infoPrivacyOpen.
   ///
   /// In it, this message translates to:

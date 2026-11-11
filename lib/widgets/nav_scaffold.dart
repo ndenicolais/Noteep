@@ -166,32 +166,13 @@ class _AppNavRail extends StatelessWidget {
   final DrawerSection currentSection;
   final bool collapsed;
 
-  int get _selectedIndex {
-    switch (currentSection) {
-      case DrawerSection.home:
-        return 0;
-      case DrawerSection.tasks:
-        return 1;
-      case DrawerSection.calendar:
-        return 2;
-      case DrawerSection.reminders:
-        return 3;
-      case DrawerSection.labels:
-        return 4;
-      case DrawerSection.archive:
-        return 5;
-      case DrawerSection.trash:
-        return 6;
-      case DrawerSection.settings:
-        return 7;
-    }
-  }
+  int get _selectedIndex => _railSections.indexOf(currentSection);
 
   // Order must match the NavigationRailDestination list below.
   static const _railSections = [
-    DrawerSection.home,
-    DrawerSection.tasks,
     DrawerSection.calendar,
+    DrawerSection.tasks,
+    DrawerSection.home,
     DrawerSection.reminders,
     DrawerSection.labels,
     DrawerSection.archive,
@@ -199,9 +180,9 @@ class _AppNavRail extends StatelessWidget {
     DrawerSection.settings,
   ];
   static const _railRoutes = <String?>[
-    null, // 0: home
-    AppRoutes.tasks,
     AppRoutes.calendar,
+    AppRoutes.tasks,
+    null, // 2: home
     AppRoutes.reminders,
     AppRoutes.labels,
     AppRoutes.archive,
@@ -229,9 +210,9 @@ class _AppNavRail extends StatelessWidget {
               : NavigationRailLabelType.all,
       destinations: [
         NavigationRailDestination(
-          icon: const Icon(Icons.lightbulb_outline),
-          selectedIcon: const Icon(Icons.lightbulb),
-          label: Text(context.l10n.navNotes),
+          icon: const Icon(Icons.calendar_today_outlined),
+          selectedIcon: const Icon(Icons.calendar_today),
+          label: Text(context.l10n.navCalendar),
         ),
         NavigationRailDestination(
           icon: const Icon(Icons.check_circle_outline),
@@ -239,9 +220,9 @@ class _AppNavRail extends StatelessWidget {
           label: Text(context.l10n.navTasks),
         ),
         NavigationRailDestination(
-          icon: const Icon(Icons.calendar_today_outlined),
-          selectedIcon: const Icon(Icons.calendar_today),
-          label: Text(context.l10n.navCalendar),
+          icon: const Icon(Icons.lightbulb_outline),
+          selectedIcon: const Icon(Icons.lightbulb),
+          label: Text(context.l10n.navNotes),
         ),
         NavigationRailDestination(
           icon: const Icon(Icons.notifications_outlined),

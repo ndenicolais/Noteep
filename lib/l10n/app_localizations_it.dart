@@ -1916,6 +1916,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Scegliendo Compleanno o Onomastico, l\'evento prende subito il suo colore, diventa annuale e di tutto il giorno e avvisa il giorno prima e il giorno stesso (puoi cambiare tutto). Nella vista Programma le schede mostrano solo l\'orario e, se c\'è, il tipo (Compleanno o Onomastico).';
 
   @override
+  String get changelog_v2_0_0_bullet_66 =>
+      'Il menu laterale ora parte da Calendario, seguito da Task, Note e Promemoria.';
+
+  @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';
 
   @override
