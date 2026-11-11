@@ -8,17 +8,15 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
-import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
-import '../../l10n/l10n.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
 import '../../theme/app_font_sizes.dart';
 import '../../theme/app_spacing.dart';
-import 'calendar_event_style.dart';
-import 'calendar_utils.dart';
+import 'calendar_time_grid.dart';
 
-/// Multi-day agenda view used for the "Settimana" and "7 giorni" modes.
+/// Multi-day view used for the "Settimana" and "7 giorni" modes: range
+/// navigation above an hour grid ([CalendarTimeGrid]).
 class CalendarMultiDayView extends StatelessWidget {
   const CalendarMultiDayView({
     super.key,
@@ -38,7 +36,6 @@ class CalendarMultiDayView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final now = DateTime.now();
     final endDay = startDay.add(Duration(days: dayCount - 1));
     final days = List.generate(
       dayCount,
@@ -78,129 +75,7 @@ class CalendarMultiDayView extends StatelessWidget {
             ],
           ),
         ),
-        Row(
-          children:
-              days.map((day) {
-                final isToday =
-                    day.year == now.year &&
-                    day.month == now.month &&
-                    day.day == now.day;
-                final dayName = DateFormat('E').format(day);
-                return Expanded(
-                  child: Column(
-                    children: [
-                      Text(
-                        dayName,
-                        style: TextStyle(
-                          fontSize: AppFontSizes.xs,
-                          fontWeight: FontWeight.w600,
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                      Container(
-                        width: 26,
-                        height: 26,
-                        margin: const EdgeInsets.symmetric(
-                          vertical: AppSpacing.xxs,
-                        ),
-                        decoration:
-                            isToday
-                                ? BoxDecoration(
-                                  color: colorScheme.primary,
-                                  shape: BoxShape.circle,
-                                )
-                                : null,
-                        alignment: Alignment.center,
-                        child: Text(
-                          '${day.day}',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight:
-                                isToday ? FontWeight.bold : FontWeight.normal,
-                            color:
-                                isToday
-                                    ? colorScheme.onPrimary
-                                    : colorScheme.onSurface,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              }).toList(),
-        ),
-        Divider(
-          height: 1,
-          color: colorScheme.outlineVariant.withValues(alpha: 0.4),
-        ),
-        Expanded(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children:
-                days.map((day) {
-                  final dayEvents =
-                      allEvents
-                          .where((e) => calendarEventOccursOn(e, day))
-                          .toList()
-                        ..sort((a, b) => a.startTime.compareTo(b.startTime));
-                  return Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border(
-                          right: BorderSide(
-                            color: colorScheme.outlineVariant.withValues(
-                              alpha: 0.35,
-                            ),
-                            width: 0.5,
-                          ),
-                        ),
-                      ),
-                      child: ListView.builder(
-                        padding: const EdgeInsets.only(top: AppSpacing.xs),
-                        itemCount: dayEvents.length,
-                        itemBuilder: (_, i) {
-                          final event = dayEvents[i];
-                          final style = calendarItemStyle(event, colorScheme);
-                          return GestureDetector(
-                            onTap:
-                                () => AppNav.openCalendarItem(context, event),
-                            child: Container(
-                              margin: const EdgeInsets.fromLTRB(
-                                AppSpacing.xxs,
-                                0,
-                                AppSpacing.xxs,
-                                AppSpacing.xxs,
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 3,
-                                vertical: AppSpacing.xxs,
-                              ),
-                              decoration: BoxDecoration(
-                                color: style.background,
-                                borderRadius: BorderRadius.circular(3),
-                              ),
-                              child: Text(
-                                event.title.isEmpty
-                                    ? context.l10n.commonUntitledParens
-                                    : event.title,
-                                style: TextStyle(
-                                  fontSize: 9,
-                                  color: style.foreground,
-                                  decoration: style.decoration,
-                                  decorationColor: style.foreground,
-                                ),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  );
-                }).toList(),
-          ),
-        ),
+        Expanded(child: CalendarTimeGrid(days: days, allEvents: allEvents)),
       ],
     );
   }

@@ -104,7 +104,15 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
     });
   }
 
+  /// Mouse wheel moves between periods in the month and year views; the day
+  /// and week views use it to scroll their hour grid.
   void _handlePointerSignal(PointerSignalEvent event) {
+    const gridViews = {
+      CalendarViewMode.day,
+      CalendarViewMode.week,
+      CalendarViewMode.sevenDays,
+    };
+    if (gridViews.contains(_currentView)) return;
     if (event is PointerScrollEvent) {
       if (event.scrollDelta.dy > 0) {
         _navigateForward();

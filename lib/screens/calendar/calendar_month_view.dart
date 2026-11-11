@@ -132,10 +132,7 @@ class CalendarMonthView extends StatelessWidget {
 
                         if (isCurrentMonth) {
                           day = DateTime(year, month, dayIndex + 1);
-                          dayEvents =
-                              allEvents
-                                  .where((e) => calendarEventOccursOn(e, day!))
-                                  .toList();
+                          dayEvents = calendarItemsOn(allEvents, day);
                           isToday =
                               day.year == now.year &&
                               day.month == now.month &&

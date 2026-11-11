@@ -1875,6 +1875,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Il calendario ricorda la vista che hai scelto (giorno, settimana, mese, anno, programma) anche quando cambi sezione o riapri l\'app.';
 
   @override
+  String get changelog_v2_0_0_bullet_61 =>
+      'Calendario più simile a Google Calendar: le viste Giorno e Settimana hanno la colonna delle ore, gli eventi disposti in base all\'orario, la riga per quelli di tutto il giorno e la linea dell\'ora attuale (tocca una fascia vuota per creare un evento a quell\'ora). La vista Programma mostra a sinistra giorno e data, l\'orario di ogni evento e il mese quando cambia.';
+
+  @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';
 
   @override

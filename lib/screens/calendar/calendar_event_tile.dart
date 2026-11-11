@@ -34,21 +34,23 @@ class CalendarEventListTile extends StatelessWidget {
     required this.event,
     required this.onTap,
     this.dense = false,
+    this.padding = const EdgeInsets.symmetric(
+      horizontal: AppSpacing.md,
+      vertical: AppSpacing.xxs,
+    ),
   });
 
   final CalendarEventModel event;
   final VoidCallback onTap;
   final bool dense;
+  final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) {
     final style = calendarItemStyle(event, Theme.of(context).colorScheme);
     final radius = BorderRadius.circular(8);
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.md,
-        vertical: AppSpacing.xxs,
-      ),
+      padding: padding,
       child: Material(
         color: style.background,
         borderRadius: radius,

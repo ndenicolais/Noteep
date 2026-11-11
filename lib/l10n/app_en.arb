@@ -565,6 +565,7 @@
   "changelog_v2_0_0_bullet_58": "The calendar also shows tasks with a due date: tap one to open it and use the button in the top bar to show or hide them.",
   "changelog_v2_0_0_bullet_59": "In the calendar every entry has a color based on its type (event, all-day event, birthday, name day, task) and the search bar sits on the right.",
   "changelog_v2_0_0_bullet_60": "The calendar remembers the view you picked (day, week, month, year, schedule) when you switch sections or reopen the app.",
+  "changelog_v2_0_0_bullet_61": "A calendar closer to Google Calendar: the Day and Week views have an hours column, events placed by time, a row for all-day ones and a line at the current time (tap an empty slot to create an event at that hour). The Schedule view shows the weekday and date on the left, the time of each event and the month when it changes.",
   "infoPrivacyOpen": "Privacy policy",
   "privacyPolicyTitle": "Privacy policy",
   "privacyPolicyIntro": "Noteep is an app for notes, tasks and calendar. This policy explains which data it processes, why, and how you can control it. Noteep shows no ads, uses no analytics or tracking tools, and does not sell or hand over your data.",

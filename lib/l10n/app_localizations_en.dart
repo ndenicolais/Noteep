@@ -1866,6 +1866,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'The calendar remembers the view you picked (day, week, month, year, schedule) when you switch sections or reopen the app.';
 
   @override
+  String get changelog_v2_0_0_bullet_61 =>
+      'A calendar closer to Google Calendar: the Day and Week views have an hours column, events placed by time, a row for all-day ones and a line at the current time (tap an empty slot to create an event at that hour). The Schedule view shows the weekday and date on the left, the time of each event and the month when it changes.';
+
+  @override
   String get infoPrivacyOpen => 'Privacy policy';
 
   @override

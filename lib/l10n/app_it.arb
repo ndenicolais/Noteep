@@ -725,6 +725,7 @@
   "changelog_v2_0_0_bullet_58": "Il calendario mostra anche i task con una scadenza: toccali per aprirli e usa il pulsante nella barra in alto per mostrarli o nasconderli.",
   "changelog_v2_0_0_bullet_59": "Nel calendario ogni voce ha un colore in base al tipo (evento, evento di tutto il giorno, compleanno, onomastico, task) e la barra di ricerca è allineata a destra.",
   "changelog_v2_0_0_bullet_60": "Il calendario ricorda la vista che hai scelto (giorno, settimana, mese, anno, programma) anche quando cambi sezione o riapri l'app.",
+  "changelog_v2_0_0_bullet_61": "Calendario più simile a Google Calendar: le viste Giorno e Settimana hanno la colonna delle ore, gli eventi disposti in base all'orario, la riga per quelli di tutto il giorno e la linea dell'ora attuale (tocca una fascia vuota per creare un evento a quell'ora). La vista Programma mostra a sinistra giorno e data, l'orario di ogni evento e il mese quando cambia.",
   "infoPrivacyOpen": "Informativa sulla privacy",
   "privacyPolicyTitle": "Informativa sulla privacy",
   "privacyPolicyIntro": "Noteep è un'app per note, task e calendario. Questa informativa spiega quali dati tratta, perché e come puoi controllarli. Noteep non mostra pubblicità, non usa strumenti di analisi o di tracciamento e non vende né cede i tuoi dati.",

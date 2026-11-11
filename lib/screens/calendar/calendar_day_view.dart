@@ -8,17 +8,16 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
-import '../../core/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import '../../l10n/l10n.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
 import '../../theme/app_font_sizes.dart';
 import '../../theme/app_spacing.dart';
-import 'calendar_event_tile.dart';
-import 'calendar_utils.dart';
+import 'calendar_time_grid.dart';
 
-/// Single-day agenda view of the calendar workspace.
+/// Single-day view of the calendar workspace: date navigation above an hour
+/// grid ([CalendarTimeGrid]).
 class CalendarDayView extends StatelessWidget {
   const CalendarDayView({
     super.key,
@@ -39,9 +38,6 @@ class CalendarDayView extends StatelessWidget {
     final now = DateTime.now();
     final isToday =
         day.year == now.year && day.month == now.month && day.day == now.day;
-    final dayEvents =
-        allEvents.where((e) => calendarEventOccursOn(e, day)).toList()
-          ..sort((a, b) => a.startTime.compareTo(b.startTime));
     final dateStr = DateFormat('EEEE, d MMMM yyyy').format(day);
 
     return Column(
@@ -80,38 +76,11 @@ class CalendarDayView extends StatelessWidget {
         ),
         const Divider(height: 1),
         Expanded(
-          child:
-              dayEvents.isEmpty
-                  ? Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.event_available,
-                          size: 64,
-                          color: colorScheme.outlineVariant,
-                        ),
-                        const SizedBox(height: AppSpacing.lg),
-                        Text(
-                          context.l10n.calendarNoEventsDay,
-                          style: TextStyle(
-                            color: colorScheme.outline,
-                            fontSize: AppFontSizes.lg,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                  : ListView.builder(
-                    itemCount: dayEvents.length,
-                    itemBuilder: (_, i) {
-                      final event = dayEvents[i];
-                      return CalendarEventListTile(
-                        event: event,
-                        onTap: () => AppNav.openCalendarItem(context, event),
-                      );
-                    },
-                  ),
+          child: CalendarTimeGrid(
+            days: [day],
+            allEvents: allEvents,
+            showDayHeader: false,
+          ),
         ),
       ],
     );
