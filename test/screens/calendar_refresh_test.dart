@@ -165,7 +165,7 @@ void main() {
         ),
       );
       expect(find.text('Pay water'), findsOneWidget);
-      expect(find.text('Task · 23:30'), findsOneWidget);
+      expect(find.text('23:30'), findsOneWidget);
     },
   );
 
@@ -181,6 +181,6 @@ void main() {
         dueDate: today.add(const Duration(hours: 23, minutes: 45)),
       ),
     );
-    expect(find.text('Task · 23:45'), findsOneWidget);
+    expect(find.text('23:45'), findsOneWidget);
   });
 }

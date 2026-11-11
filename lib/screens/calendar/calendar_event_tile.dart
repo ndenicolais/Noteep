@@ -15,18 +15,28 @@ import '../../models/calendar_model.dart';
 import '../../theme/app_spacing.dart';
 import 'calendar_event_style.dart';
 
-/// Formats the time range of an event (a single time when it has no end),
-/// "Tutto il giorno" for all-day events, "Task" for a task (followed by the
-/// reminder time when it has one on that day).
+/// Formats the time range of an entry (a single time when it has no end),
+/// or "Tutto il giorno" for all-day entries.
 String formatEventTimeRange(AppLocalizations l, CalendarEventModel event) {
-  if (event is TaskCalendarEvent) {
-    if (event.isAllDay) return l.calendarTaskLabel;
-    return '${l.calendarTaskLabel} · ${DateFormat('HH:mm').format(event.startTime)}';
-  }
   if (event.isAllDay) return l.calendarAllDay;
   final start = DateFormat('HH:mm').format(event.startTime);
   if (!event.hasEndTime) return start;
   return '$start – ${DateFormat('HH:mm').format(event.endTime)}';
+}
+
+/// Subtitle of a list card: the time (none for all-day entries) and the kind
+/// when it is a birthday or a name day, e.g. "10:00 – 11:00" or
+/// "Compleanno". Null when there is neither. The card color and icon already
+/// tell tasks and all-day entries apart.
+String? calendarItemSubtitle(AppLocalizations l, CalendarEventModel event) {
+  final parts = [
+    if (!event.isAllDay) formatEventTimeRange(l, event),
+    if (event.isBirthday)
+      l.calendarBirthday
+    else if (event.isNameDay)
+      l.calendarNameDay,
+  ];
+  return parts.isEmpty ? null : parts.join(' · ');
 }
 
 /// A colored card shared by the day, schedule and day-events-sheet calendar
@@ -52,6 +62,7 @@ class CalendarEventListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final style = calendarItemStyle(event, Theme.of(context).colorScheme);
+    final subtitle = calendarItemSubtitle(context.l10n, event);
     final radius = BorderRadius.circular(8);
     return Padding(
       padding: padding,
@@ -89,13 +100,14 @@ class CalendarEventListTile extends StatelessWidget {
                           decorationColor: style.foreground,
                         ),
                       ),
-                      Text(
-                        formatEventTimeRange(context.l10n, event),
-                        style: TextStyle(
-                          color: style.foreground.withValues(alpha: 0.85),
-                          fontSize: 12,
+                      if (subtitle != null)
+                        Text(
+                          subtitle,
+                          style: TextStyle(
+                            color: style.foreground.withValues(alpha: 0.85),
+                            fontSize: 12,
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ),

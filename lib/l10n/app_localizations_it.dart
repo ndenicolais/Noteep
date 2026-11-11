@@ -987,9 +987,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get calendarAllDay => 'Tutto il giorno';
 
   @override
-  String get calendarTaskLabel => 'Task';
-
-  @override
   String get calendarShowTasks => 'Mostra i task';
 
   @override
@@ -1913,6 +1910,10 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_64 =>
       'Tutto ciò che ha giorno e orario ti avvisa: la scadenza di un task ora chiede anche l\'ora e a quell\'ora arriva la notifica (il promemoria la segue, salvo che tu l\'abbia messo a un\'altra ora); i task importati con un orario ricevono il loro promemoria. Gli eventi hanno gli avvisi \"Il giorno prima\" e \"Il giorno stesso\", che si ripetono a ogni occorrenza degli eventi ricorrenti (alle 9:00 per quelli di tutto il giorno); i nuovi eventi avvisano il giorno stesso. I task e gli eventi futuri con orario già presenti ricevono un avviso una sola volta.';
+
+  @override
+  String get changelog_v2_0_0_bullet_65 =>
+      'Scegliendo Compleanno o Onomastico, l\'evento prende subito il suo colore, diventa annuale e di tutto il giorno e avvisa il giorno prima e il giorno stesso (puoi cambiare tutto). Nella vista Programma le schede mostrano solo l\'orario e, se c\'è, il tipo (Compleanno o Onomastico).';
 
   @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';

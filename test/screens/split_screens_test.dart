@@ -191,20 +191,31 @@ void main() {
       await tester.tap(find.text('Compleanno'));
       await tester.pump();
       expect(event.isBirthday, isTrue);
-
-      await tester.tap(find.text('Tutto il giorno'));
-      await tester.pump();
+      // A birthday becomes a yearly all-day event alerting the day before
+      // and on the day, shown in its color (banner + checkbox).
       expect(event.isAllDay, isTrue);
+      expect(event.recurrence, RecurrenceType.yearly);
+      expect(event.alertDayBefore && event.alertSameDay, isTrue);
+      expect(find.text('Compleanno'), findsNWidgets(2));
       // Subtitle switches too, and the end time row is hidden.
       expect(find.text('Tutto il giorno'), findsNWidgets(2));
       expect(find.text('Ora di fine'), findsNothing);
 
+      // Name day replaces birthday.
+      await tester.ensureVisible(find.text('Onomastico'));
+      await tester.tap(find.text('Onomastico'));
+      await tester.pump();
+      expect(event.isNameDay, isTrue);
+      expect(event.isBirthday, isFalse);
+
       // Back to a timed event: starts without an end.
+      await tester.ensureVisible(find.text('Tutto il giorno').last);
       await tester.tap(find.text('Tutto il giorno').last);
       await tester.pump();
       expect(event.isAllDay, isFalse);
       expect(event.hasEndTime, isFalse);
 
+      await tester.ensureVisible(find.text('Ricorrenza'));
       await tester.tap(find.text('Ricorrenza'));
       await tester.pumpAndSettle();
       await tester.tap(find.text(RecurrenceType.weekly.label(itL10n)));

@@ -16,6 +16,7 @@ import '../../theme/app_spacing.dart';
 import '../../utils/event_alerts.dart';
 import '../../utils/recurrence.dart';
 import '../../widgets/shared/app_dialogs.dart';
+import 'calendar_event_style.dart';
 import 'calendar_event_tile.dart';
 
 /// Date/time, all-day, birthday, name-day, recurrence and alerts (day
@@ -41,11 +42,58 @@ class CalendarEventDetailsSection extends StatelessWidget {
   final VoidCallback onClearEndTime;
   final ValueChanged<CalendarEventModel> onChanged;
 
+  /// Sets the kind (birthday and name day exclude each other). Turning one
+  /// on makes the event a yearly all-day one alerting the day before and on
+  /// the day, like Google Calendar birthdays; all of it can be changed after.
+  CalendarEventModel _withKind({bool birthday = false, bool nameDay = false}) {
+    final special = birthday || nameDay;
+    return event.copyWith(
+      isBirthday: birthday,
+      isNameDay: nameDay,
+      isAllDay: special ? true : null,
+      recurrence:
+          special && event.recurrence == RecurrenceType.none
+              ? RecurrenceType.yearly
+              : null,
+      alertDayBefore: special ? true : null,
+      alertSameDay: special ? true : null,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final style = calendarItemStyle(event, Theme.of(context).colorScheme);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        // The kind in its calendar color, so the choice shows right away.
+        if (event.isBirthday || event.isNameDay)
+          Container(
+            margin: const EdgeInsets.only(bottom: AppSpacing.sm),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.md,
+              vertical: AppSpacing.sm,
+            ),
+            decoration: BoxDecoration(
+              color: style.background,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                Icon(style.icon, size: 18, color: style.foreground),
+                const SizedBox(width: AppSpacing.sm),
+                Text(
+                  event.isBirthday
+                      ? context.l10n.calendarBirthday
+                      : context.l10n.calendarNameDay,
+                  style: TextStyle(
+                    color: style.foreground,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ListTile(
           contentPadding: EdgeInsets.zero,
           leading: const Icon(Icons.calendar_today_outlined),
@@ -91,13 +139,15 @@ class CalendarEventDetailsSection extends StatelessWidget {
           icon: Icons.cake_outlined,
           title: context.l10n.calendarBirthday,
           value: event.isBirthday,
-          onChanged: (v) => onChanged(event.copyWith(isBirthday: v)),
+          activeColor: birthdayColor,
+          onChanged: (v) => onChanged(_withKind(birthday: v)),
         ),
         _Toggle(
           icon: Icons.auto_awesome_outlined,
           title: context.l10n.calendarNameDay,
           value: event.isNameDay,
-          onChanged: (v) => onChanged(event.copyWith(isNameDay: v)),
+          activeColor: nameDayColor,
+          onChanged: (v) => onChanged(_withKind(nameDay: v)),
         ),
         const SizedBox(height: AppSpacing.lg),
         ListTile(
@@ -163,6 +213,7 @@ class _Toggle extends StatelessWidget {
     this.icon,
     required this.title,
     this.subtitle,
+    this.activeColor,
     required this.value,
     required this.onChanged,
   });
@@ -170,6 +221,7 @@ class _Toggle extends StatelessWidget {
   final IconData? icon;
   final String title;
   final String? subtitle;
+  final Color? activeColor;
   final bool value;
   final ValueChanged<bool> onChanged;
 
@@ -180,6 +232,7 @@ class _Toggle extends StatelessWidget {
       secondary: icon == null ? null : Icon(icon),
       title: Text(title),
       subtitle: subtitle == null ? null : Text(subtitle!),
+      activeColor: activeColor,
       value: value,
       onChanged: (v) {
         if (v != null) onChanged(v);

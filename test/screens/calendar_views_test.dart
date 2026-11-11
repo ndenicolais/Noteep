@@ -127,4 +127,30 @@ void main() {
     expect(find.text('${today.day}'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('schedule subtitle: time and kind, nothing for all-day', (
+    tester,
+  ) async {
+    await setSize(tester);
+    await tester.pumpWidget(
+      _app(
+        CalendarScheduleView(
+          allEvents: [
+            allDay('Holiday'),
+            CalendarEventModel(
+              title: 'Birthday',
+              startTime: today,
+              endTime: today,
+              isAllDay: true,
+              isBirthday: true,
+            ),
+            TaskCalendarEvent(TaskModel(title: 'Task day', dueDate: today)),
+          ],
+        ),
+      ),
+    );
+    expect(find.text('Compleanno'), findsOneWidget);
+    expect(find.text('Tutto il giorno'), findsNothing);
+    expect(find.text('Task'), findsNothing);
+  });
 }

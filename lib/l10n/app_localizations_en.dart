@@ -985,9 +985,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calendarAllDay => 'All day';
 
   @override
-  String get calendarTaskLabel => 'Task';
-
-  @override
   String get calendarShowTasks => 'Show tasks';
 
   @override
@@ -1904,6 +1901,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_64 =>
       'Anything with a day and a time alerts you: a task\'s due date now asks for the time too and the notification arrives then (the reminder follows it, unless you set it to another time); imported tasks with a time get their reminder. Events have \"The day before\" and \"On the day\" alerts, repeated on every occurrence of recurring events (at 9:00 for all-day ones); new events alert on the day. Existing future tasks and events with a time get an alert once.';
+
+  @override
+  String get changelog_v2_0_0_bullet_65 =>
+      'Choosing Birthday or Name day gives the event its color right away, makes it a yearly all-day event and alerts the day before and on the day (all of it can be changed). In the Schedule view cards show only the time and, if any, the kind (Birthday or Name day).';
 
   @override
   String get infoPrivacyOpen => 'Privacy policy';

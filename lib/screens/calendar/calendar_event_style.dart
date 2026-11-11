@@ -31,6 +31,9 @@ class CalendarItemStyle {
   TextDecoration? get decoration => isDone ? TextDecoration.lineThrough : null;
 }
 
+final birthdayColor = Colors.lightBlue.shade600;
+final nameDayColor = Colors.lime.shade600;
+
 /// Tasks, birthdays, name days, all-day and timed events each get their own
 /// color.
 CalendarItemStyle calendarItemStyle(
@@ -45,8 +48,8 @@ CalendarItemStyle calendarItemStyle(
       isDone: done,
     );
   }
-  if (item.isBirthday) return _style(Colors.lightBlue.shade600, Icons.cake);
-  if (item.isNameDay) return _style(Colors.lime.shade600, Icons.auto_awesome);
+  if (item.isBirthday) return _style(birthdayColor, Icons.cake);
+  if (item.isNameDay) return _style(nameDayColor, Icons.auto_awesome);
   if (item.isAllDay) return _style(Colors.deepPurple.shade300, null);
   return _style(colorScheme.primary, null);
 }
