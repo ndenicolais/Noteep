@@ -191,14 +191,20 @@ class NotificationService {
 
   /// Replaces the scheduled day-before / same-day alerts of [event] with
   /// its [upcomingEventAlerts] (none if it has no alert, or is archived or
-  /// trashed). Each alert gets its own notification id.
+  /// trashed). Each alert gets its own notification id; all-day events
+  /// alert at [allDayMinutes] (minutes after midnight, the Settings value).
   Future<void> scheduleEventAlerts(
     CalendarEventModel event, {
+    required int allDayMinutes,
     bool askPermission = true,
   }) async {
     if (kIsWeb) return;
     await cancelEventAlerts(event.id);
-    final alerts = upcomingEventAlerts(event, DateTime.now());
+    final alerts = upcomingEventAlerts(
+      event,
+      DateTime.now(),
+      allDayMinutes: allDayMinutes,
+    );
     if (alerts.isEmpty) return;
     final l10n = currentL10n();
     final title =

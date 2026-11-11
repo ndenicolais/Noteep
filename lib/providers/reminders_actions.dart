@@ -17,6 +17,7 @@ import '../utils/notification_service.dart';
 import 'calendar_provider.dart';
 import 'core_providers.dart';
 import 'notes_provider.dart';
+import 'settings/ui_provider.dart';
 import 'tasks_provider.dart';
 
 /// The plugin-backed notification service; tests override it with a fake.
@@ -54,6 +55,7 @@ class RemindersActions {
       ]);
       if (loaded.contains(false)) return;
       final notifications = _notifications;
+      final allDayMinutes = _ref.read(defaultAlertTimeProvider);
       await notifications.cancelAllNotifications();
       await Future.wait([
         for (final note in _ref.read(notesProvider))
@@ -66,11 +68,36 @@ class RemindersActions {
           if (event.deletedAt == null) ...[
             notifications.scheduleEventReminder(event, askPermission: false),
             // Also moves the window of recurring alerts forward.
-            notifications.scheduleEventAlerts(event, askPermission: false),
+            notifications.scheduleEventAlerts(
+              event,
+              allDayMinutes: allDayMinutes,
+              askPermission: false,
+            ),
           ],
       ]);
     } catch (e) {
       if (kDebugMode) debugPrint('Reminders resync failed: $e');
+    }
+  }
+
+  /// Saves the default alert time (minutes after midnight) and reschedules
+  /// the alerts of every event, so all-day ones move to the new time.
+  Future<void> setDefaultAlertTime(int minutes) async {
+    _ref.read(defaultAlertTimeProvider.notifier).set(minutes);
+    if (kIsWeb) return;
+    try {
+      final notifications = _notifications;
+      await Future.wait([
+        for (final event in _ref.read(calendarProvider))
+          if (event.deletedAt == null && event.isAllDay)
+            notifications.scheduleEventAlerts(
+              event,
+              allDayMinutes: minutes,
+              askPermission: false,
+            ),
+      ]);
+    } catch (e) {
+      if (kDebugMode) debugPrint('Default alert time reschedule failed: $e');
     }
   }
 

@@ -14,6 +14,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
 import '../../providers/calendar_provider.dart';
+import '../../providers/settings/ui_provider.dart';
 import '../../theme/app_font_sizes.dart';
 import '../../theme/app_radius.dart';
 import '../../theme/app_spacing.dart';
@@ -89,7 +90,12 @@ class _CalendarEventEditorScreenState
     }
     notifyOnError(pending, context);
     setState(() => _event = updated);
-    NotificationService.instance.scheduleEventAlerts(updated).ignore();
+    NotificationService.instance
+        .scheduleEventAlerts(
+          updated,
+          allDayMinutes: ref.read(defaultAlertTimeProvider),
+        )
+        .ignore();
   }
 
   void _openDateTimePicker() async {
@@ -305,6 +311,7 @@ class _CalendarEventEditorScreenState
             const SizedBox(height: AppSpacing.lg),
             CalendarEventDetailsSection(
               event: _event,
+              allDayAlertMinutes: ref.watch(defaultAlertTimeProvider),
               onPickDateTime: _openDateTimePicker,
               onPickEndTime: _pickEndTime,
               onClearEndTime: _clearEndTime,

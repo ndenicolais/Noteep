@@ -64,6 +64,26 @@ void main() {
     expect(times(e), [DateTime(2026, 11, 11, 9), DateTime(2026, 11, 12, 9)]);
   });
 
+  test('all-day event alerts at the chosen default time', () {
+    final e = event(
+      start: DateTime(2026, 11, 12),
+      allDay: true,
+      sameDay: true,
+      dayBefore: true,
+    );
+    final alerts = upcomingEventAlerts(e, now, allDayMinutes: 20 * 60 + 30);
+    expect(alerts.map((a) => a.at), [
+      DateTime(2026, 11, 11, 20, 30),
+      DateTime(2026, 11, 12, 20, 30),
+    ]);
+  });
+
+  test('a custom default time does not move timed events', () {
+    final e = event(start: DateTime(2026, 11, 12, 15), sameDay: true);
+    final alerts = upcomingEventAlerts(e, now, allDayMinutes: 7 * 60);
+    expect(alerts.single.at, DateTime(2026, 11, 12, 15));
+  });
+
   test('alerts already past are skipped', () {
     // Today at 09:00 (past) and tomorrow's day-before alert today at 09:00.
     final today = event(

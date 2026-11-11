@@ -15,6 +15,7 @@ import '../notes_provider.dart';
 import '../tasks_provider.dart';
 import '../../models/note_model.dart';
 import '../../models/task_model.dart';
+import '../../utils/event_alerts.dart';
 
 /// Base for a Notifier whose enum value is persisted to SharedPreferences by
 /// *name* rather than index, so a future reordering or removal of enum
@@ -238,6 +239,37 @@ final showCompletedTasksProvider = NotifierProvider<BoolSettingNotifier, bool>(
 final groupTasksByPriorityProvider =
     NotifierProvider<BoolSettingNotifier, bool>(
       () => BoolSettingNotifier(_kGroupTasksByPriorityKey, true),
+    );
+
+// --- Default Alert Time ---
+
+const _kDefaultAlertMinutesKey = 'default_alert_minutes';
+
+/// Time of the notifications that have no time of their own (the alerts of
+/// all-day events, birthdays and name days included) and the time first
+/// offered when picking a task's due time, in minutes after midnight.
+/// Change it through `RemindersActions.setDefaultAlertTime`, which also
+/// reschedules the alerts.
+class DefaultAlertTimeNotifier extends Notifier<int> {
+  @override
+  int build() {
+    final v = ref
+        .watch(sharedPreferencesProvider)
+        .getInt(_kDefaultAlertMinutesKey);
+    return v != null && v >= 0 && v < 24 * 60 ? v : defaultAllDayAlertMinutes;
+  }
+
+  void set(int minutes) {
+    state = minutes;
+    ref
+        .read(sharedPreferencesProvider)
+        .setInt(_kDefaultAlertMinutesKey, minutes);
+  }
+}
+
+final defaultAlertTimeProvider =
+    NotifierProvider<DefaultAlertTimeNotifier, int>(
+      DefaultAlertTimeNotifier.new,
     );
 
 // --- Onboarding ---

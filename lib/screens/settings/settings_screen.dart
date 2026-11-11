@@ -17,6 +17,7 @@ import '../../providers/auth_provider.dart';
 import '../../providers/settings/locale_provider.dart';
 import '../../providers/settings/theme_provider.dart';
 import '../../providers/settings/ui_provider.dart';
+import '../../providers/reminders_actions.dart';
 import '../../providers/settings/backup_provider.dart';
 import '../../providers/settings/data_actions.dart';
 import '../../theme/app_spacing.dart';
@@ -34,6 +35,7 @@ import 'settings_language_section.dart';
 import 'settings_misc_sections.dart';
 import 'settings_notes_data_section.dart';
 import 'settings_notes_prefs_section.dart';
+import 'settings_notifications_section.dart';
 import 'settings_start_screen_section.dart';
 import 'settings_tasks_data_section.dart';
 import 'settings_tasks_prefs_section.dart';
@@ -81,6 +83,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
             () => ref.read(showCompletedTasksProvider.notifier).toggle(),
         onToggleGroupByPriority:
             () => ref.read(groupTasksByPriorityProvider.notifier).toggle(),
+      ),
+      SettingsNotificationsSection(
+        defaultAlertMinutes: ref.watch(defaultAlertTimeProvider),
+        onChanged:
+            (v) => ref.read(remindersActionsProvider).setDefaultAlertTime(v),
       ),
       SettingsBackupSection(
         backupSettings: backupSettings,

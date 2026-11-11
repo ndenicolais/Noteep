@@ -30,6 +30,7 @@ class CalendarEventDetailsSection extends StatelessWidget {
   const CalendarEventDetailsSection({
     super.key,
     required this.event,
+    required this.allDayAlertMinutes,
     required this.onPickDateTime,
     required this.onPickEndTime,
     required this.onClearEndTime,
@@ -37,6 +38,9 @@ class CalendarEventDetailsSection extends StatelessWidget {
   });
 
   final CalendarEventModel event;
+
+  /// Alert time of all-day events (minutes after midnight, from Settings).
+  final int allDayAlertMinutes;
   final VoidCallback onPickDateTime;
   final VoidCallback onPickEndTime;
   final VoidCallback onClearEndTime;
@@ -183,9 +187,12 @@ class CalendarEventDetailsSection extends StatelessWidget {
     );
   }
 
-  /// "Alle 09:00" for all-day events, "Alle" and the start time otherwise.
+  /// "Alle" and the Settings alert time for all-day events, "Alle" and the
+  /// start time otherwise.
   String _alertTimeLabel(BuildContext context) => context.l10n.calendarAlertAt(
-    DateFormat('HH:mm').format(occurrenceTime(event, event.startTime)),
+    DateFormat('HH:mm').format(
+      occurrenceTime(event, event.startTime, allDayMinutes: allDayAlertMinutes),
+    ),
   );
 
   Future<void> _pickRecurrence(BuildContext context) async {

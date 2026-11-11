@@ -140,6 +140,24 @@ abstract class AppLocalizations {
   /// **'La sezione che vedi quando apri l\'app'**
   String get settingsStartScreenSubtitle;
 
+  /// No description provided for @settingsNotificationsTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Notifiche'**
+  String get settingsNotificationsTitle;
+
+  /// No description provided for @settingsDefaultAlertTime.
+  ///
+  /// In it, this message translates to:
+  /// **'Orario predefinito'**
+  String get settingsDefaultAlertTime;
+
+  /// No description provided for @settingsDefaultAlertTimeSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Per gli eventi di tutto il giorno, i compleanni e gli onomastici'**
+  String get settingsDefaultAlertTimeSubtitle;
+
   /// No description provided for @settingsLanguageSystem.
   ///
   /// In it, this message translates to:
@@ -3487,6 +3505,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Le Statistiche hanno ora una sezione tutta loro nel menu, subito sotto l\'Archivio.'**
   String get changelog_v2_0_0_bullet_68;
+
+  /// No description provided for @changelog_v2_0_0_bullet_69.
+  ///
+  /// In it, this message translates to:
+  /// **'Nelle Impostazioni puoi scegliere l\'orario delle notifiche degli eventi di tutto il giorno, dei compleanni e degli onomastici (prima sempre alle 9:00); è anche l\'orario proposto quando aggiungi l\'ora di scadenza di un task.'**
+  String get changelog_v2_0_0_bullet_69;
 
   /// No description provided for @infoPrivacyOpen.
   ///

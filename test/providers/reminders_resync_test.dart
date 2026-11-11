@@ -59,10 +59,16 @@ class _FakeNotifications implements NotificationService {
   @override
   Future<void> scheduleEventAlerts(
     CalendarEventModel event, {
+    required int allDayMinutes,
     bool askPermission = true,
   }) async {
     askedPermission.add(askPermission);
-    if (upcomingEventAlerts(event, DateTime.now()).isNotEmpty) {
+    final alerts = upcomingEventAlerts(
+      event,
+      DateTime.now(),
+      allDayMinutes: allDayMinutes,
+    );
+    if (alerts.isNotEmpty) {
       scheduled.add('alerts:${event.id}');
     }
   }
@@ -85,15 +91,22 @@ void main() {
           .doc(id)
           .set(data);
 
-  setUp(() {
+  late SharedPreferences basePrefs;
+
+  setUp(() async {
     firestore = FakeFirebaseFirestore();
     notifications = _FakeNotifications();
+    SharedPreferences.setMockInitialValues({});
+    basePrefs = await SharedPreferences.getInstance();
   });
 
   RemindersActions actions() {
     final container = createTestContainer(
       firestore,
-      overrides: [notificationServiceProvider.overrideWithValue(notifications)],
+      overrides: [
+        notificationServiceProvider.overrideWithValue(notifications),
+        sharedPreferencesProvider.overrideWithValue(basePrefs),
+      ],
     );
     return container.read(remindersActionsProvider);
   }

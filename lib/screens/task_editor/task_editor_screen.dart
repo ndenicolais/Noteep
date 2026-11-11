@@ -16,6 +16,7 @@ import 'package:share_plus/share_plus.dart';
 import '../../models/task_model.dart';
 import '../../models/subtask_model.dart';
 import '../../models/task_change_history.dart';
+import '../../providers/settings/ui_provider.dart';
 import '../../providers/tasks_provider.dart';
 import '../../providers/tasks_undo_redo_provider.dart';
 import '../../theme/app_font_sizes.dart';
@@ -217,6 +218,12 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
 
   /// Due date, then its time: cancelling the time keeps a day-only due
   /// date (no notification).
+  /// The default alert time from Settings, first offered for a due time.
+  TimeOfDay _defaultAlertTime() {
+    final minutes = ref.read(defaultAlertTimeProvider);
+    return TimeOfDay(hour: minutes ~/ 60, minute: minutes % 60);
+  }
+
   void _showDatePicker() async {
     final current = _task.dueDate;
     final date = await showDatePicker(
@@ -231,7 +238,7 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
       initialTime:
           _task.hasDueTime
               ? TimeOfDay.fromDateTime(current!)
-              : const TimeOfDay(hour: 9, minute: 0),
+              : _defaultAlertTime(),
     );
     if (!mounted) return;
     _applyDueDate(

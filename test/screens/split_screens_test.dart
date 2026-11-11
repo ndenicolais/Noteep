@@ -163,6 +163,7 @@ void main() {
                   (context, setState) => SingleChildScrollView(
                     child: CalendarEventDetailsSection(
                       event: event,
+                      allDayAlertMinutes: 9 * 60,
                       onPickDateTime: () {},
                       onPickEndTime: () {},
                       onClearEndTime:

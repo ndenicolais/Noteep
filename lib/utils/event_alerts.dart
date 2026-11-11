@@ -11,8 +11,10 @@
 import '../models/calendar_model.dart';
 import 'recurrence.dart';
 
-/// Hour of the alerts of all-day events (they have no time of their own).
-const allDayAlertHour = 9;
+/// Default time of the alerts of all-day events (they have no time of their
+/// own), in minutes after midnight: 09:00. The user can change it in
+/// Settings (`defaultAlertTimeProvider`).
+const defaultAllDayAlertMinutes = 9 * 60;
 
 /// How far ahead the alerts of an event are scheduled. Notifications are
 /// one-shot, so recurring events get the occurrences in this window and the
@@ -38,10 +40,20 @@ class EventAlert {
 }
 
 /// The time of the occurrence of [event] on [day]: its start time, or
-/// [allDayAlertHour] for an all-day event.
-DateTime occurrenceTime(CalendarEventModel event, DateTime day) =>
+/// [allDayMinutes] (minutes after midnight) for an all-day event.
+DateTime occurrenceTime(
+  CalendarEventModel event,
+  DateTime day, {
+  int allDayMinutes = defaultAllDayAlertMinutes,
+}) =>
     event.isAllDay
-        ? DateTime(day.year, day.month, day.day, allDayAlertHour)
+        ? DateTime(
+          day.year,
+          day.month,
+          day.day,
+          allDayMinutes ~/ 60,
+          allDayMinutes % 60,
+        )
         : DateTime(
           day.year,
           day.month,
@@ -52,8 +64,13 @@ DateTime occurrenceTime(CalendarEventModel event, DateTime day) =>
 
 /// The alerts of [event] after [now] within [alertHorizon], at most
 /// [maxAlertOccurrences] occurrences, sorted by time. Empty when the event
-/// has no alert, or is archived or trashed.
-List<EventAlert> upcomingEventAlerts(CalendarEventModel event, DateTime now) {
+/// has no alert, or is archived or trashed. All-day events alert at
+/// [allDayMinutes] (minutes after midnight).
+List<EventAlert> upcomingEventAlerts(
+  CalendarEventModel event,
+  DateTime now, {
+  int allDayMinutes = defaultAllDayAlertMinutes,
+}) {
   if (!event.hasAlerts || event.isArchived || event.deletedAt != null) {
     return const [];
   }
@@ -65,7 +82,7 @@ List<EventAlert> upcomingEventAlerts(CalendarEventModel event, DateTime now) {
   for (var d = 0; d <= alertHorizon.inDays; d++) {
     final day = DateTime(today.year, today.month, today.day + d);
     if (!event.occursOn(day)) continue;
-    final at = occurrenceTime(event, day);
+    final at = occurrenceTime(event, day, allDayMinutes: allDayMinutes);
     final dayBefore = DateTime(
       at.year,
       at.month,

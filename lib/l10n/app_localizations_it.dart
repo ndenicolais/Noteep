@@ -31,6 +31,16 @@ class AppLocalizationsIt extends AppLocalizations {
       'La sezione che vedi quando apri l\'app';
 
   @override
+  String get settingsNotificationsTitle => 'Notifiche';
+
+  @override
+  String get settingsDefaultAlertTime => 'Orario predefinito';
+
+  @override
+  String get settingsDefaultAlertTimeSubtitle =>
+      'Per gli eventi di tutto il giorno, i compleanni e gli onomastici';
+
+  @override
   String get settingsLanguageSystem => 'Sistema';
 
   @override
@@ -1929,6 +1939,10 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_68 =>
       'Le Statistiche hanno ora una sezione tutta loro nel menu, subito sotto l\'Archivio.';
+
+  @override
+  String get changelog_v2_0_0_bullet_69 =>
+      'Nelle Impostazioni puoi scegliere l\'orario delle notifiche degli eventi di tutto il giorno, dei compleanni e degli onomastici (prima sempre alle 9:00); è anche l\'orario proposto quando aggiungi l\'ora di scadenza di un task.';
 
   @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';

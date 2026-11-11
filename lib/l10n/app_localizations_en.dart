@@ -31,6 +31,16 @@ class AppLocalizationsEn extends AppLocalizations {
       'The section you see when you open the app';
 
   @override
+  String get settingsNotificationsTitle => 'Notifications';
+
+  @override
+  String get settingsDefaultAlertTime => 'Default time';
+
+  @override
+  String get settingsDefaultAlertTimeSubtitle =>
+      'For all-day events, birthdays and name days';
+
+  @override
   String get settingsLanguageSystem => 'System';
 
   @override
@@ -1920,6 +1930,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_68 =>
       'Statistics now have their own section in the menu, right below Archive.';
+
+  @override
+  String get changelog_v2_0_0_bullet_69 =>
+      'In Settings you can choose the time of the notifications of all-day events, birthdays and name days (before always at 9:00); it is also the time suggested when you add a due time to a task.';
 
   @override
   String get infoPrivacyOpen => 'Privacy policy';
