@@ -1879,6 +1879,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Calendario più simile a Google Calendar: le viste Giorno e Settimana hanno la colonna delle ore, gli eventi disposti in base all\'orario, la riga per quelli di tutto il giorno e la linea dell\'ora attuale (tocca una fascia vuota per creare un evento a quell\'ora). La vista Programma mostra a sinistra giorno e data, l\'orario di ogni evento e il mese quando cambia.';
 
   @override
+  String get changelog_v2_0_0_bullet_62 =>
+      'Un task con promemoria compare nel calendario all\'orario del promemoria (anche se non ha una scadenza). Tornando su Note, Task o Calendario, la barra di ricerca mostra il testo ancora attivo, così la lista non resta filtrata senza motivo apparente.';
+
+  @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';
 
   @override

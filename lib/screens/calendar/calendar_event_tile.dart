@@ -16,9 +16,13 @@ import '../../theme/app_spacing.dart';
 import 'calendar_event_style.dart';
 
 /// Formats the time range of an event (a single time when it has no end),
-/// "Tutto il giorno" for all-day events, or "Task" for a task.
+/// "Tutto il giorno" for all-day events, "Task" for a task (followed by the
+/// reminder time when it has one on that day).
 String formatEventTimeRange(AppLocalizations l, CalendarEventModel event) {
-  if (event is TaskCalendarEvent) return l.calendarTaskLabel;
+  if (event is TaskCalendarEvent) {
+    if (event.isAllDay) return l.calendarTaskLabel;
+    return '${l.calendarTaskLabel} · ${DateFormat('HH:mm').format(event.startTime)}';
+  }
   if (event.isAllDay) return l.calendarAllDay;
   final start = DateFormat('HH:mm').format(event.startTime);
   if (!event.hasEndTime) return start;

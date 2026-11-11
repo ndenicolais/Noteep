@@ -161,18 +161,20 @@ class CalendarEventModel {
       );
 }
 
-/// Read-only calendar entry built from a [TaskModel] with a due date, so tasks
-/// can be listed in the calendar views next to events. Never persisted: tap
-/// opens the task editor (see `AppNav.openCalendarItem`).
+/// Read-only calendar entry built from a [TaskModel] with a due date or a
+/// reminder, so tasks can be listed in the calendar views next to events.
+/// A reminder on the due day (or with no due date) places the task at the
+/// reminder time; otherwise it is an all-day entry on the due date. Never
+/// persisted: tap opens the task editor (see `AppNav.openCalendarItem`).
 class TaskCalendarEvent extends CalendarEventModel {
   TaskCalendarEvent(this.task)
     : super(
         id: 'task_${task.id}',
         title: task.title,
         description: task.description,
-        startTime: task.dueDate!,
-        endTime: task.dueDate!,
-        isAllDay: true,
+        startTime: _start(task),
+        endTime: _start(task),
+        isAllDay: !_isTimed(task),
         recurrence: task.recurrence,
         tags: task.tags,
         createdAt: task.createdAt,
@@ -180,4 +182,21 @@ class TaskCalendarEvent extends CalendarEventModel {
       );
 
   final TaskModel task;
+
+  /// Whether [task] can be shown in the calendar at all.
+  static bool isShown(TaskModel task) =>
+      task.dueDate != null || task.reminder != null;
+
+  static bool _isTimed(TaskModel task) {
+    final reminder = task.reminder;
+    if (reminder == null) return false;
+    final due = task.dueDate;
+    return due == null ||
+        (due.year == reminder.year &&
+            due.month == reminder.month &&
+            due.day == reminder.day);
+  }
+
+  static DateTime _start(TaskModel task) =>
+      _isTimed(task) ? task.reminder! : task.dueDate!;
 }

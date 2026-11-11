@@ -39,7 +39,9 @@ class CalendarWorkspaceView extends ConsumerStatefulWidget {
 class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
   late DateTime _focusedDay;
   late DateTime _focusedMonth;
-  final TextEditingController _searchController = TextEditingController();
+  late final _searchController = TextEditingController(
+    text: ref.read(calendarSearchQueryProvider),
+  );
 
   @override
   void initState() {

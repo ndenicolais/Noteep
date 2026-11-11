@@ -1870,6 +1870,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'A calendar closer to Google Calendar: the Day and Week views have an hours column, events placed by time, a row for all-day ones and a line at the current time (tap an empty slot to create an event at that hour). The Schedule view shows the weekday and date on the left, the time of each event and the month when it changes.';
 
   @override
+  String get changelog_v2_0_0_bullet_62 =>
+      'A task with a reminder shows up in the calendar at the reminder time (even without a due date). Back on Notes, Tasks or Calendar, the search bar shows the text still in use, so the list no longer stays filtered for no visible reason.';
+
+  @override
   String get infoPrivacyOpen => 'Privacy policy';
 
   @override
