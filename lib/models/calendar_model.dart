@@ -10,6 +10,7 @@
 
 import 'package:uuid/uuid.dart';
 import '../utils/recurrence.dart';
+import 'task_model.dart';
 
 class CalendarEventModel {
   final String id;
@@ -158,4 +159,25 @@ class CalendarEventModel {
                 ? DateTime.parse(json['deletedAt'] as String)
                 : null,
       );
+}
+
+/// Read-only calendar entry built from a [TaskModel] with a due date, so tasks
+/// can be listed in the calendar views next to events. Never persisted: tap
+/// opens the task editor (see `AppNav.openCalendarItem`).
+class TaskCalendarEvent extends CalendarEventModel {
+  TaskCalendarEvent(this.task)
+    : super(
+        id: 'task_${task.id}',
+        title: task.title,
+        description: task.description,
+        startTime: task.dueDate!,
+        endTime: task.dueDate!,
+        isAllDay: true,
+        recurrence: task.recurrence,
+        tags: task.tags,
+        createdAt: task.createdAt,
+        updatedAt: task.updatedAt,
+      );
+
+  final TaskModel task;
 }

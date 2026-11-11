@@ -156,7 +156,8 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
 
   @override
   Widget build(BuildContext context) {
-    final allEvents = ref.watch(activeEventsProvider);
+    final allEvents = ref.watch(calendarItemsProvider);
+    final showTasks = ref.watch(calendarShowTasksProvider);
     final searchQuery = ref.watch(calendarSearchQueryProvider);
     final isSearching = searchQuery.isNotEmpty;
     final filteredEvents = ref.watch(filteredCalendarEventsProvider);
@@ -168,7 +169,20 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
         provider: calendarSearchQueryProvider,
         hintText: context.l10n.calendarSearchHint,
       ),
+      alignTitleEnd: true,
       appBarActions: [
+        IconButton(
+          icon: const Icon(Icons.task_alt),
+          color:
+              showTasks
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.outline,
+          onPressed: ref.read(calendarShowTasksProvider.notifier).toggle,
+          tooltip:
+              showTasks
+                  ? context.l10n.calendarHideTasks
+                  : context.l10n.calendarShowTasks,
+        ),
         if (!isSearching) ...[
           IconButton(
             icon: const Icon(Icons.today_outlined),

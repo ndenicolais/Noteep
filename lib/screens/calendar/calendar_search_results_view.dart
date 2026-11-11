@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
 import '../../theme/app_font_sizes.dart';
 import '../../theme/app_spacing.dart';
+import 'calendar_event_style.dart';
 import 'calendar_event_tile.dart';
 
 /// List of events matching the current search query, sorted most-recent first.
@@ -65,68 +66,52 @@ class CalendarSearchResultsView extends StatelessWidget {
                 : event.title,
           ),
           subtitle: Text('$dayOfWeek, $dateStr • $timeStr'),
-          onTap: () => AppNav.openEvent(context, event),
+          onTap: () => AppNav.openCalendarItem(context, event),
         );
       },
     );
   }
 
+  /// A box in the entry's color: its icon (task, birthday, name day) or the
+  /// day and month.
   Widget _buildLeading(
     BuildContext context,
     CalendarEventModel event,
     ColorScheme colorScheme,
   ) {
-    if (event.isBirthday) {
-      return Container(
-        width: 44,
-        height: 44,
-        decoration: BoxDecoration(
-          color: Colors.pink.withValues(alpha: 0.15),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: const Icon(Icons.cake, color: Colors.pink, size: 22),
-      );
-    }
-    if (event.isNameDay) {
-      return Container(
-        width: 44,
-        height: 44,
-        decoration: BoxDecoration(
-          color: Colors.amber.withValues(alpha: 0.15),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: const Icon(Icons.auto_awesome, color: Colors.amber, size: 22),
-      );
-    }
+    final style = calendarItemStyle(event, colorScheme);
     return Container(
       width: 44,
       height: 44,
       decoration: BoxDecoration(
-        color: colorScheme.primaryContainer,
+        color: style.background,
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            DateFormat('d').format(event.startTime),
-            style: TextStyle(
-              fontSize: AppFontSizes.lg,
-              fontWeight: FontWeight.bold,
-              color: colorScheme.onPrimaryContainer,
-              height: 1.1,
-            ),
-          ),
-          Text(
-            DateFormat('MMM').format(event.startTime),
-            style: TextStyle(
-              fontSize: AppFontSizes.xs,
-              color: colorScheme.onPrimaryContainer,
-              height: 1.1,
-            ),
-          ),
-        ],
-      ),
+      child:
+          style.icon != null
+              ? Icon(style.icon, color: style.foreground, size: 22)
+              : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    DateFormat('d').format(event.startTime),
+                    style: TextStyle(
+                      fontSize: AppFontSizes.lg,
+                      fontWeight: FontWeight.bold,
+                      color: style.foreground,
+                      height: 1.1,
+                    ),
+                  ),
+                  Text(
+                    DateFormat('MMM').format(event.startTime),
+                    style: TextStyle(
+                      fontSize: AppFontSizes.xs,
+                      color: style.foreground,
+                      height: 1.1,
+                    ),
+                  ),
+                ],
+              ),
     );
   }
 }

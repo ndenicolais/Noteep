@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import '../../l10n/l10n.dart';
 import '../../models/calendar_model.dart';
 import '../../theme/app_spacing.dart';
+import 'calendar_event_style.dart';
 
 class CalendarDayCell extends StatelessWidget {
   const CalendarDayCell({
@@ -120,66 +121,7 @@ class CalendarDayCell extends StatelessWidget {
                     ),
                     // Event chips
                     ...visibleEvents.map(
-                      (e) => Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppSpacing.xxs,
-                          vertical: _chipSpacing / 2,
-                        ),
-                        child: SizedBox(
-                          height: _chipHeight,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color:
-                                  e.isBirthday
-                                      ? Colors.lightBlue.shade600
-                                      : e.isNameDay
-                                      ? Colors.lime.shade600
-                                      : colorScheme.primary.withValues(
-                                        alpha: 0.85,
-                                      ),
-                              borderRadius: BorderRadius.circular(3),
-                            ),
-                            padding: const EdgeInsets.symmetric(horizontal: 3),
-                            alignment: Alignment.centerLeft,
-                            child: Row(
-                              children: [
-                                if (e.isBirthday || e.isNameDay)
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      right: AppSpacing.xs,
-                                    ),
-                                    child: Icon(
-                                      e.isBirthday
-                                          ? Icons.cake
-                                          : Icons.auto_awesome,
-                                      size: 8,
-                                      color:
-                                          e.isBirthday
-                                              ? Colors.white
-                                              : Colors.black,
-                                    ),
-                                  ),
-                                Expanded(
-                                  child: Text(
-                                    e.title.isEmpty
-                                        ? context.l10n.commonUntitledParens
-                                        : e.title,
-                                    style: TextStyle(
-                                      fontSize: 9,
-                                      color:
-                                          e.isBirthday
-                                              ? Colors.white
-                                              : colorScheme.onPrimary,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
+                      (e) => _EventChip(event: e, colorScheme: colorScheme),
                     ),
                     // Overflow indicator
                     if (overflowCount > 0)
@@ -200,6 +142,57 @@ class CalendarDayCell extends StatelessWidget {
                   ],
                 )
                 : const SizedBox.shrink(),
+      ),
+    );
+  }
+}
+
+class _EventChip extends StatelessWidget {
+  const _EventChip({required this.event, required this.colorScheme});
+
+  final CalendarEventModel event;
+  final ColorScheme colorScheme;
+
+  @override
+  Widget build(BuildContext context) {
+    final style = calendarItemStyle(event, colorScheme);
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.xxs,
+        vertical: CalendarDayCell._chipSpacing / 2,
+      ),
+      child: Container(
+        height: CalendarDayCell._chipHeight,
+        decoration: BoxDecoration(
+          color: style.background,
+          borderRadius: BorderRadius.circular(3),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 3),
+        alignment: Alignment.centerLeft,
+        child: Row(
+          children: [
+            if (style.icon != null)
+              Padding(
+                padding: const EdgeInsets.only(right: AppSpacing.xs),
+                child: Icon(style.icon, size: 8, color: style.foreground),
+              ),
+            Expanded(
+              child: Text(
+                event.title.isEmpty
+                    ? context.l10n.commonUntitledParens
+                    : event.title,
+                style: TextStyle(
+                  fontSize: 9,
+                  color: style.foreground,
+                  decoration: style.decoration,
+                  decorationColor: style.foreground,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

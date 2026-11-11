@@ -32,6 +32,7 @@ class NavScaffold extends StatefulWidget {
     this.titleWidget,
     this.appBarActions = const [],
     this.floatingActionButton,
+    this.alignTitleEnd = false,
   });
 
   final DrawerSection section;
@@ -39,6 +40,10 @@ class NavScaffold extends StatefulWidget {
   final Widget? titleWidget;
   final List<Widget> appBarActions;
   final Widget? floatingActionButton;
+
+  /// Pushes [titleWidget] against [appBarActions] (capped in width) instead
+  /// of starting it right after the logo — used by the calendar search bar.
+  final bool alignTitleEnd;
 
   static const double _wideBreakpoint = 700;
 
@@ -76,8 +81,21 @@ class _NavScaffoldState extends State<NavScaffold> {
               const SizedBox(width: AppSpacing.lg),
             ],
           ],
-          const SizedBox(width: AppSpacing.xxl),
-          if (widget.titleWidget != null) Flexible(child: widget.titleWidget!),
+          if (widget.alignTitleEnd && widget.titleWidget != null)
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 360),
+                  child: widget.titleWidget,
+                ),
+              ),
+            )
+          else ...[
+            const SizedBox(width: AppSpacing.xxl),
+            if (widget.titleWidget != null)
+              Flexible(child: widget.titleWidget!),
+          ],
         ],
       ),
       actions: widget.appBarActions,

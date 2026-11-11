@@ -101,7 +101,7 @@ void showDayEventsBottomSheet(
                               event: event,
                               onTap: () {
                                 Navigator.pop(ctx);
-                                AppNav.openEvent(context, event);
+                                AppNav.openCalendarItem(context, event);
                               },
                             );
                           },

@@ -987,6 +987,15 @@ class AppLocalizationsIt extends AppLocalizations {
   String get calendarAllDay => 'Tutto il giorno';
 
   @override
+  String get calendarTaskLabel => 'Task';
+
+  @override
+  String get calendarShowTasks => 'Mostra i task';
+
+  @override
+  String get calendarHideTasks => 'Nascondi i task';
+
+  @override
   String get calendarEndTime => 'Ora di fine';
 
   @override
@@ -1852,6 +1861,14 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_57 =>
       'Quando esci dall\'account, i suoi promemoria non suonano più sul telefono. Quando accedi, i promemoria delle tue note, task ed eventi vengono riprogrammati, anche su un nuovo dispositivo.';
+
+  @override
+  String get changelog_v2_0_0_bullet_58 =>
+      'Il calendario mostra anche i task con una scadenza: toccali per aprirli e usa il pulsante nella barra in alto per mostrarli o nasconderli.';
+
+  @override
+  String get changelog_v2_0_0_bullet_59 =>
+      'Nel calendario ogni voce ha un colore in base al tipo (evento, evento di tutto il giorno, compleanno, onomastico, task) e la barra di ricerca è allineata a destra.';
 
   @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';

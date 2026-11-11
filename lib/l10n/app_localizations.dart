@@ -1904,6 +1904,24 @@ abstract class AppLocalizations {
   /// **'Tutto il giorno'**
   String get calendarAllDay;
 
+  /// No description provided for @calendarTaskLabel.
+  ///
+  /// In it, this message translates to:
+  /// **'Task'**
+  String get calendarTaskLabel;
+
+  /// No description provided for @calendarShowTasks.
+  ///
+  /// In it, this message translates to:
+  /// **'Mostra i task'**
+  String get calendarShowTasks;
+
+  /// No description provided for @calendarHideTasks.
+  ///
+  /// In it, this message translates to:
+  /// **'Nascondi i task'**
+  String get calendarHideTasks;
+
   /// No description provided for @calendarEndTime.
   ///
   /// In it, this message translates to:
@@ -3367,6 +3385,18 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Quando esci dall\'account, i suoi promemoria non suonano più sul telefono. Quando accedi, i promemoria delle tue note, task ed eventi vengono riprogrammati, anche su un nuovo dispositivo.'**
   String get changelog_v2_0_0_bullet_57;
+
+  /// No description provided for @changelog_v2_0_0_bullet_58.
+  ///
+  /// In it, this message translates to:
+  /// **'Il calendario mostra anche i task con una scadenza: toccali per aprirli e usa il pulsante nella barra in alto per mostrarli o nasconderli.'**
+  String get changelog_v2_0_0_bullet_58;
+
+  /// No description provided for @changelog_v2_0_0_bullet_59.
+  ///
+  /// In it, this message translates to:
+  /// **'Nel calendario ogni voce ha un colore in base al tipo (evento, evento di tutto il giorno, compleanno, onomastico, task) e la barra di ricerca è allineata a destra.'**
+  String get changelog_v2_0_0_bullet_59;
 
   /// No description provided for @infoPrivacyOpen.
   ///

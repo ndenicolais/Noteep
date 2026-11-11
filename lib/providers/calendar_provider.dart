@@ -15,7 +15,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/calendar_model.dart';
 import 'auth_provider.dart';
 import 'core_providers.dart';
+import 'settings/ui_provider.dart';
 import 'sync_provider.dart';
+import 'tasks_provider.dart';
 
 // ─── Calendar Notifier ────────────────────────────────────────────────────────
 
@@ -230,10 +232,33 @@ final trashedEventsProvider = Provider<List<CalendarEventModel>>((ref) {
 
 final calendarSearchQueryProvider = valueStateProvider<String>('');
 
+/// Whether tasks with a due date are shown in the calendar views (toggled
+/// from the calendar app bar, persisted on the device).
+final calendarShowTasksProvider = NotifierProvider<BoolSettingNotifier, bool>(
+  () => BoolSettingNotifier('calendar_show_tasks', true),
+);
+
+/// Active tasks with a due date, as read-only calendar entries.
+final calendarTaskItemsProvider = Provider<List<CalendarEventModel>>((ref) {
+  return ref
+      .watch(activeTasksProvider)
+      .where((t) => t.dueDate != null)
+      .map(TaskCalendarEvent.new)
+      .toList();
+});
+
+/// What the calendar views display: active events plus, when enabled, the
+/// tasks with a due date.
+final calendarItemsProvider = Provider<List<CalendarEventModel>>((ref) {
+  final events = ref.watch(activeEventsProvider);
+  if (!ref.watch(calendarShowTasksProvider)) return events;
+  return [...events, ...ref.watch(calendarTaskItemsProvider)];
+});
+
 final filteredCalendarEventsProvider = Provider<List<CalendarEventModel>>((
   ref,
 ) {
-  final events = ref.watch(activeEventsProvider);
+  final events = ref.watch(calendarItemsProvider);
   final query = ref.watch(calendarSearchQueryProvider);
 
   if (query.isEmpty) return events;

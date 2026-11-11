@@ -105,7 +105,7 @@ class CalendarScheduleView extends StatelessWidget {
               (event) => CalendarEventListTile(
                 event: event,
                 dense: true,
-                onTap: () => AppNav.openEvent(context, event),
+                onTap: () => AppNav.openCalendarItem(context, event),
               ),
             ),
             Divider(

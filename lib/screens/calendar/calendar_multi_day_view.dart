@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
 import '../../theme/app_font_sizes.dart';
 import '../../theme/app_spacing.dart';
+import 'calendar_event_style.dart';
 import 'calendar_utils.dart';
 
 /// Multi-day agenda view used for the "Settimana" and "7 giorni" modes.
@@ -159,8 +160,10 @@ class CalendarMultiDayView extends StatelessWidget {
                         itemCount: dayEvents.length,
                         itemBuilder: (_, i) {
                           final event = dayEvents[i];
+                          final style = calendarItemStyle(event, colorScheme);
                           return GestureDetector(
-                            onTap: () => AppNav.openEvent(context, event),
+                            onTap:
+                                () => AppNav.openCalendarItem(context, event),
                             child: Container(
                               margin: const EdgeInsets.fromLTRB(
                                 AppSpacing.xxs,
@@ -173,14 +176,7 @@ class CalendarMultiDayView extends StatelessWidget {
                                 vertical: AppSpacing.xxs,
                               ),
                               decoration: BoxDecoration(
-                                color:
-                                    event.isBirthday
-                                        ? Colors.lightBlue.shade600
-                                        : event.isNameDay
-                                        ? Colors.lime.shade600
-                                        : colorScheme.primary.withValues(
-                                          alpha: 0.85,
-                                        ),
+                                color: style.background,
                                 borderRadius: BorderRadius.circular(3),
                               ),
                               child: Text(
@@ -189,10 +185,9 @@ class CalendarMultiDayView extends StatelessWidget {
                                     : event.title,
                                 style: TextStyle(
                                   fontSize: 9,
-                                  color:
-                                      event.isBirthday
-                                          ? Colors.white
-                                          : colorScheme.onPrimary,
+                                  color: style.foreground,
+                                  decoration: style.decoration,
+                                  decorationColor: style.foreground,
                                 ),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,

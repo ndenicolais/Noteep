@@ -985,6 +985,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calendarAllDay => 'All day';
 
   @override
+  String get calendarTaskLabel => 'Task';
+
+  @override
+  String get calendarShowTasks => 'Show tasks';
+
+  @override
+  String get calendarHideTasks => 'Hide tasks';
+
+  @override
   String get calendarEndTime => 'End time';
 
   @override
@@ -1843,6 +1852,14 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_57 =>
       'When you sign out, that account\'s reminders no longer go off on the phone. When you sign in, the reminders of your notes, tasks and events are scheduled again, on a new device too.';
+
+  @override
+  String get changelog_v2_0_0_bullet_58 =>
+      'The calendar also shows tasks with a due date: tap one to open it and use the button in the top bar to show or hide them.';
+
+  @override
+  String get changelog_v2_0_0_bullet_59 =>
+      'In the calendar every entry has a color based on its type (event, all-day event, birthday, name day, task) and the search bar sits on the right.';
 
   @override
   String get infoPrivacyOpen => 'Privacy policy';

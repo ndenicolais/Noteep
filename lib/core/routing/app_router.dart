@@ -189,6 +189,16 @@ abstract final class AppNav {
     CalendarEventModel event,
   ) => Navigator.pushNamed(context, AppRoutes.event, arguments: event);
 
+  /// Opens an entry shown in the calendar: the task editor for a task with a
+  /// due date, the event editor otherwise.
+  static Future<void> openCalendarItem(
+    BuildContext context,
+    CalendarEventModel item,
+  ) =>
+      item is TaskCalendarEvent
+          ? openTask(context, item.task)
+          : openEvent(context, item);
+
   static Future<void> openLabel(BuildContext context, String label) =>
       Navigator.pushNamed(context, AppRoutes.label, arguments: label);
 

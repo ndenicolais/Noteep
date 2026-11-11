@@ -12,18 +12,22 @@ import 'package:flutter/material.dart';
 import '../../l10n/l10n.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
+import '../../theme/app_spacing.dart';
+import 'calendar_event_style.dart';
 
 /// Formats the time range of an event (a single time when it has no end),
-/// or "Tutto il giorno" for all-day events.
+/// "Tutto il giorno" for all-day events, or "Task" for a task.
 String formatEventTimeRange(AppLocalizations l, CalendarEventModel event) {
+  if (event is TaskCalendarEvent) return l.calendarTaskLabel;
   if (event.isAllDay) return l.calendarAllDay;
   final start = DateFormat('HH:mm').format(event.startTime);
   if (!event.hasEndTime) return start;
   return '$start – ${DateFormat('HH:mm').format(event.endTime)}';
 }
 
-/// A single-line list tile shared by the day, schedule and day-events-sheet
-/// calendar views: shows the event leading icon/dot, title and time range.
+/// A colored card shared by the day, schedule and day-events-sheet calendar
+/// views: the background tells the kind of entry (see [calendarItemStyle]),
+/// with title and time range on top of it.
 class CalendarEventListTile extends StatelessWidget {
   const CalendarEventListTile({
     super.key,
@@ -38,29 +42,61 @@ class CalendarEventListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return ListTile(
-      dense: dense,
-      leading: _buildLeading(colorScheme),
-      title: Text(
-        event.title.isEmpty ? context.l10n.commonUntitledParens : event.title,
+    final style = calendarItemStyle(event, Theme.of(context).colorScheme);
+    final radius = BorderRadius.circular(8);
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.md,
+        vertical: AppSpacing.xxs,
       ),
-      subtitle: Text(formatEventTimeRange(context.l10n, event)),
-      onTap: onTap,
-    );
-  }
-
-  Widget _buildLeading(ColorScheme colorScheme) {
-    if (event.isBirthday) return const Icon(Icons.cake, color: Colors.pink);
-    if (event.isNameDay) {
-      return const Icon(Icons.auto_awesome, color: Colors.amber);
-    }
-    return Container(
-      width: 10,
-      height: 10,
-      decoration: BoxDecoration(
-        color: colorScheme.primary,
-        shape: BoxShape.circle,
+      child: Material(
+        color: style.background,
+        borderRadius: radius,
+        child: InkWell(
+          borderRadius: radius,
+          onTap: onTap,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: AppSpacing.md,
+              vertical: dense ? AppSpacing.sm : AppSpacing.md,
+            ),
+            child: Row(
+              children: [
+                if (style.icon != null) ...[
+                  Icon(style.icon, size: 18, color: style.foreground),
+                  const SizedBox(width: AppSpacing.sm),
+                ],
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        event.title.isEmpty
+                            ? context.l10n.commonUntitledParens
+                            : event.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: style.foreground,
+                          fontWeight: FontWeight.w600,
+                          decoration: style.decoration,
+                          decorationColor: style.foreground,
+                        ),
+                      ),
+                      Text(
+                        formatEventTimeRange(context.l10n, event),
+                        style: TextStyle(
+                          color: style.foreground.withValues(alpha: 0.85),
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

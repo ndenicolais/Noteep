@@ -291,6 +291,9 @@ The list of active notes and the note editor.
 - Views: day, multi-day (week / 7 days), month, year, schedule (90-day look-ahead), search results. Month days open a bottom sheet with the day's events.
 - Event editor: date, start time, optional end time (an end before the start moves to the next day, an end equal to the start removes it), all day (clears the end), birthday, name day, recurrence, reminder, archive/delete. Events cannot be pinned: calendar views are ordered by time.
 - Recurring events are expanded by `calendarEventOccursOn` (monthly on the 31st skips short months, yearly on 29 February only in leap years).
+- Tasks with a due date are shown as all-day entries: `calendarItemsProvider` merges `activeEventsProvider` with `calendarTaskItemsProvider` (each task wrapped in a read-only `TaskCalendarEvent`, never persisted, recurrence kept) while `calendarShowTasksProvider` is on (`BoolSettingNotifier`, `SharedPreferences` key `calendar_show_tasks`, default on, toggled from the app bar). Search covers them too. Taps go through `AppNav.openCalendarItem`, which opens the task editor for a task and the event editor otherwise. Export, backup, statistics and reminders still read `activeEventsProvider` only.
+- Entry colors come from `calendarItemStyle` (`calendar_event_style.dart`), shared by list cards (`CalendarEventListTile`), month/week chips and search results: timed event `primary`, all-day deep purple, birthday light blue + cake, name day lime + sparkle, task green + circle (completed: faded, struck through, check icon). Text is white or black from the background's brightness.
+- The search bar uses `NavScaffold(alignTitleEnd: true)`: it sits next to the app bar actions, up to 360 px wide.
 
 ### 5.5 Reminders, labels, archive and trash
 

@@ -108,7 +108,7 @@ class CalendarDayView extends StatelessWidget {
                       final event = dayEvents[i];
                       return CalendarEventListTile(
                         event: event,
-                        onTap: () => AppNav.openEvent(context, event),
+                        onTap: () => AppNav.openCalendarItem(context, event),
                       );
                     },
                   ),

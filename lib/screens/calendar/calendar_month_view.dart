@@ -153,7 +153,7 @@ class CalendarMonthView extends StatelessWidget {
                           onTap:
                               isCurrentMonth && day != null
                                   ? dayEvents.length == 1
-                                      ? () => AppNav.openEvent(
+                                      ? () => AppNav.openCalendarItem(
                                         context,
                                         dayEvents.first,
                                       )
