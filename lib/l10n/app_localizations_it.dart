@@ -1953,6 +1953,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Tutte le opzioni di backup, esportazione e importazione sono ora raccolte in Impostazioni → Backup e dati.';
 
   @override
+  String get changelog_v2_0_0_bullet_71 =>
+      'Nella vista Programma del Calendario puoi scorrere liberamente verso i mesi passati e futuri, senza più il limite dei prossimi tre mesi.';
+
+  @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';
 
   @override

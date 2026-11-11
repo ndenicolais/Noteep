@@ -748,6 +748,7 @@
   "changelog_v2_0_0_bullet_68": "Le Statistiche hanno ora una sezione tutta loro nel menu, subito sotto l'Archivio.",
   "changelog_v2_0_0_bullet_69": "Nelle Impostazioni puoi scegliere l'orario delle notifiche degli eventi di tutto il giorno, dei compleanni e degli onomastici (prima sempre alle 9:00); è anche l'orario proposto quando aggiungi l'ora di scadenza di un task.",
   "changelog_v2_0_0_bullet_70": "Tutte le opzioni di backup, esportazione e importazione sono ora raccolte in Impostazioni → Backup e dati.",
+  "changelog_v2_0_0_bullet_71": "Nella vista Programma del Calendario puoi scorrere liberamente verso i mesi passati e futuri, senza più il limite dei prossimi tre mesi.",
   "infoPrivacyOpen": "Informativa sulla privacy",
   "privacyPolicyTitle": "Informativa sulla privacy",
   "privacyPolicyIntro": "Noteep è un'app per note, task e calendario. Questa informativa spiega quali dati tratta, perché e come puoi controllarli. Noteep non mostra pubblicità, non usa strumenti di analisi o di tracciamento e non vende né cede i tuoi dati.",

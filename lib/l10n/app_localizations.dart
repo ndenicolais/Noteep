@@ -3524,6 +3524,12 @@ abstract class AppLocalizations {
   /// **'Tutte le opzioni di backup, esportazione e importazione sono ora raccolte in Impostazioni → Backup e dati.'**
   String get changelog_v2_0_0_bullet_70;
 
+  /// No description provided for @changelog_v2_0_0_bullet_71.
+  ///
+  /// In it, this message translates to:
+  /// **'Nella vista Programma del Calendario puoi scorrere liberamente verso i mesi passati e futuri, senza più il limite dei prossimi tre mesi.'**
+  String get changelog_v2_0_0_bullet_71;
+
   /// No description provided for @infoPrivacyOpen.
   ///
   /// In it, this message translates to:

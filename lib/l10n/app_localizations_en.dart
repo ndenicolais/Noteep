@@ -1944,6 +1944,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'All backup, export and import options are now gathered in Settings → Backup and data.';
 
   @override
+  String get changelog_v2_0_0_bullet_71 =>
+      'In the Calendar Schedule view you can scroll freely through past and future months, no longer limited to the next three months.';
+
+  @override
   String get infoPrivacyOpen => 'Privacy policy';
 
   @override

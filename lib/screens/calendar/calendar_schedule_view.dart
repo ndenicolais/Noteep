@@ -21,28 +21,48 @@ import 'calendar_utils.dart';
 /// Chronological agenda ("Programma") view, laid out like Google Calendar:
 /// a month banner when the month changes, then each day with entries as a
 /// row with the date (weekday and number) on the left and the entry cards,
-/// with their time, on the right. Looks ahead a fixed number of days.
+/// with their time, on the right. Opens on today and scrolls freely both
+/// into the past and into the future: each direction is a lazy list of
+/// months, built only when it comes into view.
 class CalendarScheduleView extends StatelessWidget {
   const CalendarScheduleView({super.key, required this.allEvents});
 
   final List<CalendarEventModel> allEvents;
 
-  static const _lookaheadDays = 90;
+  /// Months reachable in each direction from the current one.
+  static const _monthRange = 1200;
+  static const _forwardKey = ValueKey('schedule-forward');
+
+  /// The days in [from, toExclusive) with at least one entry.
+  List<(DateTime, List<CalendarEventModel>)> _daysWithItems(
+    DateTime from,
+    DateTime toExclusive,
+  ) {
+    final days = <(DateTime, List<CalendarEventModel>)>[];
+    for (
+      var day = from;
+      day.isBefore(toExclusive);
+      day = DateTime(day.year, day.month, day.day + 1)
+    ) {
+      final items = calendarItemsOn(allEvents, day);
+      if (items.isNotEmpty) days.add((day, items));
+    }
+    return days;
+  }
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
+    final currentMonth = DateTime(today.year, today.month);
+    final nextMonth = DateTime(today.year, today.month + 1);
+    // Entries of the current month before today sit above the starting
+    // point, together with the month banner; without them the banner goes
+    // on top of today so it is visible on open.
+    final pastThisMonth = _daysWithItems(currentMonth, today);
 
-    final days = <(DateTime, List<CalendarEventModel>)>[];
-    for (int d = 0; d < _lookaheadDays; d++) {
-      final day = DateTime(today.year, today.month, today.day + d);
-      final items = calendarItemsOn(allEvents, day);
-      if (items.isNotEmpty) days.add((day, items));
-    }
-
-    if (days.isEmpty) {
+    if (allEvents.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -61,24 +81,89 @@ class CalendarScheduleView extends StatelessWidget {
       );
     }
 
-    return ListView.builder(
-      padding: const EdgeInsets.only(bottom: 88),
-      itemCount: days.length,
-      itemBuilder: (_, i) {
-        final (day, items) = days[i];
-        final newMonth = i == 0 || days[i - 1].$1.month != day.month;
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (newMonth) _MonthBanner(month: day),
-            _ScheduleDayRow(
-              day: day,
-              items: items,
-              isToday: day.isAtSameMomentAs(today),
-            ),
-          ],
-        );
-      },
+    return CustomScrollView(
+      center: _forwardKey,
+      slivers: [
+        // Past: index 0 is closest to today, growing upward.
+        SliverList(
+          delegate: SliverChildBuilderDelegate((_, i) {
+            if (i == 0) {
+              if (pastThisMonth.isEmpty) return const SizedBox.shrink();
+              return _ScheduleMonth(
+                month: currentMonth,
+                days: pastThisMonth,
+                today: today,
+              );
+            }
+            final month = DateTime(currentMonth.year, currentMonth.month - i);
+            return _ScheduleMonth(
+              month: month,
+              days: _daysWithItems(
+                month,
+                DateTime(month.year, month.month + 1),
+              ),
+              today: today,
+            );
+          }, childCount: _monthRange + 1),
+        ),
+        // Future: from today onward.
+        SliverPadding(
+          key: _forwardKey,
+          padding: const EdgeInsets.only(bottom: 88),
+          sliver: SliverList(
+            delegate: SliverChildBuilderDelegate((_, i) {
+              if (i == 0) {
+                return _ScheduleMonth(
+                  month: currentMonth,
+                  days: _daysWithItems(today, nextMonth),
+                  today: today,
+                  showBanner: pastThisMonth.isEmpty,
+                );
+              }
+              final month = DateTime(currentMonth.year, currentMonth.month + i);
+              return _ScheduleMonth(
+                month: month,
+                days: _daysWithItems(
+                  month,
+                  DateTime(month.year, month.month + 1),
+                ),
+                today: today,
+              );
+            }, childCount: _monthRange + 1),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// A month block: the banner followed by its days with entries.
+class _ScheduleMonth extends StatelessWidget {
+  const _ScheduleMonth({
+    required this.month,
+    required this.days,
+    required this.today,
+    this.showBanner = true,
+  });
+
+  final DateTime month;
+  final List<(DateTime, List<CalendarEventModel>)> days;
+  final DateTime today;
+  final bool showBanner;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (showBanner) _MonthBanner(month: month),
+        for (final (day, items) in days)
+          _ScheduleDayRow(
+            day: day,
+            items: items,
+            isToday: day.isAtSameMomentAs(today),
+          ),
+      ],
     );
   }
 }
