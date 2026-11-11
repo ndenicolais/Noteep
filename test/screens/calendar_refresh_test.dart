@@ -168,4 +168,19 @@ void main() {
       expect(find.text('Task · 23:30'), findsOneWidget);
     },
   );
+
+  testWidgets('a due date with a time (Google Tasks import) keeps its time', (
+    tester,
+  ) async {
+    await pumpScreen(
+      tester,
+      const CalendarWorkspaceView(),
+      prefs: {'calendar_view_mode': 'schedule'},
+      task: TaskModel(
+        title: 'Action',
+        dueDate: today.add(const Duration(hours: 23, minutes: 45)),
+      ),
+    );
+    expect(find.text('Task · 23:45'), findsOneWidget);
+  });
 }
