@@ -23,6 +23,7 @@ import '../../screens/note_editor/note_editor_screen.dart';
 import '../../screens/onboarding_screen.dart';
 import '../../screens/privacy_policy_screen.dart';
 import '../../screens/reminders_screen.dart';
+import '../../screens/settings/backup_data_screen.dart';
 import '../../screens/settings/settings_screen.dart';
 import '../../screens/statistics/statistics_screen.dart';
 import '../../screens/task_editor/task_editor_screen.dart';
@@ -49,6 +50,7 @@ abstract final class AppRoutes {
   static const event = '/event';
   static const label = '/label';
   static const export = '/export';
+  static const backupData = '/backup-data';
   static const info = '/info';
   static const onboarding = '/onboarding';
   static const privacyPolicy = '/privacy-policy';
@@ -114,6 +116,7 @@ abstract final class AppRouter {
       AppRoutes.settings => (_) => const SettingsScreen(),
       AppRoutes.statistics => (_) => const StatisticsScreen(),
       AppRoutes.export => (_) => const ExportScreen(),
+      AppRoutes.backupData => (_) => const BackupDataScreen(),
       AppRoutes.info => (_) => const InfoScreen(),
       AppRoutes.onboarding => (_) => const OnboardingScreen(replay: true),
       AppRoutes.privacyPolicy => (_) => const PrivacyPolicyScreen(),
@@ -221,6 +224,9 @@ abstract final class AppNav {
 
   static Future<void> openExport(BuildContext context) =>
       Navigator.pushNamed(context, AppRoutes.export);
+
+  static Future<void> openBackupData(BuildContext context) =>
+      Navigator.pushNamed(context, AppRoutes.backupData);
 
   static Future<void> openInfo(BuildContext context) =>
       Navigator.pushNamed(context, AppRoutes.info);

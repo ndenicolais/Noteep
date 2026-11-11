@@ -2606,6 +2606,18 @@ abstract class AppLocalizations {
   /// **'Scarica'**
   String get exportDownload;
 
+  /// No description provided for @settingsBackupDataTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Backup e dati'**
+  String get settingsBackupDataTitle;
+
+  /// No description provided for @settingsBackupDataSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Backup automatico, esportazione, importazione ed eliminazione dei dati'**
+  String get settingsBackupDataSubtitle;
+
   /// No description provided for @settingsBackupTitle.
   ///
   /// In it, this message translates to:
@@ -3511,6 +3523,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Nelle Impostazioni puoi scegliere l\'orario delle notifiche degli eventi di tutto il giorno, dei compleanni e degli onomastici (prima sempre alle 9:00); è anche l\'orario proposto quando aggiungi l\'ora di scadenza di un task.'**
   String get changelog_v2_0_0_bullet_69;
+
+  /// No description provided for @changelog_v2_0_0_bullet_70.
+  ///
+  /// In it, this message translates to:
+  /// **'Tutte le opzioni di backup, esportazione e importazione sono ora raccolte in Impostazioni → Backup e dati.'**
+  String get changelog_v2_0_0_bullet_70;
 
   /// No description provided for @infoPrivacyOpen.
   ///

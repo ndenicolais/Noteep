@@ -15,6 +15,27 @@ import '../../l10n/l10n.dart';
 import '../../widgets/shared/action_tile.dart';
 import '../../widgets/shared/section_header.dart';
 
+/// "Backup e dati" section: entry to [BackupDataScreen].
+class SettingsBackupDataSection extends StatelessWidget {
+  const SettingsBackupDataSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SectionHeader(context.l10n.settingsBackupDataTitle),
+        ActionTile(
+          icon: Icons.backup_outlined,
+          title: context.l10n.settingsBackupDataTitle,
+          subtitle: context.l10n.settingsBackupDataSubtitle,
+          onTap: () => AppNav.openBackupData(context),
+        ),
+      ],
+    );
+  }
+}
+
 /// "Account" section: permanent deletion of the account and all its data.
 class SettingsAccountSection extends StatelessWidget {
   const SettingsAccountSection({super.key, required this.onDeleteAccount});

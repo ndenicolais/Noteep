@@ -1382,6 +1382,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get exportDownload => 'Scarica';
 
   @override
+  String get settingsBackupDataTitle => 'Backup e dati';
+
+  @override
+  String get settingsBackupDataSubtitle =>
+      'Backup automatico, esportazione, importazione ed eliminazione dei dati';
+
+  @override
   String get settingsBackupTitle => 'Backup';
 
   @override
@@ -1943,6 +1950,10 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_69 =>
       'Nelle Impostazioni puoi scegliere l\'orario delle notifiche degli eventi di tutto il giorno, dei compleanni e degli onomastici (prima sempre alle 9:00); è anche l\'orario proposto quando aggiungi l\'ora di scadenza di un task.';
+
+  @override
+  String get changelog_v2_0_0_bullet_70 =>
+      'Tutte le opzioni di backup, esportazione e importazione sono ora raccolte in Impostazioni → Backup e dati.';
 
   @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';

@@ -328,15 +328,17 @@ The list of active notes and the note editor.
 
 **Path:** `lib/screens/settings/`
 
-The screen handles dialogs, file pickers and snackbars; data work is in `DataActions` and `BackupRestorer` (see [State management](#6-state-management)).
+The screens (`SettingsScreen`, `BackupDataScreen`) handle dialogs, file pickers and snackbars; data work is in `DataActions` and `BackupRestorer` (see [State management](#6-state-management)).
 
 **Features:**
 - Appearance (System/Light/Dark) and language (System/Italiano/English) as `SegmentedChoice`.
 - Start screen (Calendar/Tasks/Notes, in drawer order) as `SegmentedChoice`: `startSectionProvider` (`PersistedEnumNotifier<StartSection>`, key `start_section`, default `notes`). See [Navigation](#9-navigation).
 - Notes and tasks preferences (layout, FAB menu, completed tasks, grouping).
 - Notifications: default alert time (`SettingsNotificationsSection`, `showTimePicker`): `defaultAlertTimeProvider` (`DefaultAlertTimeNotifier`, minutes after midnight, key `default_alert_minutes`, default 09:00, out-of-range values fall back to it). It is the time of all-day event alerts (birthdays and name days included) and the time first offered for a task's due time. Changing it goes through `RemindersActions.setDefaultAlertTime`, which saves it and reschedules the alerts of all-day events.
-- Automatic backup: enable, frequency (daily, weekly, monthly), history with restore and delete.
-- Data per section (notes, tasks, calendar) and global: JSON export/import, ICS export/import for the calendar, clear. Imports and clears ask for confirmation; persistence errors show a snackbar.
+- Backup and data: a single entry (`SettingsBackupDataSection`) opens `BackupDataScreen` (`backup_data_screen.dart`, route `AppRoutes.backupData`, `AppNav.openBackupData`), which owns the export/import/clear flows and shows, in order:
+  - Automatic backup: enable, frequency (daily, weekly, monthly), history with restore and delete.
+  - Full backup: JSON export/import of everything, clear all.
+  - Data per section (notes — with the Export screen —, tasks, calendar): JSON export/import, ICS export/import for the calendar, clear. Imports and clears ask for confirmation; persistence errors show a snackbar.
 - Account: delete account (destructive confirmation → password for email accounts → non-dismissible progress dialog → `AuthNotifier.deleteAccount`; on success the app returns to the login).
 - Info tile with the app version.
 
@@ -362,7 +364,7 @@ The screen handles dialogs, file pickers and snackbars; data work is in `DataAct
 
 ### 5.10 Shared behavior
 
-- **Drawer** (`AppDrawer`, `NavScaffold`): Calendar, Tasks, Notes, Reminders, Labels, Archive, Statistics, Trash, Settings and sign out. Export opens from Settings → Notes data, Info from Settings → Info.
+- **Drawer** (`AppDrawer`, `NavScaffold`): Calendar, Tasks, Notes, Reminders, Labels, Archive, Statistics, Trash, Settings and sign out. Export opens from Settings → Backup and data → Notes data, Info from Settings → Info.
 - **Undo**: trash and archive actions show a snackbar with Undo (`notifyWithUndo`), which still works after the editor pops.
 - **Errors**: fire-and-forget writes go through `notifyOnError`, which shows an error snackbar if the write fails.
 - **Sync status**: `SyncStatusListener` (in `MaterialApp.builder`) shows a banner while writes are queued offline and a snackbar if the server later rejects one.

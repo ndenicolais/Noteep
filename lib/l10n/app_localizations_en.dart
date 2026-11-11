@@ -1376,6 +1376,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exportDownload => 'Download';
 
   @override
+  String get settingsBackupDataTitle => 'Backup and data';
+
+  @override
+  String get settingsBackupDataSubtitle =>
+      'Automatic backup, export, import and deletion of your data';
+
+  @override
   String get settingsBackupTitle => 'Backup';
 
   @override
@@ -1934,6 +1941,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_69 =>
       'In Settings you can choose the time of the notifications of all-day events, birthdays and name days (before always at 9:00); it is also the time suggested when you add a due time to a task.';
+
+  @override
+  String get changelog_v2_0_0_bullet_70 =>
+      'All backup, export and import options are now gathered in Settings → Backup and data.';
 
   @override
   String get infoPrivacyOpen => 'Privacy policy';
