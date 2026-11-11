@@ -32,7 +32,9 @@ class TasksScreen extends ConsumerStatefulWidget {
 }
 
 class _TasksScreenState extends ConsumerState<TasksScreen> {
-  final _searchController = TextEditingController();
+  late final _searchController = TextEditingController(
+    text: ref.read(taskSearchQueryProvider),
+  );
 
   @override
   void dispose() {

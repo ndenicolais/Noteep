@@ -46,7 +46,9 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  final _searchController = TextEditingController();
+  late final _searchController = TextEditingController(
+    text: ref.read(searchQueryProvider),
+  );
 
   @override
   void initState() {
