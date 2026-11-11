@@ -536,7 +536,6 @@
   "settingsAccountTitle": "Account",
   "settingsDeleteAccount": "Elimina account",
   "settingsDeleteAccountSubtitle": "Elimina definitivamente l'account e tutti i suoi dati",
-  "settingsNotesDataTitle": "Dati note",
   "settingsExportNotesSubtitle": "Esporta tutte le note in diversi formati",
   "settingsExportNotesJson": "Esporta note JSON",
   "settingsExportNotesJsonSubtitle": "Scarica le note come file .json",

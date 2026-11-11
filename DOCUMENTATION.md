@@ -338,7 +338,7 @@ The screens (`SettingsScreen`, `BackupDataScreen`) handle dialogs, file pickers 
 - Backup and data: a single entry (`SettingsBackupDataSection`) opens `BackupDataScreen` (`backup_data_screen.dart`, route `AppRoutes.backupData`, `AppNav.openBackupData`), which owns the export/import/clear flows and shows, in order:
   - Automatic backup: enable, frequency (daily, weekly, monthly), history with restore and delete.
   - Full backup: JSON export/import of everything, clear all.
-  - Data per section (notes — with the Export screen —, tasks, calendar): JSON export/import, ICS export/import for the calendar, clear. Imports and clears ask for confirmation; persistence errors show a snackbar.
+  - Data per section (calendar, tasks, notes — with the Export screen —): JSON export/import, ICS export/import for the calendar, clear. Imports and clears ask for confirmation; persistence errors show a snackbar.
 - Account: delete account (destructive confirmation → password for email accounts → non-dismissible progress dialog → `AuthNotifier.deleteAccount`; on success the app returns to the login).
 - Info tile with the app version.
 
@@ -364,7 +364,7 @@ The screens (`SettingsScreen`, `BackupDataScreen`) handle dialogs, file pickers 
 
 ### 5.10 Shared behavior
 
-- **Drawer** (`AppDrawer`, `NavScaffold`): Calendar, Tasks, Notes, Reminders, Labels, Archive, Statistics, Trash, Settings and sign out. Export opens from Settings → Backup and data → Notes data, Info from Settings → Info.
+- **Drawer** (`AppDrawer`, `NavScaffold`): Calendar, Tasks, Notes, Reminders, Labels, Archive, Statistics, Trash, Settings and sign out. Export opens from Settings → Backup and data → Notes, Info from Settings → Info.
 - **Undo**: trash and archive actions show a snackbar with Undo (`notifyWithUndo`), which still works after the editor pops.
 - **Errors**: fire-and-forget writes go through `notifyOnError`, which shows an error snackbar if the write fails.
 - **Sync status**: `SyncStatusListener` (in `MaterialApp.builder`) shows a banner while writes are queued offline and a snackbar if the server later rejects one.

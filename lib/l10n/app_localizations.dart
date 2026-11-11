@@ -2774,12 +2774,6 @@ abstract class AppLocalizations {
   /// **'Elimina definitivamente l\'account e tutti i suoi dati'**
   String get settingsDeleteAccountSubtitle;
 
-  /// No description provided for @settingsNotesDataTitle.
-  ///
-  /// In it, this message translates to:
-  /// **'Dati note'**
-  String get settingsNotesDataTitle;
-
   /// No description provided for @settingsExportNotesSubtitle.
   ///
   /// In it, this message translates to:

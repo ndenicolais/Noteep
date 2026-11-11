@@ -1475,9 +1475,6 @@ class AppLocalizationsIt extends AppLocalizations {
       'Elimina definitivamente l\'account e tutti i suoi dati';
 
   @override
-  String get settingsNotesDataTitle => 'Dati note';
-
-  @override
   String get settingsExportNotesSubtitle =>
       'Esporta tutte le note in diversi formati';
 

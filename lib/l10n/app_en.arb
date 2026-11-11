@@ -460,7 +460,6 @@
   "settingsAccountTitle": "Account",
   "settingsDeleteAccount": "Delete account",
   "settingsDeleteAccountSubtitle": "Permanently delete the account and all its data",
-  "settingsNotesDataTitle": "Notes data",
   "settingsExportNotesSubtitle": "Export all notes in several formats",
   "settingsExportNotesJson": "Export notes JSON",
   "settingsExportNotesJsonSubtitle": "Download the notes as a .json file",

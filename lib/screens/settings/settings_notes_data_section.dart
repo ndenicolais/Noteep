@@ -14,7 +14,7 @@ import '../../l10n/l10n.dart';
 import '../../widgets/shared/action_tile.dart';
 import '../../widgets/shared/section_header.dart';
 
-/// "Dati note" section: export screen, JSON export/import/clear.
+/// "Note" data section: export screen, JSON export/import/clear.
 class SettingsNotesDataSection extends StatelessWidget {
   const SettingsNotesDataSection({
     super.key,
@@ -32,7 +32,7 @@ class SettingsNotesDataSection extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        SectionHeader(context.l10n.settingsNotesDataTitle),
+        SectionHeader(context.l10n.commonTabNotes),
         ActionTile(
           icon: Icons.upload,
           title: context.l10n.exportTitle,

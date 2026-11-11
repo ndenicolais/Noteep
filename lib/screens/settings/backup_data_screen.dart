@@ -27,7 +27,7 @@ import 'settings_notes_data_section.dart';
 import 'settings_tasks_data_section.dart';
 
 /// "Backup e dati", opened from Settings: automatic backup, per-section
-/// JSON/ICS export-import and clear, full backup.
+/// JSON/ICS export-import and clear (calendar, tasks, notes), full backup.
 class BackupDataScreen extends ConsumerStatefulWidget {
   const BackupDataScreen({super.key});
 
@@ -59,22 +59,22 @@ class _BackupDataScreenState extends ConsumerState<BackupDataScreen> {
         onImportFullBackup: () => _importFullBackup(context),
         onClearAll: () => _confirmClearAll(context),
       ),
-      SettingsNotesDataSection(
-        onExportJson: () => _exportNotesJson(context),
-        onImportJson: () => _importNotesJson(context),
-        onClearNotes: () => _confirmClearNotes(context),
-      ),
-      SettingsTasksDataSection(
-        onExportJson: () => _exportTasksJson(context),
-        onImportJson: () => _importTasksJson(context),
-        onClearTasks: () => _confirmClearTasks(context),
-      ),
       SettingsCalendarDataSection(
         onExportJson: () => _exportCalendarJson(context),
         onImportJson: () => _importCalendarJson(context),
         onExportIcs: () => _exportIcsFile(context),
         onImportIcs: () => _importIcsFile(context),
         onClearCalendar: () => _confirmClearCalendar(context),
+      ),
+      SettingsTasksDataSection(
+        onExportJson: () => _exportTasksJson(context),
+        onImportJson: () => _importTasksJson(context),
+        onClearTasks: () => _confirmClearTasks(context),
+      ),
+      SettingsNotesDataSection(
+        onExportJson: () => _exportNotesJson(context),
+        onImportJson: () => _importNotesJson(context),
+        onClearNotes: () => _confirmClearNotes(context),
       ),
     ];
 
