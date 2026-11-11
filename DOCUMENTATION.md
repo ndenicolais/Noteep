@@ -289,6 +289,7 @@ The list of active notes and the note editor.
 
 **Features:**
 - Views: day, multi-day (week / 7 days), month, year, schedule (90-day look-ahead), search results. Month days open a bottom sheet with the day's events.
+- The selected view is `calendarViewModeProvider` (`PersistedEnumNotifier<CalendarViewMode>`, `SharedPreferences` key `calendar_view_mode`, default month), so it survives section changes and restarts; the focused day/month is not persisted and restarts from today.
 - Event editor: date, start time, optional end time (an end before the start moves to the next day, an end equal to the start removes it), all day (clears the end), birthday, name day, recurrence, reminder, archive/delete. Events cannot be pinned: calendar views are ordered by time.
 - Recurring events are expanded by `calendarEventOccursOn` (monthly on the 31st skips short months, yearly on 29 February only in leap years).
 - Tasks with a due date are shown as all-day entries: `calendarItemsProvider` merges `activeEventsProvider` with `calendarTaskItemsProvider` (each task wrapped in a read-only `TaskCalendarEvent`, never persisted, recurrence kept) while `calendarShowTasksProvider` is on (`BoolSettingNotifier`, `SharedPreferences` key `calendar_show_tasks`, default on, toggled from the app bar). Search covers them too. Taps go through `AppNav.openCalendarItem`, which opens the task editor for a task and the event editor otherwise. Export, backup, statistics and reminders still read `activeEventsProvider` only.

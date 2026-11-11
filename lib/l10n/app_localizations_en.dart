@@ -1862,6 +1862,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'In the calendar every entry has a color based on its type (event, all-day event, birthday, name day, task) and the search bar sits on the right.';
 
   @override
+  String get changelog_v2_0_0_bullet_60 =>
+      'The calendar remembers the view you picked (day, week, month, year, schedule) when you switch sections or reopen the app.';
+
+  @override
   String get infoPrivacyOpen => 'Privacy policy';
 
   @override

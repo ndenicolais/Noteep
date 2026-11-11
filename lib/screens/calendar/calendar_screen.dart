@@ -26,10 +26,6 @@ import 'calendar_search_bar.dart';
 import 'calendar_search_results_view.dart';
 import 'calendar_year_view.dart';
 
-// ── View modes ────────────────────────────────────────────────────────────────
-
-enum _CalendarViewMode { day, week, month, year, schedule, sevenDays }
-
 // ── Main widget ───────────────────────────────────────────────────────────────
 
 class CalendarWorkspaceView extends ConsumerStatefulWidget {
@@ -41,7 +37,6 @@ class CalendarWorkspaceView extends ConsumerStatefulWidget {
 }
 
 class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
-  _CalendarViewMode _currentView = _CalendarViewMode.month;
   late DateTime _focusedDay;
   late DateTime _focusedMonth;
   final TextEditingController _searchController = TextEditingController();
@@ -68,19 +63,24 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
     });
   }
 
+  CalendarViewMode get _currentView => ref.read(calendarViewModeProvider);
+
+  void _setView(CalendarViewMode mode) =>
+      ref.read(calendarViewModeProvider.notifier).set(mode);
+
   void _navigateForward() {
     setState(() {
       switch (_currentView) {
-        case _CalendarViewMode.day:
+        case CalendarViewMode.day:
           _focusedDay = _focusedDay.add(const Duration(days: 1));
-        case _CalendarViewMode.week:
-        case _CalendarViewMode.sevenDays:
+        case CalendarViewMode.week:
+        case CalendarViewMode.sevenDays:
           _focusedDay = _focusedDay.add(const Duration(days: 7));
-        case _CalendarViewMode.month:
+        case CalendarViewMode.month:
           _focusedMonth = DateTime(_focusedMonth.year, _focusedMonth.month + 1);
-        case _CalendarViewMode.year:
+        case CalendarViewMode.year:
           _focusedMonth = DateTime(_focusedMonth.year + 1, _focusedMonth.month);
-        case _CalendarViewMode.schedule:
+        case CalendarViewMode.schedule:
           break;
       }
     });
@@ -89,16 +89,16 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
   void _navigateBackward() {
     setState(() {
       switch (_currentView) {
-        case _CalendarViewMode.day:
+        case CalendarViewMode.day:
           _focusedDay = _focusedDay.subtract(const Duration(days: 1));
-        case _CalendarViewMode.week:
-        case _CalendarViewMode.sevenDays:
+        case CalendarViewMode.week:
+        case CalendarViewMode.sevenDays:
           _focusedDay = _focusedDay.subtract(const Duration(days: 7));
-        case _CalendarViewMode.month:
+        case CalendarViewMode.month:
           _focusedMonth = DateTime(_focusedMonth.year, _focusedMonth.month - 1);
-        case _CalendarViewMode.year:
+        case CalendarViewMode.year:
           _focusedMonth = DateTime(_focusedMonth.year - 1, _focusedMonth.month);
-        case _CalendarViewMode.schedule:
+        case CalendarViewMode.schedule:
           break;
       }
     });
@@ -114,28 +114,28 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
     }
   }
 
-  String _viewLabel(_CalendarViewMode mode) {
+  String _viewLabel(CalendarViewMode mode) {
     final l10n = context.l10n;
     switch (mode) {
-      case _CalendarViewMode.day:
+      case CalendarViewMode.day:
         return l10n.calendarViewDay;
-      case _CalendarViewMode.week:
+      case CalendarViewMode.week:
         return l10n.calendarViewWeek;
-      case _CalendarViewMode.month:
+      case CalendarViewMode.month:
         return l10n.calendarViewMonth;
-      case _CalendarViewMode.year:
+      case CalendarViewMode.year:
         return l10n.calendarViewYear;
-      case _CalendarViewMode.schedule:
+      case CalendarViewMode.schedule:
         return l10n.calendarViewSchedule;
-      case _CalendarViewMode.sevenDays:
+      case CalendarViewMode.sevenDays:
         return l10n.calendarViewSevenDays;
     }
   }
 
   /// The hint on the right is the label's first letter.
-  PopupMenuItem<_CalendarViewMode> _viewMenuItem(_CalendarViewMode mode) {
+  PopupMenuItem<CalendarViewMode> _viewMenuItem(CalendarViewMode mode) {
     final label = _viewLabel(mode);
-    return PopupMenuItem<_CalendarViewMode>(
+    return PopupMenuItem<CalendarViewMode>(
       value: mode,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -156,6 +156,7 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(calendarViewModeProvider);
     final allEvents = ref.watch(calendarItemsProvider);
     final showTasks = ref.watch(calendarShowTasksProvider);
     final searchQuery = ref.watch(calendarSearchQueryProvider);
@@ -189,13 +190,13 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
             onPressed: _goToToday,
             tooltip: context.l10n.commonToday,
           ),
-          PopupMenuButton<_CalendarViewMode>(
+          PopupMenuButton<CalendarViewMode>(
             initialValue: _currentView,
-            onSelected: (mode) => setState(() => _currentView = mode),
+            onSelected: _setView,
             tooltip: context.l10n.calendarChangeView,
             itemBuilder:
                 (_) => [
-                  for (final mode in _CalendarViewMode.values)
+                  for (final mode in CalendarViewMode.values)
                     _viewMenuItem(mode),
                 ],
             child: Padding(
@@ -240,7 +241,7 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
 
   Widget _buildCurrentView(List<CalendarEventModel> allEvents) {
     switch (_currentView) {
-      case _CalendarViewMode.day:
+      case CalendarViewMode.day:
         return CalendarDayView(
           day: _focusedDay,
           allEvents: allEvents,
@@ -254,7 +255,7 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
                 () => _focusedDay = _focusedDay.add(const Duration(days: 1)),
               ),
         );
-      case _CalendarViewMode.week:
+      case CalendarViewMode.week:
         return CalendarMultiDayView(
           startDay: _focusedDay.subtract(
             Duration(days: _focusedDay.weekday - 1),
@@ -271,7 +272,7 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
                 () => _focusedDay = _focusedDay.add(const Duration(days: 7)),
               ),
         );
-      case _CalendarViewMode.month:
+      case CalendarViewMode.month:
         return CalendarMonthView(
           focusedMonth: _focusedMonth,
           allEvents: allEvents,
@@ -292,7 +293,7 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
                     ),
               ),
         );
-      case _CalendarViewMode.year:
+      case CalendarViewMode.year:
         return CalendarYearView(
           focusedMonth: _focusedMonth,
           allEvents: allEvents,
@@ -312,15 +313,14 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
                       _focusedMonth.month,
                     ),
               ),
-          onMonthSelected:
-              (month) => setState(() {
-                _focusedMonth = month;
-                _currentView = _CalendarViewMode.month;
-              }),
+          onMonthSelected: (month) {
+            setState(() => _focusedMonth = month);
+            _setView(CalendarViewMode.month);
+          },
         );
-      case _CalendarViewMode.schedule:
+      case CalendarViewMode.schedule:
         return CalendarScheduleView(allEvents: allEvents);
-      case _CalendarViewMode.sevenDays:
+      case CalendarViewMode.sevenDays:
         return CalendarMultiDayView(
           startDay: _focusedDay,
           dayCount: 7,

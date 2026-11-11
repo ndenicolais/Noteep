@@ -232,6 +232,24 @@ final trashedEventsProvider = Provider<List<CalendarEventModel>>((ref) {
 
 final calendarSearchQueryProvider = valueStateProvider<String>('');
 
+enum CalendarViewMode { day, week, month, year, schedule, sevenDays }
+
+/// The calendar view last picked, persisted on the device so it survives
+/// section changes and app restarts.
+class CalendarViewModeNotifier extends PersistedEnumNotifier<CalendarViewMode> {
+  CalendarViewModeNotifier()
+    : super(
+        'calendar_view_mode',
+        CalendarViewMode.values,
+        CalendarViewMode.month,
+      );
+}
+
+final calendarViewModeProvider =
+    NotifierProvider<CalendarViewModeNotifier, CalendarViewMode>(
+      CalendarViewModeNotifier.new,
+    );
+
 /// Whether tasks with a due date are shown in the calendar views (toggled
 /// from the calendar app bar, persisted on the device).
 final calendarShowTasksProvider = NotifierProvider<BoolSettingNotifier, bool>(

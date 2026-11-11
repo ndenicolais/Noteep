@@ -3398,6 +3398,12 @@ abstract class AppLocalizations {
   /// **'Nel calendario ogni voce ha un colore in base al tipo (evento, evento di tutto il giorno, compleanno, onomastico, task) e la barra di ricerca è allineata a destra.'**
   String get changelog_v2_0_0_bullet_59;
 
+  /// No description provided for @changelog_v2_0_0_bullet_60.
+  ///
+  /// In it, this message translates to:
+  /// **'Il calendario ricorda la vista che hai scelto (giorno, settimana, mese, anno, programma) anche quando cambi sezione o riapri l\'app.'**
+  String get changelog_v2_0_0_bullet_60;
+
   /// No description provided for @infoPrivacyOpen.
   ///
   /// In it, this message translates to:
