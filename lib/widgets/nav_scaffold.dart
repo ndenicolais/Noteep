@@ -176,6 +176,7 @@ class _AppNavRail extends StatelessWidget {
     DrawerSection.reminders,
     DrawerSection.labels,
     DrawerSection.archive,
+    DrawerSection.statistics,
     DrawerSection.trash,
     DrawerSection.settings,
   ];
@@ -186,6 +187,7 @@ class _AppNavRail extends StatelessWidget {
     AppRoutes.reminders,
     AppRoutes.labels,
     AppRoutes.archive,
+    AppRoutes.statistics,
     AppRoutes.trash,
     AppRoutes.settings,
   ];
@@ -238,6 +240,11 @@ class _AppNavRail extends StatelessWidget {
           icon: const Icon(Icons.archive_outlined),
           selectedIcon: const Icon(Icons.archive),
           label: Text(context.l10n.navArchive),
+        ),
+        NavigationRailDestination(
+          icon: const Icon(Icons.bar_chart_outlined),
+          selectedIcon: const Icon(Icons.bar_chart),
+          label: Text(context.l10n.statsTitle),
         ),
         NavigationRailDestination(
           icon: const Icon(Icons.delete_outline),

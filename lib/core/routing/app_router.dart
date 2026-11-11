@@ -39,6 +39,7 @@ abstract final class AppRoutes {
   static const calendar = '/calendar';
   static const labels = '/labels';
   static const archive = '/archive';
+  static const statistics = '/statistics';
   static const trash = '/trash';
   static const settings = '/settings';
 
@@ -47,7 +48,6 @@ abstract final class AppRoutes {
   static const task = '/task';
   static const event = '/event';
   static const label = '/label';
-  static const statistics = '/statistics';
   static const export = '/export';
   static const info = '/info';
   static const onboarding = '/onboarding';
@@ -73,6 +73,7 @@ abstract final class AppRouter {
     AppRoutes.calendar,
     AppRoutes.labels,
     AppRoutes.archive,
+    AppRoutes.statistics,
     AppRoutes.trash,
     AppRoutes.settings,
   };
@@ -217,9 +218,6 @@ abstract final class AppNav {
 
   static Future<void> openTasks(BuildContext context) =>
       Navigator.pushNamed(context, AppRoutes.tasks);
-
-  static Future<void> openStatistics(BuildContext context) =>
-      Navigator.pushNamed(context, AppRoutes.statistics);
 
   static Future<void> openExport(BuildContext context) =>
       Navigator.pushNamed(context, AppRoutes.export);

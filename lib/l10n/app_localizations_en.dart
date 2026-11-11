@@ -1454,10 +1454,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsNotesDataTitle => 'Notes data';
 
   @override
-  String get settingsStatisticsSubtitle =>
-      'See all the information about your notes';
-
-  @override
   String get settingsExportNotesSubtitle =>
       'Export all notes in several formats';
 
@@ -1920,6 +1916,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_67 =>
       'In Settings you can choose which section the app opens on: Calendar, Tasks or Notes.';
+
+  @override
+  String get changelog_v2_0_0_bullet_68 =>
+      'Statistics now have their own section in the menu, right below Archive.';
 
   @override
   String get infoPrivacyOpen => 'Privacy policy';

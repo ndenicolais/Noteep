@@ -14,7 +14,7 @@ import '../../l10n/l10n.dart';
 import '../../widgets/shared/action_tile.dart';
 import '../../widgets/shared/section_header.dart';
 
-/// "Dati note" section: statistics, export screen, JSON export/import/clear.
+/// "Dati note" section: export screen, JSON export/import/clear.
 class SettingsNotesDataSection extends StatelessWidget {
   const SettingsNotesDataSection({
     super.key,
@@ -33,12 +33,6 @@ class SettingsNotesDataSection extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         SectionHeader(context.l10n.settingsNotesDataTitle),
-        ActionTile(
-          icon: Icons.bar_chart_outlined,
-          title: context.l10n.statsTitle,
-          subtitle: context.l10n.settingsStatisticsSubtitle,
-          onTap: () => AppNav.openStatistics(context),
-        ),
         ActionTile(
           icon: Icons.upload,
           title: context.l10n.exportTitle,

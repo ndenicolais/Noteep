@@ -24,6 +24,7 @@ enum DrawerSection {
   calendar,
   labels,
   archive,
+  statistics,
   trash,
   settings,
 }
@@ -182,6 +183,17 @@ class AppDrawer extends ConsumerWidget {
                     context,
                     DrawerSection.archive,
                     AppRoutes.archive,
+                  ),
+            ),
+            _DrawerItem(
+              icon: Icons.bar_chart_outlined,
+              label: context.l10n.statsTitle,
+              selected: currentSection == DrawerSection.statistics,
+              onTap:
+                  () => _navigateTo(
+                    context,
+                    DrawerSection.statistics,
+                    AppRoutes.statistics,
                   ),
             ),
             _DrawerItem(

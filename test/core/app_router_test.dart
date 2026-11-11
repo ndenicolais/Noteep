@@ -146,11 +146,7 @@ void main() {
           reason: name,
         );
       }
-      for (final name in [
-        AppRoutes.statistics,
-        AppRoutes.export,
-        AppRoutes.info,
-      ]) {
+      for (final name in [AppRoutes.export, AppRoutes.info]) {
         expect(
           AppRouter.onGenerateRoute(RouteSettings(name: name)),
           isA<MaterialPageRoute>(),

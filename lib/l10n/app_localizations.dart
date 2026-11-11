@@ -2750,12 +2750,6 @@ abstract class AppLocalizations {
   /// **'Dati note'**
   String get settingsNotesDataTitle;
 
-  /// No description provided for @settingsStatisticsSubtitle.
-  ///
-  /// In it, this message translates to:
-  /// **'Visualizza tutte le informazioni sulle tue note'**
-  String get settingsStatisticsSubtitle;
-
   /// No description provided for @settingsExportNotesSubtitle.
   ///
   /// In it, this message translates to:
@@ -3487,6 +3481,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Nelle Impostazioni puoi scegliere da quale sezione si apre l\'app: Calendario, Task o Note.'**
   String get changelog_v2_0_0_bullet_67;
+
+  /// No description provided for @changelog_v2_0_0_bullet_68.
+  ///
+  /// In it, this message translates to:
+  /// **'Le Statistiche hanno ora una sezione tutta loro nel menu, subito sotto l\'Archivio.'**
+  String get changelog_v2_0_0_bullet_68;
 
   /// No description provided for @infoPrivacyOpen.
   ///

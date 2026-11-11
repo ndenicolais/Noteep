@@ -16,6 +16,7 @@ import '../../providers/calendar_provider.dart';
 import '../../providers/notes_provider.dart';
 import '../../providers/tasks_provider.dart';
 import '../../theme/app_spacing.dart';
+import '../../widgets/nav_scaffold.dart';
 import 'statistics_widgets.dart';
 
 /// Class d'appoggio immutabile per aggregare i dati ed evitare re-build inutili
@@ -93,8 +94,9 @@ class StatisticsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.statsTitle)),
+    return NavScaffold(
+      section: DrawerSection.statistics,
+      titleWidget: Text(context.l10n.statsTitle),
       body: const SingleChildScrollView(
         padding: EdgeInsets.all(AppSpacing.lg),
         child: Column(

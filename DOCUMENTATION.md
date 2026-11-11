@@ -321,7 +321,7 @@ The list of active notes and the note editor.
 **Path:** `lib/screens/statistics/`, `lib/screens/export_screen.dart`
 
 **Features:**
-- Statistics: summary of notes, tasks and events computed by a screen-local provider, charts with `fl_chart`.
+- Statistics: drawer section (below Archive), summary of notes, tasks and events computed by a screen-local provider, charts with `fl_chart`.
 - Export: active notes as PDF, TXT, JSON, CSV or HTML. File text (labels, headers, date format) is in the UI language; JSON keys are fixed. Mobile saves/shares the file, web downloads it.
 
 ### 5.7 Settings
@@ -361,7 +361,7 @@ The screen handles dialogs, file pickers and snackbars; data work is in `DataAct
 
 ### 5.10 Shared behavior
 
-- **Drawer** (`AppDrawer`, `NavScaffold`): Calendar, Tasks, Notes, Reminders, Labels, Archive, Trash, Settings and sign out. Statistics and Export open from Settings → Notes data, Info from Settings → Info.
+- **Drawer** (`AppDrawer`, `NavScaffold`): Calendar, Tasks, Notes, Reminders, Labels, Archive, Statistics, Trash, Settings and sign out. Export opens from Settings → Notes data, Info from Settings → Info.
 - **Undo**: trash and archive actions show a snackbar with Undo (`notifyWithUndo`), which still works after the editor pops.
 - **Errors**: fire-and-forget writes go through `notifyOnError`, which shows an error snackbar if the write fails.
 - **Sync status**: `SyncStatusListener` (in `MaterialApp.builder`) shows a banner while writes are queued offline and a snackbar if the server later rejects one.
@@ -547,7 +547,7 @@ Screens use `ColorScheme` roles (`primary`, `surface`, `secondaryContainer`, `su
 
 ## 9. Navigation
 
-Named routes with `MaterialApp.onGenerateRoute: AppRouter.onGenerateRoute` (`lib/core/routing/app_router.dart`). Screens call the typed helpers in `AppNav` (`openNote`, `openTask`, `openEvent`, `openLabel`, `openTasks`, `openStatistics`, `openExport`, `openInfo`, `openOnboarding`, `openPrivacyPolicy`). Detail routes with a missing or wrongly typed argument, and unknown names, go to `AppRouter.onUnknownRoute` → `UnknownRouteScreen` instead of crashing.
+Named routes with `MaterialApp.onGenerateRoute: AppRouter.onGenerateRoute` (`lib/core/routing/app_router.dart`). Screens call the typed helpers in `AppNav` (`openNote`, `openTask`, `openEvent`, `openLabel`, `openTasks`, `openExport`, `openInfo`, `openOnboarding`, `openPrivacyPolicy`). Detail routes with a missing or wrongly typed argument, and unknown names, go to `AppRouter.onUnknownRoute` → `UnknownRouteScreen` instead of crashing.
 
 Drawer sections (`AppRouter.sectionRoutes`) use `FadeThroughPageRoute` (an opaque scaffold-colored backdrop fades in over the first 30%, hiding Home and the previous section below it; then the page fades + scales 0.92 → 1; 300 ms, instant with reduced motion or when pushed with the `AppRouter.noTransition` argument, used for the start section; going back still fades) because they are siblings, not a drill-down; detail screens use `MaterialPageRoute`. The drawer returns to Home with `popUntil` on the root.
 
@@ -563,8 +563,8 @@ Drawer sections (`AppRouter.sectionRoutes`) use `FadeThroughPageRoute` (an opaqu
 | `/labels` | `LabelsScreen` | Drawer section |
 | `/label` | `LabelNotesScreen` | Argument `String` (label name) |
 | `/archive` | `ArchiveScreen` | Drawer section |
+| `/statistics` | `StatisticsScreen` | Drawer section |
 | `/trash` | `TrashScreen` | Drawer section |
-| `/statistics` | `StatisticsScreen` | |
 | `/export` | `ExportScreen` | |
 | `/settings` | `SettingsScreen` | Drawer section |
 | `/info` | `InfoScreen` | |
