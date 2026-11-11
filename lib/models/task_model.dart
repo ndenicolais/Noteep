@@ -53,6 +53,11 @@ class TaskModel {
        createdAt = createdAt ?? DateTime.now(),
        updatedAt = updatedAt ?? DateTime.now();
 
+  /// Whether [dueDate] carries a time of day (e.g. tasks imported from
+  /// Google Tasks with a scheduled time); the date picker stores midnight.
+  bool get hasDueTime =>
+      dueDate != null && (dueDate!.hour != 0 || dueDate!.minute != 0);
+
   TaskModel copyWith({
     String? title,
     String? description,

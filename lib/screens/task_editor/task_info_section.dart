@@ -60,7 +60,9 @@ class TaskInfoSection extends StatelessWidget {
                   Icon(Icons.calendar_today, size: 16, color: primary),
                   const SizedBox(width: AppSpacing.sm),
                   Text(
-                    DateFormat('d MMM yyyy').format(task.dueDate!),
+                    DateFormat(
+                      task.hasDueTime ? 'd MMM yyyy, HH:mm' : 'd MMM yyyy',
+                    ).format(task.dueDate!),
                     style: TextStyle(color: primary, fontSize: AppFontSizes.sm),
                   ),
                   const SizedBox(width: AppSpacing.xs),

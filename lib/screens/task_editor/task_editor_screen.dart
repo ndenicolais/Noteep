@@ -223,7 +223,13 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
       lastDate: DateTime.now().add(const Duration(days: 365)),
     );
     if (date != null) {
-      setState(() => _task = _task.copyWith(dueDate: date));
+      // Keep the time of day of a due date that has one.
+      final old = _task.dueDate;
+      final due =
+          _task.hasDueTime
+              ? DateTime(date.year, date.month, date.day, old!.hour, old.minute)
+              : date;
+      setState(() => _task = _task.copyWith(dueDate: due));
     }
   }
 
