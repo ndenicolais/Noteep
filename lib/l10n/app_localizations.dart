@@ -128,6 +128,18 @@ abstract class AppLocalizations {
   /// **'Lingua'**
   String get settingsLanguageTitle;
 
+  /// No description provided for @settingsStartScreenTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Schermata iniziale'**
+  String get settingsStartScreenTitle;
+
+  /// No description provided for @settingsStartScreenSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'La sezione che vedi quando apri l\'app'**
+  String get settingsStartScreenSubtitle;
+
   /// No description provided for @settingsLanguageSystem.
   ///
   /// In it, this message translates to:
@@ -3469,6 +3481,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Il menu laterale ora parte da Calendario, seguito da Task, Note e Promemoria.'**
   String get changelog_v2_0_0_bullet_66;
+
+  /// No description provided for @changelog_v2_0_0_bullet_67.
+  ///
+  /// In it, this message translates to:
+  /// **'Nelle Impostazioni puoi scegliere da quale sezione si apre l\'app: Calendario, Task o Note.'**
+  String get changelog_v2_0_0_bullet_67;
 
   /// No description provided for @infoPrivacyOpen.
   ///

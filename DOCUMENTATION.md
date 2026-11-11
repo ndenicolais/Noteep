@@ -199,7 +199,7 @@ A calendar event. Collection: `users/{uid}/calendar_events`.
 
 | Data | Where |
 |---|---|
-| Settings (theme, language, layout, sort orders, task options, onboarding, backup settings, last seen changelog) | `SharedPreferences` |
+| Settings (theme, language, start section, layout, sort orders, task options, onboarding, backup settings, last seen changelog) | `SharedPreferences` |
 | Audio recordings | `<documents>/audio_notes/` |
 | Automatic backups | `<documents>/noteep_backups/`, ZIP files, last 30 kept |
 
@@ -332,6 +332,7 @@ The screen handles dialogs, file pickers and snackbars; data work is in `DataAct
 
 **Features:**
 - Appearance (System/Light/Dark) and language (System/Italiano/English) as `SegmentedChoice`.
+- Start screen (Calendar/Tasks/Notes, in drawer order) as `SegmentedChoice`: `startSectionProvider` (`PersistedEnumNotifier<StartSection>`, key `start_section`, default `notes`). See [Navigation](#9-navigation).
 - Notes and tasks preferences (layout, FAB menu, completed tasks, grouping).
 - Automatic backup: enable, frequency (daily, weekly, monthly), history with restore and delete.
 - Data per section (notes, tasks, calendar) and global: JSON export/import, ICS export/import for the calendar, clear. Imports and clears ask for confirmation; persistence errors show a snackbar.
@@ -385,7 +386,7 @@ Riverpod with `NotifierProvider`, `Provider`, `StreamProvider` and `FutureProvid
 | `RecordingStateNotifier` | `providers/audio_provider.dart` | Audio recording state |
 | `noteChangeHistoryProvider(id)`, `taskChangeHistoryProvider(id)` | `providers/*_undo_redo_provider.dart` | Undo/redo stacks (limit 50), used through `NoteUndoRedoManager`/`TaskUndoRedoManager` |
 | `ThemeModeNotifier`, `AppLanguageNotifier` | `providers/settings/theme_provider.dart`, `locale_provider.dart` | Theme and language, persisted by enum name through `PersistedEnumNotifier` |
-| UI settings and filters | `providers/settings/ui_provider.dart` | Layout, sort orders, FAB menu, task options, onboarding flag, search queries, `filteredNotesProvider`, `filteredNoteIdsProvider`, `filteredTasksProvider`, `allTagsProvider`, `tagNoteCountsProvider`, `notesWithTagProvider(tag)`; base class `PersistedEnumNotifier` |
+| UI settings and filters | `providers/settings/ui_provider.dart` | Layout, start section, sort orders, FAB menu, task options, onboarding flag, search queries, `filteredNotesProvider`, `filteredNoteIdsProvider`, `filteredTasksProvider`, `allTagsProvider`, `tagNoteCountsProvider`, `notesWithTagProvider(tag)`; base class `PersistedEnumNotifier` |
 | `BackupSettingsNotifier`, `BackupStatusNotifier`, `availableBackupsProvider` | `providers/settings/backup_provider.dart` | Automatic backup settings and status, list of local backups |
 | `BackupRestorer` (`backupRestorerProvider`) | `providers/settings/backup_restore.dart` | `FullBackupData` parsing (flat JSON and ZIP layouts), `apply` (replaces each section present), `readZip` |
 | `DataActions` (`dataActionsProvider`) | `providers/settings/data_actions.dart` | Export payloads, per-section import, ICS export/import, clear, `wipeRemoteData`/`wipeLocalData` for account deletion |
@@ -480,6 +481,7 @@ Records with `record` into `<documents>/audio_notes/` and plays with `just_audio
 - `NotificationTarget` encodes/parses payloads (missing or malformed → `null`, the app just opens) and resolves the non-trashed item.
 - `NotificationLaunchHandler` wraps the signed-in `HomeScreen` (so it is under the `MaterialApp` navigator): it listens to `pendingTarget`, waits for the item to load and opens it with `AppNav`. If the item is still missing when loading ends (notes/tasks) or after 10 s (events), it shows "Reminder item not found". A tap before sign-in waits for the user to sign in.
 - `HomeWidgetAction.parse` reads `noteep://new/...` URIs. `HomeWidgetLaunchHandler` (Android only) handles the cold start once per process (`initialLaunchHandled`, otherwise the intent left on the activity would reopen the editor at every sign-in) and taps while the app runs (`singleTop` → `onNewIntent`).
+- `StartSectionLauncher` (`start_section_launcher.dart`) wraps both handlers: when the signed-in home mounts (cold start or sign-in) and the start section is not Notes, its post-frame callback pushes that section with `AppRouter.noTransition`, so it appears without a transition. Being outermost, its callback runs first and anything a notification or widget opens lands above it. Back returns to Notes, as from any section.
 
 ---
 
@@ -547,7 +549,7 @@ Screens use `ColorScheme` roles (`primary`, `surface`, `secondaryContainer`, `su
 
 Named routes with `MaterialApp.onGenerateRoute: AppRouter.onGenerateRoute` (`lib/core/routing/app_router.dart`). Screens call the typed helpers in `AppNav` (`openNote`, `openTask`, `openEvent`, `openLabel`, `openTasks`, `openStatistics`, `openExport`, `openInfo`, `openOnboarding`, `openPrivacyPolicy`). Detail routes with a missing or wrongly typed argument, and unknown names, go to `AppRouter.onUnknownRoute` → `UnknownRouteScreen` instead of crashing.
 
-Drawer sections (`AppRouter.sectionRoutes`) use `FadeThroughPageRoute` (an opaque scaffold-colored backdrop fades in over the first 30%, hiding Home and the previous section below it; then the page fades + scales 0.92 → 1; 300 ms, instant with reduced motion) because they are siblings, not a drill-down; detail screens use `MaterialPageRoute`. The drawer returns to Home with `popUntil` on the root.
+Drawer sections (`AppRouter.sectionRoutes`) use `FadeThroughPageRoute` (an opaque scaffold-colored backdrop fades in over the first 30%, hiding Home and the previous section below it; then the page fades + scales 0.92 → 1; 300 ms, instant with reduced motion or when pushed with the `AppRouter.noTransition` argument, used for the start section; going back still fades) because they are siblings, not a drill-down; detail screens use `MaterialPageRoute`. The drawer returns to Home with `popUntil` on the root.
 
 | Route | Screen | Description |
 |---|---|---|

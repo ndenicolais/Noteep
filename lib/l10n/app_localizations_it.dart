@@ -24,6 +24,13 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settingsLanguageTitle => 'Lingua';
 
   @override
+  String get settingsStartScreenTitle => 'Schermata iniziale';
+
+  @override
+  String get settingsStartScreenSubtitle =>
+      'La sezione che vedi quando apri l\'app';
+
+  @override
   String get settingsLanguageSystem => 'Sistema';
 
   @override
@@ -1918,6 +1925,10 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_66 =>
       'Il menu laterale ora parte da Calendario, seguito da Task, Note e Promemoria.';
+
+  @override
+  String get changelog_v2_0_0_bullet_67 =>
+      'Nelle Impostazioni puoi scegliere da quale sezione si apre l\'app: Calendario, Task o Note.';
 
   @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';

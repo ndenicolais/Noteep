@@ -34,6 +34,7 @@ import 'settings_language_section.dart';
 import 'settings_misc_sections.dart';
 import 'settings_notes_data_section.dart';
 import 'settings_notes_prefs_section.dart';
+import 'settings_start_screen_section.dart';
 import 'settings_tasks_data_section.dart';
 import 'settings_tasks_prefs_section.dart';
 
@@ -62,6 +63,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       SettingsLanguageSection(
         language: ref.watch(appLanguageProvider),
         onChanged: (v) => ref.read(appLanguageProvider.notifier).set(v),
+      ),
+      SettingsStartScreenSection(
+        section: ref.watch(startSectionProvider),
+        onChanged: (v) => ref.read(startSectionProvider.notifier).set(v),
       ),
       SettingsNotesPrefsSection(
         homeLayout: homeLayout,

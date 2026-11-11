@@ -62,6 +62,24 @@ final homeLayoutProvider = NotifierProvider<HomeLayoutNotifier, HomeLayout>(
   HomeLayoutNotifier.new,
 );
 
+// --- Start Section ---
+
+/// The section shown when the app opens. Notes is the root screen, so the
+/// other choices are opened on top of it at launch.
+enum StartSection { calendar, tasks, notes }
+
+const _kStartSectionKey = 'start_section';
+
+class StartSectionNotifier extends PersistedEnumNotifier<StartSection> {
+  StartSectionNotifier()
+    : super(_kStartSectionKey, StartSection.values, StartSection.notes);
+}
+
+final startSectionProvider =
+    NotifierProvider<StartSectionNotifier, StartSection>(
+      StartSectionNotifier.new,
+    );
+
 // --- Sort Order ---
 
 enum SortOrder {

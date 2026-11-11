@@ -77,11 +77,19 @@ abstract final class AppRouter {
     AppRoutes.settings,
   };
 
+  /// Pass as the arguments of a section route to show it without the
+  /// incoming transition (the start section opened at launch).
+  static const noTransition = Object();
+
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     final builder = _builderFor(settings);
     if (builder == null) return null;
     if (sectionRoutes.contains(settings.name)) {
-      return FadeThroughPageRoute(builder: builder, settings: settings);
+      return FadeThroughPageRoute(
+        builder: builder,
+        settings: settings,
+        animateIn: !identical(settings.arguments, noTransition),
+      );
     }
     return MaterialPageRoute(builder: builder, settings: settings);
   }
@@ -128,43 +136,48 @@ abstract final class AppRouter {
 /// page, then the new page fades in on it while scaling up slightly. The
 /// background hides every route below (Home stays under the sections), so
 /// pages never show through each other mid-transition.
-/// Instant when the platform asks to reduce motion.
+/// Instant when the platform asks to reduce motion; [animateIn] false makes
+/// only the push instant (going back still fades).
 class FadeThroughPageRoute<T> extends PageRouteBuilder<T> {
-  FadeThroughPageRoute({required this.builder, super.settings})
-    : super(
-        transitionDuration: const Duration(milliseconds: 300),
-        reverseTransitionDuration: const Duration(milliseconds: 250),
-        pageBuilder: (context, _, _) => builder(context),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          if (MediaQuery.disableAnimationsOf(context)) return child;
-          final cover = CurvedAnimation(
-            parent: animation,
-            curve: const Interval(0, 0.3, curve: Curves.easeIn),
-          );
-          final incoming = CurvedAnimation(
-            parent: animation,
-            curve: const Interval(0.3, 1, curve: Curves.easeOut),
-          );
-          return Stack(
-            fit: StackFit.expand,
-            children: [
-              FadeTransition(
-                opacity: cover,
-                child: ColoredBox(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                ),
-              ),
-              FadeTransition(
-                opacity: incoming,
-                child: ScaleTransition(
-                  scale: Tween<double>(begin: 0.92, end: 1).animate(incoming),
-                  child: child,
-                ),
-              ),
-            ],
-          );
-        },
-      );
+  FadeThroughPageRoute({
+    required this.builder,
+    super.settings,
+    bool animateIn = true,
+  }) : super(
+         transitionDuration:
+             animateIn ? const Duration(milliseconds: 300) : Duration.zero,
+         reverseTransitionDuration: const Duration(milliseconds: 250),
+         pageBuilder: (context, _, _) => builder(context),
+         transitionsBuilder: (context, animation, secondaryAnimation, child) {
+           if (MediaQuery.disableAnimationsOf(context)) return child;
+           final cover = CurvedAnimation(
+             parent: animation,
+             curve: const Interval(0, 0.3, curve: Curves.easeIn),
+           );
+           final incoming = CurvedAnimation(
+             parent: animation,
+             curve: const Interval(0.3, 1, curve: Curves.easeOut),
+           );
+           return Stack(
+             fit: StackFit.expand,
+             children: [
+               FadeTransition(
+                 opacity: cover,
+                 child: ColoredBox(
+                   color: Theme.of(context).scaffoldBackgroundColor,
+                 ),
+               ),
+               FadeTransition(
+                 opacity: incoming,
+                 child: ScaleTransition(
+                   scale: Tween<double>(begin: 0.92, end: 1).animate(incoming),
+                   child: child,
+                 ),
+               ),
+             ],
+           );
+         },
+       );
 
   final WidgetBuilder builder;
 }

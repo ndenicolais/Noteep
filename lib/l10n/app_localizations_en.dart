@@ -24,6 +24,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsLanguageTitle => 'Language';
 
   @override
+  String get settingsStartScreenTitle => 'Start screen';
+
+  @override
+  String get settingsStartScreenSubtitle =>
+      'The section you see when you open the app';
+
+  @override
   String get settingsLanguageSystem => 'System';
 
   @override
@@ -1909,6 +1916,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_66 =>
       'The side menu now starts with Calendar, followed by Tasks, Notes and Reminders.';
+
+  @override
+  String get changelog_v2_0_0_bullet_67 =>
+      'In Settings you can choose which section the app opens on: Calendar, Tasks or Notes.';
 
   @override
   String get infoPrivacyOpen => 'Privacy policy';
