@@ -1552,6 +1552,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'Your current data (notes, tasks and events) will be replaced with the backup. Continue?';
 
   @override
+  String get settingsRestoreSettingsToo => 'Also restore settings';
+
+  @override
+  String get settingsRestoreSettingsTooSubtitle =>
+      'Theme, language, start screen, views and calendar, tasks and notes preferences';
+
+  @override
   String get settingsBackupReadFailed => 'Unable to read the backup.';
 
   @override
@@ -1946,6 +1953,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_71 =>
       'In the Calendar Schedule view you can scroll freely through past and future months, no longer limited to the next three months.';
+
+  @override
+  String get changelog_v2_0_0_bullet_72 =>
+      'The full backup now also saves your labels and settings (theme, language, views, notification time and other preferences): when restoring you can choose whether to bring the settings back too.';
 
   @override
   String get infoPrivacyOpen => 'Privacy policy';

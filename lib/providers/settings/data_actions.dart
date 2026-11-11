@@ -19,9 +19,11 @@ import '../../utils/notification_service.dart';
 import '../auth_provider.dart';
 import '../calendar_provider.dart';
 import '../core_providers.dart';
+import '../labels_provider.dart';
 import '../notes_provider.dart';
 import '../tasks_provider.dart';
 import 'backup_restore.dart';
+import 'preferences_backup.dart';
 
 /// Data operations behind the Settings screen (JSON/ICS export and import,
 /// clear), kept out of the UI so the screen only handles dialogs/SnackBars.
@@ -65,13 +67,35 @@ class DataActions {
     'calendar': _calendar,
   };
 
+  List<String> get _labels =>
+      _ref.read(labelsProvider).map((l) => l.name).toList();
+
   Map<String, dynamic> fullBackupExport() => {
     ..._header(appVersion),
     'notes': _notes,
     'tasks': _tasks,
     'taskLists': _taskLists,
     'calendar': _calendar,
+    'labels': _labels,
+    'settings': _ref.read(preferencesBackupProvider).export(),
   };
+
+  /// Sections of the automatic zip backup, one per file
+  /// (see `BackupService.createBackup`).
+  ({
+    Map<String, dynamic> notes,
+    Map<String, dynamic> tasks,
+    Map<String, dynamic> calendar,
+    Map<String, dynamic> labels,
+    Map<String, dynamic> settings,
+  })
+  zipBackupSections() => (
+    notes: {'notes': _notes},
+    tasks: {'tasks': _tasks, 'taskLists': _taskLists},
+    calendar: {'calendar': _calendar},
+    labels: {'labels': _labels},
+    settings: {'settings': _ref.read(preferencesBackupProvider).export()},
+  );
 
   // -- JSON import -----------------------------------------------------------
 
@@ -116,8 +140,15 @@ class DataActions {
   Future<void> importCalendar(Map<String, dynamic> decoded) =>
       _import(decoded, const ['calendar']);
 
-  Future<void> importFullBackup(Map<String, dynamic> decoded) =>
-      _restorer.apply(FullBackupData.fromJson(decoded));
+  /// Parses a full backup file without applying it; throws on malformed
+  /// data.
+  FullBackupData parseFullBackup(Map<String, dynamic> decoded) =>
+      FullBackupData.fromJson(decoded);
+
+  Future<void> importFullBackup(
+    FullBackupData data, {
+    bool restoreSettings = false,
+  }) => _restorer.apply(data, restoreSettings: restoreSettings);
 
   // -- ICS -------------------------------------------------------------------
 

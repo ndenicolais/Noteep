@@ -12,10 +12,14 @@ import 'package:noteep/models/note_model.dart';
 import 'package:noteep/models/task_list_model.dart';
 import 'package:noteep/models/task_model.dart';
 import 'package:noteep/providers/calendar_provider.dart';
+import 'package:noteep/providers/core_providers.dart';
+import 'package:noteep/providers/labels_provider.dart';
 import 'package:noteep/providers/notes_provider.dart';
 import 'package:noteep/providers/settings/backup_restore.dart';
+import 'package:noteep/providers/settings/ui_provider.dart';
 import 'package:noteep/providers/tasks_provider.dart';
 import 'package:noteep/utils/backup_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../helpers/test_container.dart';
 
 const _pathProviderChannel = MethodChannel('plugins.flutter.io/path_provider');
@@ -26,10 +30,15 @@ void main() {
   late FakeFirebaseFirestore firestore;
   late ProviderContainer container;
 
-  setUp(() {
+  setUp(() async {
     firestore = FakeFirebaseFirestore();
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
     container = ProviderContainer(
-      overrides: firestoreOverrides(firestore, uid: 'u'),
+      overrides: [
+        ...firestoreOverrides(firestore, uid: 'u'),
+        sharedPreferencesProvider.overrideWithValue(prefs),
+      ],
     );
   });
 
@@ -77,6 +86,18 @@ void main() {
       expect(data.tasks, isNull);
       expect(data.taskLists, isNull);
       expect(data.events, isNull);
+      expect(data.labels, isNull);
+      expect(data.settings, isNull);
+      expect(data.hasSettings, isFalse);
+    });
+
+    test('fromJson parses labels and settings', () {
+      final data = FullBackupData.fromJson({
+        'labels': ['Casa', 'Lavoro'],
+        'settings': {'themeMode': 'dark'},
+      });
+      expect(data.labels, ['Casa', 'Lavoro']);
+      expect(data.hasSettings, isTrue);
     });
 
     test('fromJson throws on a malformed section', () {
@@ -165,6 +186,32 @@ void main() {
 
       expect(container.read(tasksProvider).single.id, existing.id);
     });
+
+    test('adds the backup labels to the existing ones', () async {
+      await container.read(labelsProvider.notifier).add('Esistente');
+      await container
+          .read(backupRestorerProvider)
+          .apply(const FullBackupData(labels: ['Casa', 'Esistente']));
+      expect(
+        container.read(labelsProvider).map((l) => l.name),
+        unorderedEquals(['Esistente', 'Casa']),
+      );
+      expect(await docCount('labels'), 2);
+    });
+
+    test('applies the settings only when asked', () async {
+      const data = FullBackupData(
+        settings: {'calendarView': 'week', 'defaultAlertMinutes': 480},
+      );
+      final restorer = container.read(backupRestorerProvider);
+
+      await restorer.apply(data);
+      expect(container.read(calendarViewModeProvider), CalendarViewMode.month);
+
+      await restorer.apply(data, restoreSettings: true);
+      expect(container.read(calendarViewModeProvider), CalendarViewMode.week);
+      expect(container.read(defaultAlertTimeProvider), 480);
+    });
   });
 
   group('BackupRestorer.readZip', () {
@@ -198,11 +245,19 @@ void main() {
         calendarData: {
           'calendar': [event.toJson()],
         },
+        labelsData: {
+          'labels': ['Casa'],
+        },
+        settingsData: {
+          'settings': {'themeMode': 'dark'},
+        },
       );
 
       final data = await container.read(backupRestorerProvider).readZip(path!);
       expect(data, isNotNull);
-      expect(data!.notes!.single.title, 'Spesa');
+      expect(data!.labels, ['Casa']);
+      expect(data.settings, {'themeMode': 'dark'});
+      expect(data.notes!.single.title, 'Spesa');
       expect(data.tasks!.single.title, 'Chiamare');
       expect(data.taskLists!.single.name, 'Lavoro');
       expect(data.events!.single.startTime, event.startTime);

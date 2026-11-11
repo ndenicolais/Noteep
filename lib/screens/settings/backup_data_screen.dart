@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../l10n/l10n.dart';
 import '../../providers/settings/backup_provider.dart';
+import '../../providers/settings/backup_restore.dart' show FullBackupData;
 import '../../providers/settings/data_actions.dart';
 import '../../theme/app_spacing.dart';
 import '../../utils/backup_service.dart' show BackupFrequency;
@@ -23,6 +24,7 @@ import 'settings_backup_section.dart';
 import 'settings_backup_sheets.dart';
 import 'settings_calendar_data_section.dart';
 import 'settings_global_backup_section.dart';
+import 'restore_backup_dialog.dart';
 import 'settings_notes_data_section.dart';
 import 'settings_tasks_data_section.dart';
 
@@ -179,13 +181,35 @@ class _BackupDataScreenState extends ConsumerState<BackupDataScreen> {
     buildData: _actions.fullBackupExport,
   );
 
-  Future<void> _importFullBackup(BuildContext context) => _importJson(
-    context,
-    confirmTitle: context.l10n.settingsImportBackupTitle,
-    confirmMessage: context.l10n.settingsReplaceAllConfirm,
-    successMessage: context.l10n.settingsBackupImported,
-    importData: _actions.importFullBackup,
-  );
+  /// Unlike the per-section imports, the file is picked and parsed before
+  /// confirming, so the dialog can offer to restore the preferences only
+  /// when the backup has them.
+  Future<void> _importFullBackup(BuildContext context) async {
+    final decoded = await DataExportService.pickAndDecodeJson();
+    if (decoded == null || !context.mounted) return;
+
+    final FullBackupData data;
+    try {
+      data = _actions.parseFullBackup(decoded);
+    } catch (e) {
+      _showSnack(context, context.l10n.settingsImportError('$e'), seconds: 4);
+      return;
+    }
+
+    final restoreSettings = await showRestoreBackupDialog(
+      context,
+      title: context.l10n.settingsImportBackupTitle,
+      confirmLabel: context.l10n.settingsImport,
+      offerSettings: data.hasSettings,
+    );
+    if (restoreSettings == null || !context.mounted) return;
+
+    notifyOnError(
+      _actions.importFullBackup(data, restoreSettings: restoreSettings),
+      context,
+    );
+    _showSnack(context, context.l10n.settingsBackupImported);
+  }
 
   void _confirmClearAll(BuildContext context) => _confirmClear(
     context,

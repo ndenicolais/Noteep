@@ -2924,6 +2924,18 @@ abstract class AppLocalizations {
   /// **'I dati attuali (note, task ed eventi) verranno sostituiti con quelli del backup. Continuare?'**
   String get settingsReplaceAllConfirm;
 
+  /// No description provided for @settingsRestoreSettingsToo.
+  ///
+  /// In it, this message translates to:
+  /// **'Ripristina anche le impostazioni'**
+  String get settingsRestoreSettingsToo;
+
+  /// No description provided for @settingsRestoreSettingsTooSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Tema, lingua, schermata iniziale, viste e preferenze di calendario, attività e note'**
+  String get settingsRestoreSettingsTooSubtitle;
+
   /// No description provided for @settingsBackupReadFailed.
   ///
   /// In it, this message translates to:
@@ -3529,6 +3541,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Nella vista Programma del Calendario puoi scorrere liberamente verso i mesi passati e futuri, senza più il limite dei prossimi tre mesi.'**
   String get changelog_v2_0_0_bullet_71;
+
+  /// No description provided for @changelog_v2_0_0_bullet_72.
+  ///
+  /// In it, this message translates to:
+  /// **'Il backup completo ora salva anche le etichette e le tue impostazioni (tema, lingua, viste, orario delle notifiche e altre preferenze): al ripristino puoi scegliere se recuperare anche le impostazioni.'**
+  String get changelog_v2_0_0_bullet_72;
 
   /// No description provided for @infoPrivacyOpen.
   ///

@@ -1559,6 +1559,13 @@ class AppLocalizationsIt extends AppLocalizations {
       'I dati attuali (note, task ed eventi) verranno sostituiti con quelli del backup. Continuare?';
 
   @override
+  String get settingsRestoreSettingsToo => 'Ripristina anche le impostazioni';
+
+  @override
+  String get settingsRestoreSettingsTooSubtitle =>
+      'Tema, lingua, schermata iniziale, viste e preferenze di calendario, attività e note';
+
+  @override
   String get settingsBackupReadFailed => 'Impossibile leggere il backup.';
 
   @override
@@ -1955,6 +1962,10 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_71 =>
       'Nella vista Programma del Calendario puoi scorrere liberamente verso i mesi passati e futuri, senza più il limite dei prossimi tre mesi.';
+
+  @override
+  String get changelog_v2_0_0_bullet_72 =>
+      'Il backup completo ora salva anche le etichette e le tue impostazioni (tema, lingua, viste, orario delle notifiche e altre preferenze): al ripristino puoi scegliere se recuperare anche le impostazioni.';
 
   @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';

@@ -18,6 +18,7 @@ import '../../theme/app_spacing.dart';
 import '../../utils/backup_service.dart' show BackupFrequency, BackupService;
 import '../../widgets/shared/app_dialogs.dart';
 import '../../widgets/shared/error_feedback.dart';
+import 'restore_backup_dialog.dart';
 
 /// Bottom sheet to pick the automatic backup frequency.
 void showBackupFrequencySheet(
@@ -87,32 +88,37 @@ void showBackupFrequencySheet(
   );
 }
 
-/// Asks for confirmation, then replaces all data with the zip backup at
-/// [path]. [context] must outlive the backups sheet (the settings screen).
+/// Reads the zip backup at [path], asks for confirmation (offering to
+/// restore the preferences too, if the backup has them), then replaces all
+/// data. [context] must outlive the backups sheet (the settings screen).
 Future<void> _restoreBackup(
   BuildContext context,
   WidgetRef ref,
   String path,
 ) async {
-  final confirmed = await showAppConfirmDialog(
-    context,
-    title: context.l10n.settingsRestoreBackup,
-    message: context.l10n.settingsReplaceAllConfirm,
-    confirmLabel: context.l10n.commonRestore,
-  );
-  if (!confirmed || !context.mounted) return;
-
   final restorer = ref.read(backupRestorerProvider);
   final data = await restorer.readZip(path);
   if (!context.mounted) return;
-  final messenger = ScaffoldMessenger.of(context);
   if (data == null) {
-    messenger.showSnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(context.l10n.settingsBackupReadFailed)),
     );
     return;
   }
-  notifyOnError(restorer.apply(data), context);
+
+  final restoreSettings = await showRestoreBackupDialog(
+    context,
+    title: context.l10n.settingsRestoreBackup,
+    confirmLabel: context.l10n.commonRestore,
+    offerSettings: data.hasSettings,
+  );
+  if (restoreSettings == null || !context.mounted) return;
+
+  final messenger = ScaffoldMessenger.of(context);
+  notifyOnError(
+    restorer.apply(data, restoreSettings: restoreSettings),
+    context,
+  );
   messenger.showSnackBar(
     SnackBar(content: Text(context.l10n.settingsBackupRestored)),
   );

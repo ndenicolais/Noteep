@@ -103,6 +103,33 @@ void main() {
       );
     });
 
+    test('round-trips the optional labels and settings files', () async {
+      final path = await BackupService.createBackup(
+        notesData: {'notes': <Object>[]},
+        tasksData: {'tasks': <Object>[]},
+        calendarData: {'calendar': <Object>[]},
+        labelsData: {
+          'labels': ['Casa'],
+        },
+        settingsData: {
+          'settings': {'themeMode': 'dark'},
+        },
+      );
+      final restored = await BackupService.restoreBackup(path!);
+      expect(restored!['labels'], {
+        'labels': ['Casa'],
+      });
+      expect(restored['settings'], {
+        'settings': {'themeMode': 'dark'},
+      });
+
+      // Backups made by older versions have neither file.
+      final old = await backupPath();
+      final oldRestored = await BackupService.restoreBackup(old);
+      expect(oldRestored!.containsKey('labels'), isFalse);
+      expect(oldRestored.containsKey('settings'), isFalse);
+    });
+
     test('returns null when the zip lacks one of the data files', () async {
       final dir = await BackupService.getBackupDirectory();
       final archive =

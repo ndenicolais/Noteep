@@ -38,6 +38,8 @@ class BackupService {
     required Map<String, dynamic> notesData,
     required Map<String, dynamic> tasksData,
     required Map<String, dynamic> calendarData,
+    Map<String, dynamic>? labelsData,
+    Map<String, dynamic>? settingsData,
   }) async {
     try {
       final backupDir = await getBackupDirectory();
@@ -60,6 +62,16 @@ class BackupService {
         await notesFile.writeAsString(jsonEncode(notesData));
         await tasksFile.writeAsString(jsonEncode(tasksData));
         await calendarFile.writeAsString(jsonEncode(calendarData));
+        if (labelsData != null) {
+          await File(
+            '${tempDir.path}/labels.json',
+          ).writeAsString(jsonEncode(labelsData));
+        }
+        if (settingsData != null) {
+          await File(
+            '${tempDir.path}/settings.json',
+          ).writeAsString(jsonEncode(settingsData));
+        }
 
         // Create metadata
         final metadata = {
@@ -125,11 +137,27 @@ class BackupService {
         final notes = jsonDecode(await notesFile.readAsString());
         final tasks = jsonDecode(await tasksFile.readAsString());
         final calendar = jsonDecode(await calendarFile.readAsString());
+        // Optional: missing from backups made by older versions.
+        Future<Object?> optional(String name) async {
+          final file = File('${extractDir.path}/$name');
+          return file.existsSync()
+              ? jsonDecode(await file.readAsString())
+              : null;
+        }
+
+        final labels = await optional('labels.json');
+        final settings = await optional('settings.json');
 
         // Clean up
         extractDir.deleteSync(recursive: true);
 
-        return {'notes': notes, 'tasks': tasks, 'calendar': calendar};
+        return {
+          'notes': notes,
+          'tasks': tasks,
+          'calendar': calendar,
+          if (labels != null) 'labels': labels,
+          if (settings != null) 'settings': settings,
+        };
       } catch (e) {
         extractDir.deleteSync(recursive: true);
         rethrow;

@@ -2,6 +2,7 @@
 // Licensed under a source-available, non-commercial license. See LICENSE.
 
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
+import 'package:flutter/material.dart' show ThemeMode;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noteep/core/constants/app_version.dart';
@@ -10,9 +11,13 @@ import 'package:noteep/models/note_model.dart';
 import 'package:noteep/models/task_list_model.dart';
 import 'package:noteep/models/task_model.dart';
 import 'package:noteep/providers/calendar_provider.dart';
+import 'package:noteep/providers/core_providers.dart';
+import 'package:noteep/providers/labels_provider.dart';
 import 'package:noteep/providers/notes_provider.dart';
 import 'package:noteep/providers/settings/data_actions.dart';
+import 'package:noteep/providers/settings/theme_provider.dart';
 import 'package:noteep/providers/tasks_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../helpers/test_container.dart';
 
 void main() {
@@ -20,10 +25,15 @@ void main() {
   late ProviderContainer container;
   late DataActions actions;
 
-  setUp(() {
+  setUp(() async {
     firestore = FakeFirebaseFirestore();
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
     container = ProviderContainer(
-      overrides: firestoreOverrides(firestore, uid: 'u'),
+      overrides: [
+        ...firestoreOverrides(firestore, uid: 'u'),
+        sharedPreferencesProvider.overrideWithValue(prefs),
+      ],
     );
     actions = container.read(dataActionsProvider);
   });
@@ -67,7 +77,14 @@ void main() {
       expect(full['version'], appVersion);
       expect(
         full.keys,
-        containsAll(['notes', 'tasks', 'taskLists', 'calendar']),
+        containsAll([
+          'notes',
+          'tasks',
+          'taskLists',
+          'calendar',
+          'labels',
+          'settings',
+        ]),
       );
       expect(DateTime.tryParse(full['exportedAt'] as String), isNotNull);
     });
@@ -80,12 +97,34 @@ void main() {
       await actions.clearAll();
       expect(container.read(notesProvider), isEmpty);
 
-      await actions.importFullBackup(exported);
+      await actions.importFullBackup(actions.parseFullBackup(exported));
       expect(container.read(notesProvider).single.id, note.id);
       expect(container.read(tasksProvider).single.id, task.id);
       expect(container.read(taskListsProvider).single.id, list.id);
       expect(container.read(calendarProvider).single.id, event.id);
     });
+
+    test(
+      'full backup carries labels and settings, restored on request',
+      () async {
+        await container.read(labelsProvider.notifier).add('Casa');
+        container.read(themeModeProvider.notifier).set(ThemeMode.dark);
+        final exported = actions.fullBackupExport();
+        expect(exported['labels'], ['Casa']);
+        expect((exported['settings'] as Map)['themeMode'], 'dark');
+
+        await container.read(labelsProvider.notifier).delete('Casa');
+        container.read(themeModeProvider.notifier).set(ThemeMode.light);
+        final data = actions.parseFullBackup(exported);
+
+        await actions.importFullBackup(data);
+        expect(container.read(labelsProvider).map((l) => l.name), ['Casa']);
+        expect(container.read(themeModeProvider), ThemeMode.light);
+
+        await actions.importFullBackup(data, restoreSettings: true);
+        expect(container.read(themeModeProvider), ThemeMode.dark);
+      },
+    );
 
     test('importNotes reads only the notes from a full backup', () async {
       await seed();

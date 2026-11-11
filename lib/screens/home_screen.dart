@@ -15,11 +15,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/constants/app_version.dart';
 import '../models/note_model.dart';
 import '../models/task_model.dart';
-import '../providers/calendar_provider.dart';
 import '../providers/core_providers.dart';
 import '../providers/notes_provider.dart';
-import '../providers/tasks_provider.dart';
 import '../providers/settings/backup_provider.dart';
+import '../providers/settings/data_actions.dart';
 import '../providers/settings/ui_provider.dart';
 import '../utils/backup_service.dart';
 import '../utils/changelog_service.dart';
@@ -84,18 +83,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     if (!settings.enabled) return;
     if (!await BackupService.isBackupDue(settings.frequency)) return;
 
+    final sections = ref.read(dataActionsProvider).zipBackupSections();
     final path = await BackupService.createBackup(
-      notesData: {
-        'notes': ref.read(notesProvider).map((n) => n.toJson()).toList(),
-      },
-      tasksData: {
-        'tasks': ref.read(tasksProvider).map((t) => t.toJson()).toList(),
-        'taskLists':
-            ref.read(taskListsProvider).map((l) => l.toJson()).toList(),
-      },
-      calendarData: {
-        'calendar': ref.read(calendarProvider).map((e) => e.toJson()).toList(),
-      },
+      notesData: sections.notes,
+      tasksData: sections.tasks,
+      calendarData: sections.calendar,
+      labelsData: sections.labels,
+      settingsData: sections.settings,
     );
     if (path != null) {
       await BackupService.setLastBackupTime();
