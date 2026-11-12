@@ -38,7 +38,7 @@ Synced to your account with Firebase, with backups, PDF export, Home screen widg
 |---|---|
 | 📝 **Notes** | Text notes with Markdown preview and checklists, each with its own font and colors, in a grid or a list |
 | 🎙️ **Audio notes** | Record voice notes and play them back inside a note |
-| ✅ **Tasks** | Custom lists, subtasks, due dates, recurrence, starred and pinned tasks |
+| ✅ **Tasks** | Custom lists, subtasks, due dates with an optional time, recurrence, starred and pinned tasks, grouped by day and opened in a detail view |
 | 📅 **Calendar** | Day, week, month, year and schedule views, with recurring events, birthdays and name days, locations that open in Maps, color-coded entries (or a color of your choice) and your tasks' due dates |
 | ⏰ **Notifications** | Pick a day and, if you want, a time: tasks and events with a time notify at that time; all-day events can alert the day before and on the day (also when recurring); notes have their own reminder |
 | 🏷️ **Labels** | Organize notes with labels and open all the notes of a label |
@@ -50,6 +50,7 @@ Synced to your account with Firebase, with backups, PDF export, Home screen widg
 | ☁️ **Sync** | Notes, tasks, lists, labels and events are stored on Cloud Firestore, and changes made offline sync later |
 | 🌍 **Multilingual** | Italian and English |
 | 🌗 **Theme** | System / Light / Dark theme |
+| ⚙️ **Settings** | Choose the section the app opens on and the time of all-day, birthday and name day alerts |
 
 ---
 
@@ -86,6 +87,7 @@ Noteep is distributed as an APK on [GitHub Releases](https://github.com/ndenicol
 | Audio | record, just_audio |
 | Charts | fl_chart |
 | Home screen widgets | home_widget + native Kotlin widgets |
+| Address suggestions | OpenStreetMap Nominatim (http) |
 | Export | pdf, printing, share_plus, archive |
 
 <details>
