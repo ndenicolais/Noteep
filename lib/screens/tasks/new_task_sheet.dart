@@ -15,7 +15,7 @@ import '../../theme/app_spacing.dart';
 import '../../widgets/shared/app_dialogs.dart';
 
 /// What the new-task sheet collected. [due] carries a time only when one
-/// was picked: that time is also the task's reminder.
+/// was picked: the task notifies at that time.
 typedef NewTaskDraft =
     ({String title, String description, DateTime? due, bool starred});
 

@@ -28,10 +28,10 @@ class CalendarEventModel {
   // If set, the recurrence stops producing occurrences after this date
   // (inclusive) — e.g. an imported ICS RRULE with UNTIL= or COUNT=.
   DateTime? recurrenceEndDate;
-  DateTime? reminder;
-  // Recurring alerts, repeated on every occurrence: on the day itself and/or
-  // the day before, at the event time (09:00 for all-day events). See
-  // `utils/event_alerts.dart`.
+  // Alerts of all-day events, repeated on every occurrence: on the day
+  // itself and/or the day before, at the Settings time (09:00 by default).
+  // Timed events always alert at their start time and ignore these flags.
+  // See `utils/event_alerts.dart`.
   bool alertSameDay;
   bool alertDayBefore;
   List<String> tags;
@@ -52,7 +52,6 @@ class CalendarEventModel {
     this.isArchived = false,
     this.recurrence = RecurrenceType.none,
     this.recurrenceEndDate,
-    this.reminder,
     this.alertSameDay = false,
     this.alertDayBefore = false,
     List<String>? tags,
@@ -66,7 +65,14 @@ class CalendarEventModel {
 
   bool get hasEndTime => !isAllDay && endTime.isAfter(startTime);
 
-  bool get hasAlerts => alertSameDay || alertDayBefore;
+  /// Whether an occurrence alerts on its own day: always for a timed event
+  /// (at its start time), only when chosen for an all-day one.
+  bool get notifiesSameDay => !isAllDay || alertSameDay;
+
+  /// Whether an occurrence alerts the day before (all-day events only).
+  bool get notifiesDayBefore => isAllDay && alertDayBefore;
+
+  bool get hasAlerts => notifiesSameDay || notifiesDayBefore;
 
   /// Whether an occurrence of this event (recurrence and its end included)
   /// falls on [day].
@@ -109,8 +115,6 @@ class CalendarEventModel {
     RecurrenceType? recurrence,
     DateTime? recurrenceEndDate,
     bool clearRecurrenceEndDate = false,
-    DateTime? reminder,
-    bool clearReminder = false,
     bool? alertSameDay,
     bool? alertDayBefore,
     List<String>? tags,
@@ -134,7 +138,6 @@ class CalendarEventModel {
           clearRecurrenceEndDate
               ? null
               : (recurrenceEndDate ?? this.recurrenceEndDate),
-      reminder: clearReminder ? null : (reminder ?? this.reminder),
       alertSameDay: alertSameDay ?? this.alertSameDay,
       alertDayBefore: alertDayBefore ?? this.alertDayBefore,
       tags: tags ?? this.tags,
@@ -158,7 +161,6 @@ class CalendarEventModel {
     'recurrence': recurrence.toShortString(),
     if (recurrenceEndDate != null)
       'recurrenceEndDate': recurrenceEndDate!.toIso8601String(),
-    if (reminder != null) 'reminder': reminder!.toIso8601String(),
     'alertSameDay': alertSameDay,
     'alertDayBefore': alertDayBefore,
     'tags': tags,
@@ -186,10 +188,6 @@ class CalendarEventModel {
             json['recurrenceEndDate'] != null
                 ? DateTime.parse(json['recurrenceEndDate'] as String)
                 : null,
-        reminder:
-            json['reminder'] != null
-                ? DateTime.parse(json['reminder'] as String)
-                : null,
         alertSameDay: json['alertSameDay'] as bool? ?? false,
         alertDayBefore: json['alertDayBefore'] as bool? ?? false,
         tags:
@@ -206,21 +204,20 @@ class CalendarEventModel {
       );
 }
 
-/// Read-only calendar entry built from a [TaskModel] with a due date or a
-/// reminder, so tasks can be listed in the calendar views next to events.
-/// It is placed at the due time when the due date has one, else at the
-/// reminder time when the reminder falls on the due day (or there is no due
-/// date), else as an all-day entry on the due date. Never
-/// persisted: tap opens the task view (see `AppNav.openCalendarItem`).
+/// Read-only calendar entry built from a [TaskModel] with a due date, so
+/// tasks can be listed in the calendar views next to events. It is placed
+/// at the due time when the due date has one, else as an all-day entry on
+/// the due date. Never persisted: tap opens the task view (see
+/// `AppNav.openCalendarItem`).
 class TaskCalendarEvent extends CalendarEventModel {
   TaskCalendarEvent(this.task)
     : super(
         id: 'task_${task.id}',
         title: task.title,
         description: task.description,
-        startTime: _start(task),
-        endTime: _start(task),
-        isAllDay: !_isTimed(task),
+        startTime: task.dueDate!,
+        endTime: task.dueDate!,
+        isAllDay: !task.hasDueTime,
         recurrence: task.recurrence,
         tags: task.tags,
         createdAt: task.createdAt,
@@ -230,22 +227,5 @@ class TaskCalendarEvent extends CalendarEventModel {
   final TaskModel task;
 
   /// Whether [task] can be shown in the calendar at all.
-  static bool isShown(TaskModel task) =>
-      task.dueDate != null || task.reminder != null;
-
-  static bool _isTimed(TaskModel task) {
-    if (task.hasDueTime) return true;
-    final reminder = task.reminder;
-    if (reminder == null) return false;
-    final due = task.dueDate;
-    return due == null ||
-        (due.year == reminder.year &&
-            due.month == reminder.month &&
-            due.day == reminder.day);
-  }
-
-  static DateTime _start(TaskModel task) {
-    if (task.hasDueTime) return task.dueDate!;
-    return _isTimed(task) ? task.reminder! : task.dueDate!;
-  }
+  static bool isShown(TaskModel task) => task.dueDate != null;
 }

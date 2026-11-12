@@ -2,18 +2,14 @@
 // Licensed under a source-available, non-commercial license. See LICENSE.
 
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noteep/models/calendar_model.dart';
 import 'package:noteep/models/note_model.dart';
 import 'package:noteep/models/task_model.dart';
-import 'package:noteep/providers/calendar_provider.dart';
 import 'package:noteep/providers/core_providers.dart';
 import 'package:noteep/providers/reminders_actions.dart';
-import 'package:noteep/providers/tasks_provider.dart';
 import 'package:noteep/utils/event_alerts.dart';
 import 'package:noteep/utils/notification_service.dart';
-import 'package:noteep/utils/recurrence.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../helpers/test_container.dart';
 
@@ -44,16 +40,7 @@ class _FakeNotifications implements NotificationService {
     bool askPermission = true,
   }) async {
     askedPermission.add(askPermission);
-    if (task.reminder != null) scheduled.add('task:${task.id}');
-  }
-
-  @override
-  Future<void> scheduleEventReminder(
-    CalendarEventModel event, {
-    bool askPermission = true,
-  }) async {
-    askedPermission.add(askPermission);
-    if (event.reminder != null) scheduled.add('event:${event.id}');
+    if (task.hasDueTime) scheduled.add('task:${task.id}');
   }
 
   @override
@@ -111,26 +98,39 @@ void main() {
     return container.read(remindersActionsProvider);
   }
 
-  test('resync reschedules the reminders of the loaded account', () async {
+  test('resync reschedules the notifications of the loaded account', () async {
+    final at = DateTime(later.year, later.month, later.day, 10, 30);
     final note = NoteModel(title: 'Nota', reminder: later);
     final trashed = NoteModel(
       title: 'Cestinata',
       reminder: later,
       deletedAt: DateTime.now(),
     );
-    final task = TaskModel(title: 'Task', reminder: later);
-    final done = TaskModel(title: 'Fatto', reminder: later, isCompleted: true);
+    final task = TaskModel(title: 'Task', dueDate: at);
+    final dayOnly = TaskModel(
+      title: 'Solo data',
+      dueDate: DateTime(later.year, later.month, later.day),
+    );
+    final done = TaskModel(title: 'Fatto', dueDate: at, isCompleted: true);
     final event = CalendarEventModel(
       title: 'Evento',
-      startTime: later,
-      endTime: later.add(const Duration(hours: 1)),
-      reminder: later,
+      startTime: at,
+      endTime: at.add(const Duration(hours: 1)),
+    );
+    final allDay = CalendarEventModel(
+      title: 'Ferie',
+      startTime: DateTime(later.year, later.month, later.day),
+      endTime: DateTime(later.year, later.month, later.day + 1),
+      isAllDay: true,
     );
     await put('notes', note.id, note.toJson());
     await put('notes', trashed.id, trashed.toJson());
-    await put('tasks', task.id, task.toJson());
-    await put('tasks', done.id, done.toJson());
-    await put('calendar_events', event.id, event.toJson());
+    for (final t in [task, dayOnly, done]) {
+      await put('tasks', t.id, t.toJson());
+    }
+    for (final e in [event, allDay]) {
+      await put('calendar_events', e.id, e.toJson());
+    }
 
     await actions().resync();
 
@@ -140,7 +140,7 @@ void main() {
       unorderedEquals([
         'note:${note.id}',
         'task:${task.id}',
-        'event:${event.id}',
+        'alerts:${event.id}',
       ]),
     );
     expect(notifications.askedPermission, everyElement(isFalse));
@@ -163,91 +163,34 @@ void main() {
     expect(notifications.cancelAllCalls, 1);
   });
 
-  group('migrateTimedReminders', () {
-    late SharedPreferences prefs;
+  group('legacy task reminders', () {
+    Map<String, dynamic> legacy({DateTime? due, required DateTime reminder}) =>
+        {
+          ...TaskModel(title: 'Old', dueDate: due).toJson(),
+          'reminder': reminder.toIso8601String(),
+        };
 
-    setUp(() async {
-      SharedPreferences.setMockInitialValues({});
-      prefs = await SharedPreferences.getInstance();
+    test('a reminder without a due date becomes the due date', () {
+      final reminder = DateTime(2026, 12, 24, 18, 30);
+      final task = TaskModel.fromJson(legacy(reminder: reminder));
+      expect(task.dueDate, reminder);
+      expect(task.hasDueTime, isTrue);
     });
 
-    ProviderContainer migrationContainer() => createTestContainer(
-      firestore,
-      overrides: [
-        notificationServiceProvider.overrideWithValue(notifications),
-        sharedPreferencesProvider.overrideWithValue(prefs),
-      ],
-    );
+    test('a reminder on a date-only due day gives it its time', () {
+      final reminder = DateTime(2026, 12, 24, 18, 30);
+      final task = TaskModel.fromJson(
+        legacy(due: DateTime(2026, 12, 24), reminder: reminder),
+      );
+      expect(task.dueDate, reminder);
+    });
 
-    test('gives future timed tasks and events an alert, once', () async {
-      final past = DateTime.now().subtract(const Duration(days: 2));
-      final timedTask = TaskModel(title: 'Timed', dueDate: later);
-      final dayOnly = TaskModel(
-        title: 'Day only',
-        dueDate: DateTime(later.year, later.month, later.day),
+    test('a reminder on another day leaves the due date alone', () {
+      final due = DateTime(2026, 12, 24);
+      final task = TaskModel.fromJson(
+        legacy(due: due, reminder: DateTime(2026, 12, 23, 18)),
       );
-      final pastTask = TaskModel(title: 'Past', dueDate: past);
-      final custom = TaskModel(
-        title: 'Custom',
-        dueDate: later,
-        reminder: later.subtract(const Duration(hours: 1)),
-      );
-      final timedEvent = CalendarEventModel(
-        title: 'Meeting',
-        startTime: later,
-        endTime: later,
-      );
-      final allDay = CalendarEventModel(
-        title: 'Holiday',
-        startTime: later,
-        endTime: later,
-        isAllDay: true,
-      );
-      final weeklyPast = CalendarEventModel(
-        title: 'Weekly',
-        startTime: past,
-        endTime: past,
-        recurrence: RecurrenceType.weekly,
-      );
-      for (final t in [timedTask, dayOnly, pastTask, custom]) {
-        await put('tasks', t.id, t.toJson());
-      }
-      for (final e in [timedEvent, allDay, weeklyPast]) {
-        await put('calendar_events', e.id, e.toJson());
-      }
-
-      final container = migrationContainer();
-      await container
-          .read(remindersActionsProvider)
-          .migrateTimedReminders('test-uid');
-
-      final tasks = {for (final t in container.read(tasksProvider)) t.title: t};
-      expect(tasks['Timed']!.reminder, later);
-      expect(tasks['Day only']!.reminder, isNull);
-      expect(tasks['Past']!.reminder, isNull);
-      expect(tasks['Custom']!.reminder, custom.reminder);
-      final events = {
-        for (final e in container.read(calendarProvider)) e.title: e,
-      };
-      expect(events['Meeting']!.alertSameDay, isTrue);
-      expect(events['Holiday']!.alertSameDay, isFalse);
-      expect(events['Weekly']!.alertSameDay, isTrue);
-      expect(prefs.getBool('timed_reminders_migrated_test-uid'), isTrue);
-
-      // A reminder removed afterwards is not put back.
-      await container
-          .read(tasksProvider.notifier)
-          .updateTask(tasks['Timed']!.copyWith(clearReminder: true));
-      await container
-          .read(remindersActionsProvider)
-          .migrateTimedReminders('test-uid');
-      expect(
-        container
-            .read(tasksProvider)
-            .firstWhere((t) => t.title == 'Timed')
-            .reminder,
-        isNull,
-      );
+      expect(task.dueDate, due);
     });
   });
 }

@@ -15,7 +15,6 @@ import 'package:noteep/screens/export_screen.dart';
 import 'package:noteep/screens/info_screen.dart';
 import 'package:noteep/screens/labels_screen.dart';
 import 'package:noteep/screens/note_editor/note_editor_screen.dart';
-import 'package:noteep/screens/reminders_screen.dart';
 import 'package:noteep/screens/settings/settings_screen.dart';
 import 'package:noteep/screens/statistics/statistics_screen.dart';
 import 'package:noteep/screens/task_editor/task_details_screen.dart';
@@ -58,7 +57,6 @@ void main() {
   testWidgets('maps every section route to its screen', (tester) async {
     final expected = <String, Type>{
       AppRoutes.tasks: TasksScreen,
-      AppRoutes.reminders: RemindersScreen,
       AppRoutes.calendar: CalendarWorkspaceView,
       AppRoutes.labels: LabelsScreen,
       AppRoutes.archive: ArchiveScreen,

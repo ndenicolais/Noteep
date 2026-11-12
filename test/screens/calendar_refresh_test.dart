@@ -136,14 +136,13 @@ void main() {
   final now = DateTime.now();
   final today = DateTime(now.year, now.month, now.day);
 
-  testWidgets('a task with a reminder stays in the task list', (tester) async {
+  testWidgets('a task with a due time stays in the task list', (tester) async {
     await pumpScreen(
       tester,
       const TasksScreen(),
       task: TaskModel(
         title: 'Pay water',
-        dueDate: today,
-        reminder: today.add(const Duration(hours: 23)),
+        dueDate: today.add(const Duration(hours: 23)),
       ),
     );
     expect(find.text('Pay water'), findsOneWidget);
@@ -161,23 +160,6 @@ void main() {
     expect(find.text('Pay water'), findsNothing);
     expect(find.widgetWithText(TextField, 'gas'), findsOneWidget);
   });
-
-  testWidgets(
-    'a task with a reminder shows its reminder time in the schedule',
-    (tester) async {
-      await pumpScreen(
-        tester,
-        const CalendarWorkspaceView(),
-        prefs: {'calendar_view_mode': 'schedule'},
-        task: TaskModel(
-          title: 'Pay water',
-          reminder: today.add(const Duration(hours: 23, minutes: 30)),
-        ),
-      );
-      expect(find.text('Pay water'), findsOneWidget);
-      expect(find.text('23:30'), findsOneWidget);
-    },
-  );
 
   testWidgets('a due date with a time (Google Tasks import) keeps its time', (
     tester,

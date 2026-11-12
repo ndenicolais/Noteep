@@ -139,14 +139,13 @@ class NotificationService {
     );
   }
 
-  /// Schedules the reminder of [task] at [TaskModel.reminder] (no-op if it is
-  /// null or in the past).
+  /// Schedules the notification of [task] at its due time (no-op if the due
+  /// date has no time, or it is in the past).
   Future<void> scheduleTaskReminder(
     TaskModel task, {
     bool askPermission = true,
   }) async {
-    final reminder = task.reminder;
-    if (reminder == null) return;
+    if (!task.hasDueTime) return;
     final l10n = currentL10n();
     await scheduleNotification(
       id: idForTask(task.id),
@@ -158,41 +157,17 @@ class NotificationService {
           task.description.isEmpty
               ? l10n.taskEditorReminderNotificationBody
               : _preview(task.description),
-      scheduledAt: reminder,
+      scheduledAt: task.dueDate!,
       target: NotificationTarget.task(task.id),
       askPermission: askPermission,
     );
   }
 
-  /// Schedules the reminder of [event] at [CalendarEventModel.reminder]
-  /// (no-op if it is null or in the past).
-  Future<void> scheduleEventReminder(
-    CalendarEventModel event, {
-    bool askPermission = true,
-  }) async {
-    final reminder = event.reminder;
-    if (reminder == null) return;
-    final l10n = currentL10n();
-    await scheduleNotification(
-      id: idForEvent(event.id),
-      title:
-          event.title.isEmpty
-              ? l10n.calendarReminderNotificationTitle
-              : event.title,
-      body:
-          event.description.isEmpty
-              ? l10n.calendarReminderNotificationBody
-              : _preview(event.description),
-      scheduledAt: reminder,
-      target: NotificationTarget.event(event.id),
-      askPermission: askPermission,
-    );
-  }
-
-  /// Replaces the scheduled day-before / same-day alerts of [event] with
-  /// its [upcomingEventAlerts] (none if it has no alert, or is archived or
-  /// trashed). Each alert gets its own notification id; all-day events
-  /// alert at [allDayMinutes] (minutes after midnight, the Settings value).
+  /// Replaces the scheduled alerts of [event] with its [upcomingEventAlerts]
+  /// (at the start time for a timed event, on the chosen days for an all-day
+  /// one; none if it is archived or trashed). Each alert gets its own
+  /// notification id; all-day events alert at [allDayMinutes] (minutes after
+  /// midnight, the Settings value).
   Future<void> scheduleEventAlerts(
     CalendarEventModel event, {
     required int allDayMinutes,
@@ -259,15 +234,11 @@ class NotificationService {
   static int idForTask(String taskId) =>
       (taskId.hashCode.abs() % 100000) + 100000;
 
-  /// Unique int ID derived from a calendar event UUID (offset to avoid collisions).
-  static int idForEvent(String eventId) =>
-      (eventId.hashCode.abs() % 100000) + 200000;
-
   /// Alerts per event: one day-before and one same-day per occurrence.
   static const maxEventAlerts = maxAlertOccurrences * 2;
 
-  /// Id of the [index]-th recurring alert of a calendar event, in its own
-  /// range above the single reminders.
+  /// Id of the [index]-th alert of a calendar event, in its own range above
+  /// the note and task ones.
   static int idForEventAlert(String eventId, int index) =>
       1000000 + (eventId.hashCode.abs() % 100000) * maxEventAlerts + index;
 }

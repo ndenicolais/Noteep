@@ -159,26 +159,18 @@ class _CalendarEventDetailsScreenState
               icon: Icons.repeat,
               child: Text(event.recurrence.label(l10n)),
             ),
-          if (event.alertDayBefore)
+          if (event.notifiesDayBefore)
             DetailRow(
               icon: Icons.notifications_outlined,
               subtitle: l10n.calendarAlertAt(alertAt),
               child: Text(l10n.calendarAlertDayBefore),
             ),
-          if (event.alertSameDay)
+          // Always for a timed event: it alerts at its start.
+          if (event.notifiesSameDay)
             DetailRow(
               icon: Icons.notifications_active_outlined,
               subtitle: l10n.calendarAlertAt(alertAt),
               child: Text(l10n.calendarAlertSameDay),
-            ),
-          if (event.reminder != null)
-            DetailRow(
-              icon: Icons.alarm,
-              child: Text(
-                l10n.commonReminderScheduled(
-                  DateFormat('dd MMM, HH:mm').format(event.reminder!),
-                ),
-              ),
             ),
           if (event.description.isNotEmpty)
             DetailRow(

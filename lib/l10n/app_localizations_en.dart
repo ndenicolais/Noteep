@@ -324,7 +324,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get onboardingTasksBody =>
-      'Create task lists with subtasks, due dates and recurrences. Swipe a task right to complete it.';
+      'Create task lists with subtasks, dates and recurrences: add a time to get a notification. Swipe a task right to complete it.';
 
   @override
   String get onboardingCalendarTitle => 'Calendar';
@@ -334,11 +334,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Plan events with day, week, month, year and schedule views. Import and export your calendars in ICS format.';
 
   @override
-  String get onboardingRemindersTitle => 'Reminders and backups';
+  String get onboardingRemindersTitle => 'Notifications and backups';
 
   @override
   String get onboardingRemindersBody =>
-      'Set reminders for notes, tasks and events. Export your notes and create manual or automatic backups from Settings.';
+      'Add a time to tasks and events to get a notification, or a reminder to notes. Export your notes and create manual or automatic backups from Settings.';
 
   @override
   String get bootErrorTitle => 'Unable to start Noteep';
@@ -432,9 +432,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get navTasks => 'Tasks';
-
-  @override
-  String get navReminders => 'Reminders';
 
   @override
   String get navCalendar => 'Calendar';
@@ -894,10 +891,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get taskEditorPin => 'Pin to top';
 
   @override
-  String get taskEditorDueDate => 'Set due date';
-
-  @override
-  String get taskEditorReminder => 'Reminder';
+  String get taskEditorDueDate => 'Set date and time';
 
   @override
   String get taskEditorRecurrence => 'Set repeat';
@@ -1080,9 +1074,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calendarEventTrashed => 'Event moved to trash';
 
   @override
-  String get calendarReminder => 'Reminder';
-
-  @override
   String get calendarTitleHint => 'Title';
 
   @override
@@ -1090,10 +1081,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get calendarReminderNotificationTitle => 'Event reminder';
-
-  @override
-  String get calendarReminderNotificationBody =>
-      'You have a reminder for this event';
 
   @override
   String get eventRecurrenceNone => 'Does not repeat';
@@ -1109,31 +1096,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get eventRecurrenceYearly => 'Yearly';
-
-  @override
-  String get remindersUpcoming => 'Upcoming';
-
-  @override
-  String get remindersPast => 'Past';
-
-  @override
-  String get remindersEmpty => 'No reminders';
-
-  @override
-  String get remindersEmptyHint =>
-      'Add a reminder by opening\na note or a task.';
-
-  @override
-  String get remindersUntitledNote => 'Untitled note';
-
-  @override
-  String get remindersUntitledTask => 'Untitled task';
-
-  @override
-  String get remindersClearPast => 'Clear past';
-
-  @override
-  String get remindersPastCleared => 'Past reminders removed';
 
   @override
   String get archiveEmptyNotes => 'No archived notes';
@@ -1326,7 +1288,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get infoFeatureTasksText => 'Plan your to-dos and events day by day';
 
   @override
-  String get infoFeatureRemindersTitle => 'Reminders';
+  String get infoFeatureRemindersTitle => 'Notifications';
 
   @override
   String get infoFeatureRemindersText =>
@@ -1987,6 +1949,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_75 =>
       'When you create a new task you can now also set a date and time right away, add details and star it: with a time you get a reminder and the task shows up in the Calendar.';
+
+  @override
+  String get changelog_v2_0_0_bullet_76 =>
+      'Tasks and events are simpler: pick the day and, if you like, a time. With a time you get a notification at that time, without one you don\'t. All-day events alert on the day and/or the day before only if you choose so, at the time set in Settings. The separate reminder of tasks and events and the Reminders section are gone (notes keep their reminder).';
 
   @override
   String get infoPrivacyOpen => 'Privacy policy';

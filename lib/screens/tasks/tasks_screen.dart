@@ -61,21 +61,18 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
       starred: tabs.index == 1,
     );
     if (draft == null || !tabContext.mounted) return;
-    final due = draft.due;
     final task = TaskModel(
       title: draft.title,
       description: draft.description,
-      dueDate: due,
-      // A due time is also the reminder, like in Google Tasks (and the
-      // editor): it notifies and places the task at that time in Calendar.
-      reminder: due != null && (due.hour != 0 || due.minute != 0) ? due : null,
+      // A due time notifies and places the task at that time in Calendar.
+      dueDate: draft.due,
       listId: _currentList(tabs)?.id,
       isSpecial: draft.starred,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
     );
     notifyOnError(ref.read(tasksProvider.notifier).addTask(task), tabContext);
-    if (task.reminder != null) {
+    if (task.hasDueTime) {
       NotificationService.instance.scheduleTaskReminder(task).ignore();
     }
   }

@@ -144,7 +144,9 @@ class _TaskDetailsScreenState extends ConsumerState<TaskDetailsScreen> {
             ),
           if (task.dueDate != null)
             DetailRow(
-              icon: Icons.calendar_today_outlined,
+              // The alarm marks a due time, which notifies.
+              icon:
+                  task.hasDueTime ? Icons.alarm : Icons.calendar_today_outlined,
               child: Text(
                 DateFormat(
                   task.hasDueTime
@@ -157,15 +159,6 @@ class _TaskDetailsScreenState extends ConsumerState<TaskDetailsScreen> {
             DetailRow(
               icon: Icons.repeat,
               child: Text(recurrenceLabel(l10n, task.recurrence)),
-            ),
-          if (task.reminder != null)
-            DetailRow(
-              icon: Icons.alarm,
-              child: Text(
-                l10n.commonReminderScheduled(
-                  DateFormat('dd MMM, HH:mm').format(task.reminder!),
-                ),
-              ),
             ),
           if (task.listId != null)
             DetailRow(

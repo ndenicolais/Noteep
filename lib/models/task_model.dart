@@ -23,7 +23,6 @@ class TaskModel {
   bool isArchived;
   String? listId;
   RecurrenceType recurrence;
-  DateTime? reminder;
   List<String> tags;
   List<SubtaskModel> subtasks;
   final DateTime createdAt;
@@ -41,7 +40,6 @@ class TaskModel {
     this.isArchived = false,
     this.listId,
     this.recurrence = RecurrenceType.none,
-    this.reminder,
     List<String>? tags,
     List<SubtaskModel>? subtasks,
     DateTime? createdAt,
@@ -53,8 +51,9 @@ class TaskModel {
        createdAt = createdAt ?? DateTime.now(),
        updatedAt = updatedAt ?? DateTime.now();
 
-  /// Whether [dueDate] carries a time of day (e.g. tasks imported from
-  /// Google Tasks with a scheduled time); the date picker stores midnight.
+  /// Whether [dueDate] carries a time of day; the date picker stores
+  /// midnight when no time is picked. A due time is also when the task
+  /// notifies (see `NotificationService.scheduleTaskReminder`).
   bool get hasDueTime =>
       dueDate != null && (dueDate!.hour != 0 || dueDate!.minute != 0);
 
@@ -62,11 +61,10 @@ class TaskModel {
   /// to step from).
   bool get isRecurring => recurrence != RecurrenceType.none && dueDate != null;
 
-  /// This task moved on to its next occurrence: due date and reminder step
-  /// forward by one recurrence and the task is open again.
+  /// This task moved on to its next occurrence: the due date steps forward
+  /// by one recurrence and the task is open again.
   TaskModel nextOccurrence() => copyWith(
     dueDate: nextRecurrence(dueDate!, recurrence),
-    reminder: reminder == null ? null : nextRecurrence(reminder!, recurrence),
     isCompleted: false,
     updatedAt: DateTime.now(),
   );
@@ -83,8 +81,6 @@ class TaskModel {
     String? listId,
     bool clearListId = false,
     RecurrenceType? recurrence,
-    DateTime? reminder,
-    bool clearReminder = false,
     List<String>? tags,
     List<SubtaskModel>? subtasks,
     DateTime? updatedAt,
@@ -102,7 +98,6 @@ class TaskModel {
       isArchived: isArchived ?? this.isArchived,
       listId: clearListId ? null : (listId ?? this.listId),
       recurrence: recurrence ?? this.recurrence,
-      reminder: clearReminder ? null : (reminder ?? this.reminder),
       tags: tags ?? this.tags,
       subtasks: subtasks ?? this.subtasks,
       createdAt: createdAt,
@@ -122,7 +117,6 @@ class TaskModel {
     'isArchived': isArchived,
     if (listId != null) 'listId': listId,
     'recurrence': recurrence.toShortString(),
-    if (reminder != null) 'reminder': reminder!.toIso8601String(),
     'tags': tags,
     'subtasks': subtasks.map((s) => s.toJson()).toList(),
     'createdAt': createdAt.toIso8601String(),
@@ -130,15 +124,34 @@ class TaskModel {
     if (deletedAt != null) 'deletedAt': deletedAt!.toIso8601String(),
   };
 
+  /// The due date of [json]. Older data had a separate `reminder`: when
+  /// there is no due date, or a date-only one on the reminder's day, the
+  /// reminder becomes the due date, so the task keeps its day and time.
+  static DateTime? _dueDateFromJson(Map<String, dynamic> json) {
+    final due =
+        json['dueDate'] != null
+            ? DateTime.parse(json['dueDate'] as String)
+            : null;
+    final reminder =
+        json['reminder'] != null
+            ? DateTime.parse(json['reminder'] as String)
+            : null;
+    if (reminder == null) return due;
+    if (due == null) return reminder;
+    final dateOnly = due.hour == 0 && due.minute == 0;
+    final sameDay =
+        due.year == reminder.year &&
+        due.month == reminder.month &&
+        due.day == reminder.day;
+    return dateOnly && sameDay ? reminder : due;
+  }
+
   factory TaskModel.fromJson(Map<String, dynamic> json) => TaskModel(
     id: json['id'] as String?,
     title: json['title'] as String? ?? '',
     description: json['description'] as String? ?? '',
     isCompleted: json['isCompleted'] as bool? ?? false,
-    dueDate:
-        json['dueDate'] != null
-            ? DateTime.parse(json['dueDate'] as String)
-            : null,
+    dueDate: _dueDateFromJson(json),
     isPinned: json['isPinned'] as bool? ?? false,
     isSpecial: json['isSpecial'] as bool? ?? false,
     isArchived: json['isArchived'] as bool? ?? false,
@@ -146,10 +159,6 @@ class TaskModel {
     recurrence: recurrenceTypeFromString(
       json['recurrence'] as String? ?? 'none',
     ),
-    reminder:
-        json['reminder'] != null
-            ? DateTime.parse(json['reminder'] as String)
-            : null,
     tags:
         (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList() ??
         [],

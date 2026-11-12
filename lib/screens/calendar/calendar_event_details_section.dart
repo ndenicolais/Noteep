@@ -161,34 +161,38 @@ class CalendarEventDetailsSection extends StatelessWidget {
           subtitle: Text(event.recurrence.label(context.l10n)),
           onTap: () => _pickRecurrence(context),
         ),
-        const SizedBox(height: AppSpacing.sm),
-        Padding(
-          padding: const EdgeInsets.only(top: AppSpacing.sm),
-          child: Text(
-            context.l10n.calendarAlerts,
-            style: Theme.of(context).textTheme.titleSmall,
+        // A timed event always alerts at its start: the choice is only for
+        // all-day ones, which alert at the Settings time.
+        if (event.isAllDay) ...[
+          const SizedBox(height: AppSpacing.sm),
+          Padding(
+            padding: const EdgeInsets.only(top: AppSpacing.sm),
+            child: Text(
+              context.l10n.calendarAlerts,
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
           ),
-        ),
-        _Toggle(
-          icon: Icons.notifications_outlined,
-          title: context.l10n.calendarAlertDayBefore,
-          subtitle: _alertTimeLabel(context),
-          value: event.alertDayBefore,
-          onChanged: (v) => onChanged(event.copyWith(alertDayBefore: v)),
-        ),
-        _Toggle(
-          icon: Icons.notifications_active_outlined,
-          title: context.l10n.calendarAlertSameDay,
-          subtitle: _alertTimeLabel(context),
-          value: event.alertSameDay,
-          onChanged: (v) => onChanged(event.copyWith(alertSameDay: v)),
-        ),
+          _Toggle(
+            icon: Icons.notifications_outlined,
+            title: context.l10n.calendarAlertDayBefore,
+            subtitle: _alertTimeLabel(context),
+            value: event.alertDayBefore,
+            onChanged: (v) => onChanged(event.copyWith(alertDayBefore: v)),
+          ),
+          _Toggle(
+            icon: Icons.notifications_active_outlined,
+            title: context.l10n.calendarAlertSameDay,
+            subtitle: _alertTimeLabel(context),
+            value: event.alertSameDay,
+            onChanged: (v) => onChanged(event.copyWith(alertSameDay: v)),
+          ),
+        ],
       ],
     );
   }
 
-  /// "Alle" and the Settings alert time for all-day events, "Alle" and the
-  /// start time otherwise.
+  /// "Alle" and the Settings alert time (alerts are shown for all-day
+  /// events only).
   String _alertTimeLabel(BuildContext context) => context.l10n.calendarAlertAt(
     DateFormat('HH:mm').format(
       occurrenceTime(event, event.startTime, allDayMinutes: allDayAlertMinutes),

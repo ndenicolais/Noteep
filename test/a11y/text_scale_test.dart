@@ -197,8 +197,7 @@ void main() {
     final task = TaskModel(
       title: 'Titolo del task',
       description: 'Descrizione',
-      dueDate: DateTime(2026, 12, 24),
-      reminder: DateTime(2026, 12, 24, 18, 30),
+      dueDate: DateTime(2026, 12, 24, 18, 30),
     );
     await tasks.addTask(task);
     await pumpScaled(tester, TaskEditorScreen(task: task));

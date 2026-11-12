@@ -20,7 +20,6 @@ import '../theme/app_spacing.dart';
 enum DrawerSection {
   home,
   tasks,
-  reminders,
   calendar,
   labels,
   archive,
@@ -151,17 +150,6 @@ class AppDrawer extends ConsumerWidget {
               label: context.l10n.navNotes,
               selected: currentSection == DrawerSection.home,
               onTap: () => _navigateTo(context, DrawerSection.home, null),
-            ),
-            _DrawerItem(
-              icon: Icons.notifications_outlined,
-              label: context.l10n.navReminders,
-              selected: currentSection == DrawerSection.reminders,
-              onTap:
-                  () => _navigateTo(
-                    context,
-                    DrawerSection.reminders,
-                    AppRoutes.reminders,
-                  ),
             ),
             _DrawerItem(
               icon: Icons.label_outline,

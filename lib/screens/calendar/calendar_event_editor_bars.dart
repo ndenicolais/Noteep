@@ -46,20 +46,15 @@ class CalendarEventEditorAppBar extends StatelessWidget
   }
 }
 
-/// Bottom action bar for [CalendarEventEditorScreen]: delete, reminder and
-/// close.
+/// Bottom action bar for [CalendarEventEditorScreen]: delete and close.
 class CalendarEventEditorBottomBar extends StatelessWidget {
   const CalendarEventEditorBottomBar({
     super.key,
-    required this.hasReminder,
     required this.onDelete,
-    required this.onReminder,
     required this.onClose,
   });
 
-  final bool hasReminder;
   final VoidCallback onDelete;
-  final VoidCallback onReminder;
   final VoidCallback onClose;
 
   @override
@@ -73,14 +68,6 @@ class CalendarEventEditorBottomBar extends StatelessWidget {
             icon: const Icon(Icons.delete_outline),
             onPressed: onDelete,
             tooltip: context.l10n.calendarDeleteEvent,
-          ),
-          IconButton(
-            icon: Icon(
-              hasReminder ? Icons.alarm : Icons.alarm_add_outlined,
-              color: hasReminder ? colorScheme.primary : null,
-            ),
-            onPressed: onReminder,
-            tooltip: context.l10n.calendarReminder,
           ),
           const Spacer(),
           TextButton(onPressed: onClose, child: Text(context.l10n.commonClose)),

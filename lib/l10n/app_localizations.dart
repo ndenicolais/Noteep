@@ -647,7 +647,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingTasksBody.
   ///
   /// In it, this message translates to:
-  /// **'Crea elenchi di attività con sottoattività, scadenze e ricorrenze. Scorri un\'attività verso destra per completarla.'**
+  /// **'Crea elenchi di attività con sottoattività, date e ricorrenze: se aggiungi un orario ricevi una notifica. Scorri un\'attività verso destra per completarla.'**
   String get onboardingTasksBody;
 
   /// No description provided for @onboardingCalendarTitle.
@@ -665,13 +665,13 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingRemindersTitle.
   ///
   /// In it, this message translates to:
-  /// **'Promemoria e backup'**
+  /// **'Notifiche e backup'**
   String get onboardingRemindersTitle;
 
   /// No description provided for @onboardingRemindersBody.
   ///
   /// In it, this message translates to:
-  /// **'Imposta promemoria per note, attività ed eventi. Esporta le note e crea backup manuali o automatici dalle Impostazioni.'**
+  /// **'Aggiungi un orario ad attività ed eventi per ricevere una notifica, o un promemoria alle note. Esporta le note e crea backup manuali o automatici dalle Impostazioni.'**
   String get onboardingRemindersBody;
 
   /// No description provided for @bootErrorTitle.
@@ -853,12 +853,6 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Task'**
   String get navTasks;
-
-  /// No description provided for @navReminders.
-  ///
-  /// In it, this message translates to:
-  /// **'Promemoria'**
-  String get navReminders;
 
   /// No description provided for @navCalendar.
   ///
@@ -1727,14 +1721,8 @@ abstract class AppLocalizations {
   /// No description provided for @taskEditorDueDate.
   ///
   /// In it, this message translates to:
-  /// **'Imposta data scadenza'**
+  /// **'Imposta data e ora'**
   String get taskEditorDueDate;
-
-  /// No description provided for @taskEditorReminder.
-  ///
-  /// In it, this message translates to:
-  /// **'Promemoria'**
-  String get taskEditorReminder;
 
   /// No description provided for @taskEditorRecurrence.
   ///
@@ -2078,12 +2066,6 @@ abstract class AppLocalizations {
   /// **'Evento spostato nel cestino'**
   String get calendarEventTrashed;
 
-  /// No description provided for @calendarReminder.
-  ///
-  /// In it, this message translates to:
-  /// **'Promemoria'**
-  String get calendarReminder;
-
   /// No description provided for @calendarTitleHint.
   ///
   /// In it, this message translates to:
@@ -2101,12 +2083,6 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Promemoria evento'**
   String get calendarReminderNotificationTitle;
-
-  /// No description provided for @calendarReminderNotificationBody.
-  ///
-  /// In it, this message translates to:
-  /// **'Hai un promemoria per questo evento'**
-  String get calendarReminderNotificationBody;
 
   /// No description provided for @eventRecurrenceNone.
   ///
@@ -2137,54 +2113,6 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Annualmente'**
   String get eventRecurrenceYearly;
-
-  /// No description provided for @remindersUpcoming.
-  ///
-  /// In it, this message translates to:
-  /// **'In arrivo'**
-  String get remindersUpcoming;
-
-  /// No description provided for @remindersPast.
-  ///
-  /// In it, this message translates to:
-  /// **'Scaduti'**
-  String get remindersPast;
-
-  /// No description provided for @remindersEmpty.
-  ///
-  /// In it, this message translates to:
-  /// **'Nessun promemoria'**
-  String get remindersEmpty;
-
-  /// No description provided for @remindersEmptyHint.
-  ///
-  /// In it, this message translates to:
-  /// **'Aggiungi un promemoria aprendo\nuna nota o un task.'**
-  String get remindersEmptyHint;
-
-  /// No description provided for @remindersUntitledNote.
-  ///
-  /// In it, this message translates to:
-  /// **'Nota senza titolo'**
-  String get remindersUntitledNote;
-
-  /// No description provided for @remindersUntitledTask.
-  ///
-  /// In it, this message translates to:
-  /// **'Task senza titolo'**
-  String get remindersUntitledTask;
-
-  /// No description provided for @remindersClearPast.
-  ///
-  /// In it, this message translates to:
-  /// **'Cancella scaduti'**
-  String get remindersClearPast;
-
-  /// No description provided for @remindersPastCleared.
-  ///
-  /// In it, this message translates to:
-  /// **'Promemoria scaduti rimossi'**
-  String get remindersPastCleared;
 
   /// No description provided for @archiveEmptyNotes.
   ///
@@ -2519,7 +2447,7 @@ abstract class AppLocalizations {
   /// No description provided for @infoFeatureRemindersTitle.
   ///
   /// In it, this message translates to:
-  /// **'Promemoria'**
+  /// **'Notifiche'**
   String get infoFeatureRemindersTitle;
 
   /// No description provided for @infoFeatureRemindersText.
@@ -3601,6 +3529,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Quando crei un nuovo task ora puoi impostare subito anche data e ora, aggiungere i dettagli e metterlo tra gli speciali: con l\'orario ricevi il promemoria e il task compare nel Calendario.'**
   String get changelog_v2_0_0_bullet_75;
+
+  /// No description provided for @changelog_v2_0_0_bullet_76.
+  ///
+  /// In it, this message translates to:
+  /// **'Task ed eventi sono più semplici: scegli il giorno e, se vuoi, un orario. Con l\'orario ricevi la notifica a quell\'ora, senza orario no. Gli eventi di tutto il giorno avvisano il giorno stesso e/o il giorno prima solo se lo scegli, all\'orario delle Impostazioni. Il promemoria separato di task ed eventi e la sezione Promemoria non ci sono più (le note mantengono il loro promemoria).'**
+  String get changelog_v2_0_0_bullet_76;
 
   /// No description provided for @infoPrivacyOpen.
   ///

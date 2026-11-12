@@ -24,7 +24,6 @@ import '../../theme/app_spacing.dart';
 import '../../utils/notification_service.dart';
 import '../../utils/recurrence.dart';
 import '../../utils/dialogs/move_to_list_dialog.dart';
-import '../../widgets/reminder_banner.dart';
 import '../../widgets/shared/error_feedback.dart';
 import '../tasks/task_delete.dart';
 import 'task_editor_app_bar.dart';
@@ -214,14 +213,14 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
     );
   }
 
-  /// Due date, then its time: cancelling the time keeps a day-only due
-  /// date (no notification).
   /// The default alert time from Settings, first offered for a due time.
   TimeOfDay _defaultAlertTime() {
     final minutes = ref.read(defaultAlertTimeProvider);
     return TimeOfDay(hour: minutes ~/ 60, minute: minutes % 60);
   }
 
+  /// Due date, then its time: cancelling the time keeps a day-only due
+  /// date (no notification).
   void _showDatePicker() async {
     final current = _task.dueDate;
     final date = await showDatePicker(
@@ -246,35 +245,22 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
     );
   }
 
-  /// Sets (or with null clears) the due date. A due date with a time is
-  /// also the reminder, like in Google Tasks: the reminder follows it unless
-  /// it was set to a different time, and goes away with it.
+  /// Sets (or with null clears) the due date. A due date with a time
+  /// notifies at that time, like in Google Tasks; a day-only one does not.
   void _applyDueDate(DateTime? due) {
     final previous = _task;
-    final followsDue =
-        previous.reminder == null ||
-        (previous.hasDueTime && previous.reminder == previous.dueDate);
-    var updated =
+    final updated =
         due == null
             ? previous.copyWith(clearDueDate: true)
             : previous.copyWith(dueDate: due);
-    if (followsDue) {
-      updated =
-          updated.hasDueTime
-              ? updated.copyWith(reminder: updated.dueDate)
-              : updated.copyWith(clearReminder: true);
-    }
     setState(() => _task = updated);
-    if (updated.reminder == previous.reminder) return;
+    if (updated.dueDate == previous.dueDate) return;
     _save();
     final notifications = NotificationService.instance;
-    if (updated.reminder == null) {
-      notifications
-          .cancelNotification(NotificationService.idForTask(updated.id))
-          .ignore();
-    } else {
-      notifications.scheduleTaskReminder(_task).ignore();
-    }
+    notifications
+        .cancelNotification(NotificationService.idForTask(updated.id))
+        .then((_) => notifications.scheduleTaskReminder(_task))
+        .ignore();
   }
 
   void _showRecurrenceDialog() {
@@ -337,67 +323,6 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
     final text = parts.join('\n\n');
     if (text.isEmpty) return;
     SharePlus.instance.share(ShareParams(text: text));
-  }
-
-  // ─── Reminder ─────────────────────────────────────────────────────────────
-
-  Future<void> _setReminder() async {
-    final now = DateTime.now();
-    final date = await showDatePicker(
-      context: context,
-      initialDate: _task.reminder ?? now.add(const Duration(hours: 1)),
-      firstDate: now,
-      lastDate: now.add(const Duration(days: 365)),
-    );
-    if (date == null || !mounted) return;
-
-    final time = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.fromDateTime(
-        _task.reminder ?? now.add(const Duration(hours: 1)),
-      ),
-    );
-    if (time == null || !mounted) return;
-
-    final scheduled = DateTime(
-      date.year,
-      date.month,
-      date.day,
-      time.hour,
-      time.minute,
-    );
-
-    final updated = _task.copyWith(reminder: scheduled);
-    setState(() => _task = updated);
-    _save();
-
-    await NotificationService.instance.scheduleTaskReminder(_task);
-
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            context.l10n.commonReminderScheduled(
-              DateFormat('dd MMM, HH:mm').format(scheduled),
-            ),
-          ),
-        ),
-      );
-    }
-  }
-
-  Future<void> _removeReminder() async {
-    await NotificationService.instance.cancelNotification(
-      NotificationService.idForTask(_task.id),
-    );
-    final updated = _task.copyWith(clearReminder: true);
-    setState(() => _task = updated);
-    _save();
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.commonReminderRemoved)),
-      );
-    }
   }
 
   void _toggleSubtask(int index, bool completed) {
@@ -467,12 +392,6 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
         ),
         body: Column(
           children: [
-            if (_task.reminder != null)
-              ReminderBanner(
-                reminder: _task.reminder!,
-                onTap: _setReminder,
-                onRemove: _removeReminder,
-              ),
             // Campo Titolo
             Padding(
               padding: const EdgeInsets.fromLTRB(
@@ -549,9 +468,7 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
           ],
         ),
         bottomNavigationBar: TaskEditorBottomBar(
-          hasReminder: _task.reminder != null,
           onDatePicker: _showDatePicker,
-          onReminder: _setReminder,
           onRecurrence: _showRecurrenceDialog,
           onMoveToList: _showMoveToListDialog,
           onDelete: _confirmDelete,

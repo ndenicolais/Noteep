@@ -326,7 +326,7 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get onboardingTasksBody =>
-      'Crea elenchi di attività con sottoattività, scadenze e ricorrenze. Scorri un\'attività verso destra per completarla.';
+      'Crea elenchi di attività con sottoattività, date e ricorrenze: se aggiungi un orario ricevi una notifica. Scorri un\'attività verso destra per completarla.';
 
   @override
   String get onboardingCalendarTitle => 'Calendario';
@@ -336,11 +336,11 @@ class AppLocalizationsIt extends AppLocalizations {
       'Pianifica eventi con vista giorno, settimana, mese, anno e programma. Importa ed esporta i tuoi calendari in formato ICS.';
 
   @override
-  String get onboardingRemindersTitle => 'Promemoria e backup';
+  String get onboardingRemindersTitle => 'Notifiche e backup';
 
   @override
   String get onboardingRemindersBody =>
-      'Imposta promemoria per note, attività ed eventi. Esporta le note e crea backup manuali o automatici dalle Impostazioni.';
+      'Aggiungi un orario ad attività ed eventi per ricevere una notifica, o un promemoria alle note. Esporta le note e crea backup manuali o automatici dalle Impostazioni.';
 
   @override
   String get bootErrorTitle => 'Impossibile avviare Noteep';
@@ -433,9 +433,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get navTasks => 'Task';
-
-  @override
-  String get navReminders => 'Promemoria';
 
   @override
   String get navCalendar => 'Calendario';
@@ -897,10 +894,7 @@ class AppLocalizationsIt extends AppLocalizations {
   String get taskEditorPin => 'Fissa in alto';
 
   @override
-  String get taskEditorDueDate => 'Imposta data scadenza';
-
-  @override
-  String get taskEditorReminder => 'Promemoria';
+  String get taskEditorDueDate => 'Imposta data e ora';
 
   @override
   String get taskEditorRecurrence => 'Imposta ripetizione';
@@ -1084,9 +1078,6 @@ class AppLocalizationsIt extends AppLocalizations {
   String get calendarEventTrashed => 'Evento spostato nel cestino';
 
   @override
-  String get calendarReminder => 'Promemoria';
-
-  @override
   String get calendarTitleHint => 'Titolo';
 
   @override
@@ -1094,10 +1085,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get calendarReminderNotificationTitle => 'Promemoria evento';
-
-  @override
-  String get calendarReminderNotificationBody =>
-      'Hai un promemoria per questo evento';
 
   @override
   String get eventRecurrenceNone => 'Non ripetere';
@@ -1113,31 +1100,6 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get eventRecurrenceYearly => 'Annualmente';
-
-  @override
-  String get remindersUpcoming => 'In arrivo';
-
-  @override
-  String get remindersPast => 'Scaduti';
-
-  @override
-  String get remindersEmpty => 'Nessun promemoria';
-
-  @override
-  String get remindersEmptyHint =>
-      'Aggiungi un promemoria aprendo\nuna nota o un task.';
-
-  @override
-  String get remindersUntitledNote => 'Nota senza titolo';
-
-  @override
-  String get remindersUntitledTask => 'Task senza titolo';
-
-  @override
-  String get remindersClearPast => 'Cancella scaduti';
-
-  @override
-  String get remindersPastCleared => 'Promemoria scaduti rimossi';
 
   @override
   String get archiveEmptyNotes => 'Nessuna nota archiviata';
@@ -1333,7 +1295,7 @@ class AppLocalizationsIt extends AppLocalizations {
       'Organizza impegni ed eventi giorno per giorno';
 
   @override
-  String get infoFeatureRemindersTitle => 'Promemoria';
+  String get infoFeatureRemindersTitle => 'Notifiche';
 
   @override
   String get infoFeatureRemindersText =>
@@ -1997,6 +1959,10 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_75 =>
       'Quando crei un nuovo task ora puoi impostare subito anche data e ora, aggiungere i dettagli e metterlo tra gli speciali: con l\'orario ricevi il promemoria e il task compare nel Calendario.';
+
+  @override
+  String get changelog_v2_0_0_bullet_76 =>
+      'Task ed eventi sono più semplici: scegli il giorno e, se vuoi, un orario. Con l\'orario ricevi la notifica a quell\'ora, senza orario no. Gli eventi di tutto il giorno avvisano il giorno stesso e/o il giorno prima solo se lo scegli, all\'orario delle Impostazioni. Il promemoria separato di task ed eventi e la sezione Promemoria non ci sono più (le note mantengono il loro promemoria).';
 
   @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';

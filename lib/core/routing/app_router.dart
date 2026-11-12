@@ -23,7 +23,6 @@ import '../../screens/labels_screen.dart';
 import '../../screens/note_editor/note_editor_screen.dart';
 import '../../screens/onboarding_screen.dart';
 import '../../screens/privacy_policy_screen.dart';
-import '../../screens/reminders_screen.dart';
 import '../../screens/settings/backup_data_screen.dart';
 import '../../screens/settings/settings_screen.dart';
 import '../../screens/statistics/statistics_screen.dart';
@@ -38,7 +37,6 @@ import '../../screens/unknown_route_screen.dart';
 abstract final class AppRoutes {
   // Drawer sections.
   static const tasks = '/tasks';
-  static const reminders = '/reminders';
   static const calendar = '/calendar';
   static const labels = '/labels';
   static const archive = '/archive';
@@ -75,7 +73,6 @@ abstract final class AppRouter {
   /// sliding, since they are siblings rather than a drill-down.
   static const sectionRoutes = {
     AppRoutes.tasks,
-    AppRoutes.reminders,
     AppRoutes.calendar,
     AppRoutes.labels,
     AppRoutes.archive,
@@ -112,7 +109,6 @@ abstract final class AppRouter {
     final args = settings.arguments;
     return switch (settings.name) {
       AppRoutes.tasks => (_) => const TasksScreen(),
-      AppRoutes.reminders => (_) => const RemindersScreen(),
       AppRoutes.calendar => (_) => const CalendarWorkspaceView(),
       AppRoutes.labels => (_) => const LabelsScreen(),
       AppRoutes.archive => (_) => const ArchiveScreen(),

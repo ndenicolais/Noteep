@@ -63,9 +63,10 @@ DateTime occurrenceTime(
         );
 
 /// The alerts of [event] after [now] within [alertHorizon], at most
-/// [maxAlertOccurrences] occurrences, sorted by time. Empty when the event
-/// has no alert, or is archived or trashed. All-day events alert at
-/// [allDayMinutes] (minutes after midnight).
+/// [maxAlertOccurrences] occurrences, sorted by time. Timed events alert at
+/// their start time; all-day events only on the chosen days, at
+/// [allDayMinutes] (minutes after midnight). Empty when the event has no
+/// alert, or is archived or trashed.
 List<EventAlert> upcomingEventAlerts(
   CalendarEventModel event,
   DateTime now, {
@@ -91,11 +92,11 @@ List<EventAlert> upcomingEventAlerts(
       at.minute,
     );
     var added = false;
-    if (event.alertDayBefore && dayBefore.isAfter(now)) {
+    if (event.notifiesDayBefore && dayBefore.isAfter(now)) {
       alerts.add(EventAlert(at: dayBefore, occurrence: at, dayBefore: true));
       added = true;
     }
-    if (event.alertSameDay && at.isAfter(now)) {
+    if (event.notifiesSameDay && at.isAfter(now)) {
       alerts.add(EventAlert(at: at, occurrence: at, dayBefore: false));
       added = true;
     }

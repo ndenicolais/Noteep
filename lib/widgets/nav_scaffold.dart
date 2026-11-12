@@ -173,7 +173,6 @@ class _AppNavRail extends StatelessWidget {
     DrawerSection.calendar,
     DrawerSection.tasks,
     DrawerSection.home,
-    DrawerSection.reminders,
     DrawerSection.labels,
     DrawerSection.archive,
     DrawerSection.statistics,
@@ -184,7 +183,6 @@ class _AppNavRail extends StatelessWidget {
     AppRoutes.calendar,
     AppRoutes.tasks,
     null, // 2: home
-    AppRoutes.reminders,
     AppRoutes.labels,
     AppRoutes.archive,
     AppRoutes.statistics,
@@ -225,11 +223,6 @@ class _AppNavRail extends StatelessWidget {
           icon: const Icon(Icons.lightbulb_outline),
           selectedIcon: const Icon(Icons.lightbulb),
           label: Text(context.l10n.navNotes),
-        ),
-        NavigationRailDestination(
-          icon: const Icon(Icons.notifications_outlined),
-          selectedIcon: const Icon(Icons.notifications),
-          label: Text(context.l10n.navReminders),
         ),
         NavigationRailDestination(
           icon: const Icon(Icons.label_outline),

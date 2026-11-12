@@ -11,22 +11,18 @@
 import 'package:flutter/material.dart';
 import '../../l10n/l10n.dart';
 
-/// Bottom action bar for [TaskEditorScreen]: due date, reminder, recurrence,
+/// Bottom action bar for [TaskEditorScreen]: due date, recurrence,
 /// move-to-list and delete actions.
 class TaskEditorBottomBar extends StatelessWidget {
   const TaskEditorBottomBar({
     super.key,
-    required this.hasReminder,
     required this.onDatePicker,
-    required this.onReminder,
     required this.onRecurrence,
     required this.onMoveToList,
     required this.onDelete,
   });
 
-  final bool hasReminder;
   final VoidCallback onDatePicker;
-  final VoidCallback onReminder;
   final VoidCallback onRecurrence;
   final VoidCallback onMoveToList;
   final VoidCallback onDelete;
@@ -42,14 +38,6 @@ class TaskEditorBottomBar extends StatelessWidget {
             icon: const Icon(Icons.calendar_today_outlined),
             onPressed: onDatePicker,
             tooltip: context.l10n.taskEditorDueDate,
-          ),
-          IconButton(
-            icon: Icon(
-              hasReminder ? Icons.alarm : Icons.alarm_add_outlined,
-              color: hasReminder ? Theme.of(context).colorScheme.primary : null,
-            ),
-            onPressed: onReminder,
-            tooltip: context.l10n.taskEditorReminder,
           ),
           IconButton(
             icon: const Icon(Icons.repeat),

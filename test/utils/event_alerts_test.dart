@@ -37,21 +37,30 @@ void main() {
   List<DateTime> times(CalendarEventModel e) =>
       upcomingEventAlerts(e, now).map((a) => a.at).toList();
 
-  test('no alerts selected: nothing', () {
-    expect(times(event(start: DateTime(2026, 11, 10, 15))), isEmpty);
+  test('all-day event without alerts selected: nothing', () {
+    expect(times(event(start: DateTime(2026, 11, 10), allDay: true)), isEmpty);
   });
 
-  test('timed event: same day at the start, day before at the same time', () {
-    final e = event(
+  test('timed event: always at its start, the alert flags are ignored', () {
+    final plain = event(start: DateTime(2026, 11, 11, 15, 30));
+    expect(times(plain), [DateTime(2026, 11, 11, 15, 30)]);
+    expect(upcomingEventAlerts(plain, now).single.dayBefore, isFalse);
+    final flagged = event(
       start: DateTime(2026, 11, 11, 15, 30),
       sameDay: true,
       dayBefore: true,
     );
-    expect(times(e), [
-      DateTime(2026, 11, 10, 15, 30),
-      DateTime(2026, 11, 11, 15, 30),
-    ]);
-    expect(upcomingEventAlerts(e, now).first.dayBefore, isTrue);
+    expect(times(flagged), [DateTime(2026, 11, 11, 15, 30)]);
+  });
+
+  test('all-day event: day before and same day as chosen', () {
+    final e = event(
+      start: DateTime(2026, 11, 12),
+      allDay: true,
+      dayBefore: true,
+    );
+    expect(times(e), [DateTime(2026, 11, 11, 9)]);
+    expect(upcomingEventAlerts(e, now).single.dayBefore, isTrue);
   });
 
   test('all-day event alerts at 09:00', () {

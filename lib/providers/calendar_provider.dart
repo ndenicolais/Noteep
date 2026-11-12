@@ -269,7 +269,7 @@ final calendarShowTasksProvider = NotifierProvider<BoolSettingNotifier, bool>(
   () => BoolSettingNotifier('calendar_show_tasks', true),
 );
 
-/// Active tasks with a due date or a reminder, as read-only calendar entries.
+/// Active tasks with a due date, as read-only calendar entries.
 final calendarTaskItemsProvider = Provider<List<CalendarEventModel>>((ref) {
   return ref
       .watch(activeTasksProvider)

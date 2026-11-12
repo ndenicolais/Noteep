@@ -16,11 +16,9 @@ import '../../models/calendar_model.dart';
 import '../../providers/calendar_provider.dart';
 import '../../providers/settings/ui_provider.dart';
 import '../../theme/app_font_sizes.dart';
-import '../../theme/app_radius.dart';
 import '../../theme/app_spacing.dart';
 import '../../utils/notification_service.dart';
 import '../../widgets/shared/app_dialogs.dart';
-import '../../widgets/reminder_banner.dart';
 import '../../widgets/shared/error_feedback.dart';
 import 'calendar_event_details_section.dart';
 import 'calendar_event_editor_bars.dart';
@@ -48,11 +46,6 @@ class _CalendarEventEditorScreenState
     _event = widget.event;
     // Verifichiamo se l'evento esiste già nel provider
     _isNew = ref.read(calendarProvider).every((e) => e.id != _event.id);
-    // Like Google Calendar, a new event alerts on its day by default (at its
-    // start, or 09:00 when all-day); it can be turned off in "Avvisi".
-    if (_isNew && !_event.hasAlerts) {
-      _event = _event.copyWith(alertSameDay: true);
-    }
 
     _titleController = TextEditingController(text: _event.title);
     _descriptionController = TextEditingController(text: _event.description);
@@ -195,67 +188,6 @@ class _CalendarEventEditorScreenState
     Navigator.pop(context);
   }
 
-  // ─── Reminder ─────────────────────────────────────────────────────────────
-
-  Future<void> _setReminder() async {
-    final now = DateTime.now();
-    final date = await showDatePicker(
-      context: context,
-      initialDate: _event.reminder ?? now.add(const Duration(hours: 1)),
-      firstDate: now,
-      lastDate: now.add(const Duration(days: 365)),
-    );
-    if (date == null || !mounted) return;
-
-    final time = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.fromDateTime(
-        _event.reminder ?? now.add(const Duration(hours: 1)),
-      ),
-    );
-    if (time == null || !mounted) return;
-
-    final scheduled = DateTime(
-      date.year,
-      date.month,
-      date.day,
-      time.hour,
-      time.minute,
-    );
-
-    final updated = _event.copyWith(reminder: scheduled);
-    setState(() => _event = updated);
-    _save();
-
-    await NotificationService.instance.scheduleEventReminder(_event);
-
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            context.l10n.commonReminderScheduled(
-              DateFormat('dd MMM, HH:mm').format(scheduled),
-            ),
-          ),
-        ),
-      );
-    }
-  }
-
-  Future<void> _removeReminder() async {
-    await NotificationService.instance.cancelNotification(
-      NotificationService.idForEvent(_event.id),
-    );
-    final updated = _event.copyWith(clearReminder: true);
-    setState(() => _event = updated);
-    _save();
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(context.l10n.commonReminderRemoved)),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -278,18 +210,6 @@ class _CalendarEventEditorScreenState
         body: ListView(
           padding: const EdgeInsets.all(AppSpacing.lg),
           children: [
-            if (_event.reminder != null)
-              Padding(
-                padding: const EdgeInsets.only(bottom: AppSpacing.md),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(AppRadius.sm),
-                  child: ReminderBanner(
-                    reminder: _event.reminder!,
-                    onTap: _setReminder,
-                    onRemove: _removeReminder,
-                  ),
-                ),
-              ),
             // Titolo (Obbligatorio)
             TextField(
               controller: _titleController,
@@ -350,9 +270,7 @@ class _CalendarEventEditorScreenState
           ],
         ),
         bottomNavigationBar: CalendarEventEditorBottomBar(
-          hasReminder: _event.reminder != null,
           onDelete: _confirmDelete,
-          onReminder: _setReminder,
           onClose: () => Navigator.pop(context),
         ),
       ),

@@ -31,9 +31,9 @@ Noteep is a digital notebook for Android (the web build is used only for develop
 - Sign in with email/password or Google; first launch shows an onboarding.
 - Write text notes (Markdown preview, web links) and checklists, styled per note (font, size, colors), with audio recordings, labels, links to other notes and reminders.
 - Organize notes in a reorderable masonry grid or a list, sort and search them, start from a template.
-- Manage tasks in custom lists, with subtasks, due dates, recurrence, a "special" flag and reminders.
+- Manage tasks in custom lists, with subtasks, a date with an optional time (the time notifies), recurrence and a "special" flag.
 - Plan events in a calendar (day, multi-day, month, year and schedule views), with recurrence, birthdays and name days, ICS import/export.
-- See all reminders in one screen, browse notes by label, archive and restore items, recover deleted ones from the trash for 7 days.
+- Browse notes by label, archive and restore items, recover deleted ones from the trash for 7 days.
 - Export notes (PDF, TXT, JSON, CSV, HTML), back up and restore data (manual JSON and automatic local backups), read statistics.
 - Use five Android Home screen widgets (summary and quick actions).
 
@@ -153,10 +153,9 @@ A to-do item. Collection: `users/{uid}/tasks`.
 | `id` | `String` | UUID |
 | `title`, `description` | `String` | |
 | `isCompleted`, `isPinned`, `isSpecial`, `isArchived` | `bool` | `isPinned` = on top of its section; `isSpecial` = starred, shown in the "Starred" tab |
-| `dueDate` | `DateTime?` | Date, optionally with a time (`hasDueTime`: not midnight). A due time is also the reminder (see §5.4 alerts) |
+| `dueDate` | `DateTime?` | Date, optionally with a time (`hasDueTime`: not midnight). A due time is when the task notifies (see §5.4 alerts). Tasks have no separate reminder: `fromJson` turns a legacy `reminder` into the due date when there is none, or when the due date is date-only on the reminder's day; otherwise it is ignored (and dropped at the next save, which overwrites the document) |
 | `listId` | `String?` | `TaskListModel.id`; null = no list |
-| `recurrence` | `RecurrenceType` | `none`, `daily`, `weekly`, `monthly`, `yearly`. A task is a single document: `isRecurring` needs a `dueDate`, and `nextOccurrence()` steps due date and reminder forward with `nextRecurrence` (`utils/recurrence.dart`; month-end days clamp to the month's last day) and reopens the task |
-| `reminder` | `DateTime?` | |
+| `recurrence` | `RecurrenceType` | `none`, `daily`, `weekly`, `monthly`, `yearly`. A task is a single document: `isRecurring` needs a `dueDate`, and `nextOccurrence()` steps the due date forward with `nextRecurrence` (`utils/recurrence.dart`; month-end days clamp to the month's last day) and reopens the task |
 | `tags` | `List<String>` | |
 | `subtasks` | `List<SubtaskModel>` | `id`, `title`, `isCompleted`, `createdAt`, `updatedAt` |
 | `createdAt`, `updatedAt` | `DateTime` | |
@@ -183,9 +182,8 @@ A calendar event. Collection: `users/{uid}/calendar_events`.
 | `isPinned` | `bool` | Not used by the UI; kept so existing documents and backups round-trip |
 | `recurrence` | `RecurrenceType` | Shared with tasks |
 | `recurrenceEndDate` | `DateTime?` | Inclusive; filled from `UNTIL`/`COUNT` on ICS import |
-| `reminder` | `DateTime?` | |
-| `alertSameDay` | `bool` | Recurring alert on the day of each occurrence (at the start, or at the default alert time from Settings — 09:00 unless changed — if all-day). Default `false` when missing; `true` for events created in the editor |
-| `alertDayBefore` | `bool` | Recurring alert the day before each occurrence, same time |
+| `alertSameDay` | `bool` | All-day events only: alert on the day of each occurrence, at the default alert time from Settings (09:00 unless changed). Timed events ignore it and always alert at their start (`notifiesSameDay`). Default `false` |
+| `alertDayBefore` | `bool` | All-day events only: alert the day before each occurrence, same time (`notifiesDayBefore`). Default `false`. Events have no separate reminder: a legacy `reminder` field is ignored |
 | `tags` | `List<String>` | |
 | `createdAt`, `updatedAt` | `DateTime` | |
 | `deletedAt` | `DateTime?` | Trash timestamp |
@@ -279,13 +277,13 @@ The list of active notes and the note editor.
 **Path:** `lib/screens/tasks/`, `lib/screens/task_editor/`
 
 **Features:**
-- Tabs: All, Starred and one per task list. A new task is created in the current tab's list (or starred). The "+" opens `showNewTaskSheet` (`new_task_sheet.dart`, Google Tasks-like quick add): title, optional details, due date then optional time (first offered at the default alert time from Settings) and star. A due time is also the reminder (scheduled on save), so the task gets a notification and a timed slot in Calendar; a date alone shows it as all-day.
+- Tabs: All, Starred and one per task list. A new task is created in the current tab's list (or starred). The "+" opens `showNewTaskSheet` (`new_task_sheet.dart`, Google Tasks-like quick add): title, optional details, due date then optional time (first offered at the default alert time from Settings) and star. A due time notifies (scheduled on save) and gives the task a timed slot in Calendar; a date alone shows it as all-day, without a notification.
 - Active and completed sections (`sortTasksForDisplay`, pure function), each with pinned tasks on top (pin icon before the title) and then the chosen sort order; optional "group by priority" and "show completed" settings. Pin (editor) sets the position, the star sets the "Starred" tab.
 - Swipe right completes/reopens (the row stays), swipe left trashes; menu to edit, move to another list or delete; star toggles "special".
-- Tap opens the read-only `TaskDetailsScreen` (`task_details_screen.dart`, route `AppRoutes.taskDetails`, `AppNav.viewTask`), like Google Calendar/Tasks: title, completion, due date, recurrence, reminder, list, description, subtasks (checkable) and a Complete/Reopen button; the pencil opens the editor (`AppNav.openTask`), the bin uses the task delete flow. It watches `tasksProvider` by id, so it shows edits on return and closes itself once the task is trashed. New tasks and the menu's "Edit" go straight to the editor.
+- Tap opens the read-only `TaskDetailsScreen` (`task_details_screen.dart`, route `AppRoutes.taskDetails`, `AppNav.viewTask`), like Google Calendar/Tasks: title, completion, due date (alarm icon when it has a time), recurrence, list, description, subtasks (checkable) and a Complete/Reopen button; the pencil opens the editor (`AppNav.openTask`), the bin uses the task delete flow. It watches `tasksProvider` by id, so it shows edits on return and closes itself once the task is trashed. New tasks and the menu's "Edit" go straight to the editor.
 - Skeleton on first load, error state with Retry, pull to refresh.
-- Task editor: title and description with undo/redo, due date, recurrence, list, subtasks, reminder.
-- Deleting (menu, swipe left, editor) goes through `askTaskDeleteScope` + `deleteTaskWithUndo` (`task_delete.dart`). A recurring task (`isRecurring`) asks "This task" / "This and all following tasks": the first calls `TasksNotifier.skipOccurrence` (moves to the next occurrence, reschedules the reminder; undo restores the previous version), the second trashes the task. Swipe left on a recurring task opens this dialog and the row snaps back; other tasks are trashed directly with undo.
+- Task editor: title and description with undo/redo, date and optional time, recurrence, list, subtasks.
+- Deleting (menu, swipe left, editor) goes through `askTaskDeleteScope` + `deleteTaskWithUndo` (`task_delete.dart`). A recurring task (`isRecurring`) asks "This task" / "This and all following tasks": the first calls `TasksNotifier.skipOccurrence` (moves to the next occurrence, reschedules the notification; undo restores the previous version), the second trashes the task. Swipe left on a recurring task opens this dialog and the row snaps back; other tasks are trashed directly with undo.
 
 ### 5.4 Calendar
 
@@ -298,23 +296,21 @@ The list of active notes and the note editor.
 - Editor: Birthday and Name day exclude each other; turning one on (`_withKind`) also sets all-day, yearly recurrence (if none) and both alerts, and shows a banner in the kind's color (`birthdayColor` / `nameDayColor` in `calendar_event_style.dart`, also the checkbox color).
 - Entries of a day are ordered by `compareCalendarItems` (all-day first, then time of day — not the full start date, which for a recurring event is its first occurrence — then title) via `calendarItemsOn`.
 - The selected view is `calendarViewModeProvider` (`PersistedEnumNotifier<CalendarViewMode>`, `SharedPreferences` key `calendar_view_mode`, default month), so it survives section changes and restarts; the focused day/month is not persisted and restarts from today.
-- Event editor: date, start time, optional end time (an end before the start moves to the next day, an end equal to the start removes it), all day (clears the end), birthday, name day, recurrence, reminder, archive/delete. Events cannot be pinned: calendar views are ordered by time.
+- Event editor: date, start time, optional end time (an end before the start moves to the next day, an end equal to the start removes it), all day (clears the end), birthday, name day, recurrence, alerts (all-day events only), archive/delete. Events cannot be pinned: calendar views are ordered by time.
 - Recurring events are expanded by `calendarEventOccursOn` (monthly on the 31st skips short months, yearly on 29 February only in leap years).
-- Tasks with a due date or a reminder are shown (`TaskCalendarEvent.isShown`): at the due time when the due date has one (`TaskModel.hasDueTime`: not midnight, e.g. Google Tasks imports; the editor shows it as `d MMM yyyy, HH:mm` and its date picker keeps it), else at the reminder time when the reminder falls on the due day or there is no due date (shown with its time), otherwise as all-day entries on the due date. `calendarItemsProvider` merges `activeEventsProvider` with `calendarTaskItemsProvider` (each task wrapped in a read-only `TaskCalendarEvent`, never persisted, recurrence kept) while `calendarShowTasksProvider` is on (`BoolSettingNotifier`, `SharedPreferences` key `calendar_show_tasks`, default on, toggled from the app bar). Search covers them too. Taps go through `AppNav.openCalendarItem`, which opens the task view (`viewTask`) for a task and the event view (`viewEvent`) otherwise.
-- Event view: `CalendarEventDetailsScreen` (`calendar_event_details_screen.dart`, route `AppRoutes.eventDetails`): color square + title, birthday/name day, date and time range, recurrence, alerts with their time, reminder, description; pencil → editor, bin → confirm and trash (alerts cancelled). Like the task view it follows `calendarProvider` and closes once trashed. New events (FAB, long press, day sheet) open the editor directly. Both views use the shared `DetailRow` (`widgets/shared/detail_row.dart`). Export, backup, statistics and reminders still read `activeEventsProvider` only.
+- Tasks with a due date are shown (`TaskCalendarEvent.isShown`): at the due time when the due date has one (`TaskModel.hasDueTime`: not midnight; the editor shows it as `d MMM yyyy, HH:mm` and its date picker keeps it), otherwise as all-day entries on the due date. `calendarItemsProvider` merges `activeEventsProvider` with `calendarTaskItemsProvider` (each task wrapped in a read-only `TaskCalendarEvent`, never persisted, recurrence kept) while `calendarShowTasksProvider` is on (`BoolSettingNotifier`, `SharedPreferences` key `calendar_show_tasks`, default on, toggled from the app bar). Search covers them too. Taps go through `AppNav.openCalendarItem`, which opens the task view (`viewTask`) for a task and the event view (`viewEvent`) otherwise.
+- Event view: `CalendarEventDetailsScreen` (`calendar_event_details_screen.dart`, route `AppRoutes.eventDetails`): color square + title, birthday/name day, date and time range, recurrence, alerts with their time (`notifiesDayBefore` / `notifiesSameDay`: a timed event always shows its same-day alert), description; pencil → editor, bin → confirm and trash (alerts cancelled). Like the task view it follows `calendarProvider` and closes once trashed. New events (FAB, long press, day sheet) open the editor directly. Both views use the shared `DetailRow` (`widgets/shared/detail_row.dart`). Export, backup and statistics still read `activeEventsProvider` only.
 - Entry colors come from `calendarItemStyle` (`calendar_event_style.dart`), shared by list cards (`CalendarEventListTile`), month/week chips and search results: timed event `primary`, all-day deep purple, birthday light blue + cake, name day lime + sparkle, task green + circle (completed: faded, struck through, check icon). Text is white or black from the background's brightness.
 - Search queries (`searchQueryProvider`, `taskSearchQueryProvider`, `calendarSearchQueryProvider`) are global and outlive their screen, so Home, Tasks and Calendar create their search `TextEditingController` with the current query: the field never looks empty while the list is filtered. `test/screens/calendar_refresh_test.dart` checks that entries edited from every calendar view show up on return.
-- **Alerts — anything with a day and a time notifies.** Events have `alertSameDay` / `alertDayBefore` ("Avvisi" in the editor, below the recurrence; new events start with the same-day alert on). `utils/event_alerts.dart` computes `upcomingEventAlerts`: occurrences (`CalendarEventModel.occursOn`, which also backs `calendarEventOccursOn`) within `alertHorizon` (30 days), at most `maxAlertOccurrences` (8) per event, at the start time or, for all-day events, at `allDayMinutes` (minutes after midnight: the Settings value `defaultAlertTimeProvider`, default `defaultAllDayAlertMinutes` = 09:00); archived/trashed events have none. `NotificationService.scheduleEventAlerts(event, allDayMinutes:)` replaces them (ids `idForEventAlert`, from 1 000 000, `maxEventAlerts` per event; no-op on web); the editor reschedules on save and cancels on delete; `resync()` reschedules them at every start, which moves the window forward (an app not opened for 30 days misses the later occurrences). The single `reminder` of an event stays as an extra custom alert.
-- Tasks: the due-date picker is followed by a time picker (cancel = day-only due date). `_applyDueDate` keeps the reminder on the due time when it was empty or equal to the old due time, clears it with a day-only or removed due date, and leaves a reminder set to another time alone. `DataActions.importTasks` gives imported open tasks with a future due time and no reminder a reminder at that time; `BackupRestorer.apply` calls `resync()` after any import/restore.
-- One-time migration `RemindersActions.migrateTimedReminders(uid)` (flag `timed_reminders_migrated_<uid>` in `SharedPreferences`, also on web, then `resync()`): open tasks with a future due time and no reminder get it; timed events with a future occurrence and no reminder or alert get `alertSameDay`. Bulk writes through `TasksNotifier.updateTasks` / `CalendarNotifier.updateEvents`. Tests: `test/utils/event_alerts_test.dart`, `test/providers/reminders_resync_test.dart`.
+- **Alerts — a day plus a time notifies, nothing else to set.** Tasks and events have no separate reminder. A timed event always alerts at its start (`CalendarEventModel.notifiesSameDay`); an all-day event alerts only on the days chosen with `alertSameDay` / `alertDayBefore` ("Avvisi" in the editor, below the recurrence, shown only while "Tutto il giorno" is on; birthdays and name days turn both on). `utils/event_alerts.dart` computes `upcomingEventAlerts`: occurrences (`CalendarEventModel.occursOn`, which also backs `calendarEventOccursOn`) within `alertHorizon` (30 days), at most `maxAlertOccurrences` (8) per event, at the start time or, for all-day events, at `allDayMinutes` (minutes after midnight: the Settings value `defaultAlertTimeProvider`, default `defaultAllDayAlertMinutes` = 09:00); archived/trashed events have none. `NotificationService.scheduleEventAlerts(event, allDayMinutes:)` replaces them (ids `idForEventAlert`, from 1 000 000, `maxEventAlerts` per event; no-op on web); the editor reschedules on save and cancels on delete; `resync()` reschedules them at every start, which moves the window forward (an app not opened for 30 days misses the later occurrences).
+- Tasks: the due-date picker is followed by a time picker (cancel = day-only due date). `NotificationService.scheduleTaskReminder` schedules at the due time when `hasDueTime` (id `idForTask`); `_applyDueDate` cancels and reschedules it whenever the due date changes. `BackupRestorer.apply` calls `resync()` after any import/restore. Tests: `test/utils/event_alerts_test.dart`, `test/providers/reminders_resync_test.dart` (resync and legacy task reminders).
 - The search bar uses `NavScaffold(alignTitleEnd: true)`: it sits next to the app bar actions, up to 360 px wide.
 
-### 5.5 Reminders, labels, archive and trash
+### 5.5 Labels, archive and trash
 
-**Path:** `lib/screens/reminders_screen.dart`, `labels_screen.dart`, `label_notes_screen.dart`, `archive_screen.dart`, `trash_screen.dart`
+**Path:** `lib/screens/labels_screen.dart`, `label_notes_screen.dart`, `archive_screen.dart`, `trash_screen.dart`
 
 **Features:**
-- Reminders: reminders of active notes and tasks, in "Upcoming" and "Past" sections. Removing one, or "Clear past" in the section header, goes through `RemindersActions` and offers Undo, which restores and reschedules the reminders.
 - Labels: create, rename (merges into an existing label with the same name), delete; note count per label; tapping a label opens its notes (active, then archived).
 - Archive: three tabs (notes, tasks, events).
 - Trash: three tabs, restore, delete for good, empty trash; each item shows the days left before the automatic purge.
@@ -368,7 +364,7 @@ The screens (`SettingsScreen`, `BackupDataScreen`) handle dialogs, file pickers 
 
 ### 5.10 Shared behavior
 
-- **Drawer** (`AppDrawer`, `NavScaffold`): Calendar, Tasks, Notes, Reminders, Labels, Archive, Statistics, Trash, Settings and sign out. Export opens from Settings → Backup and data → Notes, Info from Settings → Info.
+- **Drawer** (`AppDrawer`, `NavScaffold`): Calendar, Tasks, Notes, Labels, Archive, Statistics, Trash, Settings and sign out. Export opens from Settings → Backup and data → Notes, Info from Settings → Info.
 - **Undo**: trash and archive actions show a snackbar with Undo (`notifyWithUndo`), which still works after the editor pops.
 - **Errors**: fire-and-forget writes go through `notifyOnError`, which shows an error snackbar if the write fails.
 - **Sync status**: `SyncStatusListener` (in `MaterialApp.builder`) shows a banner while writes are queued offline and a snackbar if the server later rejects one.
@@ -398,7 +394,7 @@ Riverpod with `NotifierProvider`, `Provider`, `StreamProvider` and `FutureProvid
 | `BackupRestorer` (`backupRestorerProvider`) | `providers/settings/backup_restore.dart` | `FullBackupData` parsing (flat JSON and ZIP layouts), `apply(data, restoreSettings:)` (preferences first when asked, then replaces each data section present and merges the labels), `readZip` |
 | `PreferencesBackup` (`preferencesBackupProvider`) | `providers/settings/preferences_backup.dart` | `export()`/`restore(json)` of the backed-up preferences under stable names independent of the `SharedPreferences` keys: `themeMode`, `language`, `startSection`, `notesLayout`, `notesSortOrder`, `notesFabMenu`, `tasksSortOrder`, `showCompletedTasks`, `groupTasksByPriority`, `calendarView`, `calendarShowTasks`, `defaultAlertMinutes`, `autoBackupEnabled`, `autoBackupFrequency`. Applied through each notifier's setter (state and storage update together); unknown keys and invalid values are skipped. Device bookkeeping (onboarding seen, last backup time, last changelog seen, migration flags) is not backed up. A new user preference must be added here |
 | `DataActions` (`dataActionsProvider`) | `providers/settings/data_actions.dart` | Export payloads (`fullBackupExport`, `zipBackupSections` for the automatic backup), per-section import, `parseFullBackup`/`importFullBackup`, ICS export/import, clear, `wipeRemoteData`/`wipeLocalData` for account deletion |
-| `RemindersActions` (`remindersActionsProvider`) | `providers/reminders_actions.dart` | Clear and restore reminders with their notifications; `resync()` after sign-in and `cancelAll()` after sign-out (see below). `notificationServiceProvider` wraps `NotificationService.instance` so tests can fake it |
+| `RemindersActions` (`remindersActionsProvider`) | `providers/reminders_actions.dart` | `resync()` after sign-in and `cancelAll()` after sign-out (see below), `setDefaultAlertTime`. `notificationServiceProvider` wraps `NotificationService.instance` so tests can fake it |
 
 **Non-obvious behavior**
 
@@ -410,7 +406,7 @@ Riverpod with `NotifierProvider`, `Provider`, `StreamProvider` and `FutureProvid
 - **Trash purge**: on load, items trashed more than 7 days ago are deleted through `mutate`, without blocking the loading flag.
 - **Rebuild granularity**: lists watch only ids (`IdList`, equal by content) and each row watches its item (`noteByIdProvider`, `taskByIdProvider`), so editing one note rebuilds only its card. Notifiers keep untouched item instances unchanged for this to work. Archive, Trash, Statistics and Calendar watch whole lists.
 - **Account deletion order**: re-authenticate first (password or Google; cancelling aborts), then `wipeRemoteData` (reads every subcollection from the **server**, so it fails offline instead of deleting halfway), `User.delete()`, `wipeLocalData` (best-effort: cancels notifications, deletes local backups), Google sign-out.
-- **Reminders follow the account**: notifications are scheduled on the device when an item is edited, so `main.dart` listens to `currentUidProvider`. On a sign-in (including the session restored at a cold start) it calls `RemindersActions.migrateTimedReminders(uid)` then `resync()`: it awaits `initialLoad` of the notes, tasks and calendar notifiers (a per-user `Completer<bool>` recreated in `build()`, `false` when the fetch fails or nobody is signed in), then cancels every notification and schedules the future reminders of notes and events not in the trash and of open tasks, plus the recurring event alerts, without the permission dialog. If any load failed it touches nothing, so an offline start keeps the reminders already scheduled. When the uid becomes empty (sign-out, account deletion) it calls `cancelAll()`.
+- **Reminders follow the account**: notifications are scheduled on the device when an item is edited, so `main.dart` listens to `currentUidProvider`. On a sign-in (including the session restored at a cold start) it calls `RemindersActions.resync()`: it awaits `initialLoad` of the notes, tasks and calendar notifiers (a per-user `Completer<bool>` recreated in `build()`, `false` when the fetch fails or nobody is signed in), then cancels every notification and schedules the future reminders of notes, the due times of open tasks and the alerts of events not in the trash, without the permission dialog. If any load failed it touches nothing, so an offline start keeps the reminders already scheduled. When the uid becomes empty (sign-out, account deletion) it calls `cancelAll()`.
 - **Restore**: `FullBackupData` parses every section before any provider is touched; `replaceAll` also deletes Firestore documents not in the backup, otherwise they would come back on the next load.
 
 ---
@@ -431,9 +427,9 @@ Plain classes in `lib/utils/`, not tied to Riverpod.
 
 **Path:** `lib/utils/notification_service.dart`
 
-- `init()`, `scheduleNotification(...)`, `cancelNotification(id)`, `cancelAllNotifications()`, `scheduleNoteReminder(note)`, `scheduleTaskReminder(task)`, `scheduleEventReminder(event)`. The schedule methods take `askPermission` (default `true`; `false` for the resync after sign-in).
+- `init()`, `scheduleNotification(...)`, `cancelNotification(id)`, `cancelAllNotifications()`, `scheduleNoteReminder(note)`, `scheduleTaskReminder(task)` (at the due time), `scheduleEventAlerts(event, allDayMinutes:)`, `cancelEventAlerts(id)`. The schedule methods take `askPermission` (default `true`; `false` for the resync after sign-in).
 - Deterministic ids: `idForNote`, `idForTask`, `idForEvent`. Schedules with `AndroidScheduleMode.exactAllowWhileIdle`.
-- Permissions are requested on the first reminder the user sets, not at startup.
+- Permissions are requested on the first notification the user schedules (a note reminder, a task time, an event), not at startup.
 - Every notification carries a `NotificationTarget` payload (`note:<id>`, `task:<id>`, `event:<id>`); a tap (app open or cold start) publishes it in `pendingTarget`.
 - Channel name and description are passed on every schedule with `currentL10n()`, so Android updates them to the current language. Already scheduled notifications keep the language they were created in.
 - Tests: `test/core/notification_target_test.dart`, `notification_launch_handler_test.dart`; the resync is covered by `test/providers/reminders_resync_test.dart` with a fake service.
@@ -539,7 +535,7 @@ Screens use `ColorScheme` roles (`primary`, `surface`, `secondaryContainer`, `su
 | `SectionHeader` | `labelLarge` w600 in `primary` (`muted`: `outline`), announced as a header; optional `trailing`; `listPadding` vs `inlinePadding` |
 | `SegmentedChoice<T>` | Full-width single-choice `SegmentedButton` without check mark |
 | `ActionTile` | Row with primary icon and chevron; `destructive` uses `error` |
-| `ItemCard` / `ItemCardList` | Card + `ListTile` rows for archive, trash and reminders |
+| `ItemCard` / `ItemCardList` | Card + `ListTile` rows for archive and trash |
 | `TagChip` | Non-interactive chip in `secondaryContainer`; `dense` on note cards |
 | `app_dialogs.dart` | `showAppTextInputDialog` (trimmed text or `null`; untrimmed with `obscureText`), `showAppConfirmDialog` (`true` only on confirm; `destructive` → `FilledButton` in `error`), `showAppMessageDialog`, `showAppSheet` (wraps content in `SafeArea(top: false)`: with Android 15 edge-to-edge, sheets would otherwise go under the navigation bar) |
 | `EmptyState` | Icon + message + optional action button |
@@ -567,7 +563,6 @@ Drawer sections (`AppRouter.sectionRoutes`) use `FadeThroughPageRoute` (an opaqu
 | `/task` | `TaskEditorScreen` | Argument `TaskModel` |
 | `/calendar` | `CalendarWorkspaceView` | Drawer section |
 | `/event` | `CalendarEventEditorScreen` | Argument `CalendarEventModel` |
-| `/reminders` | `RemindersScreen` | Drawer section |
 | `/labels` | `LabelsScreen` | Drawer section |
 | `/label` | `LabelNotesScreen` | Argument `String` (label name) |
 | `/archive` | `ArchiveScreen` | Drawer section |

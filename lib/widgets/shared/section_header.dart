@@ -11,8 +11,8 @@
 import 'package:flutter/material.dart';
 import '../../theme/app_spacing.dart';
 
-/// Title of a group of rows (settings sections, reminder groups, info
-/// blocks, "Completati" in Tasks), in the primary color with an optional
+/// Title of a group of rows (settings sections, info blocks,
+/// "Completati" in Tasks), in the primary color with an optional
 /// leading [icon]. Announced as a header by screen readers.
 class SectionHeader extends StatelessWidget {
   const SectionHeader(

@@ -57,13 +57,23 @@ class TaskInfoSection extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: AppSpacing.sm),
               child: Row(
                 children: [
-                  Icon(Icons.calendar_today, size: 16, color: primary),
+                  // The alarm marks a due time, which notifies.
+                  Icon(
+                    task.hasDueTime ? Icons.alarm : Icons.calendar_today,
+                    size: 16,
+                    color: primary,
+                  ),
                   const SizedBox(width: AppSpacing.sm),
-                  Text(
-                    DateFormat(
-                      task.hasDueTime ? 'd MMM yyyy, HH:mm' : 'd MMM yyyy',
-                    ).format(task.dueDate!),
-                    style: TextStyle(color: primary, fontSize: AppFontSizes.sm),
+                  Flexible(
+                    child: Text(
+                      DateFormat(
+                        task.hasDueTime ? 'd MMM yyyy, HH:mm' : 'd MMM yyyy',
+                      ).format(task.dueDate!),
+                      style: TextStyle(
+                        color: primary,
+                        fontSize: AppFontSizes.sm,
+                      ),
+                    ),
                   ),
                   const SizedBox(width: AppSpacing.xs),
                   GestureDetector(
@@ -108,11 +118,13 @@ class TaskInfoSection extends StatelessWidget {
                     children: [
                       Icon(Icons.playlist_add_check, size: 16, color: primary),
                       const SizedBox(width: AppSpacing.sm),
-                      Text(
-                        listName,
-                        style: TextStyle(
-                          color: primary,
-                          fontSize: AppFontSizes.sm,
+                      Flexible(
+                        child: Text(
+                          listName,
+                          style: TextStyle(
+                            color: primary,
+                            fontSize: AppFontSizes.sm,
+                          ),
                         ),
                       ),
                     ],

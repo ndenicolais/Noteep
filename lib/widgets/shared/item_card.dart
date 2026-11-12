@@ -11,8 +11,8 @@
 import 'package:flutter/material.dart';
 import '../../theme/app_spacing.dart';
 
-/// A task/event/reminder row shown as a card in a list (Archive, Trash,
-/// Reminders). The shape comes from `cardTheme`; consecutive cards are
+/// A task/event row shown as a card in a list (Archive, Trash, labels).
+/// The shape comes from `cardTheme`; consecutive cards are
 /// spaced by [ItemCardList] or the list's own separator.
 class ItemCard extends StatelessWidget {
   const ItemCard({
