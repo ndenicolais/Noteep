@@ -126,9 +126,9 @@ class _NotificationLaunchHandlerState
       case NoteModel note:
         await AppNav.openNote(context, note);
       case TaskModel task:
-        await AppNav.openTask(context, task);
+        await AppNav.viewTask(context, task);
       case CalendarEventModel event:
-        await AppNav.openEvent(context, event);
+        await AppNav.viewEvent(context, event);
     }
   }
 

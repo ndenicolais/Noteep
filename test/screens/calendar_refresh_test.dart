@@ -74,10 +74,20 @@ void main() {
           await tester.pumpAndSettle();
           expect(find.textContaining('Old'), findsOneWidget);
 
+          // Tap opens the read-only view; the pencil opens the editor.
           await tester.tap(find.textContaining('Old'));
           await tester.pumpAndSettle();
+          await tester.tap(find.byIcon(Icons.edit_outlined));
+          await tester.pumpAndSettle();
           await tester.enterText(find.widgetWithText(TextField, 'Old'), 'New');
-          await tester.state<NavigatorState>(find.byType(Navigator)).maybePop();
+          final navigator = tester.state<NavigatorState>(
+            find.byType(Navigator),
+          );
+          await navigator.maybePop();
+          await tester.pumpAndSettle();
+          // Back on the view, which follows the edit.
+          expect(find.text('New'), findsOneWidget);
+          await navigator.maybePop();
           await tester.pumpAndSettle();
 
           expect(find.textContaining('New'), findsOneWidget);

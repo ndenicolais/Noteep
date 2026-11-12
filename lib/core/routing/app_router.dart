@@ -13,6 +13,7 @@ import '../../models/calendar_model.dart';
 import '../../models/note_model.dart';
 import '../../models/task_model.dart';
 import '../../screens/archive_screen.dart';
+import '../../screens/calendar/calendar_event_details_screen.dart';
 import '../../screens/calendar/calendar_event_editor_screen.dart';
 import '../../screens/calendar/calendar_screen.dart';
 import '../../screens/export_screen.dart';
@@ -26,6 +27,7 @@ import '../../screens/reminders_screen.dart';
 import '../../screens/settings/backup_data_screen.dart';
 import '../../screens/settings/settings_screen.dart';
 import '../../screens/statistics/statistics_screen.dart';
+import '../../screens/task_editor/task_details_screen.dart';
 import '../../screens/task_editor/task_editor_screen.dart';
 import '../../screens/tasks/tasks_screen.dart';
 import '../../screens/trash_screen.dart';
@@ -48,6 +50,8 @@ abstract final class AppRoutes {
   static const note = '/note';
   static const task = '/task';
   static const event = '/event';
+  static const taskDetails = '/task-details';
+  static const eventDetails = '/event-details';
   static const label = '/label';
   static const export = '/export';
   static const backupData = '/backup-data';
@@ -129,6 +133,10 @@ abstract final class AppRouter {
         (_) => TaskEditorScreen(task: args),
       AppRoutes.event when args is CalendarEventModel =>
         (_) => CalendarEventEditorScreen(event: args),
+      AppRoutes.taskDetails when args is TaskModel =>
+        (_) => TaskDetailsScreen(task: args),
+      AppRoutes.eventDetails when args is CalendarEventModel =>
+        (_) => CalendarEventDetailsScreen(event: args),
       AppRoutes.label when args is String =>
         (_) => LabelNotesScreen(label: args),
       _ => null,
@@ -198,23 +206,35 @@ abstract final class AppNav {
     arguments: NoteRouteArgs(note, autoOpenRecorder: autoOpenRecorder),
   );
 
+  /// Opens the task editor (new tasks, or the pencil of [viewTask]).
   static Future<void> openTask(BuildContext context, TaskModel task) =>
       Navigator.pushNamed(context, AppRoutes.task, arguments: task);
 
+  /// Opens the event editor (new events, or the pencil of [viewEvent]).
   static Future<void> openEvent(
     BuildContext context,
     CalendarEventModel event,
   ) => Navigator.pushNamed(context, AppRoutes.event, arguments: event);
 
-  /// Opens an entry shown in the calendar: the task editor for a task with a
-  /// due date, the event editor otherwise.
+  /// Opens a saved task in read-only view, with a pencil to edit it.
+  static Future<void> viewTask(BuildContext context, TaskModel task) =>
+      Navigator.pushNamed(context, AppRoutes.taskDetails, arguments: task);
+
+  /// Opens a saved event in read-only view, with a pencil to edit it.
+  static Future<void> viewEvent(
+    BuildContext context,
+    CalendarEventModel event,
+  ) => Navigator.pushNamed(context, AppRoutes.eventDetails, arguments: event);
+
+  /// Opens an entry shown in the calendar in read-only view: the task's for
+  /// a task with a due date, the event's otherwise.
   static Future<void> openCalendarItem(
     BuildContext context,
     CalendarEventModel item,
   ) =>
       item is TaskCalendarEvent
-          ? openTask(context, item.task)
-          : openEvent(context, item);
+          ? viewTask(context, item.task)
+          : viewEvent(context, item);
 
   static Future<void> openLabel(BuildContext context, String label) =>
       Navigator.pushNamed(context, AppRoutes.label, arguments: label);

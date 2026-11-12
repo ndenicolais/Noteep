@@ -1975,6 +1975,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'When you delete a recurring task you can choose to delete only this task, moving on to the next repeat, or all the following ones too.';
 
   @override
+  String get changelog_v2_0_0_bullet_74 =>
+      'Tapping a task or an event now opens it in view mode first, with all its details: tap the pencil to edit it. From the view you can also complete a task, check off its subtasks or delete it.';
+
+  @override
   String get infoPrivacyOpen => 'Privacy policy';
 
   @override

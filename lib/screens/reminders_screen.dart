@@ -242,7 +242,7 @@ class _ReminderCard extends ConsumerWidget {
     if (item is _NoteReminder) {
       AppNav.openNote(context, (item as _NoteReminder).note);
     } else {
-      AppNav.openTask(context, (item as _TaskReminder).task);
+      AppNav.viewTask(context, (item as _TaskReminder).task);
     }
   }
 

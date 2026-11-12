@@ -211,7 +211,7 @@ class CalendarEventModel {
 /// It is placed at the due time when the due date has one, else at the
 /// reminder time when the reminder falls on the due day (or there is no due
 /// date), else as an all-day entry on the due date. Never
-/// persisted: tap opens the task editor (see `AppNav.openCalendarItem`).
+/// persisted: tap opens the task view (see `AppNav.openCalendarItem`).
 class TaskCalendarEvent extends CalendarEventModel {
   TaskCalendarEvent(this.task)
     : super(

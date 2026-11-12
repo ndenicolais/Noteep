@@ -8,6 +8,7 @@ import 'package:noteep/models/calendar_model.dart';
 import 'package:noteep/models/note_model.dart';
 import 'package:noteep/models/task_model.dart';
 import 'package:noteep/screens/archive_screen.dart';
+import 'package:noteep/screens/calendar/calendar_event_details_screen.dart';
 import 'package:noteep/screens/calendar/calendar_event_editor_screen.dart';
 import 'package:noteep/screens/calendar/calendar_screen.dart';
 import 'package:noteep/screens/export_screen.dart';
@@ -17,6 +18,7 @@ import 'package:noteep/screens/note_editor/note_editor_screen.dart';
 import 'package:noteep/screens/reminders_screen.dart';
 import 'package:noteep/screens/settings/settings_screen.dart';
 import 'package:noteep/screens/statistics/statistics_screen.dart';
+import 'package:noteep/screens/task_editor/task_details_screen.dart';
 import 'package:noteep/screens/task_editor/task_editor_screen.dart';
 import 'package:noteep/screens/tasks/tasks_screen.dart';
 import 'package:noteep/screens/trash_screen.dart';
@@ -97,6 +99,15 @@ void main() {
         await resolve(tester, AppRoutes.event, event)
             as CalendarEventEditorScreen;
     expect(eventScreen.event, same(event));
+
+    final taskDetails =
+        await resolve(tester, AppRoutes.taskDetails, task) as TaskDetailsScreen;
+    expect(taskDetails.task, same(task));
+
+    final eventDetails =
+        await resolve(tester, AppRoutes.eventDetails, event)
+            as CalendarEventDetailsScreen;
+    expect(eventDetails.event, same(event));
   });
 
   testWidgets('rejects detail routes with missing or wrong arguments', (
@@ -106,6 +117,8 @@ void main() {
     expect(await resolve(tester, AppRoutes.note, TaskModel()), isNull);
     expect(await resolve(tester, AppRoutes.task, NoteModel()), isNull);
     expect(await resolve(tester, AppRoutes.event), isNull);
+    expect(await resolve(tester, AppRoutes.taskDetails, NoteModel()), isNull);
+    expect(await resolve(tester, AppRoutes.eventDetails), isNull);
     expect(await resolve(tester, '/does-not-exist'), isNull);
   });
 

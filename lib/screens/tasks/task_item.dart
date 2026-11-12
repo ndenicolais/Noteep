@@ -69,7 +69,7 @@ class TaskItem extends ConsumerWidget {
                     ),
       ),
       child: ListTile(
-        onTap: () => AppNav.openTask(context, task),
+        onTap: () => AppNav.viewTask(context, task),
         leading: Checkbox(
           value: task.isCompleted,
           onChanged:

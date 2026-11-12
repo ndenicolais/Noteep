@@ -3578,6 +3578,12 @@ abstract class AppLocalizations {
   /// **'Quando elimini un task ricorrente puoi scegliere se eliminare solo questo task, passando alla ripetizione successiva, oppure anche tutti quelli successivi.'**
   String get changelog_v2_0_0_bullet_73;
 
+  /// No description provided for @changelog_v2_0_0_bullet_74.
+  ///
+  /// In it, this message translates to:
+  /// **'Toccando un task o un evento ora si apre prima in visualizzazione, con tutti i dettagli: per modificarlo tocca la matita. Dalla visualizzazione puoi anche completare un task, spuntarne le sottoattività o eliminarlo.'**
+  String get changelog_v2_0_0_bullet_74;
+
   /// No description provided for @infoPrivacyOpen.
   ///
   /// In it, this message translates to:

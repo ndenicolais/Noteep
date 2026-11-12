@@ -1985,6 +1985,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Quando elimini un task ricorrente puoi scegliere se eliminare solo questo task, passando alla ripetizione successiva, oppure anche tutti quelli successivi.';
 
   @override
+  String get changelog_v2_0_0_bullet_74 =>
+      'Toccando un task o un evento ora si apre prima in visualizzazione, con tutti i dettagli: per modificarlo tocca la matita. Dalla visualizzazione puoi anche completare un task, spuntarne le sottoattività o eliminarlo.';
+
+  @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';
 
   @override
