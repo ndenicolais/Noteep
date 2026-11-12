@@ -8,6 +8,8 @@
     <string name="widget_new_note_description">Crea una nuova nota con un tocco</string>
     <string name="widget_new_task_description">Crea un nuovo task con un tocco</string>
     <string name="widget_new_event_description">Crea un nuovo evento con un tocco</string>
+    <string name="widget_notes">Note</string>
+    <string name="widget_tasks">Task</string>
     <string name="widget_calendar">Calendario</string>
     <string name="widget_add">Aggiungi</string>
     <string name="widget_notes_empty">Nessuna nota</string>
