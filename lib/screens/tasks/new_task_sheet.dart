@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../l10n/l10n.dart';
 import '../../theme/app_spacing.dart';
+import '../../utils/picker_defaults.dart';
 import '../../widgets/shared/app_dialogs.dart';
 
 /// What the new-task sheet collected. [due] carries a time only when one
@@ -77,10 +78,12 @@ class _NewTaskSheetState extends State<_NewTaskSheet> {
     if (date == null || !mounted) return;
     final time = await showTimePicker(
       context: context,
-      initialTime:
-          _due != null && _hasTime
-              ? TimeOfDay.fromDateTime(_due!)
-              : widget.defaultTime,
+      initialTime: initialPickerTime(
+        date,
+        _due != null && _hasTime
+            ? TimeOfDay.fromDateTime(_due!)
+            : widget.defaultTime,
+      ),
     );
     if (!mounted) return;
     setState(() {

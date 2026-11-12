@@ -26,6 +26,7 @@ import '../../theme/app_font_sizes.dart';
 import '../../theme/app_spacing.dart';
 import '../../utils/audio_service.dart';
 import '../../utils/link_utils.dart';
+import '../../utils/picker_defaults.dart';
 import '../../widgets/reminder_banner.dart';
 import '../../widgets/shared/app_dialogs.dart';
 import '../../widgets/shared/error_feedback.dart';
@@ -207,7 +208,7 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
     final now = DateTime.now();
     final date = await showDatePicker(
       context: context,
-      initialDate: _note.reminder ?? now.add(const Duration(hours: 1)),
+      initialDate: _note.reminder ?? now,
       firstDate: now,
       lastDate: now.add(const Duration(days: 365)),
     );
@@ -215,8 +216,9 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
 
     final time = await showTimePicker(
       context: context,
-      initialTime: TimeOfDay.fromDateTime(
-        _note.reminder ?? now.add(const Duration(hours: 1)),
+      initialTime: initialPickerTime(
+        date,
+        TimeOfDay.fromDateTime(_note.reminder ?? now),
       ),
     );
     if (time == null || !mounted) return;

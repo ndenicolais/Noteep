@@ -14,6 +14,7 @@ import '../../l10n/l10n.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
 import '../../theme/app_spacing.dart';
+import '../../utils/picker_defaults.dart';
 import '../../widgets/shared/app_dialogs.dart';
 import 'calendar_event_tile.dart';
 
@@ -70,9 +71,10 @@ void showDayEventsBottomSheet(
                     TextButton.icon(
                       onPressed: () {
                         Navigator.pop(ctx);
+                        final start = newEntryStart(day);
                         final newEvent = CalendarEventModel(
-                          startTime: day,
-                          endTime: day,
+                          startTime: start,
+                          endTime: start,
                         );
                         AppNav.openEvent(context, newEvent);
                       },
