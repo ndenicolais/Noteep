@@ -2008,6 +2008,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'In Calendar, birthdays and name days get larger, festive cards with a gradient background and confetti.';
 
   @override
+  String get changelog_v2_0_0_bullet_85 =>
+      'In Calendar, tasks show their own icon instead of a checkbox circle: tap them to open them.';
+
+  @override
   String get infoPrivacyOpen => 'Privacy policy';
 
   @override

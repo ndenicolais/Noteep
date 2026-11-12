@@ -2019,6 +2019,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Nel Calendario compleanni e onomastici hanno card più grandi e festose, con uno sfondo sfumato e coriandoli.';
 
   @override
+  String get changelog_v2_0_0_bullet_85 =>
+      'Nel Calendario i task mostrano la loro icona al posto del cerchio da spuntare: toccali per aprirli.';
+
+  @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';
 
   @override

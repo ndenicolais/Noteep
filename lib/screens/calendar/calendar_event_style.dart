@@ -81,12 +81,13 @@ CalendarItemStyle calendarItemStyle(
 ) {
   final isDark = colorScheme.brightness == Brightness.dark;
   if (item is TaskCalendarEvent) {
-    final done = item.task.isCompleted;
+    // The task icon, not a checkbox: tapping opens the task, it does not
+    // toggle it. Completion shows as faded, struck-through text.
     return _style(
       _taskSwatch,
       isDark,
-      done ? Icons.check_circle : Icons.radio_button_unchecked,
-      isDone: done,
+      Icons.task_alt,
+      isDone: item.task.isCompleted,
     );
   }
   if (item.isBirthday) {
