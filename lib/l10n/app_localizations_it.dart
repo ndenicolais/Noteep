@@ -960,6 +960,18 @@ class AppLocalizationsIt extends AppLocalizations {
   String get commonToday => 'Oggi';
 
   @override
+  String get commonTomorrow => 'Domani';
+
+  @override
+  String get commonYesterday => 'Ieri';
+
+  @override
+  String get tasksNoDateSection => 'Senza data';
+
+  @override
+  String get tasksNotificationTimeLabel => 'Orario notifica';
+
+  @override
   String get calendarSearchHint => 'Cerca eventi...';
 
   @override
@@ -1963,6 +1975,10 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_76 =>
       'Task ed eventi sono più semplici: scegli il giorno e, se vuoi, un orario. Con l\'orario ricevi la notifica a quell\'ora, senza orario no. Gli eventi di tutto il giorno avvisano il giorno stesso e/o il giorno prima solo se lo scegli, all\'orario delle Impostazioni. Il promemoria separato di task ed eventi e la sezione Promemoria non ci sono più (le note mantengono il loro promemoria). Ripristinando un backup, compleanni e onomastici senza avvisi li ricevono entrambi.';
+
+  @override
+  String get changelog_v2_0_0_bullet_77 =>
+      'Nella pagina Task le attività sono divise per giorno (Oggi, Domani, poi le date successive, infine quelle senza data) e ogni riga mostra titolo, le prime righe dei dettagli e l\'orario della notifica, se impostato.';
 
   @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';

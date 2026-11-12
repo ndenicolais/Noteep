@@ -11,6 +11,7 @@
 import 'package:flutter/material.dart';
 import '../../l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import '../../core/routing/app_router.dart';
 import '../../models/task_model.dart';
 import '../../providers/tasks_provider.dart';
@@ -20,7 +21,8 @@ import '../../widgets/shared/error_feedback.dart';
 import '../../widgets/shared/swipe_actions.dart';
 import 'task_delete.dart';
 
-/// A task row: checkbox, title/description, star and overflow menu, with
+/// A task row: checkbox, title, up to 3 lines of description and the
+/// notification time (if set), star and overflow menu, with
 /// swipe right to complete/reopen and swipe left to trash.
 class TaskItem extends ConsumerWidget {
   const TaskItem({super.key, required this.task});
@@ -100,14 +102,46 @@ class TaskItem extends ConsumerWidget {
           ],
         ),
         subtitle:
-            task.description.isNotEmpty
-                ? Text(
-                  task.description,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: task.isCompleted ? Colors.grey : null,
-                  ),
+            task.description.isNotEmpty || task.hasDueTime
+                ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (task.description.isNotEmpty)
+                      Text(
+                        task.description,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: task.isCompleted ? Colors.grey : null,
+                        ),
+                      ),
+                    // The day is the group header: the row shows the time.
+                    if (task.hasDueTime)
+                      Padding(
+                        padding: const EdgeInsets.only(top: AppSpacing.xs),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.alarm,
+                              size: 14,
+                              color:
+                                  task.isCompleted ? Colors.grey : cs.primary,
+                              semanticLabel: l10n.tasksNotificationTimeLabel,
+                            ),
+                            const SizedBox(width: AppSpacing.xs),
+                            Text(
+                              DateFormat.Hm().format(task.dueDate!),
+                              style: Theme.of(
+                                context,
+                              ).textTheme.labelMedium?.copyWith(
+                                color:
+                                    task.isCompleted ? Colors.grey : cs.primary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
                 )
                 : null,
         trailing: Row(

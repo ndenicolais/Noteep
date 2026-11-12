@@ -38,3 +38,41 @@ import '../../providers/settings/ui_provider.dart';
     completed: sorted.where((t) => t.isCompleted).toList(),
   );
 }
+
+/// [active] tasks (already in display order) split by due day: one group per
+/// day in date order, then the tasks without a due date (`day == null`).
+/// Within a day, pinned tasks stay on top, then timed tasks by time, then
+/// the day-only ones, each keeping their order in [active].
+List<({DateTime? day, List<TaskModel> tasks})> groupTasksByDay(
+  List<TaskModel> active,
+) {
+  final byDay = <DateTime?, List<TaskModel>>{};
+  for (final t in active) {
+    final due = t.dueDate;
+    final day = due == null ? null : DateTime(due.year, due.month, due.day);
+    (byDay[day] ??= []).add(t);
+  }
+  final days =
+      byDay.keys.whereType<DateTime>().toList()..sort((a, b) => a.compareTo(b));
+  int rank(TaskModel t) => t.isPinned ? 0 : (t.hasDueTime ? 1 : 2);
+  List<TaskModel> ordered(List<TaskModel> tasks) {
+    final indexed =
+        tasks.indexed.toList()..sort((a, b) {
+          final (ia, ta) = a;
+          final (ib, tb) = b;
+          final r = rank(ta).compareTo(rank(tb));
+          if (r != 0) return r;
+          if (rank(ta) == 1) {
+            final c = ta.dueDate!.compareTo(tb.dueDate!);
+            if (c != 0) return c;
+          }
+          return ia.compareTo(ib);
+        });
+    return [for (final (_, t) in indexed) t];
+  }
+
+  return [
+    for (final d in days) (day: d, tasks: ordered(byDay[d]!)),
+    if (byDay[null] case final undated?) (day: null, tasks: undated),
+  ];
+}

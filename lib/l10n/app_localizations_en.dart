@@ -957,6 +957,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonToday => 'Today';
 
   @override
+  String get commonTomorrow => 'Tomorrow';
+
+  @override
+  String get commonYesterday => 'Yesterday';
+
+  @override
+  String get tasksNoDateSection => 'No date';
+
+  @override
+  String get tasksNotificationTimeLabel => 'Notification time';
+
+  @override
   String get calendarSearchHint => 'Search events...';
 
   @override
@@ -1953,6 +1965,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_76 =>
       'Tasks and events are simpler: pick the day and, if you like, a time. With a time you get a notification at that time, without one you don\'t. All-day events alert on the day and/or the day before only if you choose so, at the time set in Settings. The separate reminder of tasks and events and the Reminders section are gone (notes keep their reminder). When you restore a backup, birthdays and name days without alerts get both.';
+
+  @override
+  String get changelog_v2_0_0_bullet_77 =>
+      'On the Tasks page tasks are split by day (Today, Tomorrow, then later dates, and finally those without a date), and each row shows the title, the first lines of the details and the notification time, if set.';
 
   @override
   String get infoPrivacyOpen => 'Privacy policy';

@@ -8,7 +8,9 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../models/task_model.dart';
@@ -40,7 +42,10 @@ class TaskListView extends ConsumerWidget {
       source.select((tasks) {
         final sorted = sortTasksForDisplay(tasks, sort);
         return (
-          active: IdList(sorted.active.map((t) => t.id)),
+          active: _DayGroups([
+            for (final g in groupTasksByDay(sorted.active))
+              (day: g.day, ids: IdList(g.tasks.map((t) => t.id))),
+          ]),
           completed: IdList(sorted.completed.map((t) => t.id)),
         );
       }),
@@ -89,7 +94,21 @@ class TaskListView extends ConsumerWidget {
           physics: const AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.all(AppSpacing.lg),
           children: [
-            for (final id in active.ids) _TaskRow(key: ValueKey(id), id: id),
+            for (final (i, g) in active.groups.indexed) ...[
+              SectionHeader(
+                _dayLabel(context, g.day),
+                key: ValueKey('day-${g.day}'),
+                padding:
+                    i == 0
+                        ? SectionHeader.inlinePadding
+                        : const EdgeInsets.only(
+                          top: AppSpacing.lg,
+                          bottom: AppSpacing.sm,
+                        ),
+                muted: g.day == null,
+              ),
+              for (final id in g.ids.ids) _TaskRow(key: ValueKey(id), id: id),
+            ],
             if (completed.isNotEmpty) ...[
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: AppSpacing.sm),
@@ -107,6 +126,40 @@ class TaskListView extends ConsumerWidget {
       ),
     );
   }
+}
+
+/// Header of a day group: Today/Tomorrow/Yesterday, otherwise the full
+/// date (with the year only when it is not the current one).
+String _dayLabel(BuildContext context, DateTime? day) {
+  final l10n = context.l10n;
+  if (day == null) return l10n.tasksNoDateSection;
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+  final diff = DateTime(day.year, day.month, day.day).difference(today).inDays;
+  if (diff == 0) return l10n.commonToday;
+  if (diff == 1) return l10n.commonTomorrow;
+  if (diff == -1) return l10n.commonYesterday;
+  final label = DateFormat(
+    day.year == today.year ? 'EEEE d MMMM' : 'EEEE d MMMM y',
+  ).format(day);
+  return label.isEmpty ? label : label[0].toUpperCase() + label.substring(1);
+}
+
+/// The active tasks' ids per due day, compared by value so the list
+/// rebuilds only when a task changes group or position.
+class _DayGroups {
+  _DayGroups(this.groups);
+
+  final List<({DateTime? day, IdList ids})> groups;
+
+  bool get isEmpty => groups.isEmpty;
+
+  @override
+  bool operator ==(Object other) =>
+      other is _DayGroups && listEquals(other.groups, groups);
+
+  @override
+  int get hashCode => Object.hashAll(groups);
 }
 
 /// A [TaskItem] that watches its own task, so it rebuilds only when that

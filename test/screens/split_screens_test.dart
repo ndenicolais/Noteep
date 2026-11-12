@@ -80,6 +80,31 @@ void main() {
       sortTasksForDisplay(tasks, SortOrder.createdNewest);
       expect(ids(tasks), ['a', 'b', 'c', 'd']);
     });
+
+    test('groupTasksByDay splits by due day, undated last', () {
+      TaskModel due(String id, DateTime? d, {bool pinned = false}) =>
+          TaskModel(id: id, dueDate: d, isPinned: pinned);
+      final groups = groupTasksByDay([
+        due('none', null),
+        due('late', DateTime(2026, 3, 2, 18)),
+        due('day', DateTime(2026, 3, 2)),
+        due('first', DateTime(2026, 3, 1, 9)),
+        due('early', DateTime(2026, 3, 2, 8)),
+        due('pin', DateTime(2026, 3, 2), pinned: true),
+      ]);
+      expect(
+        [for (final g in groups) g.day],
+        [DateTime(2026, 3, 1), DateTime(2026, 3, 2), null],
+      );
+      expect(
+        [for (final g in groups) ids(g.tasks)],
+        [
+          ['first'],
+          ['pin', 'early', 'late', 'day'],
+          ['none'],
+        ],
+      );
+    });
   });
 
   group('showAppTextInputDialog', () {

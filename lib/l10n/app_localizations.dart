@@ -1844,6 +1844,30 @@ abstract class AppLocalizations {
   /// **'Oggi'**
   String get commonToday;
 
+  /// No description provided for @commonTomorrow.
+  ///
+  /// In it, this message translates to:
+  /// **'Domani'**
+  String get commonTomorrow;
+
+  /// No description provided for @commonYesterday.
+  ///
+  /// In it, this message translates to:
+  /// **'Ieri'**
+  String get commonYesterday;
+
+  /// No description provided for @tasksNoDateSection.
+  ///
+  /// In it, this message translates to:
+  /// **'Senza data'**
+  String get tasksNoDateSection;
+
+  /// No description provided for @tasksNotificationTimeLabel.
+  ///
+  /// In it, this message translates to:
+  /// **'Orario notifica'**
+  String get tasksNotificationTimeLabel;
+
   /// No description provided for @calendarSearchHint.
   ///
   /// In it, this message translates to:
@@ -3535,6 +3559,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Task ed eventi sono più semplici: scegli il giorno e, se vuoi, un orario. Con l\'orario ricevi la notifica a quell\'ora, senza orario no. Gli eventi di tutto il giorno avvisano il giorno stesso e/o il giorno prima solo se lo scegli, all\'orario delle Impostazioni. Il promemoria separato di task ed eventi e la sezione Promemoria non ci sono più (le note mantengono il loro promemoria). Ripristinando un backup, compleanni e onomastici senza avvisi li ricevono entrambi.'**
   String get changelog_v2_0_0_bullet_76;
+
+  /// No description provided for @changelog_v2_0_0_bullet_77.
+  ///
+  /// In it, this message translates to:
+  /// **'Nella pagina Task le attività sono divise per giorno (Oggi, Domani, poi le date successive, infine quelle senza data) e ogni riga mostra titolo, le prime righe dei dettagli e l\'orario della notifica, se impostato.'**
+  String get changelog_v2_0_0_bullet_77;
 
   /// No description provided for @infoPrivacyOpen.
   ///
