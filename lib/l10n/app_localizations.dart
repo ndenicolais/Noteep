@@ -3572,6 +3572,12 @@ abstract class AppLocalizations {
   /// **'Le schede del Calendario hanno colori più morbidi, gli stessi delle note: tinte pastello con il tema chiaro e tonalità profonde con il tema scuro, ognuna per tipo (task, compleanni, onomastici, eventi di tutto il giorno ed eventi con orario).'**
   String get changelog_v2_0_0_bullet_78;
 
+  /// No description provided for @changelog_v2_0_0_bullet_79.
+  ///
+  /// In it, this message translates to:
+  /// **'Il widget Riepilogo Noteep nella schermata Home non mostra più \"Impossibile caricare il widget\".'**
+  String get changelog_v2_0_0_bullet_79;
+
   /// No description provided for @infoPrivacyOpen.
   ///
   /// In it, this message translates to:

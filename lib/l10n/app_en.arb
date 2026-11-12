@@ -593,6 +593,7 @@
   "changelog_v2_0_0_bullet_76": "Tasks and events are simpler: pick the day and, if you like, a time. With a time you get a notification at that time, without one you don't. All-day events alert on the day and/or the day before only if you choose so, at the time set in Settings. The separate reminder of tasks and events and the Reminders section are gone (notes keep their reminder). When you restore a backup, birthdays and name days without alerts get both.",
   "changelog_v2_0_0_bullet_77": "On the Tasks page tasks are split by day (Today, Tomorrow, then later dates, and finally those without a date), and each row shows the title, the first lines of the details and the notification time, if set.",
   "changelog_v2_0_0_bullet_78": "Calendar cards now use softer colors, the same as notes: pastel tints in the light theme and deep tones in the dark theme, one for each kind (tasks, birthdays, name days, all-day events and timed events).",
+  "changelog_v2_0_0_bullet_79": "The Noteep Summary home screen widget no longer shows \"Can't load widget\".",
   "infoPrivacyOpen": "Privacy policy",
   "privacyPolicyTitle": "Privacy policy",
   "privacyPolicyIntro": "Noteep is an app for notes, tasks and calendar. This policy explains which data it processes, why, and how you can control it. Noteep shows no ads, uses no analytics or tracking tools, and does not sell or hand over your data.",

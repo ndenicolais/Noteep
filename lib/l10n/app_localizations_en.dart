@@ -1975,6 +1975,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Calendar cards now use softer colors, the same as notes: pastel tints in the light theme and deep tones in the dark theme, one for each kind (tasks, birthdays, name days, all-day events and timed events).';
 
   @override
+  String get changelog_v2_0_0_bullet_79 =>
+      'The Noteep Summary home screen widget no longer shows \"Can\'t load widget\".';
+
+  @override
   String get infoPrivacyOpen => 'Privacy policy';
 
   @override

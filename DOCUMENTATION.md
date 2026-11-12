@@ -362,7 +362,7 @@ The screens (`SettingsScreen`, `BackupDataScreen`) handle dialogs, file pickers 
 - **Quick actions** (`QuickActionsWidget`, 3×1 resizable): New note / New task / New event.
 - **New note / New task / New event** (1×1): a single button each.
 - Buttons open `MainActivity` with a `noteep://new/{note,task,event}` URI; `HomeWidgetLaunchHandler` opens an empty editor (see [Navigation](#9-navigation)).
-- All widgets are `AppWidgetProvider`s with `RemoteViews`. Picker names and descriptions are Android string resources (`res/values`, `res/values-it`).
+- All widgets are `AppWidgetProvider`s with `RemoteViews`. Layouts may only use RemoteViews-supported classes (`FrameLayout`, `LinearLayout`, `TextView`, `ImageView`, …): a plain `<View>` (e.g. as a divider) makes the launcher show "Can't load widget" — use a `FrameLayout` with a background instead. Picker names and descriptions are Android string resources (`res/values`, `res/values-it`).
 
 ### 5.10 Shared behavior
 
