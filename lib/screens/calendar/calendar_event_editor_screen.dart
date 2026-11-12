@@ -23,6 +23,7 @@ import '../../widgets/shared/error_feedback.dart';
 import 'calendar_event_details_section.dart';
 import 'calendar_event_editor_bars.dart';
 import 'calendar_location_field.dart';
+import 'calendar_new_entry.dart';
 
 class CalendarEventEditorScreen extends ConsumerStatefulWidget {
   const CalendarEventEditorScreen({super.key, required this.event});
@@ -80,6 +81,17 @@ class _CalendarEventEditorScreenState
     final description = _descriptionController.text.trim();
     final location = _locationController.text.trim();
     return title.isEmpty && description.isEmpty && location.isEmpty;
+  }
+
+  /// Switches this never-saved event to a new task, keeping what was typed.
+  void _switchToTask() {
+    _softDeleted = true; // Skips the save: the entry becomes a task.
+    switchEventToTask(
+      context,
+      _event,
+      title: _titleController.text.trim(),
+      description: _descriptionController.text.trim(),
+    );
   }
 
   void _save() {
@@ -247,6 +259,14 @@ class _CalendarEventEditorScreenState
                 border: InputBorder.none,
               ),
             ),
+            if (_isNew)
+              Padding(
+                padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+                child: CalendarEntryTypeSelector(
+                  selected: CalendarEntryType.event,
+                  onChanged: (_) => _switchToTask(),
+                ),
+              ),
             CalendarEventDetailsSection(
               event: _event,
               locationField: CalendarLocationField(

@@ -25,6 +25,7 @@ import '../../utils/notification_service.dart';
 import '../../utils/recurrence.dart';
 import '../../utils/dialogs/move_to_list_dialog.dart';
 import '../../widgets/shared/error_feedback.dart';
+import '../calendar/calendar_new_entry.dart';
 import '../tasks/task_delete.dart';
 import 'task_editor_app_bar.dart';
 import 'task_editor_bottom_bar.dart';
@@ -159,6 +160,17 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
     return title.isEmpty && description.isEmpty;
   }
 
+  /// Switches this never-saved task to a new event, keeping what was typed.
+  void _switchToEvent() {
+    _softDeleted = true; // Skips the save: the entry becomes an event.
+    switchTaskToEvent(
+      context,
+      _task,
+      title: _titleController.text.trim(),
+      description: _descriptionController.text.trim(),
+    );
+  }
+
   void _save() {
     if (_softDeleted) return;
     if (_isNew && _isEmpty()) return;
@@ -173,6 +185,9 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
     if (_isNew) {
       pending = ref.read(tasksProvider.notifier).addTask(updated);
       _isNew = false;
+      // A due time carried over from an event (or set before the first
+      // save) still notifies.
+      NotificationService.instance.scheduleTaskReminder(updated).ignore();
     } else {
       pending = ref.read(tasksProvider.notifier).updateTask(updated);
     }
@@ -421,6 +436,19 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
                 ),
               ),
             ),
+            if (_isNew)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.lg,
+                  0,
+                  AppSpacing.lg,
+                  AppSpacing.sm,
+                ),
+                child: CalendarEntryTypeSelector(
+                  selected: CalendarEntryType.task,
+                  onChanged: (_) => _switchToEvent(),
+                ),
+              ),
             TaskInfoSection(
               task: _task,
               onClearDueDate: () => _applyDueDate(null),

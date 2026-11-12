@@ -1089,6 +1089,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calendarEventTitle => 'Event';
 
   @override
+  String get calendarEntryTypeEvent => 'Event';
+
+  @override
+  String get calendarEntryTypeTask => 'Task';
+
+  @override
   String get calendarDeleteEvent => 'Delete event';
 
   @override
@@ -2005,6 +2011,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_87 =>
       'The Noteep Summary widget has been removed: to see your notes, tasks and plans on the home screen, use the Notes, Tasks and Calendar widgets.';
+
+  @override
+  String get changelog_v2_0_0_bullet_88 =>
+      'In Calendar the + button lets you choose between creating an event or a task, and while creating it you can switch between the two without losing what you typed.';
 
   @override
   String get infoPrivacyOpen => 'Privacy policy';

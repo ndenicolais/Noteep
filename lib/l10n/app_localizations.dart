@@ -2096,6 +2096,18 @@ abstract class AppLocalizations {
   /// **'Evento'**
   String get calendarEventTitle;
 
+  /// No description provided for @calendarEntryTypeEvent.
+  ///
+  /// In it, this message translates to:
+  /// **'Evento'**
+  String get calendarEntryTypeEvent;
+
+  /// No description provided for @calendarEntryTypeTask.
+  ///
+  /// In it, this message translates to:
+  /// **'Task'**
+  String get calendarEntryTypeTask;
+
   /// No description provided for @calendarDeleteEvent.
   ///
   /// In it, this message translates to:
@@ -3649,6 +3661,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Il widget Riepilogo Noteep è stato rimosso: per vedere note, task e impegni dalla schermata Home usa i widget Note, Task e Calendario.'**
   String get changelog_v2_0_0_bullet_87;
+
+  /// No description provided for @changelog_v2_0_0_bullet_88.
+  ///
+  /// In it, this message translates to:
+  /// **'Nel Calendario il pulsante + ti fa scegliere se creare un evento o un task, e mentre lo crei puoi passare dall\'uno all\'altro senza perdere quanto scritto.'**
+  String get changelog_v2_0_0_bullet_88;
 
   /// No description provided for @infoPrivacyOpen.
   ///

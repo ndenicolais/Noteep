@@ -8,7 +8,6 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
-import '../../core/routing/app_router.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../../l10n/l10n.dart';
@@ -21,6 +20,7 @@ import '../../widgets/nav_scaffold.dart';
 import 'calendar_day_view.dart';
 import 'calendar_month_view.dart';
 import 'calendar_multi_day_view.dart';
+import 'calendar_new_entry.dart';
 import 'calendar_schedule_view.dart';
 import 'calendar_search_bar.dart';
 import 'calendar_search_results_view.dart';
@@ -250,11 +250,7 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
                 : _buildCurrentView(allEvents),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          final now = DateTime.now();
-          final newEvent = CalendarEventModel(startTime: now, endTime: now);
-          AppNav.openEvent(context, newEvent);
-        },
+        onPressed: () => showNewCalendarEntrySheet(context),
         child: const Icon(Icons.add),
       ),
     );

@@ -1092,6 +1092,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get calendarEventTitle => 'Evento';
 
   @override
+  String get calendarEntryTypeEvent => 'Evento';
+
+  @override
+  String get calendarEntryTypeTask => 'Task';
+
+  @override
   String get calendarDeleteEvent => 'Elimina evento';
 
   @override
@@ -2016,6 +2022,10 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_87 =>
       'Il widget Riepilogo Noteep è stato rimosso: per vedere note, task e impegni dalla schermata Home usa i widget Note, Task e Calendario.';
+
+  @override
+  String get changelog_v2_0_0_bullet_88 =>
+      'Nel Calendario il pulsante + ti fa scegliere se creare un evento o un task, e mentre lo crei puoi passare dall\'uno all\'altro senza perdere quanto scritto.';
 
   @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';
