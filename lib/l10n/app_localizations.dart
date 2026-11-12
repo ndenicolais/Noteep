@@ -3614,6 +3614,12 @@ abstract class AppLocalizations {
   /// **'Nella griglia delle note ora puoi scorrere anche partendo da una nota: per spostarla tienila premuta e trascinala, per il menu delle azioni rapide tienila premuta e rilasciala.'**
   String get changelog_v2_0_0_bullet_82;
 
+  /// No description provided for @changelog_v2_0_0_bullet_83.
+  ///
+  /// In it, this message translates to:
+  /// **'Nel Calendario il pulsante Oggi ora riporta al giorno corrente anche nella vista Programma.'**
+  String get changelog_v2_0_0_bullet_83;
+
   /// No description provided for @infoPrivacyOpen.
   ///
   /// In it, this message translates to:

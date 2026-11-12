@@ -51,9 +51,13 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
     _focusedMonth = DateTime(now.year, now.month);
   }
 
+  /// The schedule view ignores [_focusedDay]: "Today" scrolls it instead.
+  final _scheduleController = ScrollController();
+
   @override
   void dispose() {
     _searchController.dispose();
+    _scheduleController.dispose();
     super.dispose();
   }
 
@@ -63,6 +67,13 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
       _focusedDay = now;
       _focusedMonth = DateTime(now.year, now.month);
     });
+    if (_scheduleController.hasClients) {
+      _scheduleController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
   }
 
   CalendarViewMode get _currentView => ref.read(calendarViewModeProvider);
@@ -329,7 +340,10 @@ class _CalendarWorkspaceViewState extends ConsumerState<CalendarWorkspaceView> {
           },
         );
       case CalendarViewMode.schedule:
-        return CalendarScheduleView(allEvents: allEvents);
+        return CalendarScheduleView(
+          allEvents: allEvents,
+          controller: _scheduleController,
+        );
       case CalendarViewMode.sevenDays:
         return CalendarMultiDayView(
           startDay: _focusedDay,

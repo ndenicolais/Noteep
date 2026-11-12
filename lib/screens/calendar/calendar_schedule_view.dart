@@ -25,9 +25,17 @@ import 'calendar_utils.dart';
 /// into the past and into the future: each direction is a lazy list of
 /// months, built only when it comes into view.
 class CalendarScheduleView extends StatelessWidget {
-  const CalendarScheduleView({super.key, required this.allEvents});
+  const CalendarScheduleView({
+    super.key,
+    required this.allEvents,
+    this.controller,
+  });
 
   final List<CalendarEventModel> allEvents;
+
+  /// Offset 0 is today (the start of the centered forward sliver), so the
+  /// "Today" button scrolls this back to 0.
+  final ScrollController? controller;
 
   /// Months reachable in each direction from the current one.
   static const _monthRange = 1200;
@@ -82,6 +90,7 @@ class CalendarScheduleView extends StatelessWidget {
     }
 
     return CustomScrollView(
+      controller: controller,
       center: _forwardKey,
       slivers: [
         // Past: index 0 is closest to today, growing upward.

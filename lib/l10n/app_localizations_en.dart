@@ -2000,6 +2000,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'In the notes grid you can now scroll starting from a note: to move it, press and hold, then drag; for the quick actions menu, press and hold, then release.';
 
   @override
+  String get changelog_v2_0_0_bullet_83 =>
+      'In Calendar, the Today button now brings you back to the current day in the Schedule view too.';
+
+  @override
   String get infoPrivacyOpen => 'Privacy policy';
 
   @override

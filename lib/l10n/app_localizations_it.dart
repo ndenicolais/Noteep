@@ -2011,6 +2011,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Nella griglia delle note ora puoi scorrere anche partendo da una nota: per spostarla tienila premuta e trascinala, per il menu delle azioni rapide tienila premuta e rilasciala.';
 
   @override
+  String get changelog_v2_0_0_bullet_83 =>
+      'Nel Calendario il pulsante Oggi ora riporta al giorno corrente anche nella vista Programma.';
+
+  @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';
 
   @override
