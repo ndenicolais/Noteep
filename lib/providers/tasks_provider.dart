@@ -145,6 +145,14 @@ class TasksNotifier extends Notifier<List<TaskModel>>
     );
   }
 
+  /// Removes only the current occurrence of the recurring [task]: it moves on
+  /// to the next one. Returns the updated task.
+  Future<TaskModel> skipOccurrence(TaskModel task) async {
+    final next = task.nextOccurrence();
+    await updateTask(next);
+    return next;
+  }
+
   Future<void> restoreFromTrash(String id) async {
     final updated = state
         .firstWhere((t) => t.id == id)

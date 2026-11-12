@@ -58,6 +58,19 @@ class TaskModel {
   bool get hasDueTime =>
       dueDate != null && (dueDate!.hour != 0 || dueDate!.minute != 0);
 
+  /// Whether this task repeats on a schedule (a recurrence needs a due date
+  /// to step from).
+  bool get isRecurring => recurrence != RecurrenceType.none && dueDate != null;
+
+  /// This task moved on to its next occurrence: due date and reminder step
+  /// forward by one recurrence and the task is open again.
+  TaskModel nextOccurrence() => copyWith(
+    dueDate: nextRecurrence(dueDate!, recurrence),
+    reminder: reminder == null ? null : nextRecurrence(reminder!, recurrence),
+    isCompleted: false,
+    updatedAt: DateTime.now(),
+  );
+
   TaskModel copyWith({
     String? title,
     String? description,

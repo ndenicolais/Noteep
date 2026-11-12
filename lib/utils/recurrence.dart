@@ -48,3 +48,29 @@ extension RecurrenceTypeExtension on RecurrenceType {
     return toString().split('.').last;
   }
 }
+
+/// [from] moved one [type] step forward, keeping its time of day. A monthly
+/// or yearly step that lands past the end of the month (e.g. 31 Jan → Feb)
+/// falls on the month's last day.
+DateTime nextRecurrence(DateTime from, RecurrenceType type) {
+  DateTime at(int year, int month, int day) =>
+      DateTime(year, month, day, from.hour, from.minute, from.second);
+  DateTime addMonths(int months) {
+    final target = DateTime(from.year, from.month + months);
+    final lastDay = DateTime(target.year, target.month + 1, 0).day;
+    return at(target.year, target.month, from.day.clamp(1, lastDay));
+  }
+
+  switch (type) {
+    case RecurrenceType.none:
+      return from;
+    case RecurrenceType.daily:
+      return at(from.year, from.month, from.day + 1);
+    case RecurrenceType.weekly:
+      return at(from.year, from.month, from.day + 7);
+    case RecurrenceType.monthly:
+      return addMonths(1);
+    case RecurrenceType.yearly:
+      return addMonths(12);
+  }
+}

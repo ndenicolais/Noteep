@@ -299,6 +299,10 @@
     }
   },
   "tasksDeleteTaskConfirm": "Vuoi spostare questo task nel cestino?",
+  "tasksDeleteRecurringTitle": "Elimina task ricorrente",
+  "tasksDeleteThisOccurrence": "Solo questo task",
+  "tasksDeleteAllOccurrences": "Questo e tutti i successivi",
+  "tasksOccurrenceDeleted": "Task eliminato, passato alla prossima ripetizione",
   "tasksMoveToListTitle": "Sposta in un elenco",
   "tasksNoList": "Nessun elenco",
   "tasksUnknownList": "Sconosciuto",
@@ -752,6 +756,7 @@
   "changelog_v2_0_0_bullet_70": "Tutte le opzioni di backup, esportazione e importazione sono ora raccolte in Impostazioni → Backup e dati.",
   "changelog_v2_0_0_bullet_71": "Nella vista Programma del Calendario puoi scorrere liberamente verso i mesi passati e futuri, senza più il limite dei prossimi tre mesi.",
   "changelog_v2_0_0_bullet_72": "Il backup completo ora salva anche le etichette e le tue impostazioni (tema, lingua, viste, orario delle notifiche e altre preferenze): al ripristino puoi scegliere se recuperare anche le impostazioni.",
+  "changelog_v2_0_0_bullet_73": "Quando elimini un task ricorrente puoi scegliere se eliminare solo questo task, passando alla ripetizione successiva, oppure anche tutti quelli successivi.",
   "infoPrivacyOpen": "Informativa sulla privacy",
   "privacyPolicyTitle": "Informativa sulla privacy",
   "privacyPolicyIntro": "Noteep è un'app per note, task e calendario. Questa informativa spiega quali dati tratta, perché e come puoi controllarli. Noteep non mostra pubblicità, non usa strumenti di analisi o di tracciamento e non vende né cede i tuoi dati.",

@@ -25,8 +25,8 @@ import '../../utils/notification_service.dart';
 import '../../utils/recurrence.dart';
 import '../../utils/dialogs/move_to_list_dialog.dart';
 import '../../widgets/reminder_banner.dart';
-import '../../widgets/shared/app_dialogs.dart';
 import '../../widgets/shared/error_feedback.dart';
+import '../tasks/task_delete.dart';
 import 'task_editor_app_bar.dart';
 import 'task_editor_bottom_bar.dart';
 import 'task_info_section.dart';
@@ -182,26 +182,24 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
   }
 
   Future<void> _confirmDelete() async {
-    final confirmed = await showAppConfirmDialog(
-      context,
-      title: context.l10n.tasksDeleteTask,
-      message: context.l10n.tasksDeleteTaskConfirm,
-      confirmLabel: context.l10n.commonDelete,
-      destructive: true,
+    // A never-saved task has no series to keep: plain confirm only.
+    final current = _task.copyWith(
+      title: _titleController.text.trim(),
+      description: _descriptionController.text.trim(),
+      updatedAt: DateTime.now(),
+      recurrence: _isNew ? RecurrenceType.none : null,
     );
-    if (!confirmed || !mounted) return;
+    final scope = await askTaskDeleteScope(
+      context,
+      current,
+      message: context.l10n.tasksDeleteTaskConfirm,
+    );
+    if (scope == null || !mounted) return;
+    // Skips the save on pop: the delete below already persists the task.
     _softDeleted = true;
     // A never-saved task is not in the provider: nothing to trash.
-    if (!_isNew) {
-      final notifier = ref.read(tasksProvider.notifier);
-      final id = _task.id;
-      notifyWithUndo(
-        notifier.softDelete(id),
-        context,
-        message: context.l10n.tasksTrashed,
-        onUndo: () => notifier.restoreFromTrash(id),
-      );
-    }
+    // Skipping an occurrence keeps the edits made here.
+    if (!_isNew) deleteTaskWithUndo(context, ref, current, scope);
     Navigator.pop(context);
   }
 

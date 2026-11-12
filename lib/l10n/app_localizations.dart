@@ -1640,6 +1640,30 @@ abstract class AppLocalizations {
   /// **'Vuoi spostare questo task nel cestino?'**
   String get tasksDeleteTaskConfirm;
 
+  /// No description provided for @tasksDeleteRecurringTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Elimina task ricorrente'**
+  String get tasksDeleteRecurringTitle;
+
+  /// No description provided for @tasksDeleteThisOccurrence.
+  ///
+  /// In it, this message translates to:
+  /// **'Solo questo task'**
+  String get tasksDeleteThisOccurrence;
+
+  /// No description provided for @tasksDeleteAllOccurrences.
+  ///
+  /// In it, this message translates to:
+  /// **'Questo e tutti i successivi'**
+  String get tasksDeleteAllOccurrences;
+
+  /// No description provided for @tasksOccurrenceDeleted.
+  ///
+  /// In it, this message translates to:
+  /// **'Task eliminato, passato alla prossima ripetizione'**
+  String get tasksOccurrenceDeleted;
+
   /// No description provided for @tasksMoveToListTitle.
   ///
   /// In it, this message translates to:
@@ -3547,6 +3571,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Il backup completo ora salva anche le etichette e le tue impostazioni (tema, lingua, viste, orario delle notifiche e altre preferenze): al ripristino puoi scegliere se recuperare anche le impostazioni.'**
   String get changelog_v2_0_0_bullet_72;
+
+  /// No description provided for @changelog_v2_0_0_bullet_73.
+  ///
+  /// In it, this message translates to:
+  /// **'Quando elimini un task ricorrente puoi scegliere se eliminare solo questo task, passando alla ripetizione successiva, oppure anche tutti quelli successivi.'**
+  String get changelog_v2_0_0_bullet_73;
 
   /// No description provided for @infoPrivacyOpen.
   ///

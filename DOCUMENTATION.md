@@ -155,7 +155,7 @@ A to-do item. Collection: `users/{uid}/tasks`.
 | `isCompleted`, `isPinned`, `isSpecial`, `isArchived` | `bool` | `isPinned` = on top of its section; `isSpecial` = starred, shown in the "Starred" tab |
 | `dueDate` | `DateTime?` | Date, optionally with a time (`hasDueTime`: not midnight). A due time is also the reminder (see §5.4 alerts) |
 | `listId` | `String?` | `TaskListModel.id`; null = no list |
-| `recurrence` | `RecurrenceType` | `none`, `daily`, `weekly`, `monthly`, `yearly` |
+| `recurrence` | `RecurrenceType` | `none`, `daily`, `weekly`, `monthly`, `yearly`. A task is a single document: `isRecurring` needs a `dueDate`, and `nextOccurrence()` steps due date and reminder forward with `nextRecurrence` (`utils/recurrence.dart`; month-end days clamp to the month's last day) and reopens the task |
 | `reminder` | `DateTime?` | |
 | `tags` | `List<String>` | |
 | `subtasks` | `List<SubtaskModel>` | `id`, `title`, `isCompleted`, `createdAt`, `updatedAt` |
@@ -284,6 +284,7 @@ The list of active notes and the note editor.
 - Swipe right completes/reopens (the row stays), swipe left trashes; menu to edit, move to another list or delete; star toggles "special".
 - Skeleton on first load, error state with Retry, pull to refresh.
 - Task editor: title and description with undo/redo, due date, recurrence, list, subtasks, reminder.
+- Deleting (menu, swipe left, editor) goes through `askTaskDeleteScope` + `deleteTaskWithUndo` (`task_delete.dart`). A recurring task (`isRecurring`) asks "This task" / "This and all following tasks": the first calls `TasksNotifier.skipOccurrence` (moves to the next occurrence, reschedules the reminder; undo restores the previous version), the second trashes the task. Swipe left on a recurring task opens this dialog and the row snaps back; other tasks are trashed directly with undo.
 
 ### 5.4 Calendar
 

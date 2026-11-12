@@ -854,6 +854,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get tasksDeleteTaskConfirm => 'Vuoi spostare questo task nel cestino?';
 
   @override
+  String get tasksDeleteRecurringTitle => 'Elimina task ricorrente';
+
+  @override
+  String get tasksDeleteThisOccurrence => 'Solo questo task';
+
+  @override
+  String get tasksDeleteAllOccurrences => 'Questo e tutti i successivi';
+
+  @override
+  String get tasksOccurrenceDeleted =>
+      'Task eliminato, passato alla prossima ripetizione';
+
+  @override
   String get tasksMoveToListTitle => 'Sposta in un elenco';
 
   @override
@@ -1966,6 +1979,10 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_72 =>
       'Il backup completo ora salva anche le etichette e le tue impostazioni (tema, lingua, viste, orario delle notifiche e altre preferenze): al ripristino puoi scegliere se recuperare anche le impostazioni.';
+
+  @override
+  String get changelog_v2_0_0_bullet_73 =>
+      'Quando elimini un task ricorrente puoi scegliere se eliminare solo questo task, passando alla ripetizione successiva, oppure anche tutti quelli successivi.';
 
   @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';

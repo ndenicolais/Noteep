@@ -852,6 +852,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tasksDeleteTaskConfirm => 'Move this task to the trash?';
 
   @override
+  String get tasksDeleteRecurringTitle => 'Delete recurring task';
+
+  @override
+  String get tasksDeleteThisOccurrence => 'This task';
+
+  @override
+  String get tasksDeleteAllOccurrences => 'This and all following tasks';
+
+  @override
+  String get tasksOccurrenceDeleted => 'Task deleted, moved to the next repeat';
+
+  @override
   String get tasksMoveToListTitle => 'Move to a list';
 
   @override
@@ -1957,6 +1969,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_72 =>
       'The full backup now also saves your labels and settings (theme, language, views, notification time and other preferences): when restoring you can choose whether to bring the settings back too.';
+
+  @override
+  String get changelog_v2_0_0_bullet_73 =>
+      'When you delete a recurring task you can choose to delete only this task, moving on to the next repeat, or all the following ones too.';
 
   @override
   String get infoPrivacyOpen => 'Privacy policy';

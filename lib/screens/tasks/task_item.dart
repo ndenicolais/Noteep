@@ -16,9 +16,9 @@ import '../../models/task_model.dart';
 import '../../providers/tasks_provider.dart';
 import '../../theme/app_spacing.dart';
 import '../../utils/dialogs/move_to_list_dialog.dart';
-import '../../widgets/shared/app_dialogs.dart';
 import '../../widgets/shared/error_feedback.dart';
 import '../../widgets/shared/swipe_actions.dart';
+import 'task_delete.dart';
 
 /// A task row: checkbox, title/description, star and overflow menu, with
 /// swipe right to complete/reopen and swipe left to trash.
@@ -54,7 +54,19 @@ class TaskItem extends ConsumerWidget {
         icon: Icons.delete_outline,
         label: l10n.commonTrash,
         color: cs.error,
-        onTriggered: () => _trash(context, ref),
+        // A recurring task first asks what to delete, so the row snaps back
+        // and leaves the list only if the whole series is trashed.
+        removesItem: !task.isRecurring,
+        onTriggered:
+            () =>
+                task.isRecurring
+                    ? _confirmTrash(context, ref)
+                    : deleteTaskWithUndo(
+                      context,
+                      ref,
+                      task,
+                      TaskDeleteScope.all,
+                    ),
       ),
       child: ListTile(
         onTap: () => AppNav.openTask(context, task),
@@ -128,26 +140,14 @@ class TaskItem extends ConsumerWidget {
     );
   }
 
-  void _trash(BuildContext context, WidgetRef ref) {
-    final notifier = ref.read(tasksProvider.notifier);
-    notifyWithUndo(
-      notifier.softDelete(task.id),
-      context,
-      message: context.l10n.tasksTrashed,
-      onUndo: () => notifier.restoreFromTrash(task.id),
-    );
-  }
-
   Future<void> _confirmTrash(BuildContext context, WidgetRef ref) async {
-    final confirmed = await showAppConfirmDialog(
+    final scope = await askTaskDeleteScope(
       context,
-      title: context.l10n.tasksDeleteTask,
+      task,
       message: context.l10n.tasksDeleteTaskNamedConfirm(task.title),
-      confirmLabel: context.l10n.commonDelete,
-      destructive: true,
     );
-    if (!confirmed || !context.mounted) return;
-    _trash(context, ref);
+    if (scope == null || !context.mounted) return;
+    deleteTaskWithUndo(context, ref, task, scope);
   }
 }
 
