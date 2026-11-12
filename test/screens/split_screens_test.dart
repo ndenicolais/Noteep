@@ -189,6 +189,7 @@ void main() {
                     child: CalendarEventDetailsSection(
                       event: event,
                       allDayAlertMinutes: 9 * 60,
+                      locationField: const SizedBox.shrink(),
                       onPickDateTime: () {},
                       onPickEndTime: () {},
                       onClearEndTime:

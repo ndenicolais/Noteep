@@ -99,7 +99,8 @@ void main() {
       final gesture = await tester.startGesture(
         tester.getCenter(find.text('A')),
       );
-      await tester.pump(const Duration(milliseconds: 50));
+      // Drag starts on long press, so hold past the long-press timeout.
+      await tester.pump(const Duration(milliseconds: 600));
       await gesture.moveTo(tester.getCenter(find.text('D')));
       await tester.pump();
       await gesture.up();
