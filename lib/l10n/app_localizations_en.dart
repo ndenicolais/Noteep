@@ -1971,6 +1971,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'On the Tasks page tasks are split by day (Today, Tomorrow, then later dates, and finally those without a date), and each row shows the title, the first lines of the details and the notification time, if set.';
 
   @override
+  String get changelog_v2_0_0_bullet_78 =>
+      'Calendar cards now use softer colors, the same as notes: pastel tints in the light theme and deep tones in the dark theme, one for each kind (tasks, birthdays, name days, all-day events and timed events).';
+
+  @override
   String get infoPrivacyOpen => 'Privacy policy';
 
   @override

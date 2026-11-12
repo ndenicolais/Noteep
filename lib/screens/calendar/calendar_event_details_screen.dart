@@ -124,7 +124,7 @@ class _CalendarEventDetailsScreenState
                 height: 18,
                 margin: const EdgeInsets.only(top: 7, right: AppSpacing.lg),
                 decoration: BoxDecoration(
-                  color: style.background,
+                  color: style.accent,
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),
@@ -144,7 +144,7 @@ class _CalendarEventDetailsScreenState
           if (event.isBirthday || event.isNameDay)
             DetailRow(
               icon: style.icon ?? Icons.event,
-              iconColor: style.background,
+              iconColor: style.accent,
               child: Text(
                 event.isBirthday ? l10n.calendarBirthday : l10n.calendarNameDay,
               ),
