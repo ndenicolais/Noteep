@@ -22,6 +22,7 @@ import '../../providers/tasks_undo_redo_provider.dart';
 import '../../theme/app_font_sizes.dart';
 import '../../theme/app_spacing.dart';
 import '../../utils/notification_service.dart';
+import '../../utils/picker_defaults.dart';
 import '../../utils/recurrence.dart';
 import '../../utils/dialogs/move_to_list_dialog.dart';
 import '../../widgets/shared/error_feedback.dart';
@@ -247,10 +248,12 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
     if (date == null || !mounted) return;
     final time = await showTimePicker(
       context: context,
-      initialTime:
-          _task.hasDueTime
-              ? TimeOfDay.fromDateTime(current!)
-              : _defaultAlertTime(),
+      initialTime: initialPickerTime(
+        date,
+        _task.hasDueTime
+            ? TimeOfDay.fromDateTime(current!)
+            : _defaultAlertTime(),
+      ),
     );
     if (!mounted) return;
     _applyDueDate(

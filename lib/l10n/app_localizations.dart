@@ -3668,6 +3668,12 @@ abstract class AppLocalizations {
   /// **'Nel Calendario il pulsante + ti fa scegliere se creare un evento o un task, e mentre lo crei puoi passare dall\'uno all\'altro senza perdere quanto scritto.'**
   String get changelog_v2_0_0_bullet_88;
 
+  /// No description provided for @changelog_v2_0_0_bullet_89.
+  ///
+  /// In it, this message translates to:
+  /// **'Quando scegli l\'orario di un evento, un task o un promemoria per oggi, la scelta parte dall\'ora attuale invece che da un orario già passato.'**
+  String get changelog_v2_0_0_bullet_89;
+
   /// No description provided for @infoPrivacyOpen.
   ///
   /// In it, this message translates to:

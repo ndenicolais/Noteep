@@ -18,6 +18,7 @@ import '../../providers/settings/ui_provider.dart';
 import '../../theme/app_font_sizes.dart';
 import '../../theme/app_spacing.dart';
 import '../../utils/notification_service.dart';
+import '../../utils/picker_defaults.dart';
 import '../../widgets/shared/app_dialogs.dart';
 import '../../widgets/shared/error_feedback.dart';
 import 'calendar_event_details_section.dart';
@@ -142,7 +143,14 @@ class _CalendarEventEditorScreenState
       } else {
         final selectedTime = await showTimePicker(
           context: context,
-          initialTime: TimeOfDay.fromDateTime(_event.startTime),
+          // A new event for today does not start in the past.
+          initialTime:
+              _isNew
+                  ? initialPickerTime(
+                    selectedDate,
+                    TimeOfDay.fromDateTime(_event.startTime),
+                  )
+                  : TimeOfDay.fromDateTime(_event.startTime),
         );
 
         if (selectedTime != null && mounted) {

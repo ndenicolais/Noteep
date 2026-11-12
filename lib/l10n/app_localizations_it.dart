@@ -2028,6 +2028,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Nel Calendario il pulsante + ti fa scegliere se creare un evento o un task, e mentre lo crei puoi passare dall\'uno all\'altro senza perdere quanto scritto.';
 
   @override
+  String get changelog_v2_0_0_bullet_89 =>
+      'Quando scegli l\'orario di un evento, un task o un promemoria per oggi, la scelta parte dall\'ora attuale invece che da un orario già passato.';
+
+  @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';
 
   @override

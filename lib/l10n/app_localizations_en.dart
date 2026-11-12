@@ -2017,6 +2017,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'In Calendar the + button lets you choose between creating an event or a task, and while creating it you can switch between the two without losing what you typed.';
 
   @override
+  String get changelog_v2_0_0_bullet_89 =>
+      'When you pick the time of an event, task or reminder for today, the picker now starts from the current time instead of a time that has already passed.';
+
+  @override
   String get infoPrivacyOpen => 'Privacy policy';
 
   @override
