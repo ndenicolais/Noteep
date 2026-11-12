@@ -31,11 +31,16 @@ class NoteCard extends ConsumerWidget {
     this.onTap,
     this.onToggleChecklist,
     this.extraSemanticsActions = const {},
+    this.quickActionsOnLongPress = true,
   });
 
   final NoteModel note;
   final VoidCallback? onTap;
   final Function(String)? onToggleChecklist;
+
+  /// False when the container owns the long press (the Home grid starts a
+  /// drag on it and calls [showQuickActions] itself on a drop in place).
+  final bool quickActionsOnLongPress;
 
   /// Screen-reader actions added by the container (e.g. "Sposta prima/dopo"
   /// in the Home grid, where reordering is otherwise drag-only).
@@ -43,7 +48,7 @@ class NoteCard extends ConsumerWidget {
 
   void _openNote(BuildContext context) => AppNav.openNote(context, note);
 
-  Future<void> _showQuickActions(
+  Future<void> showQuickActions(
     BuildContext context,
     WidgetRef ref,
     Offset position,
@@ -194,8 +199,10 @@ class NoteCard extends ConsumerWidget {
         child: GestureDetector(
           onTap: onTap ?? () => _openNote(context),
           onLongPressStart:
-              (details) =>
-                  _showQuickActions(context, ref, details.globalPosition),
+              quickActionsOnLongPress
+                  ? (details) =>
+                      showQuickActions(context, ref, details.globalPosition)
+                  : null,
           child: NoteHero(
             noteId: note.id,
             color: effectiveBg,

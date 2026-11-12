@@ -3608,6 +3608,12 @@ abstract class AppLocalizations {
   /// **'I widget Nuova nota, Nuovo task e Nuovo evento sono ora rotondi, con l\'icona sopra e il nome sotto: Nota, Task, Evento.'**
   String get changelog_v2_0_0_bullet_81;
 
+  /// No description provided for @changelog_v2_0_0_bullet_82.
+  ///
+  /// In it, this message translates to:
+  /// **'Nella griglia delle note ora puoi scorrere anche partendo da una nota: per spostarla tienila premuta e trascinala, per il menu delle azioni rapide tienila premuta e rilasciala.'**
+  String get changelog_v2_0_0_bullet_82;
+
   /// No description provided for @infoPrivacyOpen.
   ///
   /// In it, this message translates to:

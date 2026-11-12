@@ -41,6 +41,12 @@ class _ReorderableGridViewState extends State<ReorderableGridView> {
   int? _dragging;
   int? _hovered;
 
+  /// Where the current press started and how far the drag has moved since:
+  /// a drag dropped about where it started opens the card's quick actions,
+  /// since the long press that used to open them now starts the drag.
+  Offset _downPosition = Offset.zero;
+  double _dragDistance = 0;
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -127,7 +133,7 @@ class _ReorderableGridViewState extends State<ReorderableGridView> {
             builder: (_, ref, _) {
               final note = ref.watch(noteByIdProvider(id));
               if (note == null) return const SizedBox.shrink();
-              return _buildDraggable(ctx, i, itemWidth, note, isTarget);
+              return _buildDraggable(ctx, ref, i, itemWidth, note, isTarget);
             },
           ),
     );
@@ -135,19 +141,31 @@ class _ReorderableGridViewState extends State<ReorderableGridView> {
 
   Widget _buildDraggable(
     BuildContext ctx,
+    WidgetRef ref,
     int i,
     double itemWidth,
     NoteModel note,
     bool isTarget,
   ) {
-    return Draggable<int>(
+    // Long press (not an immediate drag) so a swipe over a card scrolls the
+    // grid instead of moving the note.
+    final draggable = LongPressDraggable<int>(
       data: i,
-      onDragStarted: () => setState(() => _dragging = i),
-      onDragEnd:
-          (_) => setState(() {
-            _dragging = null;
-            _hovered = null;
+      onDragStarted:
+          () => setState(() {
+            _dragging = i;
+            _dragDistance = 0;
           }),
+      onDragUpdate: (d) => _dragDistance += d.delta.distance,
+      onDragEnd: (details) {
+        setState(() {
+          _dragging = null;
+          _hovered = null;
+        });
+        if (!details.wasAccepted && _dragDistance < kTouchSlop) {
+          NoteCard(note: note).showQuickActions(ctx, ref, _downPosition);
+        }
+      },
       feedback: Material(
         elevation: 8,
         borderRadius: BorderRadius.circular(AppRadius.md),
@@ -168,6 +186,7 @@ class _ReorderableGridViewState extends State<ReorderableGridView> {
                 : const BoxDecoration(),
         child: NoteCard(
           note: note,
+          quickActionsOnLongPress: false,
           // Screen-reader alternative to drag & drop, same indices.
           extraSemanticsActions: {
             if (i > 0)
@@ -179,6 +198,10 @@ class _ReorderableGridViewState extends State<ReorderableGridView> {
           },
         ),
       ),
+    );
+    return Listener(
+      onPointerDown: (e) => _downPosition = e.position,
+      child: draggable,
     );
   }
 }

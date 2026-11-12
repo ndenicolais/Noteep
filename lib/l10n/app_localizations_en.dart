@@ -1996,6 +1996,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'The New note, New task and New event widgets are now round, with the icon on top and the name below: Note, Task, Event.';
 
   @override
+  String get changelog_v2_0_0_bullet_82 =>
+      'In the notes grid you can now scroll starting from a note: to move it, press and hold, then drag; for the quick actions menu, press and hold, then release.';
+
+  @override
   String get infoPrivacyOpen => 'Privacy policy';
 
   @override

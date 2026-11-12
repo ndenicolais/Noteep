@@ -599,6 +599,7 @@
   "changelog_v2_0_0_bullet_79": "The Noteep Summary home screen widget no longer shows \"Can't load widget\".",
   "changelog_v2_0_0_bullet_80": "Three new home screen widgets: Notes, with your latest notes; Tasks, with the tasks to do split by day; Calendar, with events, tasks and birthdays for the next two weeks. Tap an item to open it, or + to create a new one.",
   "changelog_v2_0_0_bullet_81": "The New note, New task and New event widgets are now round, with the icon on top and the name below: Note, Task, Event.",
+  "changelog_v2_0_0_bullet_82": "In the notes grid you can now scroll starting from a note: to move it, press and hold, then drag; for the quick actions menu, press and hold, then release.",
   "infoPrivacyOpen": "Privacy policy",
   "privacyPolicyTitle": "Privacy policy",
   "privacyPolicyIntro": "Noteep is an app for notes, tasks and calendar. This policy explains which data it processes, why, and how you can control it. Noteep shows no ads, uses no analytics or tracking tools, and does not sell or hand over your data.",

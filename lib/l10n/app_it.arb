@@ -762,6 +762,7 @@
   "changelog_v2_0_0_bullet_79": "Il widget Riepilogo Noteep nella schermata Home non mostra più \"Impossibile caricare il widget\".",
   "changelog_v2_0_0_bullet_80": "Tre nuovi widget per la schermata Home: Note, con le ultime note; Task, con i task da completare divisi per giorno; Calendario, con eventi, task e compleanni delle prossime due settimane. Tocca un elemento per aprirlo o + per crearne uno nuovo.",
   "changelog_v2_0_0_bullet_81": "I widget Nuova nota, Nuovo task e Nuovo evento sono ora rotondi, con l'icona sopra e il nome sotto: Nota, Task, Evento.",
+  "changelog_v2_0_0_bullet_82": "Nella griglia delle note ora puoi scorrere anche partendo da una nota: per spostarla tienila premuta e trascinala, per il menu delle azioni rapide tienila premuta e rilasciala.",
   "infoPrivacyOpen": "Informativa sulla privacy",
   "privacyPolicyTitle": "Informativa sulla privacy",
   "privacyPolicyIntro": "Noteep è un'app per note, task e calendario. Questa informativa spiega quali dati tratta, perché e come puoi controllarli. Noteep non mostra pubblicità, non usa strumenti di analisi o di tracciamento e non vende né cede i tuoi dati.",

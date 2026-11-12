@@ -2007,6 +2007,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'I widget Nuova nota, Nuovo task e Nuovo evento sono ora rotondi, con l\'icona sopra e il nome sotto: Nota, Task, Evento.';
 
   @override
+  String get changelog_v2_0_0_bullet_82 =>
+      'Nella griglia delle note ora puoi scorrere anche partendo da una nota: per spostarla tienila premuta e trascinala, per il menu delle azioni rapide tienila premuta e rilasciala.';
+
+  @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';
 
   @override
