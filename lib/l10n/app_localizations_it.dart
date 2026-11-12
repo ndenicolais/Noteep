@@ -1788,31 +1788,6 @@ class AppLocalizationsIt extends AppLocalizations {
       'Elemento del promemoria non trovato';
 
   @override
-  String widgetNoteCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count note',
-      one: '1 nota',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String widgetTaskCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count task',
-      one: '1 task',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get widgetNoRecentNote => 'Nessuna nota recente';
-
-  @override
   String get widgetNotesEmpty => 'Nessuna nota';
 
   @override
@@ -2037,6 +2012,10 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_86 =>
       'Negli eventi del Calendario puoi aggiungere un luogo, con i suggerimenti degli indirizzi mentre scrivi e da aprire in Maps con un tocco, e scegliere il colore della card.';
+
+  @override
+  String get changelog_v2_0_0_bullet_87 =>
+      'Il widget Riepilogo Noteep è stato rimosso: per vedere note, task e impegni dalla schermata Home usa i widget Note, Task e Calendario.';
 
   @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';

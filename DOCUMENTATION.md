@@ -35,7 +35,7 @@ Noteep is a digital notebook for Android (the web build is used only for develop
 - Plan events in a calendar (day, multi-day, month, year and schedule views), with recurrence, birthdays and name days, ICS import/export.
 - Browse notes by label, archive and restore items, recover deleted ones from the trash for 7 days.
 - Export notes (PDF, TXT, JSON, CSV, HTML), back up and restore data (manual JSON and automatic local backups), read statistics.
-- Use eight Android Home screen widgets (summary, notes, tasks and calendar lists, quick actions).
+- Use seven Android Home screen widgets (notes, tasks and calendar lists, quick actions).
 
 Languages: Italian and English (see [Localization](#10-localization)). Themes: light, dark or system (see [Theme and style](#8-theme-and-style)).
 
@@ -217,7 +217,7 @@ Record of processing (GDPR art. 30) and the source for the data section of `PRIV
 | Audio recordings (name, duration and file path synced with the note) | `<documents>/audio_notes/` on the device | Audio notes | Until deleted or the app is uninstalled; never uploaded |
 | Settings, onboarding and changelog seen, backup settings | `SharedPreferences` (browser storage on the web) | App behavior | Until uninstall |
 | Automatic backups | `<documents>/noteep_backups/` | Local restore | Last 30 kept; removed on account deletion |
-| Scheduled reminders, Home widget data | `flutter_local_notifications`, `home_widget` storage on the device | Reminders and widgets | Until the item changes; reminders are cancelled on sign-out and account deletion and rebuilt from the account at sign-in; the widget falls back to empty counts on sign-out, because the notes and tasks providers reset with the user |
+| Scheduled reminders, Home widget data | `flutter_local_notifications`, `home_widget` storage on the device | Reminders and widgets | Until the item changes; reminders are cancelled on sign-out and account deletion and rebuilt from the account at sign-in; the list widgets fall back to their empty state on sign-out, because the data providers reset with the user |
 | Exported files (PDF, TXT, JSON, CSV, HTML, ICS, backups) | Wherever the user saves or shares them | Export on request | Under the user's control |
 | Device IP address | Google servers hosting the profile photo (`photoURL`) | Showing the Google avatar | Not stored by the app |
 | Text typed in the event location field, device IP address | OpenStreetMap Nominatim (`PlaceSearchService`, only while typing ≥ 3 characters, 500 ms debounce, max 1 request/s) | Address suggestions | Not stored by the app; Nominatim usage policy applies |
@@ -361,7 +361,6 @@ The screens (`SettingsScreen`, `BackupDataScreen`) handle dialogs, file pickers 
 **Path:** `android/app/src/main/kotlin/com/ndn21/noteep/`, `lib/utils/widget_service.dart`, `lib/core/routing/home_widget_*.dart`
 
 **Features:**
-- **Summary** (`NoteepWidget`): note and task counts and the latest note, written by `WidgetService`; tapping opens the app.
 - **Quick actions** (`QuickActionsWidget`, 3×1 resizable): New note / New task / New event.
 - **New note / New task / New event** (1×1): a single round button each (fixed 56dp `widget_circle_background` oval centered in the cell, since cells are rarely square), icon over the short name (`widget_note` / `widget_task` / `widget_event`: Note, Task, Event); the picker keeps the "New …" labels.
 - **Notes / Tasks / Calendar** (`NotesSummaryWidget`, `TasksSummaryWidget`, `CalendarSummaryWidget` in `SummaryWidgets.kt`, 3×3 resizable): a header (icon, title, "+") over a scrolling `ListView` fed by `SummaryListService` (`RemoteViewsService`, `BIND_REMOTEVIEWS`). Rows are built in Dart by `lib/utils/home_widget_rows.dart` and stored as JSON under `<kind>_rows`: latest notes (pinned first, note color bar, plain-text or checklist preview, max 30); tasks to do grouped by due day like the Tasks page (overdue first, undated last, max 60); calendar entries of the next 14 days (events, birthdays/name days, tasks with a due date; all-day first; kind accent bar; max 60). Day headers carry their `yyyy-MM-dd`: the factory swaps the label for Today/Tomorrow/Yesterday by the current date and the calendar drops past days, so the list stays right after midnight without a sync (`updatePeriodMillis` 30 min re-reads it).
@@ -470,7 +469,7 @@ Records with `record` into `<documents>/audio_notes/` and plays with `just_audio
 **Path:** `lib/utils/widget_service.dart`
 
 - `init()`, `scheduleSync(notes, tasks, events)`: no-op on the web; `main.dart` calls it when active notes, tasks or events change.
-- Debounces 500 ms, builds every value (summary labels, list titles/empty texts, rows JSON, Today/Tomorrow/Yesterday labels), writes only the keys that changed and refreshes only the widgets that read them (`_widgetKeys`).
+- Debounces 500 ms, builds every value (list titles/empty texts, rows JSON, Today/Tomorrow/Yesterday labels), writes only the keys that changed and refreshes only the widgets that read them (`_widgetKeys`).
 - Writes ready-made localized labels (`currentL10n()`), which the Kotlin widget shows as-is; `main.dart` resyncs when the language changes. Android string resources are used only before the first sync.
 
 ### 7.7 Other services
@@ -505,7 +504,7 @@ Records with `record` into `<documents>/audio_notes/` and plays with `just_audio
 - in `assets/images/`: `app_icon_legacy.png` (logo at 64% on a rounded square), `app_icon_foreground.png` and `app_icon_monochrome.png` (62%, transparent);
 - in `images/icons/` (not bundled): `icon_512.png` (store), `icon_192.png`, `oauth_logo_120.png` (Google Auth Platform → Branding), `favicon_32.png`.
 
-Then `dart run flutter_launcher_icons` (config in `pubspec.yaml`) generates `@mipmap/launcher_icon` (legacy, adaptive with 16% inset, monochrome), also used by notifications and the summary widget. Web icons and `favicon.png` come from `design/app-icon/icon.svg` (symbol inside the central 80%, so it also works as maskable); `web/manifest.json` uses `#3D3F4D` for `theme_color`/`background_color`. In the app, `AppLogo({size})` shows the logo on an `AppColors.dark` rounded square, like the launcher icon.
+Then `dart run flutter_launcher_icons` (config in `pubspec.yaml`) generates `@mipmap/launcher_icon` (legacy, adaptive with 16% inset, monochrome), also used by notifications. Web icons and `favicon.png` come from `design/app-icon/icon.svg` (symbol inside the central 80%, so it also works as maskable); `web/manifest.json` uses `#3D3F4D` for `theme_color`/`background_color`. In the app, `AppLogo({size})` shows the logo on an `AppColors.dark` rounded square, like the launcher icon.
 
 **Themes.** Light, dark or system, chosen in Settings and persisted as `theme_mode_v2` by `ThemeModeNotifier`. Both are Material 3 (`AppTheme.light`/`dark` in `app_theme.dart`), from `ColorScheme.fromSeed(seedColor: warmBrown)` with the main roles overridden.
 

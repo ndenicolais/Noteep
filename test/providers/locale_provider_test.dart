@@ -4,8 +4,6 @@ import 'package:noteep/l10n/l10n.dart';
 import 'package:noteep/providers/settings/locale_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../helpers/l10n.dart';
-
 void main() {
   Future<String> startup(Map<String, Object> values) async {
     SharedPreferences.setMockInitialValues(values);
@@ -26,11 +24,5 @@ void main() {
     expect(currentL10n().localeName, 'it');
     Intl.defaultLocale = 'fr_FR';
     expect(currentL10n().localeName, 'en');
-  });
-
-  test('home widget labels use the plural', () {
-    expect(itL10n.widgetNoteCount(1), '1 nota');
-    expect(itL10n.widgetNoteCount(3), '3 note');
-    expect(lookupAppLocalizations(testLocale).widgetTaskCount(0), '0 task');
   });
 }

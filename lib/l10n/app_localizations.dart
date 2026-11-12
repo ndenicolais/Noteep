@@ -3302,24 +3302,6 @@ abstract class AppLocalizations {
   /// **'Elemento del promemoria non trovato'**
   String get notificationTargetNotFound;
 
-  /// No description provided for @widgetNoteCount.
-  ///
-  /// In it, this message translates to:
-  /// **'{count, plural, =1{1 nota} other{{count} note}}'**
-  String widgetNoteCount(int count);
-
-  /// No description provided for @widgetTaskCount.
-  ///
-  /// In it, this message translates to:
-  /// **'{count, plural, =1{1 task} other{{count} task}}'**
-  String widgetTaskCount(int count);
-
-  /// No description provided for @widgetNoRecentNote.
-  ///
-  /// In it, this message translates to:
-  /// **'Nessuna nota recente'**
-  String get widgetNoRecentNote;
-
   /// No description provided for @widgetNotesEmpty.
   ///
   /// In it, this message translates to:
@@ -3661,6 +3643,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Negli eventi del Calendario puoi aggiungere un luogo, con i suggerimenti degli indirizzi mentre scrivi e da aprire in Maps con un tocco, e scegliere il colore della card.'**
   String get changelog_v2_0_0_bullet_86;
+
+  /// No description provided for @changelog_v2_0_0_bullet_87.
+  ///
+  /// In it, this message translates to:
+  /// **'Il widget Riepilogo Noteep è stato rimosso: per vedere note, task e impegni dalla schermata Home usa i widget Note, Task e Calendario.'**
+  String get changelog_v2_0_0_bullet_87;
 
   /// No description provided for @infoPrivacyOpen.
   ///

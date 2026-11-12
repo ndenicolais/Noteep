@@ -23,7 +23,6 @@ class WidgetService {
   /// Android provider of each widget and the keys it reads, so a change
   /// refreshes only the widgets that show it.
   static const _widgetKeys = {
-    'NoteepWidget': ['note_count', 'task_count', 'latest_note'],
     'NotesSummaryWidget': ['notes_title', 'notes_empty', 'notes_rows'],
     'TasksSummaryWidget': ['tasks_title', 'tasks_empty', 'tasks_rows'],
     'CalendarSummaryWidget': [
@@ -75,20 +74,7 @@ class WidgetService {
   ) {
     final l10n = currentL10n();
     final now = DateTime.now();
-    NoteModel? latest;
-    for (final n in notes) {
-      if (latest == null || n.updatedAt.isAfter(latest.updatedAt)) {
-        latest = n;
-      }
-    }
-    final latestTitle = latest?.title ?? '';
     return {
-      'note_count': l10n.widgetNoteCount(notes.length),
-      'task_count': l10n.widgetTaskCount(
-        tasks.where((t) => !t.isCompleted).length,
-      ),
-      'latest_note':
-          latestTitle.isEmpty ? l10n.widgetNoRecentNote : latestTitle,
       'label_today': l10n.commonToday,
       'label_tomorrow': l10n.commonTomorrow,
       'label_yesterday': l10n.commonYesterday,
@@ -117,8 +103,7 @@ class WidgetService {
     }
     final sharedChanged = _sharedKeys.any(changed.contains);
     for (final MapEntry(key: widget, value: keys) in _widgetKeys.entries) {
-      final isList = widget != 'NoteepWidget';
-      if (keys.any(changed.contains) || (isList && sharedChanged)) {
+      if (sharedChanged || keys.any(changed.contains)) {
         await HomeWidget.updateWidget(
           qualifiedAndroidName: '$_package.$widget',
         );

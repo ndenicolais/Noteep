@@ -45,7 +45,7 @@ Synced to your account with Firebase, with backups, PDF export, Home screen widg
 | 🗂️ **Archive and trash** | Archive what you don't need now, restore deleted items within 7 days |
 | 📊 **Statistics** | Overview of notes, tasks and events |
 | 📤 **Export and backup** | Notes as PDF, TXT, CSV, HTML or JSON, full backups and calendar import/export in ICS |
-| 📱 **Home screen widgets** | A summary widget, scrolling lists of notes, tasks and upcoming calendar entries, and quick actions to create a note, task or event |
+| 📱 **Home screen widgets** | Scrolling lists of notes, tasks and upcoming calendar entries, and quick actions to create a note, task or event |
 | 🔐 **Authentication** | Sign in with a Google account or email and password |
 | ☁️ **Sync** | Notes, tasks, lists, labels and events are stored on Cloud Firestore, and changes made offline sync later |
 | 🌍 **Multilingual** | Italian and English |

@@ -697,23 +697,6 @@
   "notificationChannelName": "Promemoria",
   "notificationChannelDescription": "Notifiche per i promemoria di Noteep",
   "notificationTargetNotFound": "Elemento del promemoria non trovato",
-  "widgetNoteCount": "{count, plural, =1{1 nota} other{{count} note}}",
-  "@widgetNoteCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "widgetTaskCount": "{count, plural, =1{1 task} other{{count} task}}",
-  "@widgetTaskCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "widgetNoRecentNote": "Nessuna nota recente",
   "widgetNotesEmpty": "Nessuna nota",
   "widgetTasksEmpty": "Nessun task da completare",
   "widgetCalendarEmpty": "Nessun impegno nelle prossime due settimane",
@@ -771,6 +754,7 @@
   "changelog_v2_0_0_bullet_84": "Nel Calendario compleanni e onomastici hanno card più grandi e festose, con uno sfondo sfumato e coriandoli.",
   "changelog_v2_0_0_bullet_85": "Nel Calendario i task mostrano la loro icona al posto del cerchio da spuntare: toccali per aprirli.",
   "changelog_v2_0_0_bullet_86": "Negli eventi del Calendario puoi aggiungere un luogo, con i suggerimenti degli indirizzi mentre scrivi e da aprire in Maps con un tocco, e scegliere il colore della card.",
+  "changelog_v2_0_0_bullet_87": "Il widget Riepilogo Noteep è stato rimosso: per vedere note, task e impegni dalla schermata Home usa i widget Note, Task e Calendario.",
   "infoPrivacyOpen": "Informativa sulla privacy",
   "privacyPolicyTitle": "Informativa sulla privacy",
   "privacyPolicyIntro": "Noteep è un'app per note, task e calendario. Questa informativa spiega quali dati tratta, perché e come puoi controllarli. Noteep non mostra pubblicità, non usa strumenti di analisi o di tracciamento e non vende né cede i tuoi dati.",

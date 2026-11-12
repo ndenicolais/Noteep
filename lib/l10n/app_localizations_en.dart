@@ -1778,31 +1778,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get notificationTargetNotFound => 'Reminder item not found';
 
   @override
-  String widgetNoteCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count notes',
-      one: '1 note',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String widgetTaskCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count tasks',
-      one: '1 task',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get widgetNoRecentNote => 'No recent notes';
-
-  @override
   String get widgetNotesEmpty => 'No notes';
 
   @override
@@ -2026,6 +2001,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_86 =>
       'Calendar events can now have a location, with address suggestions as you type and a tap to open it in Maps, and a card color of your choice.';
+
+  @override
+  String get changelog_v2_0_0_bullet_87 =>
+      'The Noteep Summary widget has been removed: to see your notes, tasks and plans on the home screen, use the Notes, Tasks and Calendar widgets.';
 
   @override
   String get infoPrivacyOpen => 'Privacy policy';
