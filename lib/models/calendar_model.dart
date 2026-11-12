@@ -8,6 +8,7 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
+import 'package:flutter/painting.dart';
 import 'package:uuid/uuid.dart';
 import '../utils/recurrence.dart';
 import 'task_model.dart';
@@ -16,6 +17,13 @@ class CalendarEventModel {
   final String id;
   String title;
   String description;
+  // Free-text place (address or name), opened in the maps app from the
+  // event view. Empty when not set.
+  String location;
+  // Card fill chosen by the user; null keeps the color of the event kind
+  // (see `calendarItemStyle`). A note swatch is shown as its counterpart
+  // in the other theme.
+  Color? color;
   DateTime startTime;
   // Equal to [startTime] for a timed event with a single time (no end).
   DateTime endTime;
@@ -43,6 +51,8 @@ class CalendarEventModel {
     String? id,
     this.title = '',
     this.description = '',
+    this.location = '',
+    this.color,
     required this.startTime,
     required this.endTime,
     this.isAllDay = false,
@@ -105,6 +115,9 @@ class CalendarEventModel {
   CalendarEventModel copyWith({
     String? title,
     String? description,
+    String? location,
+    Color? color,
+    bool clearColor = false,
     DateTime? startTime,
     DateTime? endTime,
     bool? isAllDay,
@@ -126,6 +139,8 @@ class CalendarEventModel {
       id: id,
       title: title ?? this.title,
       description: description ?? this.description,
+      location: location ?? this.location,
+      color: clearColor ? null : (color ?? this.color),
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       isAllDay: isAllDay ?? this.isAllDay,
@@ -151,6 +166,8 @@ class CalendarEventModel {
     'id': id,
     'title': title,
     'description': description,
+    if (location.isNotEmpty) 'location': location,
+    if (color != null) 'color': color!.toARGB32(),
     'startTime': startTime.toIso8601String(),
     'endTime': endTime.toIso8601String(),
     'isAllDay': isAllDay,
@@ -174,6 +191,8 @@ class CalendarEventModel {
         id: json['id'] as String?,
         title: json['title'] as String? ?? '',
         description: json['description'] as String? ?? '',
+        location: json['location'] as String? ?? '',
+        color: json['color'] != null ? Color(json['color'] as int) : null,
         startTime: DateTime.parse(json['startTime'] as String),
         endTime: DateTime.parse(json['endTime'] as String),
         isAllDay: json['isAllDay'] as bool? ?? false,

@@ -37,6 +37,7 @@ class _CalendarEventEditorScreenState
   late CalendarEventModel _event;
   late TextEditingController _titleController;
   late TextEditingController _descriptionController;
+  late TextEditingController _locationController;
   bool _isNew = false;
   bool _softDeleted = false;
 
@@ -49,19 +50,22 @@ class _CalendarEventEditorScreenState
 
     _titleController = TextEditingController(text: _event.title);
     _descriptionController = TextEditingController(text: _event.description);
+    _locationController = TextEditingController(text: _event.location);
   }
 
   @override
   void dispose() {
     _titleController.dispose();
     _descriptionController.dispose();
+    _locationController.dispose();
     super.dispose();
   }
 
   bool _isEmpty() {
     final title = _titleController.text.trim();
     final description = _descriptionController.text.trim();
-    return title.isEmpty && description.isEmpty;
+    final location = _locationController.text.trim();
+    return title.isEmpty && description.isEmpty && location.isEmpty;
   }
 
   void _save() {
@@ -71,6 +75,7 @@ class _CalendarEventEditorScreenState
     final updated = _event.copyWith(
       title: _titleController.text.trim(),
       description: _descriptionController.text.trim(),
+      location: _locationController.text.trim(),
       updatedAt: DateTime.now(),
     );
 
@@ -228,7 +233,19 @@ class _CalendarEventEditorScreenState
                 border: InputBorder.none,
               ),
             ),
-            const SizedBox(height: AppSpacing.lg),
+            TextField(
+              controller: _locationController,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: InputDecoration(
+                icon: const Icon(Icons.location_on_outlined),
+                hintText: context.l10n.calendarLocationHint,
+                hintStyle: TextStyle(
+                  color: colorScheme.onSurface.withAlpha(100),
+                ),
+                border: InputBorder.none,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.sm),
             CalendarEventDetailsSection(
               event: _event,
               allDayAlertMinutes: ref.watch(defaultAlertTimeProvider),

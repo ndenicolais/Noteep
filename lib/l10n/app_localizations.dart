@@ -2066,6 +2066,30 @@ abstract class AppLocalizations {
   /// **'Ricorrenza'**
   String get calendarRecurrence;
 
+  /// No description provided for @calendarLocationHint.
+  ///
+  /// In it, this message translates to:
+  /// **'Aggiungi luogo'**
+  String get calendarLocationHint;
+
+  /// No description provided for @calendarLocationOpenMaps.
+  ///
+  /// In it, this message translates to:
+  /// **'Apri in Maps'**
+  String get calendarLocationOpenMaps;
+
+  /// No description provided for @calendarColor.
+  ///
+  /// In it, this message translates to:
+  /// **'Colore'**
+  String get calendarColor;
+
+  /// No description provided for @calendarColorDefault.
+  ///
+  /// In it, this message translates to:
+  /// **'Predefinito'**
+  String get calendarColorDefault;
+
   /// No description provided for @calendarEventTitle.
   ///
   /// In it, this message translates to:
@@ -3631,6 +3655,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Nel Calendario i task mostrano la loro icona al posto del cerchio da spuntare: toccali per aprirli.'**
   String get changelog_v2_0_0_bullet_85;
+
+  /// No description provided for @changelog_v2_0_0_bullet_86.
+  ///
+  /// In it, this message translates to:
+  /// **'Negli eventi del Calendario puoi aggiungere un luogo, da aprire in Maps con un tocco, e scegliere il colore della card.'**
+  String get changelog_v2_0_0_bullet_86;
 
   /// No description provided for @infoPrivacyOpen.
   ///

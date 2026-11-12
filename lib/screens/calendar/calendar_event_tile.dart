@@ -26,10 +26,10 @@ String formatEventTimeRange(AppLocalizations l, CalendarEventModel event) {
   return '$start – ${DateFormat('HH:mm').format(event.endTime)}';
 }
 
-/// Subtitle of a list card: the time (none for all-day entries) and the kind
-/// when it is a birthday or a name day, e.g. "10:00 – 11:00" or
-/// "Compleanno". Null when there is neither. The card color and icon already
-/// tell tasks and all-day entries apart.
+/// Subtitle of a list card: the time (none for all-day entries), the kind
+/// when it is a birthday or a name day and the location, e.g.
+/// "10:00 – 11:00 · Ufficio" or "Compleanno". Null when there is none. The
+/// card color and icon already tell tasks and all-day entries apart.
 String? calendarItemSubtitle(AppLocalizations l, CalendarEventModel event) {
   final parts = [
     if (!event.isAllDay) formatEventTimeRange(l, event),
@@ -37,6 +37,7 @@ String? calendarItemSubtitle(AppLocalizations l, CalendarEventModel event) {
       l.calendarBirthday
     else if (event.isNameDay)
       l.calendarNameDay,
+    if (event.location.isNotEmpty) event.location,
   ];
   return parts.isEmpty ? null : parts.join(' · ');
 }

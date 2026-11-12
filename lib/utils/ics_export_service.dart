@@ -49,6 +49,10 @@ class IcsExportService {
         buf.writeln('DESCRIPTION:${_escape(event.description)}');
       }
 
+      if (event.location.isNotEmpty) {
+        buf.writeln('LOCATION:${_escape(event.location)}');
+      }
+
       if (event.isBirthday) {
         buf.writeln('CATEGORIES:BIRTHDAY');
       }

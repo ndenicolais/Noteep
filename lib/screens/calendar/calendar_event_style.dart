@@ -74,7 +74,8 @@ final _Swatch _allDaySwatch = (
 );
 
 /// Tasks, birthdays, name days, all-day and timed events each get their own
-/// color.
+/// color; an event with a [CalendarEventModel.color] uses that one instead
+/// (birthdays and name days keep their icon and festive gradient).
 CalendarItemStyle calendarItemStyle(
   CalendarEventModel item,
   ColorScheme colorScheme,
@@ -90,9 +91,10 @@ CalendarItemStyle calendarItemStyle(
       isDone: item.task.isCompleted,
     );
   }
+  final custom = item.color;
   if (item.isBirthday) {
     return _style(
-      _birthdaySwatch,
+      custom != null ? _customSwatch(custom) : _birthdaySwatch,
       isDark,
       Icons.cake,
       festiveEnd: isDark ? const Color(0xFF4A148C) : const Color(0xFFF8BBD0),
@@ -100,12 +102,13 @@ CalendarItemStyle calendarItemStyle(
   }
   if (item.isNameDay) {
     return _style(
-      _nameDaySwatch,
+      custom != null ? _customSwatch(custom) : _nameDaySwatch,
       isDark,
       Icons.auto_awesome,
       festiveEnd: isDark ? const Color(0xFF880E4F) : const Color(0xFFFFF59D),
     );
   }
+  if (custom != null) return _style(_customSwatch(custom), isDark, null);
   if (item.isAllDay) return _style(_allDaySwatch, isDark, null);
   final _Swatch timed = (
     light: const Color(0xFFFFF9C4),
@@ -113,6 +116,23 @@ CalendarItemStyle calendarItemStyle(
     accent: colorScheme.primary,
   );
   return _style(timed, isDark, null);
+}
+
+/// A user-picked event color: a note swatch maps to the swatch at the same
+/// position in the other theme (pastel in light, deep tone in dark), so the
+/// card follows the theme like the built-in kinds; any other color is used
+/// as is. The accent is a mid tone of the color, visible on the surface.
+_Swatch _customSwatch(Color color) {
+  var i = AppColors.noteSwatchesLight.indexOf(color);
+  if (i < 0) i = AppColors.noteSwatchesDark.indexOf(color);
+  final light = i >= 0 ? AppColors.noteSwatchesLight[i] : color;
+  final dark = i >= 0 ? AppColors.noteSwatchesDark[i] : color;
+  final hsl = HSLColor.fromColor(i >= 0 ? dark : color);
+  final accent =
+      hsl.saturation < 0.1
+          ? Colors.blueGrey.shade400
+          : hsl.withLightness(0.5).toColor();
+  return (light: light, dark: dark, accent: accent);
 }
 
 CalendarItemStyle _style(

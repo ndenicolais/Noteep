@@ -1077,6 +1077,18 @@ class AppLocalizationsIt extends AppLocalizations {
   String get calendarRecurrence => 'Ricorrenza';
 
   @override
+  String get calendarLocationHint => 'Aggiungi luogo';
+
+  @override
+  String get calendarLocationOpenMaps => 'Apri in Maps';
+
+  @override
+  String get calendarColor => 'Colore';
+
+  @override
+  String get calendarColorDefault => 'Predefinito';
+
+  @override
   String get calendarEventTitle => 'Evento';
 
   @override
@@ -2021,6 +2033,10 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_85 =>
       'Nel Calendario i task mostrano la loro icona al posto del cerchio da spuntare: toccali per aprirli.';
+
+  @override
+  String get changelog_v2_0_0_bullet_86 =>
+      'Negli eventi del Calendario puoi aggiungere un luogo, da aprire in Maps con un tocco, e scegliere il colore della card.';
 
   @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';

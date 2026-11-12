@@ -1074,6 +1074,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calendarRecurrence => 'Repeat';
 
   @override
+  String get calendarLocationHint => 'Add location';
+
+  @override
+  String get calendarLocationOpenMaps => 'Open in Maps';
+
+  @override
+  String get calendarColor => 'Color';
+
+  @override
+  String get calendarColorDefault => 'Default';
+
+  @override
   String get calendarEventTitle => 'Event';
 
   @override
@@ -2010,6 +2022,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_85 =>
       'In Calendar, tasks show their own icon instead of a checkbox circle: tap them to open them.';
+
+  @override
+  String get changelog_v2_0_0_bullet_86 =>
+      'Calendar events can now have a location, which opens in Maps with a tap, and a card color of your choice.';
 
   @override
   String get infoPrivacyOpen => 'Privacy policy';

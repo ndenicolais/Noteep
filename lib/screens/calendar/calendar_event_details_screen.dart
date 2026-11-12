@@ -19,6 +19,7 @@ import '../../providers/settings/ui_provider.dart';
 import '../../theme/app_font_sizes.dart';
 import '../../theme/app_spacing.dart';
 import '../../utils/event_alerts.dart';
+import '../../utils/link_utils.dart';
 import '../../utils/notification_service.dart';
 import '../../utils/recurrence.dart';
 import '../../widgets/shared/app_dialogs.dart';
@@ -77,6 +78,21 @@ class _CalendarEventDetailsScreenState
       onUndo: () => notifier.restoreFromTrash(event.id),
     );
     _close();
+  }
+
+  /// Searches [location] in the maps app (Google Maps handles the link, the
+  /// browser otherwise).
+  Future<void> _openLocation(String location) async {
+    final uri = Uri.https('www.google.com', '/maps/search/', {
+      'api': '1',
+      'query': location,
+    });
+    final opened = await openExternalLink(uri.toString());
+    if (!opened && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.commonLinkOpenFailed)),
+      );
+    }
   }
 
   @override
@@ -154,6 +170,16 @@ class _CalendarEventDetailsScreenState
             subtitle: formatEventTimeRange(l10n, event),
             child: Text(DateFormat('EEEE d MMMM yyyy').format(event.startTime)),
           ),
+          if (event.location.isNotEmpty)
+            InkWell(
+              borderRadius: BorderRadius.circular(8),
+              onTap: () => _openLocation(event.location),
+              child: DetailRow(
+                icon: Icons.location_on_outlined,
+                subtitle: l10n.calendarLocationOpenMaps,
+                child: Text(event.location),
+              ),
+            ),
           if (event.recurrence != RecurrenceType.none)
             DetailRow(
               icon: Icons.repeat,

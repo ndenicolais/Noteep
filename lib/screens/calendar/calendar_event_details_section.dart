@@ -12,15 +12,17 @@ import 'package:flutter/material.dart';
 import '../../l10n/l10n.dart';
 import 'package:intl/intl.dart';
 import '../../models/calendar_model.dart';
+import '../../theme/app_colors.dart';
 import '../../theme/app_spacing.dart';
 import '../../utils/event_alerts.dart';
 import '../../utils/recurrence.dart';
 import '../../widgets/shared/app_dialogs.dart';
+import '../../widgets/style_editor/color_picker_widget.dart';
 import 'calendar_event_style.dart';
 import 'calendar_event_tile.dart';
 
-/// Date/time, all-day, birthday, name-day, recurrence and alerts (day
-/// before / same day) of an event.
+/// Date/time, all-day, birthday, name-day, recurrence, card color and
+/// alerts (day before / same day) of an event.
 ///
 /// Edits are reported through [onChanged] with the updated event; picking
 /// the date/time is delegated to [onPickDateTime] (it chains two pickers
@@ -161,6 +163,27 @@ class CalendarEventDetailsSection extends StatelessWidget {
           subtitle: Text(event.recurrence.label(context.l10n)),
           onTap: () => _pickRecurrence(context),
         ),
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: const Icon(Icons.palette_outlined),
+          title: Text(context.l10n.calendarColor),
+          subtitle:
+              event.color == null
+                  ? Text(context.l10n.calendarColorDefault)
+                  : null,
+          trailing: Container(
+            width: 24,
+            height: 24,
+            decoration: BoxDecoration(
+              color: style.background,
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: Theme.of(context).colorScheme.outlineVariant,
+              ),
+            ),
+          ),
+          onTap: () => _pickColor(context),
+        ),
         // A timed event always alerts at its start: the choice is only for
         // all-day ones, which alert at the Settings time.
         if (event.isAllDay) ...[
@@ -198,6 +221,58 @@ class CalendarEventDetailsSection extends StatelessWidget {
       occurrenceTime(event, event.startTime, allDayMinutes: allDayAlertMinutes),
     ),
   );
+
+  /// Note swatches plus a custom Material color; "Predefinito" goes back to
+  /// the color of the event kind.
+  Future<void> _pickColor(BuildContext context) async {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final current = event.color;
+    // A swatch picked in the other theme shows as selected here too.
+    final from =
+        isDark ? AppColors.noteSwatchesLight : AppColors.noteSwatchesDark;
+    final to =
+        isDark ? AppColors.noteSwatchesDark : AppColors.noteSwatchesLight;
+    final i = current == null ? -1 : from.indexOf(current);
+    final shown = i >= 0 ? to[i] : current;
+    await showAppSheet<void>(
+      context,
+      builder:
+          (ctx) => Padding(
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  ctx.l10n.calendarColor,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: AppSpacing.lg),
+                ColorPickerWidget(
+                  current: shown ?? Colors.transparent,
+                  isDark: isDark,
+                  onPick: (color) {
+                    onChanged(event.copyWith(color: color));
+                    Navigator.pop(ctx);
+                  },
+                ),
+                const SizedBox(height: AppSpacing.md),
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: const Icon(Icons.format_color_reset_outlined),
+                  title: Text(ctx.l10n.calendarColorDefault),
+                  selected: current == null,
+                  onTap: () {
+                    onChanged(event.copyWith(clearColor: true));
+                    Navigator.pop(ctx);
+                  },
+                ),
+              ],
+            ),
+          ),
+    );
+  }
 
   Future<void> _pickRecurrence(BuildContext context) async {
     final type = await showAppSheet<RecurrenceType>(

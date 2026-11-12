@@ -111,6 +111,7 @@ class IcsImportService {
 
     final uid = props['UID'];
     final description = _stripHtml(_unescape(props['DESCRIPTION'] ?? ''));
+    final location = _unescape(props['LOCATION'] ?? '').trim();
 
     final categoriesRaw = (props['CATEGORIES'] ?? '').toUpperCase();
     final isBirthday = categoriesRaw.contains('BIRTHDAY');
@@ -138,6 +139,7 @@ class IcsImportService {
       id: uid != null ? _sanitizeId(uid) : null,
       title: summary,
       description: description,
+      location: location,
       startTime: startTime,
       endTime: endTime,
       isAllDay: isAllDay,
