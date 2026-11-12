@@ -279,7 +279,7 @@ The list of active notes and the note editor.
 **Path:** `lib/screens/tasks/`, `lib/screens/task_editor/`
 
 **Features:**
-- Tabs: All, Starred and one per task list. A new task is created in the current tab's list (or starred).
+- Tabs: All, Starred and one per task list. A new task is created in the current tab's list (or starred). The "+" opens `showNewTaskSheet` (`new_task_sheet.dart`, Google Tasks-like quick add): title, optional details, due date then optional time (first offered at the default alert time from Settings) and star. A due time is also the reminder (scheduled on save), so the task gets a notification and a timed slot in Calendar; a date alone shows it as all-day.
 - Active and completed sections (`sortTasksForDisplay`, pure function), each with pinned tasks on top (pin icon before the title) and then the chosen sort order; optional "group by priority" and "show completed" settings. Pin (editor) sets the position, the star sets the "Starred" tab.
 - Swipe right completes/reopens (the row stays), swipe left trashes; menu to edit, move to another list or delete; star toggles "special".
 - Tap opens the read-only `TaskDetailsScreen` (`task_details_screen.dart`, route `AppRoutes.taskDetails`, `AppNav.viewTask`), like Google Calendar/Tasks: title, completion, due date, recurrence, reminder, list, description, subtasks (checkable) and a Complete/Reopen button; the pencil opens the editor (`AppNav.openTask`), the bin uses the task delete flow. It watches `tasksProvider` by id, so it shows edits on return and closes itself once the task is trashed. New tasks and the menu's "Edit" go straight to the editor.

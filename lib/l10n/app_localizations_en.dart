@@ -867,6 +867,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get tasksMoveToListTitle => 'Move to a list';
 
   @override
+  String get tasksAddDetails => 'Add details';
+
+  @override
+  String get tasksRemoveDueDate => 'Remove date';
+
+  @override
   String get tasksNoList => 'No list';
 
   @override
@@ -1977,6 +1983,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_74 =>
       'Tapping a task or an event now opens it in view mode first, with all its details: tap the pencil to edit it. From the view you can also complete a task, check off its subtasks or delete it.';
+
+  @override
+  String get changelog_v2_0_0_bullet_75 =>
+      'When you create a new task you can now also set a date and time right away, add details and star it: with a time you get a reminder and the task shows up in the Calendar.';
 
   @override
   String get infoPrivacyOpen => 'Privacy policy';

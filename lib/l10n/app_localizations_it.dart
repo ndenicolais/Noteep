@@ -870,6 +870,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get tasksMoveToListTitle => 'Sposta in un elenco';
 
   @override
+  String get tasksAddDetails => 'Aggiungi dettagli';
+
+  @override
+  String get tasksRemoveDueDate => 'Rimuovi data';
+
+  @override
   String get tasksNoList => 'Nessun elenco';
 
   @override
@@ -1987,6 +1993,10 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_74 =>
       'Toccando un task o un evento ora si apre prima in visualizzazione, con tutti i dettagli: per modificarlo tocca la matita. Dalla visualizzazione puoi anche completare un task, spuntarne le sottoattività o eliminarlo.';
+
+  @override
+  String get changelog_v2_0_0_bullet_75 =>
+      'Quando crei un nuovo task ora puoi impostare subito anche data e ora, aggiungere i dettagli e metterlo tra gli speciali: con l\'orario ricevi il promemoria e il task compare nel Calendario.';
 
   @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';

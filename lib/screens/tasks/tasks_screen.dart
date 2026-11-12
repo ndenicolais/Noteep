@@ -15,11 +15,13 @@ import '../../models/task_list_model.dart';
 import '../../models/task_model.dart';
 import '../../providers/settings/ui_provider.dart';
 import '../../providers/tasks_provider.dart';
+import '../../utils/notification_service.dart';
 import '../../widgets/nav_scaffold.dart';
 import '../../widgets/shared/app_dialogs.dart';
 import '../../widgets/shared/error_feedback.dart';
 import '../../widgets/shared/search_field.dart';
 import '../../widgets/sort_sheet.dart';
+import 'new_task_sheet.dart';
 import 'task_list_view.dart';
 
 /// Tasks section: fixed "Tutte"/"Speciali" tabs plus one per task list.
@@ -51,23 +53,31 @@ class _TasksScreenState extends ConsumerState<TasksScreen> {
 
   Future<void> _addTask(BuildContext tabContext) async {
     final tabs = DefaultTabController.of(tabContext);
-    final title = await showAppTextInputDialog(
+    final minutes = ref.read(defaultAlertTimeProvider);
+    final draft = await showNewTaskSheet(
       tabContext,
-      title: tabContext.l10n.tasksNewTask,
-      hintText: tabContext.l10n.tasksNewTaskHint,
-      confirmLabel: tabContext.l10n.tasksAdd,
-      textCapitalization: TextCapitalization.sentences,
+      defaultTime: TimeOfDay(hour: minutes ~/ 60, minute: minutes % 60),
+      // New tasks land in the tab they were created from.
+      starred: tabs.index == 1,
     );
-    if (title == null || !tabContext.mounted) return;
-    // New tasks land in the tab they were created from.
+    if (draft == null || !tabContext.mounted) return;
+    final due = draft.due;
     final task = TaskModel(
-      title: title,
+      title: draft.title,
+      description: draft.description,
+      dueDate: due,
+      // A due time is also the reminder, like in Google Tasks (and the
+      // editor): it notifies and places the task at that time in Calendar.
+      reminder: due != null && (due.hour != 0 || due.minute != 0) ? due : null,
       listId: _currentList(tabs)?.id,
-      isSpecial: tabs.index == 1,
+      isSpecial: draft.starred,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
     );
     notifyOnError(ref.read(tasksProvider.notifier).addTask(task), tabContext);
+    if (task.reminder != null) {
+      NotificationService.instance.scheduleTaskReminder(task).ignore();
+    }
   }
 
   Future<void> _createList() async {

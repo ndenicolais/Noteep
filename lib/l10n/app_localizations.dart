@@ -1670,6 +1670,18 @@ abstract class AppLocalizations {
   /// **'Sposta in un elenco'**
   String get tasksMoveToListTitle;
 
+  /// No description provided for @tasksAddDetails.
+  ///
+  /// In it, this message translates to:
+  /// **'Aggiungi dettagli'**
+  String get tasksAddDetails;
+
+  /// No description provided for @tasksRemoveDueDate.
+  ///
+  /// In it, this message translates to:
+  /// **'Rimuovi data'**
+  String get tasksRemoveDueDate;
+
   /// No description provided for @tasksNoList.
   ///
   /// In it, this message translates to:
@@ -3583,6 +3595,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Toccando un task o un evento ora si apre prima in visualizzazione, con tutti i dettagli: per modificarlo tocca la matita. Dalla visualizzazione puoi anche completare un task, spuntarne le sottoattività o eliminarlo.'**
   String get changelog_v2_0_0_bullet_74;
+
+  /// No description provided for @changelog_v2_0_0_bullet_75.
+  ///
+  /// In it, this message translates to:
+  /// **'Quando crei un nuovo task ora puoi impostare subito anche data e ora, aggiungere i dettagli e metterlo tra gli speciali: con l\'orario ricevi il promemoria e il task compare nel Calendario.'**
+  String get changelog_v2_0_0_bullet_75;
 
   /// No description provided for @infoPrivacyOpen.
   ///
