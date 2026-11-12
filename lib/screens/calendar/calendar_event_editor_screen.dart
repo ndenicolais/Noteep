@@ -247,13 +247,12 @@ class _CalendarEventEditorScreenState
                 border: InputBorder.none,
               ),
             ),
-            CalendarLocationField(
-              controller: _locationController,
-              history: _locationHistory,
-            ),
-            const SizedBox(height: AppSpacing.sm),
             CalendarEventDetailsSection(
               event: _event,
+              locationField: CalendarLocationField(
+                controller: _locationController,
+                history: _locationHistory,
+              ),
               allDayAlertMinutes: ref.watch(defaultAlertTimeProvider),
               onPickDateTime: _openDateTimePicker,
               onPickEndTime: _pickEndTime,

@@ -21,8 +21,8 @@ import '../../widgets/style_editor/color_picker_widget.dart';
 import 'calendar_event_style.dart';
 import 'calendar_event_tile.dart';
 
-/// Date/time, all-day, birthday, name-day, recurrence, card color and
-/// alerts (day before / same day) of an event.
+/// Date/time, location, all-day, birthday, name-day, recurrence, card color
+/// and alerts (day before / same day) of an event.
 ///
 /// Edits are reported through [onChanged] with the updated event; picking
 /// the date/time is delegated to [onPickDateTime] (it chains two pickers
@@ -32,6 +32,7 @@ class CalendarEventDetailsSection extends StatelessWidget {
   const CalendarEventDetailsSection({
     super.key,
     required this.event,
+    required this.locationField,
     required this.allDayAlertMinutes,
     required this.onPickDateTime,
     required this.onPickEndTime,
@@ -40,6 +41,10 @@ class CalendarEventDetailsSection extends StatelessWidget {
   });
 
   final CalendarEventModel event;
+
+  /// Location input, placed right below date and time (the screen owns its
+  /// controller).
+  final Widget locationField;
 
   /// Alert time of all-day events (minutes after midnight, from Settings).
   final int allDayAlertMinutes;
@@ -127,6 +132,7 @@ class CalendarEventDetailsSection extends StatelessWidget {
                     : null,
             onTap: onPickEndTime,
           ),
+        locationField,
         const SizedBox(height: AppSpacing.sm),
         _Toggle(
           title: context.l10n.calendarAllDay,
