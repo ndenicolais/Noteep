@@ -28,4 +28,7 @@
     <string name="widget_tasks_summary_description">Tasks to do, split by day</string>
     <string name="widget_calendar_summary_label">Calendar</string>
     <string name="widget_calendar_summary_description">Events, tasks and birthdays for the next two weeks</string>
+    <string name="widget_note">Note</string>
+    <string name="widget_task">Task</string>
+    <string name="widget_event">Event</string>
 </resources>

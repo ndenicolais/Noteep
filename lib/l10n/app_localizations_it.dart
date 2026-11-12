@@ -2003,6 +2003,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Tre nuovi widget per la schermata Home: Note, con le ultime note; Task, con i task da completare divisi per giorno; Calendario, con eventi, task e compleanni delle prossime due settimane. Tocca un elemento per aprirlo o + per crearne uno nuovo.';
 
   @override
+  String get changelog_v2_0_0_bullet_81 =>
+      'I widget Nuova nota, Nuovo task e Nuovo evento sono ora rotondi, con l\'icona sopra e il nome sotto: Nota, Task, Evento.';
+
+  @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';
 
   @override

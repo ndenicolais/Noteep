@@ -1992,6 +1992,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Three new home screen widgets: Notes, with your latest notes; Tasks, with the tasks to do split by day; Calendar, with events, tasks and birthdays for the next two weeks. Tap an item to open it, or + to create a new one.';
 
   @override
+  String get changelog_v2_0_0_bullet_81 =>
+      'The New note, New task and New event widgets are now round, with the icon on top and the name below: Note, Task, Event.';
+
+  @override
   String get infoPrivacyOpen => 'Privacy policy';
 
   @override

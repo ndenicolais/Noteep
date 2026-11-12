@@ -27,4 +27,7 @@
     <string name="widget_tasks_summary_description">I task da completare, divisi per giorno</string>
     <string name="widget_calendar_summary_label">Calendario</string>
     <string name="widget_calendar_summary_description">Eventi, task e compleanni delle prossime due settimane</string>
+    <string name="widget_note">Nota</string>
+    <string name="widget_task">Task</string>
+    <string name="widget_event">Evento</string>
 </resources>
