@@ -3533,7 +3533,7 @@ abstract class AppLocalizations {
   /// No description provided for @changelog_v2_0_0_bullet_76.
   ///
   /// In it, this message translates to:
-  /// **'Task ed eventi sono più semplici: scegli il giorno e, se vuoi, un orario. Con l\'orario ricevi la notifica a quell\'ora, senza orario no. Gli eventi di tutto il giorno avvisano il giorno stesso e/o il giorno prima solo se lo scegli, all\'orario delle Impostazioni. Il promemoria separato di task ed eventi e la sezione Promemoria non ci sono più (le note mantengono il loro promemoria).'**
+  /// **'Task ed eventi sono più semplici: scegli il giorno e, se vuoi, un orario. Con l\'orario ricevi la notifica a quell\'ora, senza orario no. Gli eventi di tutto il giorno avvisano il giorno stesso e/o il giorno prima solo se lo scegli, all\'orario delle Impostazioni. Il promemoria separato di task ed eventi e la sezione Promemoria non ci sono più (le note mantengono il loro promemoria). Ripristinando un backup, compleanni e onomastici senza avvisi li ricevono entrambi.'**
   String get changelog_v2_0_0_bullet_76;
 
   /// No description provided for @infoPrivacyOpen.

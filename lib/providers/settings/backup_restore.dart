@@ -86,6 +86,16 @@ class FullBackupData {
   }
 }
 
+/// [event] with both alerts (day before and same day) when it is a birthday
+/// or name day with none: older data predates the alerts, and without them
+/// an all-day event never notifies. Others are returned unchanged.
+CalendarEventModel withSpecialAlerts(CalendarEventModel event) =>
+    (event.isBirthday || event.isNameDay) &&
+            !event.alertSameDay &&
+            !event.alertDayBefore
+        ? event.copyWith(alertSameDay: true, alertDayBefore: true)
+        : event;
+
 /// Applies full backups (from a `.json` file or an automatic zip backup) to
 /// the notes, tasks, task lists and calendar providers.
 class BackupRestorer {
@@ -112,7 +122,9 @@ class BackupRestorer {
       if (data.taskLists != null)
         _ref.read(taskListsProvider.notifier).replaceAll(data.taskLists!),
       if (data.events != null)
-        _ref.read(calendarProvider.notifier).replaceAll(data.events!),
+        _ref
+            .read(calendarProvider.notifier)
+            .replaceAll(data.events!.map(withSpecialAlerts).toList()),
     ]).then((_) {});
     _ref.read(remindersActionsProvider).resync().ignore();
     return saved;

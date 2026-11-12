@@ -142,6 +142,44 @@ void main() {
       expect(await docCount('calendar_events'), 1);
     });
 
+    test('gives birthdays and name days without alerts both alerts', () async {
+      CalendarEventModel special({
+        required String title,
+        bool birthday = false,
+        bool nameDay = false,
+        bool sameDay = false,
+      }) => CalendarEventModel(
+        title: title,
+        startTime: DateTime(2026, 5, 4),
+        endTime: DateTime(2026, 5, 5),
+        isAllDay: true,
+        isBirthday: birthday,
+        isNameDay: nameDay,
+        alertSameDay: sameDay,
+      );
+      await container
+          .read(backupRestorerProvider)
+          .apply(
+            FullBackupData(
+              events: [
+                special(title: 'Birthday', birthday: true),
+                special(title: 'Name day', nameDay: true),
+                special(title: 'Chosen', birthday: true, sameDay: true),
+                special(title: 'Holiday'),
+              ],
+            ),
+          );
+      final events = {
+        for (final e in container.read(calendarProvider)) e.title: e,
+      };
+      for (final title in ['Birthday', 'Name day']) {
+        expect(events[title]!.alertSameDay, isTrue);
+        expect(events[title]!.alertDayBefore, isTrue);
+      }
+      expect(events['Chosen']!.alertDayBefore, isFalse);
+      expect(events['Holiday']!.hasAlerts, isFalse);
+    });
+
     test('updates state before persistence completes', () {
       final restorer = container.read(backupRestorerProvider);
       restorer.apply(FullBackupData(notes: [note]));
