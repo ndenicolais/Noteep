@@ -41,6 +41,44 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/noteep_widget_info" />
         </receiver>
+        <!-- List widgets: latest notes, tasks to do, upcoming calendar (SummaryWidgets.kt) -->
+        <receiver
+            android:name=".NotesSummaryWidget"
+            android:exported="true"
+            android:label="@string/widget_notes_summary_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/notes_summary_widget_info" />
+        </receiver>
+        <receiver
+            android:name=".TasksSummaryWidget"
+            android:exported="true"
+            android:label="@string/widget_tasks_summary_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/tasks_summary_widget_info" />
+        </receiver>
+        <receiver
+            android:name=".CalendarSummaryWidget"
+            android:exported="true"
+            android:label="@string/widget_calendar_summary_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/calendar_summary_widget_info" />
+        </receiver>
+        <service
+            android:name=".SummaryListService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
         <!-- Quick action widgets: open an empty editor (QuickActionWidgets.kt) -->
         <receiver
             android:name=".QuickActionsWidget"

@@ -16,4 +16,15 @@
     <string name="widget_new_note_description">Crea una nuova nota con un tocco</string>
     <string name="widget_new_task_description">Crea un nuovo task con un tocco</string>
     <string name="widget_new_event_description">Crea un nuovo evento con un tocco</string>
+    <string name="widget_calendar">Calendario</string>
+    <string name="widget_add">Aggiungi</string>
+    <string name="widget_notes_empty">Nessuna nota</string>
+    <string name="widget_tasks_empty">Nessun task da completare</string>
+    <string name="widget_calendar_empty">Nessun impegno nelle prossime due settimane</string>
+    <string name="widget_notes_summary_label">Note</string>
+    <string name="widget_notes_summary_description">Le tue ultime note, prima quelle fissate</string>
+    <string name="widget_tasks_summary_label">Task</string>
+    <string name="widget_tasks_summary_description">I task da completare, divisi per giorno</string>
+    <string name="widget_calendar_summary_label">Calendario</string>
+    <string name="widget_calendar_summary_description">Eventi, task e compleanni delle prossime due settimane</string>
 </resources>

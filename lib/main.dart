@@ -18,6 +18,7 @@ import 'core/routing/notification_launch_handler.dart';
 import 'core/routing/start_section_launcher.dart';
 import 'l10n/l10n.dart';
 import 'providers/auth_provider.dart';
+import 'providers/calendar_provider.dart';
 import 'providers/core_providers.dart';
 import 'providers/notes_provider.dart';
 import 'providers/reminders_actions.dart';
@@ -65,10 +66,11 @@ class NotesApp extends ConsumerWidget {
     final themeMode = ref.watch(themeModeProvider);
     final authState = ref.watch(authStateProvider);
 
-    // Keep the Android home-screen widget in sync whenever notes or tasks
-    // change — otherwise it stays on its placeholder values forever.
+    // Keep the Android home-screen widgets in sync whenever notes, tasks or
+    // events change — otherwise they stay on their placeholder values forever.
     ref.listen(activeNotesProvider, (_, _) => _syncHomeWidget(ref));
     ref.listen(activeTasksProvider, (_, _) => _syncHomeWidget(ref));
+    ref.listen(activeEventsProvider, (_, _) => _syncHomeWidget(ref));
     // The widget labels are in the UI language.
     ref.listen(appLanguageProvider, (_, _) => _syncHomeWidget(ref));
     // Reminders live on the device: rebuild them from the account after a
@@ -129,6 +131,7 @@ class NotesApp extends ConsumerWidget {
     WidgetService.instance.scheduleSync(
       ref.read(activeNotesProvider),
       ref.read(activeTasksProvider),
+      ref.read(activeEventsProvider),
     );
   }
 }

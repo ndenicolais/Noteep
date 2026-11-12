@@ -710,6 +710,9 @@
     }
   },
   "widgetNoRecentNote": "Nessuna nota recente",
+  "widgetNotesEmpty": "Nessuna nota",
+  "widgetTasksEmpty": "Nessun task da completare",
+  "widgetCalendarEmpty": "Nessun impegno nelle prossime due settimane",
   "changelog_v2_0_0_bullet_33": "Il widget per la schermata Home ora si aggiorna davvero con il numero di note e task e con l'ultima nota modificata, nella lingua dell'app.",
   "changelog_v2_0_0_bullet_34": "Nuova informativa sulla privacy, leggibile direttamente nell'app da Info su Noteep, in italiano e in inglese.",
   "changelog_v2_0_0_bullet_35": "Schermata Info su Noteep rinnovata: funzionalità principali in evidenza e nuovi link al codice sorgente, al profilo GitHub e al contatto dello sviluppatore.",
@@ -757,6 +760,7 @@
   "changelog_v2_0_0_bullet_77": "Nella pagina Task le attività sono divise per giorno (Oggi, Domani, poi le date successive, infine quelle senza data) e ogni riga mostra titolo, le prime righe dei dettagli e l'orario della notifica, se impostato.",
   "changelog_v2_0_0_bullet_78": "Le schede del Calendario hanno colori più morbidi, gli stessi delle note: tinte pastello con il tema chiaro e tonalità profonde con il tema scuro, ognuna per tipo (task, compleanni, onomastici, eventi di tutto il giorno ed eventi con orario).",
   "changelog_v2_0_0_bullet_79": "Il widget Riepilogo Noteep nella schermata Home non mostra più \"Impossibile caricare il widget\".",
+  "changelog_v2_0_0_bullet_80": "Tre nuovi widget per la schermata Home: Note, con le ultime note; Task, con i task da completare divisi per giorno; Calendario, con eventi, task e compleanni delle prossime due settimane. Tocca un elemento per aprirlo o + per crearne uno nuovo.",
   "infoPrivacyOpen": "Informativa sulla privacy",
   "privacyPolicyTitle": "Informativa sulla privacy",
   "privacyPolicyIntro": "Noteep è un'app per note, task e calendario. Questa informativa spiega quali dati tratta, perché e come puoi controllarli. Noteep non mostra pubblicità, non usa strumenti di analisi o di tracciamento e non vende né cede i tuoi dati.",

@@ -17,4 +17,15 @@
     <string name="widget_new_note_description">Create a new note in one tap</string>
     <string name="widget_new_task_description">Create a new task in one tap</string>
     <string name="widget_new_event_description">Create a new event in one tap</string>
+    <string name="widget_calendar">Calendar</string>
+    <string name="widget_add">Add</string>
+    <string name="widget_notes_empty">No notes</string>
+    <string name="widget_tasks_empty">No tasks to do</string>
+    <string name="widget_calendar_empty">Nothing planned in the next two weeks</string>
+    <string name="widget_notes_summary_label">Notes</string>
+    <string name="widget_notes_summary_description">Your latest notes, pinned first</string>
+    <string name="widget_tasks_summary_label">Tasks</string>
+    <string name="widget_tasks_summary_description">Tasks to do, split by day</string>
+    <string name="widget_calendar_summary_label">Calendar</string>
+    <string name="widget_calendar_summary_description">Events, tasks and birthdays for the next two weeks</string>
 </resources>

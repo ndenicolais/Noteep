@@ -1801,6 +1801,16 @@ class AppLocalizationsIt extends AppLocalizations {
   String get widgetNoRecentNote => 'Nessuna nota recente';
 
   @override
+  String get widgetNotesEmpty => 'Nessuna nota';
+
+  @override
+  String get widgetTasksEmpty => 'Nessun task da completare';
+
+  @override
+  String get widgetCalendarEmpty =>
+      'Nessun impegno nelle prossime due settimane';
+
+  @override
   String get changelog_v2_0_0_bullet_33 =>
       'Il widget per la schermata Home ora si aggiorna davvero con il numero di note e task e con l\'ultima nota modificata, nella lingua dell\'app.';
 
@@ -1987,6 +1997,10 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_79 =>
       'Il widget Riepilogo Noteep nella schermata Home non mostra più \"Impossibile caricare il widget\".';
+
+  @override
+  String get changelog_v2_0_0_bullet_80 =>
+      'Tre nuovi widget per la schermata Home: Note, con le ultime note; Task, con i task da completare divisi per giorno; Calendario, con eventi, task e compleanni delle prossime due settimane. Tocca un elemento per aprirlo o + per crearne uno nuovo.';
 
   @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';

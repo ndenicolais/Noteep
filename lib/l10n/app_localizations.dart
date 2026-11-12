@@ -3296,6 +3296,24 @@ abstract class AppLocalizations {
   /// **'Nessuna nota recente'**
   String get widgetNoRecentNote;
 
+  /// No description provided for @widgetNotesEmpty.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessuna nota'**
+  String get widgetNotesEmpty;
+
+  /// No description provided for @widgetTasksEmpty.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessun task da completare'**
+  String get widgetTasksEmpty;
+
+  /// No description provided for @widgetCalendarEmpty.
+  ///
+  /// In it, this message translates to:
+  /// **'Nessun impegno nelle prossime due settimane'**
+  String get widgetCalendarEmpty;
+
   /// No description provided for @changelog_v2_0_0_bullet_33.
   ///
   /// In it, this message translates to:
@@ -3577,6 +3595,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Il widget Riepilogo Noteep nella schermata Home non mostra più \"Impossibile caricare il widget\".'**
   String get changelog_v2_0_0_bullet_79;
+
+  /// No description provided for @changelog_v2_0_0_bullet_80.
+  ///
+  /// In it, this message translates to:
+  /// **'Tre nuovi widget per la schermata Home: Note, con le ultime note; Task, con i task da completare divisi per giorno; Calendario, con eventi, task e compleanni delle prossime due settimane. Tocca un elemento per aprirlo o + per crearne uno nuovo.'**
+  String get changelog_v2_0_0_bullet_80;
 
   /// No description provided for @infoPrivacyOpen.
   ///

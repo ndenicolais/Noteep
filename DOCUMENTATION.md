@@ -35,7 +35,7 @@ Noteep is a digital notebook for Android (the web build is used only for develop
 - Plan events in a calendar (day, multi-day, month, year and schedule views), with recurrence, birthdays and name days, ICS import/export.
 - Browse notes by label, archive and restore items, recover deleted ones from the trash for 7 days.
 - Export notes (PDF, TXT, JSON, CSV, HTML), back up and restore data (manual JSON and automatic local backups), read statistics.
-- Use five Android Home screen widgets (summary and quick actions).
+- Use eight Android Home screen widgets (summary, notes, tasks and calendar lists, quick actions).
 
 Languages: Italian and English (see [Localization](#10-localization)). Themes: light, dark or system (see [Theme and style](#8-theme-and-style)).
 
@@ -361,6 +361,8 @@ The screens (`SettingsScreen`, `BackupDataScreen`) handle dialogs, file pickers 
 - **Summary** (`NoteepWidget`): note and task counts and the latest note, written by `WidgetService`; tapping opens the app.
 - **Quick actions** (`QuickActionsWidget`, 3×1 resizable): New note / New task / New event.
 - **New note / New task / New event** (1×1): a single button each.
+- **Notes / Tasks / Calendar** (`NotesSummaryWidget`, `TasksSummaryWidget`, `CalendarSummaryWidget` in `SummaryWidgets.kt`, 3×3 resizable): a header (icon, title, "+") over a scrolling `ListView` fed by `SummaryListService` (`RemoteViewsService`, `BIND_REMOTEVIEWS`). Rows are built in Dart by `lib/utils/home_widget_rows.dart` and stored as JSON under `<kind>_rows`: latest notes (pinned first, note color bar, plain-text or checklist preview, max 30); tasks to do grouped by due day like the Tasks page (overdue first, undated last, max 60); calendar entries of the next 14 days (events, birthdays/name days, tasks with a due date; all-day first; kind accent bar; max 60). Day headers carry their `yyyy-MM-dd`: the factory swaps the label for Today/Tomorrow/Yesterday by the current date and the calendar drops past days, so the list stays right after midnight without a sync (`updatePeriodMillis` 30 min re-reads it).
+- List widget taps: header → `noteep://section/{notes,tasks,calendar}`, "+" → `noteep://new/...`, row → `noteep://open/{note,task,event}/<id>` (a mutable `PendingIntent` template with `HOME_WIDGET_LAUNCH_ACTION`; each row fills in its data URI).
 - Buttons open `MainActivity` with a `noteep://new/{note,task,event}` URI; `HomeWidgetLaunchHandler` opens an empty editor (see [Navigation](#9-navigation)).
 - All widgets are `AppWidgetProvider`s with `RemoteViews`. Layouts may only use RemoteViews-supported classes (`FrameLayout`, `LinearLayout`, `TextView`, `ImageView`, …): a plain `<View>` (e.g. as a divider) makes the launcher show "Can't load widget" — use a `FrameLayout` with a background instead. Picker names and descriptions are Android string resources (`res/values`, `res/values-it`).
 
@@ -464,8 +466,8 @@ Records with `record` into `<documents>/audio_notes/` and plays with `just_audio
 
 **Path:** `lib/utils/widget_service.dart`
 
-- `init()`, `scheduleSync(notes, tasks)`: no-op on the web.
-- Debounces 500 ms, finds the latest note in one pass and skips the write when nothing changed.
+- `init()`, `scheduleSync(notes, tasks, events)`: no-op on the web; `main.dart` calls it when active notes, tasks or events change.
+- Debounces 500 ms, builds every value (summary labels, list titles/empty texts, rows JSON, Today/Tomorrow/Yesterday labels), writes only the keys that changed and refreshes only the widgets that read them (`_widgetKeys`).
 - Writes ready-made localized labels (`currentL10n()`), which the Kotlin widget shows as-is; `main.dart` resyncs when the language changes. Android string resources are used only before the first sync.
 
 ### 7.7 Other services
@@ -486,7 +488,7 @@ Records with `record` into `<documents>/audio_notes/` and plays with `just_audio
 
 - `NotificationTarget` encodes/parses payloads (missing or malformed → `null`, the app just opens) and resolves the non-trashed item.
 - `NotificationLaunchHandler` wraps the signed-in `HomeScreen` (so it is under the `MaterialApp` navigator): it listens to `pendingTarget`, waits for the item to load and opens it with `AppNav` (tasks and events in their read-only view). If the item is still missing when loading ends (notes/tasks) or after 10 s (events), it shows "Reminder item not found". A tap before sign-in waits for the user to sign in.
-- `HomeWidgetAction.parse` reads `noteep://new/...` URIs. `HomeWidgetLaunchHandler` (Android only) handles the cold start once per process (`initialLaunchHandled`, otherwise the intent left on the activity would reopen the editor at every sign-in) and taps while the app runs (`singleTop` → `onNewIntent`).
+- `HomeWidgetAction.parse` reads `noteep://new/...` URIs, `HomeWidgetOpenItem.parse` `noteep://open/<kind>/<id>` (opens the note editor, or the task/event read-only view; on a cold start it waits up to 20 s for the item to load via `notesByIdProvider` / `tasksByIdProvider` / `eventsByIdProvider`), `HomeWidgetSection.parse` `noteep://section/<section>` (pops to home, then pushes Tasks or Calendar). `HomeWidgetLaunchHandler` (Android only) handles the cold start once per process (`initialLaunchHandled`, otherwise the intent left on the activity would reopen the editor at every sign-in) and taps while the app runs (`singleTop` → `onNewIntent`).
 - `StartSectionLauncher` (`start_section_launcher.dart`) wraps both handlers: when the signed-in home mounts (cold start or sign-in) and the start section is not Notes, its post-frame callback pushes that section with `AppRouter.noTransition`, so it appears without a transition. Being outermost, its callback runs first and anything a notification or widget opens lands above it. Back returns to Notes, as from any section.
 
 ---
@@ -652,7 +654,7 @@ dev_dependencies:
 
 Run with `flutter test`. No real Firebase project is needed.
 
-- **Pure logic**: recurrence, Markdown to plain text, ICS import/export round trip, changelog service and entries (`it`/`en` changelog keys match, each bullet used once), notification payloads, Home widget URIs, colors contrast, text theme, task sorting, login validators.
+- **Pure logic**: recurrence, Markdown to plain text, ICS import/export round trip, changelog service and entries (`it`/`en` changelog keys match, each bullet used once), notification payloads, Home widget URIs and list rows, colors contrast, text theme, task sorting, login validators.
 - **With fakes**: data notifiers, labels, undo/redo, backup restore, `DataActions` (including account wipe isolation between users), reminders resync and cancel (`RemindersActions` with a fake `NotificationService`), offline sync (`FirestoreListMutations` with a short `writeGrace`) against `fake_cloud_firestore`; `BackupService` on a real temp folder with a mocked `path_provider` channel.
 - **Widget and layout**: editors, Info, login privacy notice, boot error, router, notification and Home widget launch handlers, masonry grid, rebuild granularity, `NoteHero`, skeletons, `FadeSwitcher`, design-system components, dialogs, swipe actions, empty state; accessibility (200% text on 360×690 without overflow, card semantics and custom actions, sheets above the navigation bar).
 

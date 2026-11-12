@@ -34,3 +34,57 @@ enum HomeWidgetAction {
     return values.where((a) => a.path == segments.single).firstOrNull;
   }
 }
+
+/// Kind of item a list widget row opens.
+enum HomeWidgetItemKind { note, task, event }
+
+/// A row tapped in a list widget (`SummaryWidgets.kt`):
+/// `noteep://open/<note|task|event>/<id>`.
+class HomeWidgetOpenItem {
+  const HomeWidgetOpenItem(this.kind, this.id);
+
+  final HomeWidgetItemKind kind;
+  final String id;
+
+  Uri get uri =>
+      Uri(scheme: 'noteep', host: 'open', pathSegments: [kind.name, id]);
+
+  static HomeWidgetOpenItem? parse(Uri? uri) {
+    if (uri == null || uri.scheme != 'noteep' || uri.host != 'open') {
+      return null;
+    }
+    final segments = uri.pathSegments;
+    if (segments.length != 2 || segments[1].isEmpty) return null;
+    final kind =
+        HomeWidgetItemKind.values
+            .where((k) => k.name == segments[0])
+            .firstOrNull;
+    return kind == null ? null : HomeWidgetOpenItem(kind, segments[1]);
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      other is HomeWidgetOpenItem && other.kind == kind && other.id == id;
+
+  @override
+  int get hashCode => Object.hash(kind, id);
+}
+
+/// The header of a list widget, which opens its section:
+/// `noteep://section/<notes|tasks|calendar>`.
+enum HomeWidgetSection {
+  notes,
+  tasks,
+  calendar;
+
+  Uri get uri => Uri(scheme: 'noteep', host: 'section', path: '/$name');
+
+  static HomeWidgetSection? parse(Uri? uri) {
+    if (uri == null || uri.scheme != 'noteep' || uri.host != 'section') {
+      return null;
+    }
+    final segments = uri.pathSegments;
+    if (segments.length != 1) return null;
+    return values.where((s) => s.name == segments.single).firstOrNull;
+  }
+}

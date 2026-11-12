@@ -1791,6 +1791,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get widgetNoRecentNote => 'No recent notes';
 
   @override
+  String get widgetNotesEmpty => 'No notes';
+
+  @override
+  String get widgetTasksEmpty => 'No tasks to do';
+
+  @override
+  String get widgetCalendarEmpty => 'Nothing planned in the next two weeks';
+
+  @override
   String get changelog_v2_0_0_bullet_33 =>
       'The home screen widget now really updates with the number of notes and tasks and the last edited note, in the app\'s language.';
 
@@ -1977,6 +1986,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_79 =>
       'The Noteep Summary home screen widget no longer shows \"Can\'t load widget\".';
+
+  @override
+  String get changelog_v2_0_0_bullet_80 =>
+      'Three new home screen widgets: Notes, with your latest notes; Tasks, with the tasks to do split by day; Calendar, with events, tasks and birthdays for the next two weeks. Tap an item to open it, or + to create a new one.';
 
   @override
   String get infoPrivacyOpen => 'Privacy policy';

@@ -228,6 +228,11 @@ final calendarProvider =
       CalendarNotifier.new,
     );
 
+/// Every event by id, rebuilt once per change of [calendarProvider].
+final eventsByIdProvider = Provider<Map<String, CalendarEventModel>>((ref) {
+  return {for (final e in ref.watch(calendarProvider)) e.id: e};
+});
+
 final activeEventsProvider = Provider<List<CalendarEventModel>>((ref) {
   final events = ref.watch(calendarProvider);
   return events.where((e) => !e.isArchived && e.deletedAt == null).toList();

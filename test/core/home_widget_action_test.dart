@@ -38,4 +38,46 @@ void main() {
       expect(HomeWidgetAction.parse(u), isNull, reason: '$u');
     }
   });
+
+  test('parses the list widget row and header URIs', () {
+    // Keep in sync with SummaryWidgets.kt.
+    expect(
+      HomeWidgetOpenItem.parse(Uri.parse('noteep://open/note/abc-123')),
+      const HomeWidgetOpenItem(HomeWidgetItemKind.note, 'abc-123'),
+    );
+    expect(
+      HomeWidgetOpenItem.parse(Uri.parse('noteep://open/event/e1')),
+      const HomeWidgetOpenItem(HomeWidgetItemKind.event, 'e1'),
+    );
+    expect(
+      HomeWidgetSection.parse(Uri.parse('noteep://section/tasks')),
+      HomeWidgetSection.tasks,
+    );
+    for (final item in HomeWidgetItemKind.values) {
+      final open = HomeWidgetOpenItem(item, 'x');
+      expect(HomeWidgetOpenItem.parse(open.uri), open);
+    }
+    for (final section in HomeWidgetSection.values) {
+      expect(HomeWidgetSection.parse(section.uri), section);
+    }
+  });
+
+  test('malformed list widget URIs parse to null', () {
+    for (final u in [
+      Uri.parse('noteep://open/note'),
+      Uri.parse('noteep://open/note/'),
+      Uri.parse('noteep://open/banana/1'),
+      Uri.parse('noteep://open/note/1/extra'),
+      Uri.parse('noteep://new/note'),
+    ]) {
+      expect(HomeWidgetOpenItem.parse(u), isNull, reason: '$u');
+    }
+    for (final u in [
+      Uri.parse('noteep://section'),
+      Uri.parse('noteep://section/archive'),
+      Uri.parse('noteep://new/note'),
+    ]) {
+      expect(HomeWidgetSection.parse(u), isNull, reason: '$u');
+    }
+  });
 }
