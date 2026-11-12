@@ -2025,7 +2025,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get changelog_v2_0_0_bullet_86 =>
-      'Calendar events can now have a location, which opens in Maps with a tap, and a card color of your choice.';
+      'Calendar events can now have a location, with address suggestions as you type and a tap to open it in Maps, and a card color of your choice.';
 
   @override
   String get infoPrivacyOpen => 'Privacy policy';
@@ -2075,7 +2075,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get policy_section_storage_text =>
-      'Account and content are stored on Google Firebase (Firebase Authentication and Cloud Firestore), services provided by Google. Content is stored on servers in the United States and Firebase Authentication may also process data outside the European Union: the transfer takes place with the safeguards provided by the Google Firebase terms. Data travels encrypted and the database security rules make sure only your account can read and change your content. The developer does not look at your content and does not share it with anyone.';
+      'Account and content are stored on Google Firebase (Firebase Authentication and Cloud Firestore), services provided by Google. Content is stored on servers in the United States and Firebase Authentication may also process data outside the European Union: the transfer takes place with the safeguards provided by the Google Firebase terms. Data travels encrypted and the database security rules make sure only your account can read and change your content. The developer does not look at your content and does not share it with anyone.\n\nWhile you type the location of an event, the typed text is sent to the OpenStreetMap search service (Nominatim, run by the OpenStreetMap Foundation) to suggest addresses: nothing else is sent, neither your position nor your account data. If you tap the location to open it in Maps, the search is handed to the Google Maps app or website.';
 
   @override
   String get policy_section_device_title => '5. On-device processing';

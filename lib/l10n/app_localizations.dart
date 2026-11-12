@@ -3659,7 +3659,7 @@ abstract class AppLocalizations {
   /// No description provided for @changelog_v2_0_0_bullet_86.
   ///
   /// In it, this message translates to:
-  /// **'Negli eventi del Calendario puoi aggiungere un luogo, da aprire in Maps con un tocco, e scegliere il colore della card.'**
+  /// **'Negli eventi del Calendario puoi aggiungere un luogo, con i suggerimenti degli indirizzi mentre scrivi e da aprire in Maps con un tocco, e scegliere il colore della card.'**
   String get changelog_v2_0_0_bullet_86;
 
   /// No description provided for @infoPrivacyOpen.
@@ -3743,7 +3743,7 @@ abstract class AppLocalizations {
   /// No description provided for @policy_section_storage_text.
   ///
   /// In it, this message translates to:
-  /// **'Account e contenuti sono conservati su Google Firebase (Firebase Authentication e Cloud Firestore), servizi forniti da Google. I contenuti sono conservati su server negli Stati Uniti e anche Firebase Authentication può trattare i dati fuori dall\'Unione europea: il trasferimento avviene con le garanzie previste dai termini di Google Firebase. I dati viaggiano cifrati e le regole di sicurezza del database fanno sì che solo il tuo account possa leggere e modificare i tuoi contenuti. Lo sviluppatore non consulta i tuoi contenuti e non li condivide con nessuno.'**
+  /// **'Account e contenuti sono conservati su Google Firebase (Firebase Authentication e Cloud Firestore), servizi forniti da Google. I contenuti sono conservati su server negli Stati Uniti e anche Firebase Authentication può trattare i dati fuori dall\'Unione europea: il trasferimento avviene con le garanzie previste dai termini di Google Firebase. I dati viaggiano cifrati e le regole di sicurezza del database fanno sì che solo il tuo account possa leggere e modificare i tuoi contenuti. Lo sviluppatore non consulta i tuoi contenuti e non li condivide con nessuno.\n\nMentre scrivi il luogo di un evento, il testo digitato viene inviato al servizio di ricerca di OpenStreetMap (Nominatim, gestito dalla OpenStreetMap Foundation) per suggerirti gli indirizzi: non viene inviato nient\'altro, né la tua posizione né i dati del tuo account. Se tocchi il luogo per aprirlo in Maps, la ricerca passa all\'app o al sito di Google Maps.'**
   String get policy_section_storage_text;
 
   /// No description provided for @policy_section_device_title.

@@ -22,6 +22,7 @@ import '../../widgets/shared/app_dialogs.dart';
 import '../../widgets/shared/error_feedback.dart';
 import 'calendar_event_details_section.dart';
 import 'calendar_event_editor_bars.dart';
+import 'calendar_location_field.dart';
 
 class CalendarEventEditorScreen extends ConsumerStatefulWidget {
   const CalendarEventEditorScreen({super.key, required this.event});
@@ -38,6 +39,7 @@ class _CalendarEventEditorScreenState
   late TextEditingController _titleController;
   late TextEditingController _descriptionController;
   late TextEditingController _locationController;
+  late final List<String> _locationHistory;
   bool _isNew = false;
   bool _softDeleted = false;
 
@@ -51,6 +53,7 @@ class _CalendarEventEditorScreenState
     _titleController = TextEditingController(text: _event.title);
     _descriptionController = TextEditingController(text: _event.description);
     _locationController = TextEditingController(text: _event.location);
+    _locationHistory = _otherLocations();
   }
 
   @override
@@ -59,6 +62,17 @@ class _CalendarEventEditorScreenState
     _descriptionController.dispose();
     _locationController.dispose();
     super.dispose();
+  }
+
+  /// Locations of the other events, most recently edited first, offered
+  /// as suggestions while typing.
+  List<String> _otherLocations() {
+    final events = [...ref.read(calendarProvider)]
+      ..sort((a, b) => b.updatedAt.compareTo(a.updatedAt));
+    return {
+      for (final e in events)
+        if (e.id != _event.id && e.location.isNotEmpty) e.location,
+    }.toList();
   }
 
   bool _isEmpty() {
@@ -233,17 +247,9 @@ class _CalendarEventEditorScreenState
                 border: InputBorder.none,
               ),
             ),
-            TextField(
+            CalendarLocationField(
               controller: _locationController,
-              textCapitalization: TextCapitalization.sentences,
-              decoration: InputDecoration(
-                icon: const Icon(Icons.location_on_outlined),
-                hintText: context.l10n.calendarLocationHint,
-                hintStyle: TextStyle(
-                  color: colorScheme.onSurface.withAlpha(100),
-                ),
-                border: InputBorder.none,
-              ),
+              history: _locationHistory,
             ),
             const SizedBox(height: AppSpacing.sm),
             CalendarEventDetailsSection(

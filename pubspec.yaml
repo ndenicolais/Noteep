@@ -57,6 +57,9 @@ dependencies:
   # Links
   url_launcher: ^6.3.3
 
+  # Place suggestions for event locations (OpenStreetMap Nominatim)
+  http: ^1.6.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -13,7 +13,7 @@ const developerEmail = 'ndn21dev@gmail.com';
 
 /// Date shown as "last updated" in the privacy policy (in-app and
 /// `PRIVACY.md`): change both together.
-final privacyPolicyUpdatedAt = DateTime(2026, 11, 9);
+final privacyPolicyUpdatedAt = DateTime(2026, 11, 12);
 
 /// Online privacy policy: the portfolio page, which is also the privacy URL
 /// of the Google OAuth consent screen.
