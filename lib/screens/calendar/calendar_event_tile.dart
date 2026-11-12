@@ -8,6 +8,8 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import '../../l10n/l10n.dart';
 import 'package:intl/intl.dart';
@@ -63,59 +65,165 @@ class CalendarEventListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final style = calendarItemStyle(event, Theme.of(context).colorScheme);
     final subtitle = calendarItemSubtitle(context.l10n, event);
-    final radius = BorderRadius.circular(8);
+    final festive = style.isFestive;
+    final radius = BorderRadius.circular(festive ? 12 : 8);
+    final double vertical =
+        festive
+            ? (dense ? AppSpacing.md : AppSpacing.lg)
+            : (dense ? AppSpacing.sm : AppSpacing.md);
     return Padding(
       padding: padding,
       child: Material(
-        color: style.background,
+        color: festive ? Colors.transparent : style.background,
         borderRadius: radius,
-        child: InkWell(
-          borderRadius: radius,
-          onTap: onTap,
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: AppSpacing.md,
-              vertical: dense ? AppSpacing.sm : AppSpacing.md,
-            ),
-            child: Row(
-              children: [
-                if (style.icon != null) ...[
-                  Icon(style.icon, size: 18, color: style.foreground),
-                  const SizedBox(width: AppSpacing.sm),
-                ],
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        event.title.isEmpty
-                            ? context.l10n.commonUntitledParens
-                            : event.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: style.foreground,
-                          fontWeight: FontWeight.w600,
-                          decoration: style.decoration,
-                          decorationColor: style.foreground,
-                        ),
-                      ),
-                      if (subtitle != null)
-                        Text(
-                          subtitle,
-                          style: TextStyle(
-                            color: style.foreground.withValues(alpha: 0.85),
-                            fontSize: 12,
-                          ),
-                        ),
-                    ],
-                  ),
+        clipBehavior: festive ? Clip.antiAlias : Clip.none,
+        child: Ink(
+          decoration:
+              festive
+                  ? BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [style.background, style.festiveEnd!],
+                    ),
+                  )
+                  : null,
+          child: CustomPaint(
+            painter:
+                festive
+                    ? _ConfettiPainter(
+                      seed: event.title.hashCode,
+                      isDark: Theme.of(context).brightness == Brightness.dark,
+                      accent: style.accent,
+                    )
+                    : null,
+            child: InkWell(
+              borderRadius: radius,
+              onTap: onTap,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppSpacing.md,
+                  vertical: vertical,
                 ),
-              ],
+                child: _content(context, style, subtitle, festive),
+              ),
             ),
           ),
         ),
       ),
     );
   }
+
+  Widget _content(
+    BuildContext context,
+    CalendarItemStyle style,
+    String? subtitle,
+    bool festive,
+  ) {
+    return Row(
+      children: [
+        if (style.icon != null && festive) ...[
+          Container(
+            width: 36,
+            height: 36,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: style.foreground.withValues(alpha: 0.15),
+            ),
+            child: Icon(style.icon, size: 20, color: style.foreground),
+          ),
+          const SizedBox(width: AppSpacing.md),
+        ] else if (style.icon != null) ...[
+          Icon(style.icon, size: 18, color: style.foreground),
+          const SizedBox(width: AppSpacing.sm),
+        ],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                event.title.isEmpty
+                    ? context.l10n.commonUntitledParens
+                    : event.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: style.foreground,
+                  fontSize: festive ? 16 : null,
+                  fontWeight: festive ? FontWeight.w700 : FontWeight.w600,
+                  decoration: style.decoration,
+                  decorationColor: style.foreground,
+                ),
+              ),
+              if (subtitle != null)
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    color: style.foreground.withValues(alpha: 0.85),
+                    fontSize: 12,
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Scattered confetti (dots and short strips) behind birthday and name day
+/// cards. Positions come from [seed], so a card keeps the same pattern
+/// across rebuilds.
+class _ConfettiPainter extends CustomPainter {
+  _ConfettiPainter({
+    required this.seed,
+    required this.isDark,
+    required this.accent,
+  });
+
+  final int seed;
+  final bool isDark;
+  final Color accent;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rnd = math.Random(seed);
+    final alpha = isDark ? 0.35 : 0.5;
+    final colors =
+        [
+          accent,
+          Colors.pink.shade300,
+          Colors.amber.shade600,
+          Colors.purple.shade300,
+          Colors.teal.shade300,
+        ].map((c) => c.withValues(alpha: alpha)).toList();
+    final paint = Paint()..style = PaintingStyle.fill;
+    final count = (size.width / 18).round().clamp(8, 40);
+    for (var i = 0; i < count; i++) {
+      paint.color = colors[rnd.nextInt(colors.length)];
+      final center = Offset(
+        rnd.nextDouble() * size.width,
+        rnd.nextDouble() * size.height,
+      );
+      if (rnd.nextBool()) {
+        canvas.drawCircle(center, 1.5 + rnd.nextDouble() * 1.5, paint);
+      } else {
+        canvas.save();
+        canvas.translate(center.dx, center.dy);
+        canvas.rotate(rnd.nextDouble() * math.pi);
+        canvas.drawRRect(
+          RRect.fromRectAndRadius(
+            const Rect.fromLTWH(-4, -1.25, 8, 2.5),
+            const Radius.circular(1),
+          ),
+          paint,
+        );
+        canvas.restore();
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(_ConfettiPainter old) =>
+      old.seed != seed || old.isDark != isDark || old.accent != accent;
 }

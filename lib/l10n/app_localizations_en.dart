@@ -2004,6 +2004,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'In Calendar, the Today button now brings you back to the current day in the Schedule view too.';
 
   @override
+  String get changelog_v2_0_0_bullet_84 =>
+      'In Calendar, birthdays and name days get larger, festive cards with a gradient background and confetti.';
+
+  @override
   String get infoPrivacyOpen => 'Privacy policy';
 
   @override

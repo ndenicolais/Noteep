@@ -3620,6 +3620,12 @@ abstract class AppLocalizations {
   /// **'Nel Calendario il pulsante Oggi ora riporta al giorno corrente anche nella vista Programma.'**
   String get changelog_v2_0_0_bullet_83;
 
+  /// No description provided for @changelog_v2_0_0_bullet_84.
+  ///
+  /// In it, this message translates to:
+  /// **'Nel Calendario compleanni e onomastici hanno card più grandi e festose, con uno sfondo sfumato e coriandoli.'**
+  String get changelog_v2_0_0_bullet_84;
+
   /// No description provided for @infoPrivacyOpen.
   ///
   /// In it, this message translates to:

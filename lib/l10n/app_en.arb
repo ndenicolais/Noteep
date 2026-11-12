@@ -601,6 +601,7 @@
   "changelog_v2_0_0_bullet_81": "The New note, New task and New event widgets are now round, with the icon on top and the name below: Note, Task, Event.",
   "changelog_v2_0_0_bullet_82": "In the notes grid you can now scroll starting from a note: to move it, press and hold, then drag; for the quick actions menu, press and hold, then release.",
   "changelog_v2_0_0_bullet_83": "In Calendar, the Today button now brings you back to the current day in the Schedule view too.",
+  "changelog_v2_0_0_bullet_84": "In Calendar, birthdays and name days get larger, festive cards with a gradient background and confetti.",
   "infoPrivacyOpen": "Privacy policy",
   "privacyPolicyTitle": "Privacy policy",
   "privacyPolicyIntro": "Noteep is an app for notes, tasks and calendar. This policy explains which data it processes, why, and how you can control it. Noteep shows no ads, uses no analytics or tracking tools, and does not sell or hand over your data.",

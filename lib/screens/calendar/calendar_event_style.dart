@@ -21,7 +21,14 @@ class CalendarItemStyle {
     required this.accent,
     this.icon,
     this.isDone = false,
+    this.festiveEnd,
   });
+
+  /// Second gradient stop of birthdays and name days, whose list cards are
+  /// larger and festive; null for every other kind.
+  final Color? festiveEnd;
+
+  bool get isFestive => festiveEnd != null;
 
   /// Card fill, taken from the note swatches of the current theme.
   final Color background;
@@ -82,9 +89,21 @@ CalendarItemStyle calendarItemStyle(
       isDone: done,
     );
   }
-  if (item.isBirthday) return _style(_birthdaySwatch, isDark, Icons.cake);
+  if (item.isBirthday) {
+    return _style(
+      _birthdaySwatch,
+      isDark,
+      Icons.cake,
+      festiveEnd: isDark ? const Color(0xFF4A148C) : const Color(0xFFF8BBD0),
+    );
+  }
   if (item.isNameDay) {
-    return _style(_nameDaySwatch, isDark, Icons.auto_awesome);
+    return _style(
+      _nameDaySwatch,
+      isDark,
+      Icons.auto_awesome,
+      festiveEnd: isDark ? const Color(0xFF880E4F) : const Color(0xFFFFF59D),
+    );
   }
   if (item.isAllDay) return _style(_allDaySwatch, isDark, null);
   final _Swatch timed = (
@@ -100,6 +119,7 @@ CalendarItemStyle _style(
   bool isDark,
   IconData? icon, {
   bool isDone = false,
+  Color? festiveEnd,
 }) {
   final opaque = isDark ? swatch.dark : swatch.light;
   return CalendarItemStyle(
@@ -108,5 +128,6 @@ CalendarItemStyle _style(
     accent: swatch.accent,
     icon: icon,
     isDone: isDone,
+    festiveEnd: festiveEnd,
   );
 }

@@ -2015,6 +2015,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Nel Calendario il pulsante Oggi ora riporta al giorno corrente anche nella vista Programma.';
 
   @override
+  String get changelog_v2_0_0_bullet_84 =>
+      'Nel Calendario compleanni e onomastici hanno card più grandi e festose, con uno sfondo sfumato e coriandoli.';
+
+  @override
   String get infoPrivacyOpen => 'Informativa sulla privacy';
 
   @override
