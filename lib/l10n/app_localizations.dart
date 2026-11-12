@@ -203,194 +203,128 @@ abstract class AppLocalizations {
   /// No description provided for @changelog_v2_0_0_bullet_1.
   ///
   /// In it, this message translates to:
-  /// **'App completamente ridisegnata: note, attività e calendario in un unico posto, sincronizzati sul tuo account.'**
+  /// **'App completamente ridisegnata: note, task e calendario in un unico posto, sincronizzati sul tuo account.'**
   String get changelog_v2_0_0_bullet_1;
 
   /// No description provided for @changelog_v2_0_0_bullet_2.
   ///
   /// In it, this message translates to:
-  /// **'Note con stili personalizzati, Markdown, liste di controllo, note audio, collegamenti tra note e 6 modelli pronti.'**
+  /// **'Note con stili personalizzati, Markdown, liste di controllo, note audio, collegamenti tra note, link ai siti da aprire con un tocco e 6 modelli pronti. In Impostazioni > Note scegli se il pulsante + apre il menu (nota, lista, task, audio, modello) o crea subito una nota.'**
   String get changelog_v2_0_0_bullet_2;
 
   /// No description provided for @changelog_v2_0_0_bullet_3.
   ///
   /// In it, this message translates to:
-  /// **'Attività con elenchi, sottoattività, scadenze, ricorrenze e attività speciali.'**
+  /// **'Task con sottoattività, ricorrenze e task speciali: già alla creazione imposti giorno, orario e dettagli. L\'elenco è diviso per giorno (Oggi, Domani, le date successive, poi quelli senza data). Toccando un task lo vedi con tutti i dettagli e da lì lo completi, spunti le sottoattività o lo modifichi con la matita. Per un task ricorrente scegli se eliminare solo questo o anche i successivi.'**
   String get changelog_v2_0_0_bullet_3;
 
   /// No description provided for @changelog_v2_0_0_bullet_4.
   ///
   /// In it, this message translates to:
-  /// **'Nuovo calendario con vista giorno, settimana, mese, anno e programma, compleanni e onomastici, importazione ed esportazione ICS.'**
+  /// **'Nuovo calendario con viste Giorno, Settimana, Mese, Anno e Programma: colonna delle ore con la linea dell\'ora attuale, Programma da scorrere liberamente nel passato e nel futuro, e la vista scelta viene ricordata. Mostra anche i task con una data (puoi nasconderli), compleanni e onomastici, e importa ed esporta file ICS. Il pulsante + crea un evento o un task, e agli eventi puoi aggiungere un luogo da aprire in Maps e il colore della card.'**
   String get changelog_v2_0_0_bullet_4;
 
   /// No description provided for @changelog_v2_0_0_bullet_5.
   ///
   /// In it, this message translates to:
-  /// **'Promemoria per note, attività ed eventi, con una schermata dedicata.'**
+  /// **'Calendario più leggibile: ogni tipo di voce (evento, evento di tutto il giorno, compleanno, onomastico, task) ha il suo colore pastello, compleanni e onomastici hanno card festose con coriandoli e i task mostrano la loro icona. Scegliendo Compleanno o Onomastico l\'evento diventa subito annuale, di tutto il giorno e con gli avvisi.'**
   String get changelog_v2_0_0_bullet_5;
 
   /// No description provided for @changelog_v2_0_0_bullet_6.
   ///
   /// In it, this message translates to:
-  /// **'Etichette, archivio e cestino con eliminazione automatica dopo 7 giorni.'**
+  /// **'Notifiche semplici: task ed eventi con un orario ti avvisano a quell\'ora; eventi di tutto il giorno, compleanni e onomastici avvisano il giorno stesso e/o il giorno prima, all\'orario scelto in Impostazioni. Le note possono avere un promemoria. Toccando la notifica si apre l\'elemento collegato, il permesso viene chiesto solo al primo avviso e, scegliendo un orario per oggi, si parte dall\'ora attuale.'**
   String get changelog_v2_0_0_bullet_6;
 
   /// No description provided for @changelog_v2_0_0_bullet_7.
   ///
   /// In it, this message translates to:
-  /// **'Statistiche, esportazione delle note in PDF, TXT, JSON, CSV e HTML, backup manuali e automatici.'**
+  /// **'Etichette salvate nel tuo account, da aggiungere dall\'editor e da toccare per vedere le note che le usano. Archivio e cestino con eliminazione automatica dopo 7 giorni: eliminare dall\'editor sposta nel cestino, e dopo aver archiviato o cestinato puoi toccare Annulla.'**
   String get changelog_v2_0_0_bullet_7;
 
   /// No description provided for @changelog_v2_0_0_bullet_8.
   ///
   /// In it, this message translates to:
-  /// **'Widget per la schermata Home di Android.'**
+  /// **'Scorri un task verso destra per completarlo o verso sinistra per cestinarlo; in vista elenco scorri una nota per archiviarla o cestinarla. Trascina verso il basso per aggiornare le liste e, se la sincronizzazione non riesce, tocca Riprova.'**
   String get changelog_v2_0_0_bullet_8;
 
   /// No description provided for @changelog_v2_0_0_bullet_9.
   ///
   /// In it, this message translates to:
-  /// **'Pulsante \"Annulla\" dopo aver spostato nel cestino o archiviato note, attività ed eventi.'**
+  /// **'Tutto in Impostazioni > Backup e dati: backup manuali e automatici da ripristinare con un tocco, che salvano anche etichette e impostazioni, ed esportazione delle note in PDF, TXT, JSON, CSV e HTML.'**
   String get changelog_v2_0_0_bullet_9;
 
   /// No description provided for @changelog_v2_0_0_bullet_10.
   ///
   /// In it, this message translates to:
-  /// **'Eliminare una nota o un\'attività dall\'editor ora la sposta nel cestino invece di cancellarla definitivamente.'**
+  /// **'Modalità offline: le modifiche fatte senza connessione vengono salvate sul dispositivo e inviate appena torni online, con un avviso finché restano in attesa. Anche sul web i dati restano disponibili offline.'**
   String get changelog_v2_0_0_bullet_10;
 
   /// No description provided for @changelog_v2_0_0_bullet_11.
   ///
   /// In it, this message translates to:
-  /// **'Trascina verso il basso su note e attività per aggiornarle, ad esempio dopo un errore di connessione o modifiche fatte da un altro dispositivo.'**
+  /// **'Widget per la schermata Home: Note, Task e Calendario per vedere le ultime note, i task da fare e gli impegni delle prossime due settimane; Azioni rapide e i pulsanti rotondi Nota, Task ed Evento per creare subito un nuovo elemento.'**
   String get changelog_v2_0_0_bullet_11;
 
   /// No description provided for @changelog_v2_0_0_bullet_12.
   ///
   /// In it, this message translates to:
-  /// **'Pulsante \"Riprova\" quando la sincronizzazione non riesce e \"Crea la prima nota\" quando non ne hai ancora.'**
+  /// **'L\'app è disponibile anche in inglese: segue la lingua del telefono, oppure la scegli in Impostazioni > Lingua. Date, selettori e menu di sistema seguono la lingua dell\'app.'**
   String get changelog_v2_0_0_bullet_12;
 
   /// No description provided for @changelog_v2_0_0_bullet_13.
   ///
   /// In it, this message translates to:
-  /// **'Scorri un\'attività verso destra per completarla o verso sinistra per spostarla nel cestino; in vista elenco, scorri una nota verso destra per archiviarla o verso sinistra per cestinarla.'**
+  /// **'Guida introduttiva al primo avvio, sempre consultabile da Info su Noteep. La pagina Info è rinnovata, con le funzioni principali, i link al codice sorgente e allo sviluppatore e le licenze open source, compresi i caratteri.'**
   String get changelog_v2_0_0_bullet_13;
 
   /// No description provided for @changelog_v2_0_0_bullet_14.
   ///
   /// In it, this message translates to:
-  /// **'Selettori di data e ora, menu di sistema e date nella lingua dell\'app.'**
+  /// **'Menu laterale con Calendario, Task, Note e una sezione dedicata alle Statistiche. In Impostazioni scegli da quale sezione si apre l\'app, e tema e lingua si scelgono con dei pulsanti affiancati.'**
   String get changelog_v2_0_0_bullet_14;
 
   /// No description provided for @changelog_v2_0_0_bullet_15.
   ///
   /// In it, this message translates to:
-  /// **'Se l\'avvio non riesce, al posto di una schermata bianca compare un messaggio con il pulsante Riprova.'**
+  /// **'Aspetto più curato e uniforme: nuova icona e nuovo logo, griglia delle note a mattoncini senza spazi vuoti, anteprima della lista durante il caricamento, animazioni più fluide (disattivate se il sistema riduce le animazioni) e lo stesso stile per intestazioni, impostazioni ed elementi in tutta l\'app.'**
   String get changelog_v2_0_0_bullet_15;
 
   /// No description provided for @changelog_v2_0_0_bullet_16.
   ///
   /// In it, this message translates to:
-  /// **'Guida introduttiva al primo avvio che presenta le funzioni dell\'app, sempre consultabile da Info app.'**
+  /// **'Accessibilità: con TalkBack ogni nota si legge per intero e le azioni rapide sono nel menu Azioni; con il testo di sistema molto grande nulla viene tagliato. La prima lettera di titoli e testi è maiuscola in automatico.'**
   String get changelog_v2_0_0_bullet_16;
 
   /// No description provided for @changelog_v2_0_0_bullet_17.
   ///
   /// In it, this message translates to:
-  /// **'Ripristino dei backup automatici: in Impostazioni, apri l\'elenco dei backup e tocca quello da ripristinare.'**
+  /// **'Informativa sulla privacy in italiano e in inglese, leggibile anche senza account e mostrata con l\'età minima prima della registrazione; indica che i contenuti sono conservati su server negli Stati Uniti. In Impostazioni puoi eliminare definitivamente l\'account con tutti i tuoi dati.'**
   String get changelog_v2_0_0_bullet_17;
 
   /// No description provided for @changelog_v2_0_0_bullet_18.
   ///
   /// In it, this message translates to:
-  /// **'Importare un backup completo ora elimina davvero note, attività ed eventi che non ne fanno parte, invece di farli ricomparire al riavvio.'**
+  /// **'Il ripristino del backup e l\'importazione del calendario sono più sicuri: un file selezionato non può più essere usato per accedere ad altri file del dispositivo.'**
   String get changelog_v2_0_0_bullet_18;
 
   /// No description provided for @changelog_v2_0_0_bullet_19.
   ///
   /// In it, this message translates to:
-  /// **'Calendario ICS: gli eventi ricorrenti esportati mantengono la data di fine, quelli importati non perdono più l\'ultima ripetizione a cavallo del cambio d\'ora, gli orari con fuso esplicito restano corretti e il testo con barre rovesciate viene letto bene.'**
+  /// **'Se l\'avvio non riesce compare un messaggio con il pulsante Riprova invece di una schermata bianca. Dopo una reinstallazione l\'accesso resta attivo. Uscendo dall\'account i suoi promemoria non suonano più e, accedendo, vengono riprogrammati anche su un nuovo dispositivo.'**
   String get changelog_v2_0_0_bullet_19;
 
   /// No description provided for @changelog_v2_0_0_bullet_20.
   ///
   /// In it, this message translates to:
-  /// **'Durante il primo caricamento di note e attività compare un\'anteprima della lista al posto della rotellina, con un passaggio più morbido tra caricamento, lista e schermata vuota.'**
+  /// **'Importare un backup completo ora elimina davvero gli elementi che non ne fanno parte. Nei file ICS gli eventi ricorrenti mantengono la data di fine e l\'ultima ripetizione, e gli orari con fuso orario restano corretti.'**
   String get changelog_v2_0_0_bullet_20;
 
   /// No description provided for @changelog_v2_0_0_bullet_21.
   ///
   /// In it, this message translates to:
-  /// **'Nuova griglia della Home \"a mattoncini\": ogni nota occupa solo lo spazio che le serve, senza vuoti tra le note corte e senza tagliare quelle lunghe.'**
+  /// **'Note e task fissati restano sempre in cima; le note con formattazione mostrano il testo pulito, senza asterischi o cancelletti; i task con una scadenza con orario, ad esempio importati da Google Tasks, mantengono il loro orario.'**
   String get changelog_v2_0_0_bullet_21;
-
-  /// No description provided for @changelog_v2_0_0_bullet_22.
-  ///
-  /// In it, this message translates to:
-  /// **'Toccando la notifica di un promemoria si apre direttamente la nota, l\'attività o l\'evento collegato, anche ad app chiusa.'**
-  String get changelog_v2_0_0_bullet_22;
-
-  /// No description provided for @changelog_v2_0_0_bullet_23.
-  ///
-  /// In it, this message translates to:
-  /// **'Animazioni più fluide: la nota si espande dalla sua card quando la apri e il passaggio tra le sezioni del menu avviene in dissolvenza. Con le animazioni ridotte del sistema restano disattivate.'**
-  String get changelog_v2_0_0_bullet_23;
-
-  /// No description provided for @changelog_v2_0_0_bullet_24.
-  ///
-  /// In it, this message translates to:
-  /// **'Accessibilità: con TalkBack ogni nota si legge per intero e le azioni rapide (fissa, archivia, cestino, sposta) sono nel menu Azioni; con il testo di sistema molto grande schede e campi non vengono più tagliati, e i pannelli dal basso non finiscono sotto la barra di navigazione.'**
-  String get changelog_v2_0_0_bullet_24;
-
-  /// No description provided for @changelog_v2_0_0_bullet_25.
-  ///
-  /// In it, this message translates to:
-  /// **'Modalità offline: le modifiche fatte senza connessione vengono salvate sul dispositivo e inviate appena torni online, con un avviso finché restano in attesa. Anche sul web i dati restano disponibili offline.'**
-  String get changelog_v2_0_0_bullet_25;
-
-  /// No description provided for @changelog_v2_0_0_bullet_26.
-  ///
-  /// In it, this message translates to:
-  /// **'Aspetto più uniforme: intestazioni di sezione, voci delle impostazioni, elementi di archivio e cestino ed etichette hanno ora lo stesso stile in tutta l\'app, e le conferme di eliminazione usano sempre il pulsante rosso.'**
-  String get changelog_v2_0_0_bullet_26;
-
-  /// No description provided for @changelog_v2_0_0_bullet_27.
-  ///
-  /// In it, this message translates to:
-  /// **'Nuova icona dell\'app: la lampadina con la spunta su sfondo scuro, che si adatta alla forma scelta dal launcher e ai temi colore di Android 13 e successivi.'**
-  String get changelog_v2_0_0_bullet_27;
-
-  /// No description provided for @changelog_v2_0_0_bullet_28.
-  ///
-  /// In it, this message translates to:
-  /// **'Il nuovo logo dell\'app compare anche nella schermata di accesso e registrazione, in quella di caricamento e nella pagina Info.'**
-  String get changelog_v2_0_0_bullet_28;
-
-  /// No description provided for @changelog_v2_0_0_bullet_29.
-  ///
-  /// In it, this message translates to:
-  /// **'Link nelle note: con il pulsante \"Inserisci link\" aggiungi un collegamento a un sito, e nell\'anteprima Markdown basta toccarlo per aprirlo nel browser. Anche gli indirizzi scritti a mano diventano cliccabili.'**
-  String get changelog_v2_0_0_bullet_29;
-
-  /// No description provided for @changelog_v2_0_0_bullet_30.
-  ///
-  /// In it, this message translates to:
-  /// **'Eliminazione dell\'account: in Impostazioni, dopo aver confermato la password o l\'account Google, puoi eliminare definitivamente l\'account insieme a tutte le note, le attività e gli eventi.'**
-  String get changelog_v2_0_0_bullet_30;
-
-  /// No description provided for @changelog_v2_0_0_bullet_31.
-  ///
-  /// In it, this message translates to:
-  /// **'Nuova opzione in Impostazioni > Note: scegli se il pulsante + delle note apre il menu con nota, lista, task, audio e modello oppure crea subito una nuova nota. Dal menu, \"Task\" ora apre direttamente un nuovo task.'**
-  String get changelog_v2_0_0_bullet_31;
-
-  /// No description provided for @changelog_v2_0_0_bullet_32.
-  ///
-  /// In it, this message translates to:
-  /// **'L\'app è disponibile anche in inglese: segue la lingua del telefono, oppure puoi sceglierla in Impostazioni > Lingua.'**
-  String get changelog_v2_0_0_bullet_32;
 
   /// No description provided for @commonCancel.
   ///
@@ -3331,348 +3265,6 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Nessun impegno nelle prossime due settimane'**
   String get widgetCalendarEmpty;
-
-  /// No description provided for @changelog_v2_0_0_bullet_33.
-  ///
-  /// In it, this message translates to:
-  /// **'Il widget per la schermata Home ora si aggiorna davvero con il numero di note e task e con l\'ultima nota modificata, nella lingua dell\'app.'**
-  String get changelog_v2_0_0_bullet_33;
-
-  /// No description provided for @changelog_v2_0_0_bullet_34.
-  ///
-  /// In it, this message translates to:
-  /// **'Nuova informativa sulla privacy, leggibile direttamente nell\'app da Info su Noteep, in italiano e in inglese.'**
-  String get changelog_v2_0_0_bullet_34;
-
-  /// No description provided for @changelog_v2_0_0_bullet_35.
-  ///
-  /// In it, this message translates to:
-  /// **'Schermata Info su Noteep rinnovata: funzionalità principali in evidenza e nuovi link al codice sorgente, al profilo GitHub e al contatto dello sviluppatore.'**
-  String get changelog_v2_0_0_bullet_35;
-
-  /// No description provided for @changelog_v2_0_0_bullet_36.
-  ///
-  /// In it, this message translates to:
-  /// **'Il ripristino del backup e l\'importazione del calendario sono più sicuri: un file selezionato non può più essere usato per accedere ad altri file del dispositivo.'**
-  String get changelog_v2_0_0_bullet_36;
-
-  /// No description provided for @changelog_v2_0_0_bullet_37.
-  ///
-  /// In it, this message translates to:
-  /// **'Il permesso per le notifiche non viene più chiesto all\'apertura dell\'app, ma solo la prima volta che imposti un promemoria.'**
-  String get changelog_v2_0_0_bullet_37;
-
-  /// No description provided for @changelog_v2_0_0_bullet_38.
-  ///
-  /// In it, this message translates to:
-  /// **'Nuovi widget per la schermata Home: Azioni rapide, con i pulsanti per creare una nota, un task o un evento, e i widget singoli Nuova nota, Nuovo task e Nuovo evento.'**
-  String get changelog_v2_0_0_bullet_38;
-
-  /// No description provided for @changelog_v2_0_0_bullet_39.
-  ///
-  /// In it, this message translates to:
-  /// **'Toccare il widget Noteep nella schermata Home ora apre l\'app.'**
-  String get changelog_v2_0_0_bullet_39;
-
-  /// No description provided for @changelog_v2_0_0_bullet_40.
-  ///
-  /// In it, this message translates to:
-  /// **'Dopo aver reinstallato l\'app non devi più accedere di nuovo a ogni riapertura: l\'accesso resta attivo.'**
-  String get changelog_v2_0_0_bullet_40;
-
-  /// No description provided for @changelog_v2_0_0_bullet_41.
-  ///
-  /// In it, this message translates to:
-  /// **'I promemoria funzionano di nuovo: impostarne uno non mostra più l\'errore \"Impossibile pianificare il promemoria\" e la notifica arriva all\'orario scelto.'**
-  String get changelog_v2_0_0_bullet_41;
-
-  /// No description provided for @changelog_v2_0_0_bullet_42.
-  ///
-  /// In it, this message translates to:
-  /// **'Quando scrivi titoli, note, task, sottotask, eventi ed etichette la prima lettera ora è maiuscola in automatico.'**
-  String get changelog_v2_0_0_bullet_42;
-
-  /// No description provided for @changelog_v2_0_0_bullet_43.
-  ///
-  /// In it, this message translates to:
-  /// **'Gli eventi del calendario possono avere un solo orario: l\'ora di fine ora è facoltativa e puoi sceglierla tu.'**
-  String get changelog_v2_0_0_bullet_43;
-
-  /// No description provided for @changelog_v2_0_0_bullet_44.
-  ///
-  /// In it, this message translates to:
-  /// **'Etichette più utili: aggiungile a una nota dal menu dell\'editor e tocca un\'etichetta nella sezione Etichette per vedere le note che la usano. Ora sono salvate nel tuo account, quindi le ritrovi su ogni dispositivo.'**
-  String get changelog_v2_0_0_bullet_44;
-
-  /// No description provided for @changelog_v2_0_0_bullet_45.
-  ///
-  /// In it, this message translates to:
-  /// **'Nella sezione Promemoria puoi rimuovere in un colpo tutti i promemoria scaduti, e se ne togli uno per sbaglio basta toccare Annulla per rimetterlo.'**
-  String get changelog_v2_0_0_bullet_45;
-
-  /// No description provided for @changelog_v2_0_0_bullet_46.
-  ///
-  /// In it, this message translates to:
-  /// **'In Info e nelle Impostazioni la versione dell\'app è mostrata in modo più semplice, senza il numero di build.'**
-  String get changelog_v2_0_0_bullet_46;
-
-  /// No description provided for @changelog_v2_0_0_bullet_47.
-  ///
-  /// In it, this message translates to:
-  /// **'Dalle Impostazioni è stata tolta la voce Google Drive, che non era ancora attiva: tornerà quando la funzione sarà pronta.'**
-  String get changelog_v2_0_0_bullet_47;
-
-  /// No description provided for @changelog_v2_0_0_bullet_48.
-  ///
-  /// In it, this message translates to:
-  /// **'Nelle Impostazioni tema e lingua si scelgono con dei comodi pulsanti affiancati, invece che da un elenco.'**
-  String get changelog_v2_0_0_bullet_48;
-
-  /// No description provided for @changelog_v2_0_0_bullet_49.
-  ///
-  /// In it, this message translates to:
-  /// **'Nella schermata principale le note scritte con la formattazione mostrano il testo pulito, senza simboli come asterischi o cancelletti. Lo stesso vale per l\'anteprima dei promemoria e per l\'elenco delle note da collegare.'**
-  String get changelog_v2_0_0_bullet_49;
-
-  /// No description provided for @changelog_v2_0_0_bullet_50.
-  ///
-  /// In it, this message translates to:
-  /// **'Le note fissate compaiono sempre in cima alla schermata principale, qualunque sia l\'ordinamento scelto.'**
-  String get changelog_v2_0_0_bullet_50;
-
-  /// No description provided for @changelog_v2_0_0_bullet_51.
-  ///
-  /// In it, this message translates to:
-  /// **'I task fissati compaiono in cima all\'elenco, con l\'icona della puntina accanto al titolo.'**
-  String get changelog_v2_0_0_bullet_51;
-
-  /// No description provided for @changelog_v2_0_0_bullet_52.
-  ///
-  /// In it, this message translates to:
-  /// **'Dagli eventi del calendario è stato tolto il pulsante per fissarli, che non aveva effetto: nel calendario gli eventi sono già ordinati per data e ora.'**
-  String get changelog_v2_0_0_bullet_52;
-
-  /// No description provided for @changelog_v2_0_0_bullet_53.
-  ///
-  /// In it, this message translates to:
-  /// **'Nella pagina delle licenze open source ora compaiono anche quelle dei caratteri usati dall\'app.'**
-  String get changelog_v2_0_0_bullet_53;
-
-  /// No description provided for @changelog_v2_0_0_bullet_54.
-  ///
-  /// In it, this message translates to:
-  /// **'Il passaggio da una sezione all\'altra del menu è più pulito: durante l\'animazione non si intravedono più le pagine sottostanti.'**
-  String get changelog_v2_0_0_bullet_54;
-
-  /// No description provided for @changelog_v2_0_0_bullet_55.
-  ///
-  /// In it, this message translates to:
-  /// **'Prima di registrarti o di continuare con Google, l\'app mostra l\'età minima e un link all\'informativa sulla privacy, leggibile anche senza account.'**
-  String get changelog_v2_0_0_bullet_55;
-
-  /// No description provided for @changelog_v2_0_0_bullet_56.
-  ///
-  /// In it, this message translates to:
-  /// **'L\'informativa sulla privacy ora indica chiaramente che i tuoi contenuti sono conservati su server negli Stati Uniti.'**
-  String get changelog_v2_0_0_bullet_56;
-
-  /// No description provided for @changelog_v2_0_0_bullet_57.
-  ///
-  /// In it, this message translates to:
-  /// **'Quando esci dall\'account, i suoi promemoria non suonano più sul telefono. Quando accedi, i promemoria delle tue note, task ed eventi vengono riprogrammati, anche su un nuovo dispositivo.'**
-  String get changelog_v2_0_0_bullet_57;
-
-  /// No description provided for @changelog_v2_0_0_bullet_58.
-  ///
-  /// In it, this message translates to:
-  /// **'Il calendario mostra anche i task con una scadenza: toccali per aprirli e usa il pulsante nella barra in alto per mostrarli o nasconderli.'**
-  String get changelog_v2_0_0_bullet_58;
-
-  /// No description provided for @changelog_v2_0_0_bullet_59.
-  ///
-  /// In it, this message translates to:
-  /// **'Nel calendario ogni voce ha un colore in base al tipo (evento, evento di tutto il giorno, compleanno, onomastico, task) e la barra di ricerca è allineata a destra.'**
-  String get changelog_v2_0_0_bullet_59;
-
-  /// No description provided for @changelog_v2_0_0_bullet_60.
-  ///
-  /// In it, this message translates to:
-  /// **'Il calendario ricorda la vista che hai scelto (giorno, settimana, mese, anno, programma) anche quando cambi sezione o riapri l\'app.'**
-  String get changelog_v2_0_0_bullet_60;
-
-  /// No description provided for @changelog_v2_0_0_bullet_61.
-  ///
-  /// In it, this message translates to:
-  /// **'Calendario più simile a Google Calendar: le viste Giorno e Settimana hanno la colonna delle ore, gli eventi disposti in base all\'orario, la riga per quelli di tutto il giorno e la linea dell\'ora attuale (tocca una fascia vuota per creare un evento a quell\'ora). La vista Programma mostra a sinistra giorno e data, l\'orario di ogni evento e il mese quando cambia.'**
-  String get changelog_v2_0_0_bullet_61;
-
-  /// No description provided for @changelog_v2_0_0_bullet_62.
-  ///
-  /// In it, this message translates to:
-  /// **'Un task con promemoria compare nel calendario all\'orario del promemoria (anche se non ha una scadenza). Tornando su Note, Task o Calendario, la barra di ricerca mostra il testo ancora attivo, così la lista non resta filtrata senza motivo apparente.'**
-  String get changelog_v2_0_0_bullet_62;
-
-  /// No description provided for @changelog_v2_0_0_bullet_63.
-  ///
-  /// In it, this message translates to:
-  /// **'I task con una scadenza che include un orario (per esempio quelli importati da Google Tasks) mostrano l\'orario nel task e compaiono nel calendario a quell\'ora; cambiando la data della scadenza l\'orario resta.'**
-  String get changelog_v2_0_0_bullet_63;
-
-  /// No description provided for @changelog_v2_0_0_bullet_64.
-  ///
-  /// In it, this message translates to:
-  /// **'Tutto ciò che ha giorno e orario ti avvisa: la scadenza di un task ora chiede anche l\'ora e a quell\'ora arriva la notifica (il promemoria la segue, salvo che tu l\'abbia messo a un\'altra ora); i task importati con un orario ricevono il loro promemoria. Gli eventi hanno gli avvisi \"Il giorno prima\" e \"Il giorno stesso\", che si ripetono a ogni occorrenza degli eventi ricorrenti (alle 9:00 per quelli di tutto il giorno); i nuovi eventi avvisano il giorno stesso. I task e gli eventi futuri con orario già presenti ricevono un avviso una sola volta.'**
-  String get changelog_v2_0_0_bullet_64;
-
-  /// No description provided for @changelog_v2_0_0_bullet_65.
-  ///
-  /// In it, this message translates to:
-  /// **'Scegliendo Compleanno o Onomastico, l\'evento prende subito il suo colore, diventa annuale e di tutto il giorno e avvisa il giorno prima e il giorno stesso (puoi cambiare tutto). Nella vista Programma le schede mostrano solo l\'orario e, se c\'è, il tipo (Compleanno o Onomastico).'**
-  String get changelog_v2_0_0_bullet_65;
-
-  /// No description provided for @changelog_v2_0_0_bullet_66.
-  ///
-  /// In it, this message translates to:
-  /// **'Il menu laterale ora parte da Calendario, seguito da Task, Note e Promemoria.'**
-  String get changelog_v2_0_0_bullet_66;
-
-  /// No description provided for @changelog_v2_0_0_bullet_67.
-  ///
-  /// In it, this message translates to:
-  /// **'Nelle Impostazioni puoi scegliere da quale sezione si apre l\'app: Calendario, Task o Note.'**
-  String get changelog_v2_0_0_bullet_67;
-
-  /// No description provided for @changelog_v2_0_0_bullet_68.
-  ///
-  /// In it, this message translates to:
-  /// **'Le Statistiche hanno ora una sezione tutta loro nel menu, subito sotto l\'Archivio.'**
-  String get changelog_v2_0_0_bullet_68;
-
-  /// No description provided for @changelog_v2_0_0_bullet_69.
-  ///
-  /// In it, this message translates to:
-  /// **'Nelle Impostazioni puoi scegliere l\'orario delle notifiche degli eventi di tutto il giorno, dei compleanni e degli onomastici (prima sempre alle 9:00); è anche l\'orario proposto quando aggiungi l\'ora di scadenza di un task.'**
-  String get changelog_v2_0_0_bullet_69;
-
-  /// No description provided for @changelog_v2_0_0_bullet_70.
-  ///
-  /// In it, this message translates to:
-  /// **'Tutte le opzioni di backup, esportazione e importazione sono ora raccolte in Impostazioni → Backup e dati.'**
-  String get changelog_v2_0_0_bullet_70;
-
-  /// No description provided for @changelog_v2_0_0_bullet_71.
-  ///
-  /// In it, this message translates to:
-  /// **'Nella vista Programma del Calendario puoi scorrere liberamente verso i mesi passati e futuri, senza più il limite dei prossimi tre mesi.'**
-  String get changelog_v2_0_0_bullet_71;
-
-  /// No description provided for @changelog_v2_0_0_bullet_72.
-  ///
-  /// In it, this message translates to:
-  /// **'Il backup completo ora salva anche le etichette e le tue impostazioni (tema, lingua, viste, orario delle notifiche e altre preferenze): al ripristino puoi scegliere se recuperare anche le impostazioni.'**
-  String get changelog_v2_0_0_bullet_72;
-
-  /// No description provided for @changelog_v2_0_0_bullet_73.
-  ///
-  /// In it, this message translates to:
-  /// **'Quando elimini un task ricorrente puoi scegliere se eliminare solo questo task, passando alla ripetizione successiva, oppure anche tutti quelli successivi.'**
-  String get changelog_v2_0_0_bullet_73;
-
-  /// No description provided for @changelog_v2_0_0_bullet_74.
-  ///
-  /// In it, this message translates to:
-  /// **'Toccando un task o un evento ora si apre prima in visualizzazione, con tutti i dettagli: per modificarlo tocca la matita. Dalla visualizzazione puoi anche completare un task, spuntarne le sottoattività o eliminarlo.'**
-  String get changelog_v2_0_0_bullet_74;
-
-  /// No description provided for @changelog_v2_0_0_bullet_75.
-  ///
-  /// In it, this message translates to:
-  /// **'Quando crei un nuovo task ora puoi impostare subito anche data e ora, aggiungere i dettagli e metterlo tra gli speciali: con l\'orario ricevi il promemoria e il task compare nel Calendario.'**
-  String get changelog_v2_0_0_bullet_75;
-
-  /// No description provided for @changelog_v2_0_0_bullet_76.
-  ///
-  /// In it, this message translates to:
-  /// **'Task ed eventi sono più semplici: scegli il giorno e, se vuoi, un orario. Con l\'orario ricevi la notifica a quell\'ora, senza orario no. Gli eventi di tutto il giorno avvisano il giorno stesso e/o il giorno prima solo se lo scegli, all\'orario delle Impostazioni. Il promemoria separato di task ed eventi e la sezione Promemoria non ci sono più (le note mantengono il loro promemoria). Ripristinando un backup, compleanni e onomastici senza avvisi li ricevono entrambi.'**
-  String get changelog_v2_0_0_bullet_76;
-
-  /// No description provided for @changelog_v2_0_0_bullet_77.
-  ///
-  /// In it, this message translates to:
-  /// **'Nella pagina Task le attività sono divise per giorno (Oggi, Domani, poi le date successive, infine quelle senza data) e ogni riga mostra titolo, le prime righe dei dettagli e l\'orario della notifica, se impostato.'**
-  String get changelog_v2_0_0_bullet_77;
-
-  /// No description provided for @changelog_v2_0_0_bullet_78.
-  ///
-  /// In it, this message translates to:
-  /// **'Le schede del Calendario hanno colori più morbidi, gli stessi delle note: tinte pastello con il tema chiaro e tonalità profonde con il tema scuro, ognuna per tipo (task, compleanni, onomastici, eventi di tutto il giorno ed eventi con orario).'**
-  String get changelog_v2_0_0_bullet_78;
-
-  /// No description provided for @changelog_v2_0_0_bullet_79.
-  ///
-  /// In it, this message translates to:
-  /// **'Il widget Riepilogo Noteep nella schermata Home non mostra più \"Impossibile caricare il widget\".'**
-  String get changelog_v2_0_0_bullet_79;
-
-  /// No description provided for @changelog_v2_0_0_bullet_80.
-  ///
-  /// In it, this message translates to:
-  /// **'Tre nuovi widget per la schermata Home: Note, con le ultime note; Task, con i task da completare divisi per giorno; Calendario, con eventi, task e compleanni delle prossime due settimane. Tocca un elemento per aprirlo o + per crearne uno nuovo.'**
-  String get changelog_v2_0_0_bullet_80;
-
-  /// No description provided for @changelog_v2_0_0_bullet_81.
-  ///
-  /// In it, this message translates to:
-  /// **'I widget Nuova nota, Nuovo task e Nuovo evento sono ora rotondi, con l\'icona sopra e il nome sotto: Nota, Task, Evento.'**
-  String get changelog_v2_0_0_bullet_81;
-
-  /// No description provided for @changelog_v2_0_0_bullet_82.
-  ///
-  /// In it, this message translates to:
-  /// **'Nella griglia delle note ora puoi scorrere anche partendo da una nota: per spostarla tienila premuta e trascinala, per il menu delle azioni rapide tienila premuta e rilasciala.'**
-  String get changelog_v2_0_0_bullet_82;
-
-  /// No description provided for @changelog_v2_0_0_bullet_83.
-  ///
-  /// In it, this message translates to:
-  /// **'Nel Calendario il pulsante Oggi ora riporta al giorno corrente anche nella vista Programma.'**
-  String get changelog_v2_0_0_bullet_83;
-
-  /// No description provided for @changelog_v2_0_0_bullet_84.
-  ///
-  /// In it, this message translates to:
-  /// **'Nel Calendario compleanni e onomastici hanno card più grandi e festose, con uno sfondo sfumato e coriandoli.'**
-  String get changelog_v2_0_0_bullet_84;
-
-  /// No description provided for @changelog_v2_0_0_bullet_85.
-  ///
-  /// In it, this message translates to:
-  /// **'Nel Calendario i task mostrano la loro icona al posto del cerchio da spuntare: toccali per aprirli.'**
-  String get changelog_v2_0_0_bullet_85;
-
-  /// No description provided for @changelog_v2_0_0_bullet_86.
-  ///
-  /// In it, this message translates to:
-  /// **'Negli eventi del Calendario puoi aggiungere un luogo, con i suggerimenti degli indirizzi mentre scrivi e da aprire in Maps con un tocco, e scegliere il colore della card.'**
-  String get changelog_v2_0_0_bullet_86;
-
-  /// No description provided for @changelog_v2_0_0_bullet_87.
-  ///
-  /// In it, this message translates to:
-  /// **'Il widget Riepilogo Noteep è stato rimosso: per vedere note, task e impegni dalla schermata Home usa i widget Note, Task e Calendario.'**
-  String get changelog_v2_0_0_bullet_87;
-
-  /// No description provided for @changelog_v2_0_0_bullet_88.
-  ///
-  /// In it, this message translates to:
-  /// **'Nel Calendario il pulsante + ti fa scegliere se creare un evento o un task, e mentre lo crei puoi passare dall\'uno all\'altro senza perdere quanto scritto.'**
-  String get changelog_v2_0_0_bullet_88;
-
-  /// No description provided for @changelog_v2_0_0_bullet_89.
-  ///
-  /// In it, this message translates to:
-  /// **'Quando scegli l\'orario di un evento, un task o un promemoria per oggi, la scelta parte dall\'ora attuale invece che da un orario già passato.'**
-  String get changelog_v2_0_0_bullet_89;
 
   /// No description provided for @infoPrivacyOpen.
   ///
