@@ -17,13 +17,13 @@ Il titolare del trattamento è Nicola De Nicolais, sviluppatore di Noteep. Per q
 ### 2. Dati che raccogliamo
 
 - **Account**: l'indirizzo email con cui ti registri; la password è gestita da Firebase Authentication e non è mai visibile allo sviluppatore. Se accedi con Google, Google condivide con Firebase nome, email, foto del profilo e identificativo del tuo account Google. Firebase registra anche la data di creazione dell'account e dell'ultimo accesso.
-- **Contenuti**: note (titolo, testo, liste di controllo, etichette, colori e stile, promemoria, collegamenti tra note, cronologia delle modifiche), task ed elenchi (sottotask, scadenze, ricorrenze, priorità), eventi del calendario ed etichette.
+- **Contenuti**: note (titolo, testo, liste di controllo, etichette, colori e stile, promemoria, collegamenti tra note, cronologia delle modifiche), task ed elenchi (sottotask, scadenze, ricorrenze, priorità), eventi del calendario (compreso il luogo) ed etichette.
 - **Note audio**: le registrazioni restano solo sul dispositivo; con la nota vengono sincronizzati soltanto nome, durata e percorso del file.
-- **Sul dispositivo**: preferenze dell'app (lingua, tema, layout, ordinamento, opzioni di note e task, guida introduttiva e novità già viste, impostazioni dei backup), i backup automatici, una copia dei dati per l'uso offline, i promemoria programmati e i dati mostrati dal widget della schermata Home (numero di note e task, titolo dell'ultima nota). Sul web le preferenze sono salvate nel browser.
+- **Sul dispositivo**: preferenze dell'app (lingua, tema, layout, ordinamento, opzioni di note e task, guida introduttiva e novità già viste, impostazioni dei backup), i backup automatici, una copia dei dati per l'uso offline, i promemoria programmati e i dati mostrati dai widget della schermata Home (titoli e anteprime di note, task e impegni). Sul web le preferenze sono salvate nel browser.
 
 ### 3. Come usiamo i dati
 
-I dati servono solo a far funzionare Noteep: accedere al tuo account, salvare i tuoi contenuti e sincronizzarli tra i tuoi dispositivi, inviarti i promemoria che imposti e creare i backup. La tua email viene usata solo per l'accesso e, se lo chiedi, per inviarti il link per reimpostare la password. Nessuna profilazione, nessuna pubblicità, nessuna analisi statistica né segnalazione automatica degli errori.
+I dati servono solo a far funzionare Noteep: accedere al tuo account, salvare i tuoi contenuti e sincronizzarli tra i tuoi dispositivi, inviarti le notifiche e i promemoria che imposti e creare i backup. La tua email viene usata solo per l'accesso e, se lo chiedi, per inviarti il link per reimpostare la password. Nessuna profilazione, nessuna pubblicità, nessuna analisi statistica né segnalazione automatica degli errori.
 
 ### 4. Dove sono conservati
 
@@ -47,7 +47,7 @@ I file che esporti o condividi finiscono dove scegli tu (ad esempio una cartella
 Su Android Noteep usa questi permessi:
 
 - **Microfono**: solo per registrare le note audio, quando avvii una registrazione.
-- **Notifiche**: per mostrarti i promemoria.
+- **Notifiche**: per mostrarti i promemoria e le notifiche di task ed eventi.
 - **Sveglie e promemoria esatti**: per far scattare i promemoria all'orario impostato.
 - **Avvio all'accensione**: per riprogrammare i promemoria dopo il riavvio del telefono.
 - **Mantenere attivo il dispositivo e vibrazione**: per consegnare i promemoria anche in standby.
@@ -58,7 +58,7 @@ Noteep non accede a posizione, contatti, fotocamera, foto o file del telefono: i
 
 ### 7. Conservazione e cancellazione
 
-I tuoi dati restano finché mantieni l'account. Gli elementi nel cestino vengono eliminati definitivamente dopo 7 giorni. Puoi eliminare l'account e tutti i dati da *Impostazioni > Account > Elimina account*: vengono cancellati l'account e i contenuti su Firebase e, su questo dispositivo, i promemoria e i backup automatici. Prima puoi esportare tutto da *Impostazioni > Backup globale*. Eventuali copie residue nei sistemi di Google vengono rimosse nei tempi previsti da Firebase. Uscire dall'account non cancella i dati; disinstallando l'app vengono rimossi i dati salvati sul dispositivo, comprese le note audio. Puoi anche chiedere la cancellazione scrivendo a [ndn21dev@gmail.com](mailto:ndn21dev@gmail.com).
+I tuoi dati restano finché mantieni l'account. Gli elementi nel cestino vengono eliminati definitivamente dopo 7 giorni. Puoi eliminare l'account e tutti i dati da *Impostazioni > Account > Elimina account*: vengono cancellati l'account e i contenuti su Firebase e, su questo dispositivo, i promemoria e i backup automatici. Prima puoi esportare tutto da *Impostazioni > Backup e dati > Backup globale*. Eventuali copie residue nei sistemi di Google vengono rimosse nei tempi previsti da Firebase. Uscire dall'account non cancella i dati; disinstallando l'app vengono rimossi i dati salvati sul dispositivo, comprese le note audio. Puoi anche chiedere la cancellazione scrivendo a [ndn21dev@gmail.com](mailto:ndn21dev@gmail.com).
 
 ### 8. I tuoi diritti
 
@@ -94,13 +94,13 @@ The data controller is Nicola De Nicolais, developer of Noteep. For any privacy 
 ### 2. Data we collect
 
 - **Account**: the email address you sign up with; the password is handled by Firebase Authentication and is never visible to the developer. If you sign in with Google, Google shares your name, email, profile photo and Google account ID with Firebase. Firebase also records when the account was created and when you last signed in.
-- **Content**: notes (title, text, checklists, labels, colors and style, reminders, links between notes, edit history), tasks and lists (subtasks, due dates, recurrence, priority), calendar events and labels.
+- **Content**: notes (title, text, checklists, labels, colors and style, reminders, links between notes, edit history), tasks and lists (subtasks, due dates, recurrence, priority), calendar events (location included) and labels.
 - **Audio notes**: recordings stay on your device only; just the file name, duration and path are synced with the note.
-- **On your device**: app preferences (language, theme, layout, sorting, note and task options, intro guide and what's new already seen, backup settings), automatic backups, a copy of your data for offline use, scheduled reminders and the data shown by the Home screen widget (number of notes and tasks, title of the latest note). On the web, preferences are saved in the browser.
+- **On your device**: app preferences (language, theme, layout, sorting, note and task options, intro guide and what's new already seen, backup settings), automatic backups, a copy of your data for offline use, scheduled reminders and the data shown by the Home screen widgets (titles and previews of notes, tasks and upcoming entries). On the web, preferences are saved in the browser.
 
 ### 3. How we use data
 
-Data is used only to make Noteep work: signing in to your account, saving your content and syncing it across your devices, sending you the reminders you set and creating backups. Your email is used only to sign in and, if you ask, to send you a password reset link. No profiling, no ads, no analytics and no automatic crash reporting.
+Data is used only to make Noteep work: signing in to your account, saving your content and syncing it across your devices, sending you the notifications and reminders you set and creating backups. Your email is used only to sign in and, if you ask, to send you a password reset link. No profiling, no ads, no analytics and no automatic crash reporting.
 
 ### 4. Where it is stored
 
@@ -124,7 +124,7 @@ Files you export or share go wherever you choose (for example a folder or anothe
 On Android Noteep uses these permissions:
 
 - **Microphone**: only to record audio notes, when you start a recording.
-- **Notifications**: to show you reminders.
+- **Notifications**: to show you reminders and task and event notifications.
 - **Alarms and exact reminders**: to fire reminders at the time you set.
 - **Run at startup**: to schedule reminders again after the phone restarts.
 - **Keep the device awake and vibration**: to deliver reminders even in standby.
@@ -135,7 +135,7 @@ Noteep does not access your location, contacts, camera, photos or phone files: y
 
 ### 7. Retention and deletion
 
-Your data is kept as long as you keep your account. Items in the trash are permanently deleted after 7 days. You can delete your account and all your data from *Settings > Account > Delete account*: the account and the content on Firebase are deleted and, on this device, reminders and automatic backups too. Before that you can export everything from *Settings > Full backup*. Any residual copies in Google's systems are removed within the time frames set by Firebase. Signing out does not delete data; uninstalling the app removes the data saved on the device, audio notes included. You can also ask for deletion by writing to [ndn21dev@gmail.com](mailto:ndn21dev@gmail.com).
+Your data is kept as long as you keep your account. Items in the trash are permanently deleted after 7 days. You can delete your account and all your data from *Settings > Account > Delete account*: the account and the content on Firebase are deleted and, on this device, reminders and automatic backups too. Before that you can export everything from *Settings > Backup and data > Full backup*. Any residual copies in Google's systems are removed within the time frames set by Firebase. Signing out does not delete data; uninstalling the app removes the data saved on the device, audio notes included. You can also ask for deletion by writing to [ndn21dev@gmail.com](mailto:ndn21dev@gmail.com).
 
 ### 8. Your rights
 

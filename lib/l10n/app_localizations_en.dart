@@ -1783,14 +1783,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get policy_section_data_text =>
-      '• Account: the email address you sign up with; the password is handled by Firebase Authentication and is never visible to the developer. If you sign in with Google, Google shares your name, email, profile photo and Google account ID with Firebase. Firebase also records when the account was created and when you last signed in.\n• Content: notes (title, text, checklists, labels, colors and style, reminders, links between notes, edit history), tasks and lists (subtasks, due dates, recurrence, priority), calendar events and labels.\n• Audio notes: recordings stay on your device only; just the file name, duration and path are synced with the note.\n• On your device: app preferences (language, theme, layout, sorting, note and task options, intro guide and what\'s new already seen, backup settings), automatic backups, a copy of your data for offline use, scheduled reminders and the data shown by the Home screen widget (number of notes and tasks, title of the latest note). On the web, preferences are saved in the browser.';
+      '• Account: the email address you sign up with; the password is handled by Firebase Authentication and is never visible to the developer. If you sign in with Google, Google shares your name, email, profile photo and Google account ID with Firebase. Firebase also records when the account was created and when you last signed in.\n• Content: notes (title, text, checklists, labels, colors and style, reminders, links between notes, edit history), tasks and lists (subtasks, due dates, recurrence, priority), calendar events (location included) and labels.\n• Audio notes: recordings stay on your device only; just the file name, duration and path are synced with the note.\n• On your device: app preferences (language, theme, layout, sorting, note and task options, intro guide and what\'s new already seen, backup settings), automatic backups, a copy of your data for offline use, scheduled reminders and the data shown by the Home screen widgets (titles and previews of notes, tasks and upcoming entries). On the web, preferences are saved in the browser.';
 
   @override
   String get policy_section_use_title => '3. How we use data';
 
   @override
   String get policy_section_use_text =>
-      'Data is used only to make Noteep work: signing in to your account, saving your content and syncing it across your devices, sending you the reminders you set and creating backups. Your email is used only to sign in and, if you ask, to send you a password reset link. No profiling, no ads, no analytics and no automatic crash reporting.';
+      'Data is used only to make Noteep work: signing in to your account, saving your content and syncing it across your devices, sending you the notifications and reminders you set and creating backups. Your email is used only to sign in and, if you ask, to send you a password reset link. No profiling, no ads, no analytics and no automatic crash reporting.';
 
   @override
   String get policy_section_storage_title => '4. Where it is stored';
@@ -1811,14 +1811,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get policy_section_permissions_text =>
-      'On Android Noteep uses these permissions:\n• Microphone: only to record audio notes, when you start a recording.\n• Notifications: to show you reminders.\n• Alarms and exact reminders: to fire reminders at the time you set.\n• Run at startup: to schedule reminders again after the phone restarts.\n• Keep the device awake and vibration: to deliver reminders even in standby.\n• Foreground service: required by the Android component that runs background work, such as updating the Home screen widget.\n• Internet and network state: to sync data with Firebase and detect when you are offline.\nNoteep does not access your location, contacts, camera, photos or phone files: you pick the files to import yourself from the system picker.';
+      'On Android Noteep uses these permissions:\n• Microphone: only to record audio notes, when you start a recording.\n• Notifications: to show you reminders and task and event notifications.\n• Alarms and exact reminders: to fire reminders at the time you set.\n• Run at startup: to schedule reminders again after the phone restarts.\n• Keep the device awake and vibration: to deliver reminders even in standby.\n• Foreground service: required by the Android component that runs background work, such as updating the Home screen widget.\n• Internet and network state: to sync data with Firebase and detect when you are offline.\nNoteep does not access your location, contacts, camera, photos or phone files: you pick the files to import yourself from the system picker.';
 
   @override
   String get policy_section_retention_title => '7. Retention and deletion';
 
   @override
   String policy_section_retention_text(String email) {
-    return 'Your data is kept as long as you keep your account. Items in the trash are permanently deleted after 7 days. You can delete your account and all your data from Settings > Account > Delete account: the account and the content on Firebase are deleted and, on this device, reminders and automatic backups too. Before that you can export everything from Settings > Full backup. Any residual copies in Google\'s systems are removed within the time frames set by Firebase. Signing out does not delete data; uninstalling the app removes the data saved on the device, audio notes included. You can also ask for deletion by writing to $email.';
+    return 'Your data is kept as long as you keep your account. Items in the trash are permanently deleted after 7 days. You can delete your account and all your data from Settings > Account > Delete account: the account and the content on Firebase are deleted and, on this device, reminders and automatic backups too. Before that you can export everything from Settings > Backup and data > Full backup. Any residual copies in Google\'s systems are removed within the time frames set by Firebase. Signing out does not delete data; uninstalling the app removes the data saved on the device, audio notes included. You can also ask for deletion by writing to $email.';
   }
 
   @override
