@@ -245,8 +245,8 @@ final groupTasksByPriorityProvider =
 
 const _kDefaultAlertMinutesKey = 'default_alert_minutes';
 
-/// Time of the notifications that have no time of their own (the alerts of
-/// all-day events, birthdays and name days included) and the time first
+/// Time of the notifications that have no time of their own (the same-day
+/// alerts of all-day events, birthdays and name days included) and the time first
 /// offered when picking a task's due time, in minutes after midnight.
 /// Change it through `RemindersActions.setDefaultAlertTime`, which also
 /// reschedules the alerts.
@@ -270,6 +270,37 @@ class DefaultAlertTimeNotifier extends Notifier<int> {
 final defaultAlertTimeProvider =
     NotifierProvider<DefaultAlertTimeNotifier, int>(
       DefaultAlertTimeNotifier.new,
+    );
+
+const _kDayBeforeAlertMinutesKey = 'day_before_alert_minutes';
+
+/// Time of the day-before alerts of all-day events (birthdays and name days
+/// included), in minutes after midnight, independent of the same-day one.
+/// Until it is set it follows [defaultAlertTimeProvider], as before it
+/// existed. Change it through `RemindersActions.setDayBeforeAlertTime`,
+/// which also reschedules the alerts.
+class DayBeforeAlertTimeNotifier extends Notifier<int> {
+  @override
+  int build() {
+    final v = ref
+        .watch(sharedPreferencesProvider)
+        .getInt(_kDayBeforeAlertMinutesKey);
+    return v != null && v >= 0 && v < 24 * 60
+        ? v
+        : ref.watch(defaultAlertTimeProvider);
+  }
+
+  void set(int minutes) {
+    state = minutes;
+    ref
+        .read(sharedPreferencesProvider)
+        .setInt(_kDayBeforeAlertMinutesKey, minutes);
+  }
+}
+
+final dayBeforeAlertTimeProvider =
+    NotifierProvider<DayBeforeAlertTimeNotifier, int>(
+      DayBeforeAlertTimeNotifier.new,
     );
 
 // --- Onboarding ---

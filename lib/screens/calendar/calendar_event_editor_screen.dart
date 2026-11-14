@@ -120,6 +120,7 @@ class _CalendarEventEditorScreenState
         .scheduleEventAlerts(
           updated,
           allDayMinutes: ref.read(defaultAlertTimeProvider),
+          dayBeforeMinutes: ref.read(dayBeforeAlertTimeProvider),
         )
         .ignore();
   }
@@ -273,6 +274,7 @@ class _CalendarEventEditorScreenState
                 history: _locationHistory,
               ),
               allDayAlertMinutes: ref.watch(defaultAlertTimeProvider),
+              dayBeforeAlertMinutes: ref.watch(dayBeforeAlertTimeProvider),
               onPickDateTime: _openDateTimePicker,
               onPickEndTime: _pickEndTime,
               onClearEndTime: _clearEndTime,

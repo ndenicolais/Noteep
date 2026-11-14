@@ -80,6 +80,14 @@ class PreferencesBackup {
         }
       },
     ),
+    'dayBeforeAlertMinutes': _BackedUpSetting(
+      (ref) => ref.read(dayBeforeAlertTimeProvider),
+      (ref, value) {
+        if (value is int && value >= 0 && value < 24 * 60) {
+          ref.read(dayBeforeAlertTimeProvider.notifier).set(value);
+        }
+      },
+    ),
     'autoBackupEnabled': _BackedUpSetting(
       (ref) => ref.read(backupSettingsProvider).enabled,
       (ref, value) {

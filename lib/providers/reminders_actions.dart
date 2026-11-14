@@ -62,6 +62,7 @@ class RemindersActions {
       if (loaded.contains(false)) return;
       final notifications = _notifications;
       final allDayMinutes = _ref.read(defaultAlertTimeProvider);
+      final dayBeforeMinutes = _ref.read(dayBeforeAlertTimeProvider);
       await notifications.cancelAllNotifications();
       await Future.wait([
         for (final note in _ref.read(notesProvider))
@@ -76,6 +77,7 @@ class RemindersActions {
             notifications.scheduleEventAlerts(
               event,
               allDayMinutes: allDayMinutes,
+              dayBeforeMinutes: dayBeforeMinutes,
               askPermission: false,
             ),
       ]);
@@ -84,24 +86,38 @@ class RemindersActions {
     }
   }
 
-  /// Saves the default alert time (minutes after midnight) and reschedules
-  /// the alerts of every event, so all-day ones move to the new time.
+  /// Saves the default (same-day) alert time (minutes after midnight) and
+  /// reschedules the alerts of all-day events, so they move to the new time.
   Future<void> setDefaultAlertTime(int minutes) async {
     _ref.read(defaultAlertTimeProvider.notifier).set(minutes);
+    await _rescheduleAllDayAlerts();
+  }
+
+  /// Saves the time of the day-before alerts (minutes after midnight) and
+  /// reschedules the alerts of all-day events.
+  Future<void> setDayBeforeAlertTime(int minutes) async {
+    _ref.read(dayBeforeAlertTimeProvider.notifier).set(minutes);
+    await _rescheduleAllDayAlerts();
+  }
+
+  Future<void> _rescheduleAllDayAlerts() async {
     if (kIsWeb) return;
     try {
       final notifications = _notifications;
+      final allDayMinutes = _ref.read(defaultAlertTimeProvider);
+      final dayBeforeMinutes = _ref.read(dayBeforeAlertTimeProvider);
       await Future.wait([
         for (final event in _ref.read(calendarProvider))
           if (event.deletedAt == null && event.isAllDay)
             notifications.scheduleEventAlerts(
               event,
-              allDayMinutes: minutes,
+              allDayMinutes: allDayMinutes,
+              dayBeforeMinutes: dayBeforeMinutes,
               askPermission: false,
             ),
       ]);
     } catch (e) {
-      if (kDebugMode) debugPrint('Default alert time reschedule failed: $e');
+      if (kDebugMode) debugPrint('Alert time reschedule failed: $e');
     }
   }
 

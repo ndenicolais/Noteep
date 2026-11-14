@@ -34,11 +34,18 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settingsNotificationsTitle => 'Notifiche';
 
   @override
-  String get settingsDefaultAlertTime => 'Orario predefinito';
+  String get settingsDefaultAlertTime => 'Avviso il giorno stesso';
 
   @override
   String get settingsDefaultAlertTimeSubtitle =>
-      'Per gli eventi di tutto il giorno, i compleanni e gli onomastici';
+      'Per eventi di tutto il giorno, compleanni e onomastici; è anche l\'orario proposto per le scadenze dei task';
+
+  @override
+  String get settingsDayBeforeAlertTime => 'Avviso il giorno prima';
+
+  @override
+  String get settingsDayBeforeAlertTimeSubtitle =>
+      'Per eventi di tutto il giorno, compleanni e onomastici';
 
   @override
   String get settingsLanguageSystem => 'Sistema';
@@ -64,6 +71,10 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get changelog_v2_0_1_bullet_1 =>
       'Scegliere la data e l\'orario di task, promemoria ed eventi è più rapido: calendario e orario sono nella stessa finestra, così per cambiare solo l\'orario (o solo il giorno) basta un tocco.';
+
+  @override
+  String get changelog_v2_0_1_bullet_2 =>
+      'Puoi scegliere in Impostazioni a che ora ricevere l\'avviso del giorno prima e quello del giorno stesso degli eventi di tutto il giorno, dei compleanni e degli onomastici, in modo indipendente.';
 
   @override
   String get changelog_v2_0_0_bullet_1 =>

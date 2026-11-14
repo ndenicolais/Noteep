@@ -13,7 +13,8 @@ import 'recurrence.dart';
 
 /// Default time of the alerts of all-day events (they have no time of their
 /// own), in minutes after midnight: 09:00. The user can change it in
-/// Settings (`defaultAlertTimeProvider`).
+/// Settings (`defaultAlertTimeProvider` for the same day,
+/// `dayBeforeAlertTimeProvider` for the day before).
 const defaultAllDayAlertMinutes = 9 * 60;
 
 /// How far ahead the alerts of an event are scheduled. Notifications are
@@ -65,12 +66,14 @@ DateTime occurrenceTime(
 /// The alerts of [event] after [now] within [alertHorizon], at most
 /// [maxAlertOccurrences] occurrences, sorted by time. Timed events alert at
 /// their start time; all-day events only on the chosen days, at
-/// [allDayMinutes] (minutes after midnight). Empty when the event has no
-/// alert, or is archived or trashed.
+/// [allDayMinutes] (minutes after midnight), the day-before one at
+/// [dayBeforeMinutes] (the same time when null). Empty when the event has
+/// no alert, or is archived or trashed.
 List<EventAlert> upcomingEventAlerts(
   CalendarEventModel event,
   DateTime now, {
   int allDayMinutes = defaultAllDayAlertMinutes,
+  int? dayBeforeMinutes,
 }) {
   if (!event.hasAlerts || event.isArchived || event.deletedAt != null) {
     return const [];
@@ -84,12 +87,13 @@ List<EventAlert> upcomingEventAlerts(
     final day = DateTime(today.year, today.month, today.day + d);
     if (!event.occursOn(day)) continue;
     final at = occurrenceTime(event, day, allDayMinutes: allDayMinutes);
+    final beforeMinutes = dayBeforeMinutes ?? at.hour * 60 + at.minute;
     final dayBefore = DateTime(
       at.year,
       at.month,
       at.day - 1,
-      at.hour,
-      at.minute,
+      beforeMinutes ~/ 60,
+      beforeMinutes % 60,
     );
     var added = false;
     if (event.notifiesDayBefore && dayBefore.isAfter(now)) {

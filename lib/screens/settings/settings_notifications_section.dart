@@ -12,23 +12,69 @@ import 'package:flutter/material.dart';
 import '../../l10n/l10n.dart';
 import '../../widgets/shared/section_header.dart';
 
-/// "Notifications" section: the default time of the notifications that have
-/// no time of their own (all-day events, birthdays, name days).
+/// "Notifications" section: the times of the notifications that have no
+/// time of their own (all-day events, birthdays, name days), one for the
+/// same-day alert and one for the day-before alert.
 class SettingsNotificationsSection extends StatelessWidget {
   const SettingsNotificationsSection({
     super.key,
     required this.defaultAlertMinutes,
+    required this.dayBeforeAlertMinutes,
+    required this.onChanged,
+    required this.onDayBeforeChanged,
+  });
+
+  /// Same-day alert time, minutes after midnight.
+  final int defaultAlertMinutes;
+
+  /// Day-before alert time, minutes after midnight.
+  final int dayBeforeAlertMinutes;
+  final ValueChanged<int> onChanged;
+  final ValueChanged<int> onDayBeforeChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SectionHeader(l10n.settingsNotificationsTitle),
+        _AlertTimeTile(
+          icon: Icons.notifications_outlined,
+          title: l10n.settingsDayBeforeAlertTime,
+          subtitle: l10n.settingsDayBeforeAlertTimeSubtitle,
+          minutes: dayBeforeAlertMinutes,
+          onChanged: onDayBeforeChanged,
+        ),
+        _AlertTimeTile(
+          icon: Icons.notifications_active_outlined,
+          title: l10n.settingsDefaultAlertTime,
+          subtitle: l10n.settingsDefaultAlertTimeSubtitle,
+          minutes: defaultAlertMinutes,
+          onChanged: onChanged,
+        ),
+      ],
+    );
+  }
+}
+
+/// A time setting: tapping opens the time picker.
+class _AlertTimeTile extends StatelessWidget {
+  const _AlertTimeTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.minutes,
     required this.onChanged,
   });
 
-  /// Minutes after midnight.
-  final int defaultAlertMinutes;
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final int minutes;
   final ValueChanged<int> onChanged;
 
-  TimeOfDay get _time => TimeOfDay(
-    hour: defaultAlertMinutes ~/ 60,
-    minute: defaultAlertMinutes % 60,
-  );
+  TimeOfDay get _time => TimeOfDay(hour: minutes ~/ 60, minute: minutes % 60);
 
   Future<void> _pick(BuildContext context) async {
     final picked = await showTimePicker(context: context, initialTime: _time);
@@ -38,24 +84,17 @@ class SettingsNotificationsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SectionHeader(l10n.settingsNotificationsTitle),
-        ListTile(
-          leading: const Icon(Icons.schedule),
-          title: Text(l10n.settingsDefaultAlertTime),
-          subtitle: Text(l10n.settingsDefaultAlertTimeSubtitle),
-          trailing: Text(
-            MaterialLocalizations.of(
-              context,
-            ).formatTimeOfDay(_time, alwaysUse24HourFormat: true),
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          onTap: () => _pick(context),
-        ),
-      ],
+    return ListTile(
+      leading: Icon(icon),
+      title: Text(title),
+      subtitle: Text(subtitle),
+      trailing: Text(
+        MaterialLocalizations.of(
+          context,
+        ).formatTimeOfDay(_time, alwaysUse24HourFormat: true),
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
+      onTap: () => _pick(context),
     );
   }
 }

@@ -52,6 +52,7 @@ class _FakeNotifications implements NotificationService {
   Future<void> scheduleEventAlerts(
     CalendarEventModel event, {
     required int allDayMinutes,
+    int? dayBeforeMinutes,
     bool askPermission = true,
   }) async {
     askedPermission.add(askPermission);
@@ -59,6 +60,7 @@ class _FakeNotifications implements NotificationService {
       event,
       DateTime.now(),
       allDayMinutes: allDayMinutes,
+      dayBeforeMinutes: dayBeforeMinutes,
     );
     if (alerts.isNotEmpty) {
       scheduled.add('alerts:${event.id}');

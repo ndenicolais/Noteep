@@ -167,10 +167,12 @@ class NotificationService {
   /// (at the start time for a timed event, on the chosen days for an all-day
   /// one; none if it is archived or trashed). Each alert gets its own
   /// notification id; all-day events alert at [allDayMinutes] (minutes after
-  /// midnight, the Settings value).
+  /// midnight, the Settings value), their day-before alerts at
+  /// [dayBeforeMinutes] (the same time when null).
   Future<void> scheduleEventAlerts(
     CalendarEventModel event, {
     required int allDayMinutes,
+    int? dayBeforeMinutes,
     bool askPermission = true,
   }) async {
     if (kIsWeb) return;
@@ -179,6 +181,7 @@ class NotificationService {
       event,
       DateTime.now(),
       allDayMinutes: allDayMinutes,
+      dayBeforeMinutes: dayBeforeMinutes,
     );
     if (alerts.isEmpty) return;
     final l10n = currentL10n();

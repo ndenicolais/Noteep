@@ -34,6 +34,7 @@ class CalendarEventDetailsSection extends StatelessWidget {
     required this.event,
     required this.locationField,
     required this.allDayAlertMinutes,
+    required this.dayBeforeAlertMinutes,
     required this.onPickDateTime,
     required this.onPickEndTime,
     required this.onClearEndTime,
@@ -48,6 +49,9 @@ class CalendarEventDetailsSection extends StatelessWidget {
 
   /// Alert time of all-day events (minutes after midnight, from Settings).
   final int allDayAlertMinutes;
+
+  /// Time of the day-before alert from Settings, minutes after midnight.
+  final int dayBeforeAlertMinutes;
   final VoidCallback onPickDateTime;
   final VoidCallback onPickEndTime;
   final VoidCallback onClearEndTime;
@@ -204,14 +208,14 @@ class CalendarEventDetailsSection extends StatelessWidget {
           _Toggle(
             icon: Icons.notifications_outlined,
             title: context.l10n.calendarAlertDayBefore,
-            subtitle: _alertTimeLabel(context),
+            subtitle: _alertTimeLabel(context, dayBeforeAlertMinutes),
             value: event.alertDayBefore,
             onChanged: (v) => onChanged(event.copyWith(alertDayBefore: v)),
           ),
           _Toggle(
             icon: Icons.notifications_active_outlined,
             title: context.l10n.calendarAlertSameDay,
-            subtitle: _alertTimeLabel(context),
+            subtitle: _alertTimeLabel(context, allDayAlertMinutes),
             value: event.alertSameDay,
             onChanged: (v) => onChanged(event.copyWith(alertSameDay: v)),
           ),
@@ -220,13 +224,14 @@ class CalendarEventDetailsSection extends StatelessWidget {
     );
   }
 
-  /// "Alle" and the Settings alert time (alerts are shown for all-day
-  /// events only).
-  String _alertTimeLabel(BuildContext context) => context.l10n.calendarAlertAt(
-    DateFormat('HH:mm').format(
-      occurrenceTime(event, event.startTime, allDayMinutes: allDayAlertMinutes),
-    ),
-  );
+  /// "Alle" and a Settings alert time (alerts are shown for all-day events
+  /// only).
+  String _alertTimeLabel(BuildContext context, int minutes) =>
+      context.l10n.calendarAlertAt(
+        DateFormat('HH:mm').format(
+          occurrenceTime(event, event.startTime, allDayMinutes: minutes),
+        ),
+      );
 
   /// Note swatches plus a custom Material color; "Predefinito" goes back to
   /// the color of the event kind.

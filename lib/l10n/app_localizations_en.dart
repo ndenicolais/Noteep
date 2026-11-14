@@ -34,10 +34,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsNotificationsTitle => 'Notifications';
 
   @override
-  String get settingsDefaultAlertTime => 'Default time';
+  String get settingsDefaultAlertTime => 'Same-day alert';
 
   @override
   String get settingsDefaultAlertTimeSubtitle =>
+      'For all-day events, birthdays and name days; also the time offered for task due dates';
+
+  @override
+  String get settingsDayBeforeAlertTime => 'Day-before alert';
+
+  @override
+  String get settingsDayBeforeAlertTimeSubtitle =>
       'For all-day events, birthdays and name days';
 
   @override
@@ -64,6 +71,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelog_v2_0_1_bullet_1 =>
       'Picking the date and time of tasks, reminders and events is quicker: the calendar and the time are in the same window, so changing just the time (or just the day) takes a single tap.';
+
+  @override
+  String get changelog_v2_0_1_bullet_2 =>
+      'In Settings you can choose separately when to get the day-before and the same-day alert of all-day events, birthdays and name days.';
 
   @override
   String get changelog_v2_0_0_bullet_1 =>

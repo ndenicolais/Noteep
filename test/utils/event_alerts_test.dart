@@ -87,6 +87,26 @@ void main() {
     ]);
   });
 
+  test('the day-before alert has its own time', () {
+    final e = event(
+      start: DateTime(2026, 11, 12),
+      allDay: true,
+      sameDay: true,
+      dayBefore: true,
+    );
+    final alerts = upcomingEventAlerts(
+      e,
+      now,
+      allDayMinutes: 8 * 60,
+      dayBeforeMinutes: 21 * 60 + 15,
+    );
+    expect(alerts.map((a) => a.at), [
+      DateTime(2026, 11, 11, 21, 15),
+      DateTime(2026, 11, 12, 8),
+    ]);
+    expect(alerts.first.occurrence, DateTime(2026, 11, 12, 8));
+  });
+
   test('a custom default time does not move timed events', () {
     final e = event(start: DateTime(2026, 11, 12, 15), sameDay: true);
     final alerts = upcomingEventAlerts(e, now, allDayMinutes: 7 * 60);

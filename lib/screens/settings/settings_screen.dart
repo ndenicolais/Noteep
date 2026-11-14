@@ -73,8 +73,11 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       ),
       SettingsNotificationsSection(
         defaultAlertMinutes: ref.watch(defaultAlertTimeProvider),
+        dayBeforeAlertMinutes: ref.watch(dayBeforeAlertTimeProvider),
         onChanged:
             (v) => ref.read(remindersActionsProvider).setDefaultAlertTime(v),
+        onDayBeforeChanged:
+            (v) => ref.read(remindersActionsProvider).setDayBeforeAlertTime(v),
       ),
       const SettingsBackupDataSection(),
       SettingsAccountSection(onDeleteAccount: () => _deleteAccount(context)),

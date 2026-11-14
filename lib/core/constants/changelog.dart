@@ -45,6 +45,7 @@ final List<ChangelogEntry> changelogEntries = [
     version: '2.0.1',
     items: [
       ChangelogItem(ChangeType.improved, (l) => l.changelog_v2_0_1_bullet_1),
+      ChangelogItem(ChangeType.added, (l) => l.changelog_v2_0_1_bullet_2),
     ],
   ),
   ChangelogEntry(

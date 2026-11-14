@@ -111,6 +111,14 @@ class _CalendarEventDetailsScreenState
         allDayMinutes: ref.watch(defaultAlertTimeProvider),
       ),
     );
+    // Day-before alerts exist for all-day events only.
+    final dayBeforeAt = DateFormat('HH:mm').format(
+      occurrenceTime(
+        event,
+        event.startTime,
+        allDayMinutes: ref.watch(dayBeforeAlertTimeProvider),
+      ),
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -188,7 +196,7 @@ class _CalendarEventDetailsScreenState
           if (event.notifiesDayBefore)
             DetailRow(
               icon: Icons.notifications_outlined,
-              subtitle: l10n.calendarAlertAt(alertAt),
+              subtitle: l10n.calendarAlertAt(dayBeforeAt),
               child: Text(l10n.calendarAlertDayBefore),
             ),
           // Always for a timed event: it alerts at its start.

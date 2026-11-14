@@ -149,14 +149,26 @@ abstract class AppLocalizations {
   /// No description provided for @settingsDefaultAlertTime.
   ///
   /// In it, this message translates to:
-  /// **'Orario predefinito'**
+  /// **'Avviso il giorno stesso'**
   String get settingsDefaultAlertTime;
 
   /// No description provided for @settingsDefaultAlertTimeSubtitle.
   ///
   /// In it, this message translates to:
-  /// **'Per gli eventi di tutto il giorno, i compleanni e gli onomastici'**
+  /// **'Per eventi di tutto il giorno, compleanni e onomastici; è anche l\'orario proposto per le scadenze dei task'**
   String get settingsDefaultAlertTimeSubtitle;
+
+  /// No description provided for @settingsDayBeforeAlertTime.
+  ///
+  /// In it, this message translates to:
+  /// **'Avviso il giorno prima'**
+  String get settingsDayBeforeAlertTime;
+
+  /// No description provided for @settingsDayBeforeAlertTimeSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Per eventi di tutto il giorno, compleanni e onomastici'**
+  String get settingsDayBeforeAlertTimeSubtitle;
 
   /// No description provided for @settingsLanguageSystem.
   ///
@@ -205,6 +217,12 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Scegliere la data e l\'orario di task, promemoria ed eventi è più rapido: calendario e orario sono nella stessa finestra, così per cambiare solo l\'orario (o solo il giorno) basta un tocco.'**
   String get changelog_v2_0_1_bullet_1;
+
+  /// No description provided for @changelog_v2_0_1_bullet_2.
+  ///
+  /// In it, this message translates to:
+  /// **'Puoi scegliere in Impostazioni a che ora ricevere l\'avviso del giorno prima e quello del giorno stesso degli eventi di tutto il giorno, dei compleanni e degli onomastici, in modo indipendente.'**
+  String get changelog_v2_0_1_bullet_2;
 
   /// No description provided for @changelog_v2_0_0_bullet_1.
   ///
