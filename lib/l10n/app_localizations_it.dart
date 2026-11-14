@@ -62,6 +62,10 @@ class AppLocalizationsIt extends AppLocalizations {
   String get changelog_section_security => 'Sicurezza';
 
   @override
+  String get changelog_v2_0_1_bullet_1 =>
+      'Scegliere la data e l\'orario di task, promemoria ed eventi è più rapido: calendario e orario sono nella stessa finestra, così per cambiare solo l\'orario (o solo il giorno) basta un tocco.';
+
+  @override
   String get changelog_v2_0_0_bullet_1 =>
       'App completamente ridisegnata: note, task e calendario in un unico posto, sincronizzati sul tuo account.';
 
@@ -332,6 +336,15 @@ class AppLocalizationsIt extends AppLocalizations {
 
   @override
   String get commonOk => 'OK';
+
+  @override
+  String get commonDone => 'Fine';
+
+  @override
+  String get dateTimePickerAddTime => 'Aggiungi orario';
+
+  @override
+  String get dateTimePickerRemoveTime => 'Rimuovi orario';
 
   @override
   String get commonPin => 'Fissa';

@@ -21,6 +21,7 @@ import '../../utils/notification_service.dart';
 import '../../utils/picker_defaults.dart';
 import '../../widgets/shared/app_dialogs.dart';
 import '../../widgets/shared/error_feedback.dart';
+import '../../widgets/shared/date_time_picker_dialog.dart';
 import 'calendar_event_details_section.dart';
 import 'calendar_event_editor_bars.dart';
 import 'calendar_location_field.dart';
@@ -124,53 +125,43 @@ class _CalendarEventEditorScreenState
   }
 
   void _openDateTimePicker() async {
-    final selectedDate = await showDatePicker(
-      context: context,
-      initialDate: _event.startTime,
+    final start = _event.startTime;
+    final startTime = TimeOfDay.fromDateTime(start);
+    // A new event for today does not start in the past.
+    TimeOfDay offered(DateTime date) =>
+        _isNew ? initialPickerTime(date, startTime) : startTime;
+    final picked = await showDateTimePickerDialog(
+      context,
+      initialDate: start,
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
+      initialTime: offered(start),
+      defaultTime: offered,
+      timeRequired: true,
+      showTime: !_event.isAllDay,
     );
+    if (picked == null || !mounted) return;
 
-    if (selectedDate != null && mounted) {
-      if (_event.isAllDay) {
-        setState(
-          () =>
-              _event = _event.copyWith(
-                startTime: selectedDate,
-                endTime: selectedDate.add(const Duration(days: 1)),
-              ),
-        );
-      } else {
-        final selectedTime = await showTimePicker(
-          context: context,
-          // A new event for today does not start in the past.
-          initialTime:
-              _isNew
-                  ? initialPickerTime(
-                    selectedDate,
-                    TimeOfDay.fromDateTime(_event.startTime),
-                  )
-                  : TimeOfDay.fromDateTime(_event.startTime),
-        );
-
-        if (selectedTime != null && mounted) {
-          final newStart = DateTime(
-            selectedDate.year,
-            selectedDate.month,
-            selectedDate.day,
-            selectedTime.hour,
-            selectedTime.minute,
-          );
-          final duration = _event.endTime.difference(_event.startTime);
-          final newEnd = newStart.add(duration);
-
-          setState(
-            () =>
-                _event = _event.copyWith(startTime: newStart, endTime: newEnd),
-          );
-        }
-      }
+    if (_event.isAllDay) {
+      final day = picked.combined;
+      setState(
+        () =>
+            _event = _event.copyWith(
+              startTime: day,
+              endTime: day.add(const Duration(days: 1)),
+            ),
+      );
+      return;
     }
+    final newStart = picked.combined;
+    final duration = _event.endTime.difference(_event.startTime);
+    setState(
+      () =>
+          _event = _event.copyWith(
+            startTime: newStart,
+            endTime: newStart.add(duration),
+          ),
+    );
   }
 
   Future<void> _pickEndTime() async {

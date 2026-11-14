@@ -33,6 +33,7 @@ import '../../widgets/shared/error_feedback.dart';
 import '../../widgets/shared/note_hero.dart';
 import '../../widgets/style_editor/color_picker_widget.dart';
 import '../../widgets/style_editor/style_editor_sheet.dart';
+import '../../widgets/shared/date_time_picker_dialog.dart';
 import 'note_audio_notes_section.dart';
 import 'note_audio_recorder_sheet.dart';
 import 'note_checklist_editor.dart';
@@ -206,30 +207,20 @@ class _NoteEditorScreenState extends ConsumerState<NoteEditorScreen> {
 
   Future<void> _setReminder() async {
     final now = DateTime.now();
-    final date = await showDatePicker(
-      context: context,
-      initialDate: _note.reminder ?? now,
+    final initial = _note.reminder ?? now;
+    final picked = await showDateTimePickerDialog(
+      context,
+      initialDate: initial,
       firstDate: now,
       lastDate: now.add(const Duration(days: 365)),
+      initialTime: initialPickerTime(initial, TimeOfDay.fromDateTime(initial)),
+      defaultTime:
+          (date) => initialPickerTime(date, TimeOfDay.fromDateTime(initial)),
+      timeRequired: true,
     );
-    if (date == null || !mounted) return;
+    if (picked == null || !mounted) return;
 
-    final time = await showTimePicker(
-      context: context,
-      initialTime: initialPickerTime(
-        date,
-        TimeOfDay.fromDateTime(_note.reminder ?? now),
-      ),
-    );
-    if (time == null || !mounted) return;
-
-    final scheduled = DateTime(
-      date.year,
-      date.month,
-      date.day,
-      time.hour,
-      time.minute,
-    );
+    final scheduled = picked.combined;
 
     _controller.updateNote((n) => n.copyWith(reminder: scheduled));
     _save();

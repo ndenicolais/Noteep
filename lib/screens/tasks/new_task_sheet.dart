@@ -14,6 +14,7 @@ import '../../l10n/l10n.dart';
 import '../../theme/app_spacing.dart';
 import '../../utils/picker_defaults.dart';
 import '../../widgets/shared/app_dialogs.dart';
+import '../../widgets/shared/date_time_picker_dialog.dart';
 
 /// What the new-task sheet collected. [due] carries a time only when one
 /// was picked: the task notifies at that time.
@@ -66,38 +67,22 @@ class _NewTaskSheetState extends State<_NewTaskSheet> {
     super.dispose();
   }
 
-  /// Due date, then its time: cancelling the time keeps a day-only date.
+  /// Due date and optional time in one dialog: no time means day-only.
   Future<void> _pickDue() async {
     final now = DateTime.now();
-    final date = await showDatePicker(
-      context: context,
+    final picked = await showDateTimePickerDialog(
+      context,
       initialDate: _due ?? now,
       firstDate: now.subtract(const Duration(days: 365)),
       lastDate: now.add(const Duration(days: 365 * 5)),
+      initialTime:
+          _due != null && _hasTime ? TimeOfDay.fromDateTime(_due!) : null,
+      defaultTime: (date) => initialPickerTime(date, widget.defaultTime),
     );
-    if (date == null || !mounted) return;
-    final time = await showTimePicker(
-      context: context,
-      initialTime: initialPickerTime(
-        date,
-        _due != null && _hasTime
-            ? TimeOfDay.fromDateTime(_due!)
-            : widget.defaultTime,
-      ),
-    );
-    if (!mounted) return;
+    if (picked == null || !mounted) return;
     setState(() {
-      _hasTime = time != null;
-      _due =
-          time == null
-              ? date
-              : DateTime(
-                date.year,
-                date.month,
-                date.day,
-                time.hour,
-                time.minute,
-              );
+      _hasTime = picked.time != null;
+      _due = picked.combined;
     });
   }
 

@@ -200,6 +200,12 @@ abstract class AppLocalizations {
   /// **'Sicurezza'**
   String get changelog_section_security;
 
+  /// No description provided for @changelog_v2_0_1_bullet_1.
+  ///
+  /// In it, this message translates to:
+  /// **'Scegliere la data e l\'orario di task, promemoria ed eventi è più rapido: calendario e orario sono nella stessa finestra, così per cambiare solo l\'orario (o solo il giorno) basta un tocco.'**
+  String get changelog_v2_0_1_bullet_1;
+
   /// No description provided for @changelog_v2_0_0_bullet_1.
   ///
   /// In it, this message translates to:
@@ -673,6 +679,24 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'OK'**
   String get commonOk;
+
+  /// No description provided for @commonDone.
+  ///
+  /// In it, this message translates to:
+  /// **'Fine'**
+  String get commonDone;
+
+  /// No description provided for @dateTimePickerAddTime.
+  ///
+  /// In it, this message translates to:
+  /// **'Aggiungi orario'**
+  String get dateTimePickerAddTime;
+
+  /// No description provided for @dateTimePickerRemoveTime.
+  ///
+  /// In it, this message translates to:
+  /// **'Rimuovi orario'**
+  String get dateTimePickerRemoveTime;
 
   /// No description provided for @commonPin.
   ///

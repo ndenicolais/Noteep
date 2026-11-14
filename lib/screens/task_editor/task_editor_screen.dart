@@ -26,6 +26,7 @@ import '../../utils/picker_defaults.dart';
 import '../../utils/recurrence.dart';
 import '../../utils/dialogs/move_to_list_dialog.dart';
 import '../../widgets/shared/error_feedback.dart';
+import '../../widgets/shared/date_time_picker_dialog.dart';
 import '../calendar/calendar_new_entry.dart';
 import '../tasks/task_delete.dart';
 import 'task_editor_app_bar.dart';
@@ -235,32 +236,21 @@ class _TaskEditorScreenState extends ConsumerState<TaskEditorScreen> {
     return TimeOfDay(hour: minutes ~/ 60, minute: minutes % 60);
   }
 
-  /// Due date, then its time: cancelling the time keeps a day-only due
-  /// date (no notification).
+  /// Due date and optional time in one dialog: without a time the due
+  /// date is day-only (no notification).
   void _showDatePicker() async {
     final current = _task.dueDate;
-    final date = await showDatePicker(
-      context: context,
-      initialDate: current ?? DateTime.now(),
-      firstDate: DateTime.now().subtract(const Duration(days: 365)),
-      lastDate: DateTime.now().add(const Duration(days: 365)),
+    final now = DateTime.now();
+    final picked = await showDateTimePickerDialog(
+      context,
+      initialDate: current ?? now,
+      firstDate: now.subtract(const Duration(days: 365)),
+      lastDate: now.add(const Duration(days: 365)),
+      initialTime: _task.hasDueTime ? TimeOfDay.fromDateTime(current!) : null,
+      defaultTime: (date) => initialPickerTime(date, _defaultAlertTime()),
     );
-    if (date == null || !mounted) return;
-    final time = await showTimePicker(
-      context: context,
-      initialTime: initialPickerTime(
-        date,
-        _task.hasDueTime
-            ? TimeOfDay.fromDateTime(current!)
-            : _defaultAlertTime(),
-      ),
-    );
-    if (!mounted) return;
-    _applyDueDate(
-      time == null
-          ? date
-          : DateTime(date.year, date.month, date.day, time.hour, time.minute),
-    );
+    if (picked == null || !mounted) return;
+    _applyDueDate(picked.combined);
   }
 
   /// Sets (or with null clears) the due date. A due date with a time

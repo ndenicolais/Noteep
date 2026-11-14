@@ -62,6 +62,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get changelog_section_security => 'Security';
 
   @override
+  String get changelog_v2_0_1_bullet_1 =>
+      'Picking the date and time of tasks, reminders and events is quicker: the calendar and the time are in the same window, so changing just the time (or just the day) takes a single tap.';
+
+  @override
   String get changelog_v2_0_0_bullet_1 =>
       'Completely redesigned app: notes, tasks and calendar in one place, synced to your account.';
 
@@ -332,6 +336,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get commonOk => 'OK';
+
+  @override
+  String get commonDone => 'Done';
+
+  @override
+  String get dateTimePickerAddTime => 'Add time';
+
+  @override
+  String get dateTimePickerRemoveTime => 'Remove time';
 
   @override
   String get commonPin => 'Pin';
