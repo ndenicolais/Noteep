@@ -347,6 +347,9 @@ The screens (`SettingsScreen`, `BackupDataScreen`) handle dialogs, file pickers 
   - Full backup: JSON export/import of everything, clear all.
   - Full backup content: notes, tasks, task lists, events, label names (`labels`) and the user's preferences (`settings`, see `PreferencesBackup`). The JSON file has them as top-level keys; the ZIP has `notes.json`, `tasks.json`, `calendar.json`, `metadata.json` plus `labels.json` and `settings.json` (both optional, missing from older backups). Both restore flows (JSON import and automatic backup history) read and parse the backup first, then confirm with `showRestoreBackupDialog` (`restore_backup_dialog.dart`): when the backup has preferences, a checkbox "Also restore settings" (off by default) decides `restoreSettings`. Labels are always merged into the existing ones (`LabelsNotifier.addAll`), never deleted.
   - Data per section (calendar, tasks, notes — with the Export screen —): JSON export/import, ICS export/import for the calendar, clear. Imports and clears ask for confirmation; persistence errors show a snackbar.
+  - **Export destination**: every export (full backup, per-section JSON, ICS and the Export screen's TXT/JSON/CSV/HTML) first asks `pickExportDestination` (`widgets/shared/export_destination_sheet.dart`): *Save to device* (`FilePicker.saveFile`, the system "Save as" dialog: the user picks the folder, no storage permission, the file survives uninstall) or *Share* (temp file + `SharePlus` with `subject: fileName`, as some targets such as "Save to Drive" name the document after the subject). On web there is no sheet: `saveFile` starts a browser download. The app never writes exports to a folder of its own choosing. Backing out of the sheet, the dialog or the share sheet shows no snackbar. File names: `noteep_<backup|notes|tasks|calendar>_yyyyMMdd_HHmmss.<ext>`.
+  - **JSON file header** (all JSON exports): `{app: "noteep", schemaVersion: 1, appVersion, exportedAt (UTC ISO 8601), ...sections}`. On import `DataActions._checkHeader` refuses a different `app` or a higher `schemaVersion` with a `BackupFileException` (user-facing message); files from earlier versions (only `version` + `exportedAt`) are accepted. Bump `backupSchemaVersion` only on an incompatible layout change. Same layout across Noteep, Flowdget, Garagement and Loviary.
+  - **Pre-restore snapshot**: every JSON import and every restore from the automatic backup history goes through `DataActions.restore`, which first saves the current data as `noteep_prerestore_<timestamp>.zip` in the automatic backups folder (sections read synchronously before the state is replaced, ZIP written in the background, best effort, skipped on web), so a wrong import can be undone from the history. ICS import only adds events and takes no snapshot.
 - Account: delete account (destructive confirmation → password for email accounts → non-dismissible progress dialog → `AuthNotifier.deleteAccount`; on success the app returns to the login).
 - Info tile with the app version.
 
@@ -402,7 +405,7 @@ Riverpod with `NotifierProvider`, `Provider`, `StreamProvider` and `FutureProvid
 | `BackupSettingsNotifier`, `BackupStatusNotifier`, `availableBackupsProvider` | `providers/settings/backup_provider.dart` | Automatic backup settings and status, list of local backups |
 | `BackupRestorer` (`backupRestorerProvider`) | `providers/settings/backup_restore.dart` | `FullBackupData` parsing (flat JSON and ZIP layouts), `apply(data, restoreSettings:)` (preferences first when asked, then replaces each data section present and merges the labels; birthdays and name days with no alert get both through `withSpecialAlerts`, as older data predates the alerts), `readZip` |
 | `PreferencesBackup` (`preferencesBackupProvider`) | `providers/settings/preferences_backup.dart` | `export()`/`restore(json)` of the backed-up preferences under stable names independent of the `SharedPreferences` keys: `themeMode`, `language`, `startSection`, `notesLayout`, `notesSortOrder`, `notesFabMenu`, `tasksSortOrder`, `showCompletedTasks`, `groupTasksByPriority`, `calendarView`, `calendarShowTasks`, `defaultAlertMinutes`, `dayBeforeAlertMinutes`, `autoBackupEnabled`, `autoBackupFrequency`. Applied through each notifier's setter (state and storage update together); unknown keys and invalid values are skipped. Device bookkeeping (onboarding seen, last backup time, last changelog seen, migration flags) is not backed up. A new user preference must be added here |
-| `DataActions` (`dataActionsProvider`) | `providers/settings/data_actions.dart` | Export payloads (`fullBackupExport`, `zipBackupSections` for the automatic backup), per-section import, `parseFullBackup`/`importFullBackup`, ICS export/import, clear, `wipeRemoteData`/`wipeLocalData` for account deletion |
+| `DataActions` (`dataActionsProvider`) | `providers/settings/data_actions.dart` | Export payloads (`fullBackupExport`, `zipBackupSections` for the automatic backup), JSON header (`backupAppId`, `backupSchemaVersion`) and its check, per-section import, `parseFullBackup`/`restore` (pre-restore snapshot, then `BackupRestorer.apply`), ICS export/import, clear, `wipeRemoteData`/`wipeLocalData` for account deletion |
 | `RemindersActions` (`remindersActionsProvider`) | `providers/reminders_actions.dart` | `resync()` after sign-in and `cancelAll()` after sign-out (see below), `setDefaultAlertTime`, `setDayBeforeAlertTime`. `notificationServiceProvider` wraps `NotificationService.instance` so tests can fake it |
 
 **Non-obvious behavior**
@@ -447,7 +450,8 @@ Plain classes in `lib/utils/`, not tied to Riverpod.
 
 **Path:** `lib/utils/backup_service.dart`
 
-- `createBackup(...)`, `restoreBackup(path)`, `listBackups()`, `deleteBackup(path)`, `getBackupInfo(file)`, `isBackupDue(frequency)`, `getLastBackupTime()`.
+- `createBackup(..., namePrefix)`, `restoreBackup(path)`, `listBackups()`, `deleteBackup(path)`, `getBackupInfo(file)`, `isBackupDue(frequency)`, `getLastBackupTime()`.
+- `namePrefix`: `autoPrefix` (`noteep_backup`, scheduled backups) or `preRestorePrefix` (`noteep_prerestore`, taken before an import/restore). Both are listed in the history and count towards the 30 kept.
 - ZIP in `<documents>/noteep_backups/` with notes, tasks, task lists and calendar as JSON plus `metadata.json` (`appVersion`); keeps the 30 most recent; `last_backup_time` in `SharedPreferences`.
 - `restoreBackup` waits for the asynchronous extraction before reading; corrupt or incomplete ZIPs return `null`.
 - The Home screen runs a silent backup at startup when `isBackupDue` says so.
@@ -480,8 +484,7 @@ Records with `record` into `<documents>/audio_notes/` and plays with `just_audio
 | Class / file | What it does |
 |---|---|
 | `ChangelogService.pendingEntries(prefs, version)` | Compares `appVersion` with `last_seen_changelog_version`: first install → save and show nothing; same version → nothing; otherwise the newer entries (all if the seen version is unknown). Test: `test/utils/changelog_service_test.dart` |
-| `DataExportService` | JSON and ICS file writing and picking for Settings |
-| `downloader.dart` (`_io`, `_web`, `_stub`) | Conditional import: save/share a file on mobile, download it on the web |
+| `DataExportService` | `exportBytes`/`exportJson`/`exportIcs` to an `ExportDestination` (`device` = system "Save as" dialog / browser download, `share` = share sheet) returning an `ExportOutcome` (`saved`, `shared`, `cancelled`); `timestampedName`; JSON/ICS file picking |
 | `link_utils.dart` | `normalizeUrl` (adds `https://`, `null` if invalid), `buildMarkdownLink` (escapes brackets and URL characters), `openExternalLink` (external app). Allowed schemes: `http`, `https`, `mailto`, `tel`; the matching `<queries>` are in the Android manifest |
 | `markdown_text.dart` | `markdownToPlainText(source)`: removes Markdown syntax (headings, emphasis, code, quotes, rules, links, images) and turns list items into `• `, keeping escaped characters and `snake_case` words literal. Used by previews that show note text unrendered: `NoteCard`, the reminder notification body and the link sheet. Test: `test/utils/markdown_text_test.dart` |
 | `recurrence.dart` | `RecurrenceType`, `recurrenceTypeFromString`, labels, `calendarEventOccursOn`. Test: `test/utils/recurrence_test.dart` |
@@ -618,7 +621,7 @@ dependencies:
   intl: ^0.20.2                   # Dates, plurals, gen-l10n
   pdf: ^3.11.1                    # PDF export
   printing: ^5.13.1               # PDF share/print
-  path_provider: ^2.1.4           # Documents folder (audio, backups, exports)
+  path_provider: ^2.1.4           # Documents folder (audio, backups), temp files to share
 
   firebase_core: ^3.13.1          # Firebase init
   firebase_auth: ^5.5.3           # Authentication

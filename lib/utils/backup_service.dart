@@ -23,6 +23,12 @@ class BackupService {
   static const String _backupDirName = 'noteep_backups';
   static const int _maxBackups = 30;
 
+  /// Name prefix of the scheduled automatic backups.
+  static const String autoPrefix = 'noteep_backup';
+
+  /// Name prefix of the backups taken just before an import or restore.
+  static const String preRestorePrefix = 'noteep_prerestore';
+
   /// Get the backup directory
   static Future<Directory> getBackupDirectory() async {
     final appDir = await getApplicationDocumentsDirectory();
@@ -40,17 +46,21 @@ class BackupService {
     required Map<String, dynamic> calendarData,
     Map<String, dynamic>? labelsData,
     Map<String, dynamic>? settingsData,
+    String namePrefix = autoPrefix,
   }) async {
     try {
       final backupDir = await getBackupDirectory();
       final timestamp = DateFormat(
         'yyyy-MM-dd_HH-mm-ss',
       ).format(DateTime.now());
-      final backupName = 'noteep_backup_$timestamp.zip';
+      final backupName = '${namePrefix}_$timestamp.zip';
       final backupPath = '${backupDir.path}/$backupName';
 
-      // Create temporary directory for files
-      final tempDir = Directory('${backupDir.path}/temp_$timestamp');
+      // Create temporary directory for files (per prefix, so a pre-restore
+      // backup and a scheduled one in the same second don't share it).
+      final tempDir = Directory(
+        '${backupDir.path}/temp_${namePrefix}_$timestamp',
+      );
       tempDir.createSync();
 
       try {

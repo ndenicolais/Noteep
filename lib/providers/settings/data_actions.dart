@@ -12,6 +12,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/constants/app_version.dart';
+import '../../l10n/l10n.dart';
 import '../../utils/backup_service.dart';
 import '../../utils/ics_export_service.dart';
 import '../../utils/ics_import_service.dart';
@@ -39,12 +40,36 @@ class DataActions {
 
   BackupRestorer get _restorer => _ref.read(backupRestorerProvider);
 
-  // -- Export payloads -------------------------------------------------------
+  // -- Backup file format ----------------------------------------------------
 
-  Map<String, dynamic> _header(String version) => {
-    'version': version,
-    'exportedAt': DateTime.now().toIso8601String(),
+  /// Identifies Noteep files, so a backup of another app is refused.
+  static const backupAppId = 'noteep';
+
+  /// Bumped when the file layout changes incompatibly.
+  static const backupSchemaVersion = 1;
+
+  Map<String, dynamic> get _header => {
+    'app': backupAppId,
+    'schemaVersion': backupSchemaVersion,
+    'appVersion': appVersion,
+    'exportedAt': DateTime.now().toUtc().toIso8601String(),
   };
+
+  /// Throws [BackupFileException] if [decoded] belongs to another app or
+  /// to a newer, unknown layout. Files from older versions (no `app` or
+  /// `schemaVersion`, just `version`) are accepted.
+  static void _checkHeader(Map<String, dynamic> decoded) {
+    final app = decoded['app'];
+    if (app != null && app != backupAppId) {
+      throw BackupFileException(currentL10n().settingsBackupWrongApp);
+    }
+    final schema = decoded['schemaVersion'];
+    if (schema is int && schema > backupSchemaVersion) {
+      throw BackupFileException(currentL10n().settingsBackupTooNew);
+    }
+  }
+
+  // -- Export payloads -------------------------------------------------------
 
   List<Map<String, dynamic>> get _notes =>
       _ref.read(notesProvider).map((n) => n.toJson()).toList();
@@ -55,24 +80,21 @@ class DataActions {
   List<Map<String, dynamic>> get _calendar =>
       _ref.read(calendarProvider).map((e) => e.toJson()).toList();
 
-  Map<String, dynamic> notesExport() => {..._header('1.0.0'), 'notes': _notes};
+  Map<String, dynamic> notesExport() => {..._header, 'notes': _notes};
 
   Map<String, dynamic> tasksExport() => {
-    ..._header('1.0.0'),
+    ..._header,
     'tasks': _tasks,
     'taskLists': _taskLists,
   };
 
-  Map<String, dynamic> calendarExport() => {
-    ..._header('1.0.0'),
-    'calendar': _calendar,
-  };
+  Map<String, dynamic> calendarExport() => {..._header, 'calendar': _calendar};
 
   List<String> get _labels =>
       _ref.read(labelsProvider).map((l) => l.name).toList();
 
   Map<String, dynamic> fullBackupExport() => {
-    ..._header(appVersion),
+    ..._header,
     'notes': _notes,
     'tasks': _tasks,
     'taskLists': _taskLists,
@@ -103,11 +125,12 @@ class DataActions {
   /// Only the given [keys] are read from [decoded], so e.g. importing a full
   /// backup file as "notes" replaces just the notes.
   Future<void> _import(Map<String, dynamic> decoded, List<String> keys) {
+    _checkHeader(decoded);
     final data = FullBackupData.fromJson({
       for (final k in keys)
         if (decoded.containsKey(k)) k: decoded[k],
     });
-    return _restorer.apply(data);
+    return restore(data);
   }
 
   Future<void> importNotes(Map<String, dynamic> decoded) =>
@@ -120,14 +143,35 @@ class DataActions {
       _import(decoded, const ['calendar']);
 
   /// Parses a full backup file without applying it; throws on malformed
-  /// data.
-  FullBackupData parseFullBackup(Map<String, dynamic> decoded) =>
-      FullBackupData.fromJson(decoded);
+  /// data or on a file of another app.
+  FullBackupData parseFullBackup(Map<String, dynamic> decoded) {
+    _checkHeader(decoded);
+    return FullBackupData.fromJson(decoded);
+  }
 
-  Future<void> importFullBackup(
-    FullBackupData data, {
-    bool restoreSettings = false,
-  }) => _restorer.apply(data, restoreSettings: restoreSettings);
+  /// Applies [data] (from a `.json` file or an automatic backup) after
+  /// saving the current data as an automatic backup, so a wrong import can
+  /// be undone from the backups list.
+  Future<void> restore(FullBackupData data, {bool restoreSettings = false}) {
+    _snapshotBeforeRestore();
+    return _restorer.apply(data, restoreSettings: restoreSettings);
+  }
+
+  /// The sections are read synchronously, before [restore] replaces the
+  /// state; the zip is written in the background (best effort: a failure
+  /// doesn't block the restore).
+  void _snapshotBeforeRestore() {
+    if (kIsWeb) return; // BackupService needs dart:io / path_provider.
+    final s = zipBackupSections();
+    BackupService.createBackup(
+      notesData: s.notes,
+      tasksData: s.tasks,
+      calendarData: s.calendar,
+      labelsData: s.labels,
+      settingsData: s.settings,
+      namePrefix: BackupService.preRestorePrefix,
+    ).ignore();
+  }
 
   // -- ICS -------------------------------------------------------------------
 
@@ -221,3 +265,13 @@ class DataActions {
 }
 
 final dataActionsProvider = Provider<DataActions>(DataActions.new);
+
+/// A backup file that can't be imported; [message] is user-facing.
+class BackupFileException implements Exception {
+  const BackupFileException(this.message);
+
+  final String message;
+
+  @override
+  String toString() => message;
+}

@@ -263,7 +263,7 @@ abstract class AppLocalizations {
   /// No description provided for @changelog_v2_0_0_bullet_9.
   ///
   /// In it, this message translates to:
-  /// **'Tutto in Impostazioni > Backup e dati: backup manuali e automatici da ripristinare con un tocco, che salvano anche etichette e impostazioni, ed esportazione delle note in PDF, TXT, JSON, CSV e HTML.'**
+  /// **'Tutto in Impostazioni > Backup e dati: backup manuali e automatici da ripristinare con un tocco, che salvano anche etichette e impostazioni, ed esportazione delle note in PDF, TXT, JSON, CSV e HTML. Ogni file esportato lo salvi dove vuoi (Download, Drive, scheda SD…) o lo condividi con un\'altra app, e prima di ogni ripristino Noteep conserva una copia dei dati attuali tra i backup, così puoi sempre tornare indietro.'**
   String get changelog_v2_0_0_bullet_9;
 
   /// No description provided for @changelog_v2_0_0_bullet_10.
@@ -317,7 +317,7 @@ abstract class AppLocalizations {
   /// No description provided for @changelog_v2_0_0_bullet_18.
   ///
   /// In it, this message translates to:
-  /// **'Il ripristino del backup e l\'importazione del calendario sono più sicuri: un file selezionato non può più essere usato per accedere ad altri file del dispositivo.'**
+  /// **'Il ripristino del backup e l\'importazione del calendario sono più sicuri: un file selezionato non può più essere usato per accedere ad altri file del dispositivo, e i backup di altre app o di versioni più recenti di Noteep vengono rifiutati con un avviso.'**
   String get changelog_v2_0_0_bullet_18;
 
   /// No description provided for @changelog_v2_0_0_bullet_19.
@@ -2570,6 +2570,42 @@ abstract class AppLocalizations {
   /// **'Esporta note'**
   String get exportTitle;
 
+  /// No description provided for @exportDestinationTitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Esporta'**
+  String get exportDestinationTitle;
+
+  /// No description provided for @exportSaveToDevice.
+  ///
+  /// In it, this message translates to:
+  /// **'Salva sul dispositivo'**
+  String get exportSaveToDevice;
+
+  /// No description provided for @exportSaveToDeviceSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Scegli la cartella: Download, Drive, scheda SD…'**
+  String get exportSaveToDeviceSubtitle;
+
+  /// No description provided for @exportShareSubtitle.
+  ///
+  /// In it, this message translates to:
+  /// **'Invia a Drive, email o un\'altra app'**
+  String get exportShareSubtitle;
+
+  /// No description provided for @exportFileDone.
+  ///
+  /// In it, this message translates to:
+  /// **'{format} esportato'**
+  String exportFileDone(String format);
+
+  /// No description provided for @exportFailed.
+  ///
+  /// In it, this message translates to:
+  /// **'Esportazione non riuscita: {error}'**
+  String exportFailed(String error);
+
   /// No description provided for @exportIntro.
   ///
   /// In it, this message translates to:
@@ -2978,12 +3014,6 @@ abstract class AppLocalizations {
   /// **'Backup esportato'**
   String get settingsBackupExported;
 
-  /// No description provided for @settingsBackupSavedIn.
-  ///
-  /// In it, this message translates to:
-  /// **'Backup salvato in:\n'**
-  String get settingsBackupSavedIn;
-
   /// No description provided for @settingsImportBackupTitle.
   ///
   /// In it, this message translates to:
@@ -2995,6 +3025,18 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Backup importato con successo.'**
   String get settingsBackupImported;
+
+  /// No description provided for @settingsBackupWrongApp.
+  ///
+  /// In it, this message translates to:
+  /// **'Questo file non è un backup di Noteep.'**
+  String get settingsBackupWrongApp;
+
+  /// No description provided for @settingsBackupTooNew.
+  ///
+  /// In it, this message translates to:
+  /// **'Questo backup è stato creato da una versione più recente di Noteep: aggiorna l\'app per importarlo.'**
+  String get settingsBackupTooNew;
 
   /// No description provided for @settingsClearAllConfirm.
   ///
@@ -3019,12 +3061,6 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Note esportate'**
   String get settingsNotesExported;
-
-  /// No description provided for @settingsNotesSavedIn.
-  ///
-  /// In it, this message translates to:
-  /// **'Note salvate in:\n'**
-  String get settingsNotesSavedIn;
 
   /// No description provided for @settingsImportNotesTitle.
   ///
@@ -3062,12 +3098,6 @@ abstract class AppLocalizations {
   /// **'Task esportati'**
   String get settingsTasksExported;
 
-  /// No description provided for @settingsTasksSavedIn.
-  ///
-  /// In it, this message translates to:
-  /// **'Task salvati in:\n'**
-  String get settingsTasksSavedIn;
-
   /// No description provided for @settingsImportTasksTitle.
   ///
   /// In it, this message translates to:
@@ -3103,12 +3133,6 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Calendario esportato'**
   String get settingsCalendarExported;
-
-  /// No description provided for @settingsCalendarSavedIn.
-  ///
-  /// In it, this message translates to:
-  /// **'Calendario salvato in:\n'**
-  String get settingsCalendarSavedIn;
 
   /// No description provided for @settingsImportCalendarTitle.
   ///
@@ -3151,12 +3175,6 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Nessun evento da esportare.'**
   String get settingsNoEventsToExport;
-
-  /// No description provided for @settingsIcsDownloaded.
-  ///
-  /// In it, this message translates to:
-  /// **'Calendario ICS scaricato'**
-  String get settingsIcsDownloaded;
 
   /// No description provided for @settingsIcsExported.
   ///
@@ -3205,12 +3223,6 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Errore nel caricamento dei backup: {error}'**
   String settingsBackupsLoadError(String error);
-
-  /// No description provided for @settingsIcsSavedIn.
-  ///
-  /// In it, this message translates to:
-  /// **'Calendario ICS salvato in:\n{path}'**
-  String settingsIcsSavedIn(String path);
 
   /// No description provided for @settingsIcsImported.
   ///

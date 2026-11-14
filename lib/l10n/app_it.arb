@@ -27,7 +27,7 @@
   "changelog_v2_0_0_bullet_6": "Notifiche semplici: task ed eventi con un orario ti avvisano a quell'ora; eventi di tutto il giorno, compleanni e onomastici avvisano il giorno stesso e/o il giorno prima, all'orario scelto in Impostazioni. Le note possono avere un promemoria. Toccando la notifica si apre l'elemento collegato, il permesso viene chiesto solo al primo avviso e, scegliendo un orario per oggi, si parte dall'ora attuale.",
   "changelog_v2_0_0_bullet_7": "Etichette salvate nel tuo account, da aggiungere dall'editor e da toccare per vedere le note che le usano. Archivio e cestino con eliminazione automatica dopo 7 giorni: eliminare dall'editor sposta nel cestino, e dopo aver archiviato o cestinato puoi toccare Annulla.",
   "changelog_v2_0_0_bullet_8": "Scorri un task verso destra per completarlo o verso sinistra per cestinarlo; in vista elenco scorri una nota per archiviarla o cestinarla. Trascina verso il basso per aggiornare le liste e, se la sincronizzazione non riesce, tocca Riprova.",
-  "changelog_v2_0_0_bullet_9": "Tutto in Impostazioni > Backup e dati: backup manuali e automatici da ripristinare con un tocco, che salvano anche etichette e impostazioni, ed esportazione delle note in PDF, TXT, JSON, CSV e HTML.",
+  "changelog_v2_0_0_bullet_9": "Tutto in Impostazioni > Backup e dati: backup manuali e automatici da ripristinare con un tocco, che salvano anche etichette e impostazioni, ed esportazione delle note in PDF, TXT, JSON, CSV e HTML. Ogni file esportato lo salvi dove vuoi (Download, Drive, scheda SD…) o lo condividi con un'altra app, e prima di ogni ripristino Noteep conserva una copia dei dati attuali tra i backup, così puoi sempre tornare indietro.",
   "changelog_v2_0_0_bullet_10": "Modalità offline: le modifiche fatte senza connessione vengono salvate sul dispositivo e inviate appena torni online, con un avviso finché restano in attesa. Anche sul web i dati restano disponibili offline.",
   "changelog_v2_0_0_bullet_11": "Widget per la schermata Home: Note, Task e Calendario per vedere le ultime note, i task da fare e gli impegni delle prossime due settimane; Azioni rapide e i pulsanti rotondi Nota, Task ed Evento per creare subito un nuovo elemento.",
   "changelog_v2_0_0_bullet_12": "L'app è disponibile anche in inglese: segue la lingua del telefono, oppure la scegli in Impostazioni > Lingua. Date, selettori e menu di sistema seguono la lingua dell'app.",
@@ -36,7 +36,7 @@
   "changelog_v2_0_0_bullet_15": "Aspetto più curato e uniforme: nuova icona e nuovo logo, griglia delle note a mattoncini senza spazi vuoti, anteprima della lista durante il caricamento, animazioni più fluide (disattivate se il sistema riduce le animazioni) e lo stesso stile per intestazioni, impostazioni ed elementi in tutta l'app.",
   "changelog_v2_0_0_bullet_16": "Accessibilità: con TalkBack ogni nota si legge per intero e le azioni rapide sono nel menu Azioni; con il testo di sistema molto grande nulla viene tagliato. La prima lettera di titoli e testi è maiuscola in automatico.",
   "changelog_v2_0_0_bullet_17": "Informativa sulla privacy in italiano e in inglese, leggibile anche senza account e mostrata con l'età minima prima della registrazione; indica che i contenuti sono conservati su server negli Stati Uniti. In Impostazioni puoi eliminare definitivamente l'account con tutti i tuoi dati.",
-  "changelog_v2_0_0_bullet_18": "Il ripristino del backup e l'importazione del calendario sono più sicuri: un file selezionato non può più essere usato per accedere ad altri file del dispositivo.",
+  "changelog_v2_0_0_bullet_18": "Il ripristino del backup e l'importazione del calendario sono più sicuri: un file selezionato non può più essere usato per accedere ad altri file del dispositivo, e i backup di altre app o di versioni più recenti di Noteep vengono rifiutati con un avviso.",
   "changelog_v2_0_0_bullet_19": "Se l'avvio non riesce compare un messaggio con il pulsante Riprova invece di una schermata bianca. Dopo una reinstallazione l'accesso resta attivo. Uscendo dall'account i suoi promemoria non suonano più e, accedendo, vengono riprogrammati anche su un nuovo dispositivo.",
   "changelog_v2_0_0_bullet_20": "Importare un backup completo ora elimina davvero gli elementi che non ne fanno parte. Nei file ICS gli eventi ricorrenti mantengono la data di fine e l'ultima ripetizione, e gli orari con fuso orario restano corretti.",
   "changelog_v2_0_0_bullet_21": "Note e task fissati restano sempre in cima; le note con formattazione mostrano il testo pulito, senza asterischi o cancelletti; i task con una scadenza con orario, ad esempio importati da Google Tasks, mantengono il loro orario.",
@@ -502,6 +502,26 @@
   "infoChangelogTitle": "Novità",
   "infoLicensesTitle": "Licenze open source",
   "exportTitle": "Esporta note",
+  "exportDestinationTitle": "Esporta",
+  "exportSaveToDevice": "Salva sul dispositivo",
+  "exportSaveToDeviceSubtitle": "Scegli la cartella: Download, Drive, scheda SD…",
+  "exportShareSubtitle": "Invia a Drive, email o un'altra app",
+  "exportFileDone": "{format} esportato",
+  "@exportFileDone": {
+    "placeholders": {
+      "format": {
+        "type": "String"
+      }
+    }
+  },
+  "exportFailed": "Esportazione non riuscita: {error}",
+  "@exportFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
   "exportIntro": "Esporta tutte le note attive (escluse quelle nel cestino).",
   "exportPdfSubtitle": "Salva le note in un file .pdf",
   "exportTxtSubtitle": "Salva le note in un file .txt",
@@ -570,28 +590,26 @@
   "settingsBackupsAvailable": "Backup disponibili",
   "settingsImport": "Importa",
   "settingsBackupExported": "Backup esportato",
-  "settingsBackupSavedIn": "Backup salvato in:\n",
   "settingsImportBackupTitle": "Importa backup",
   "settingsBackupImported": "Backup importato con successo.",
+  "settingsBackupWrongApp": "Questo file non è un backup di Noteep.",
+  "settingsBackupTooNew": "Questo backup è stato creato da una versione più recente di Noteep: aggiorna l'app per importarlo.",
   "settingsClearAllConfirm": "Tutti i dati (note, task ed eventi) verranno eliminati definitivamente. Questa operazione è irreversibile. Continuare?",
   "settingsAllCleared": "Tutti i dati sono stati eliminati.",
   "settingsDeleteAll": "Elimina tutto",
   "settingsNotesExported": "Note esportate",
-  "settingsNotesSavedIn": "Note salvate in:\n",
   "settingsImportNotesTitle": "Importa note",
   "settingsReplaceNotesConfirm": "Le note attuali verranno sostituite con quelle del file. Continuare?",
   "settingsNotesImported": "Note importate con successo.",
   "settingsClearNotesConfirm": "Tutte le note verranno eliminate definitivamente. Continuare?",
   "settingsNotesCleared": "Tutte le note sono state eliminate.",
   "settingsTasksExported": "Task esportati",
-  "settingsTasksSavedIn": "Task salvati in:\n",
   "settingsImportTasksTitle": "Importa task",
   "settingsReplaceTasksConfirm": "I task attuali verranno sostituiti con quelli del file. Continuare?",
   "settingsTasksImported": "Task importati con successo.",
   "settingsClearTasksConfirm": "Tutti i task verranno eliminati definitivamente. Continuare?",
   "settingsTasksCleared": "Tutti i task sono stati eliminati.",
   "settingsCalendarExported": "Calendario esportato",
-  "settingsCalendarSavedIn": "Calendario salvato in:\n",
   "settingsImportCalendarTitle": "Importa calendario",
   "settingsReplaceCalendarConfirm": "Gli eventi attuali verranno sostituiti con quelli del file. Continuare?",
   "settingsCalendarImported": "Calendario importato con successo.",
@@ -599,7 +617,6 @@
   "settingsClearCalendarConfirm": "Tutti gli eventi del calendario verranno eliminati definitivamente. Continuare?",
   "settingsCalendarCleared": "Tutti gli eventi sono stati eliminati.",
   "settingsNoEventsToExport": "Nessun evento da esportare.",
-  "settingsIcsDownloaded": "Calendario ICS scaricato",
   "settingsIcsExported": "Calendario ICS esportato",
   "settingsNoEventsInFile": "Nessun evento trovato nel file.",
   "settingsDeleteAccountConfirm": "L'account e tutti i suoi dati (note, task ed eventi) verranno eliminati definitivamente da tutti i dispositivi. Questa operazione è irreversibile: se vuoi conservare i dati, esporta prima un backup completo. Continuare?",
@@ -618,14 +635,6 @@
   "@settingsBackupsLoadError": {
     "placeholders": {
       "error": {
-        "type": "String"
-      }
-    }
-  },
-  "settingsIcsSavedIn": "Calendario ICS salvato in:\n{path}",
-  "@settingsIcsSavedIn": {
-    "placeholders": {
-      "path": {
         "type": "String"
       }
     }

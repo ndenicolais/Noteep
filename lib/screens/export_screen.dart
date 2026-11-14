@@ -9,7 +9,6 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'dart:convert';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import '../l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,7 +19,8 @@ import 'package:printing/printing.dart';
 import '../models/note_model.dart';
 import '../providers/notes_provider.dart';
 import '../theme/app_spacing.dart';
-import '../utils/downloader.dart';
+import '../utils/data_export_service.dart';
+import '../widgets/shared/export_destination_sheet.dart';
 
 class ExportScreen extends ConsumerWidget {
   const ExportScreen({super.key});
@@ -287,16 +287,27 @@ class ExportScreen extends ConsumerWidget {
     required String mimeType,
     required String label,
   }) async {
-    final bytes = utf8.encode(content);
-    final savedPath = await downloadFile(bytes, fileName, mimeType);
-    if (!context.mounted) return;
-    final msg =
-        kIsWeb
-            ? '$label scaricato'
-            : savedPath != null
-            ? '$label salvato in:\n$savedPath'
-            : '$label esportato';
-    ScaffoldMessenger.of(context).showSnackBar(
+    final destination = await pickExportDestination(context);
+    if (destination == null || !context.mounted) return;
+    final l10n = context.l10n;
+    final messenger = ScaffoldMessenger.of(context);
+    String msg;
+    try {
+      final outcome = await DataExportService.exportBytes(
+        bytes: utf8.encode(content),
+        fileName: DataExportService.timestampedName(
+          'noteep_notes',
+          fileName.split('.').last,
+        ),
+        mimeType: mimeType,
+        destination: destination,
+      );
+      if (outcome == ExportOutcome.cancelled) return;
+      msg = l10n.exportFileDone(label);
+    } catch (e) {
+      msg = l10n.exportFailed('$e');
+    }
+    messenger.showSnackBar(
       SnackBar(content: Text(msg), duration: const Duration(seconds: 3)),
     );
   }

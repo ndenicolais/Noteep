@@ -102,7 +102,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get changelog_v2_0_0_bullet_9 =>
-      'Everything in Settings > Backup & data: manual and automatic backups you restore with a tap, which also save labels and settings, and note export to PDF, TXT, JSON, CSV and HTML.';
+      'Everything in Settings > Backup & data: manual and automatic backups you restore with a tap, which also save labels and settings, and note export to PDF, TXT, JSON, CSV and HTML. Save every exported file wherever you like (Downloads, Drive, SD card…) or share it with another app, and before every restore Noteep keeps a copy of your current data among the backups, so you can always go back.';
 
   @override
   String get changelog_v2_0_0_bullet_10 =>
@@ -138,7 +138,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get changelog_v2_0_0_bullet_18 =>
-      'Backup restore and calendar import are safer: a selected file can no longer be used to reach other files on the device.';
+      'Backup restore and calendar import are safer: a selected file can no longer be used to reach other files on the device, and backups of other apps or of newer versions of Noteep are refused with a notice.';
 
   @override
   String get changelog_v2_0_0_bullet_19 =>
@@ -1349,6 +1349,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exportTitle => 'Export notes';
 
   @override
+  String get exportDestinationTitle => 'Export';
+
+  @override
+  String get exportSaveToDevice => 'Save to device';
+
+  @override
+  String get exportSaveToDeviceSubtitle =>
+      'Choose the folder: Downloads, Drive, SD card…';
+
+  @override
+  String get exportShareSubtitle => 'Send to Drive, email or another app';
+
+  @override
+  String exportFileDone(String format) {
+    return '$format exported';
+  }
+
+  @override
+  String exportFailed(String error) {
+    return 'Export failed: $error';
+  }
+
+  @override
   String get exportIntro =>
       'Export all active notes (excluding those in the trash).';
 
@@ -1572,13 +1595,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsBackupExported => 'Backup exported';
 
   @override
-  String get settingsBackupSavedIn => 'Backup saved in:\n';
-
-  @override
   String get settingsImportBackupTitle => 'Import backup';
 
   @override
   String get settingsBackupImported => 'Backup imported successfully.';
+
+  @override
+  String get settingsBackupWrongApp => 'This file is not a Noteep backup.';
+
+  @override
+  String get settingsBackupTooNew =>
+      'This backup was made by a newer version of Noteep: update the app to import it.';
 
   @override
   String get settingsClearAllConfirm =>
@@ -1592,9 +1619,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsNotesExported => 'Notes exported';
-
-  @override
-  String get settingsNotesSavedIn => 'Notes saved in:\n';
 
   @override
   String get settingsImportNotesTitle => 'Import notes';
@@ -1617,9 +1641,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsTasksExported => 'Tasks exported';
 
   @override
-  String get settingsTasksSavedIn => 'Tasks saved in:\n';
-
-  @override
   String get settingsImportTasksTitle => 'Import tasks';
 
   @override
@@ -1638,9 +1659,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsCalendarExported => 'Calendar exported';
-
-  @override
-  String get settingsCalendarSavedIn => 'Calendar saved in:\n';
 
   @override
   String get settingsImportCalendarTitle => 'Import calendar';
@@ -1664,9 +1682,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsNoEventsToExport => 'No events to export.';
-
-  @override
-  String get settingsIcsDownloaded => 'ICS calendar downloaded';
 
   @override
   String get settingsIcsExported => 'ICS calendar exported';
@@ -1696,11 +1711,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String settingsBackupsLoadError(String error) {
     return 'Error loading backups: $error';
-  }
-
-  @override
-  String settingsIcsSavedIn(String path) {
-    return 'ICS calendar saved in:\n$path';
   }
 
   @override

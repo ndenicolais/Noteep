@@ -8,7 +8,6 @@
 // Contact: ndn21dev@gmail.com
 // GitHub: https://github.com/ndenicolais
 
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../l10n/l10n.dart';
@@ -20,6 +19,7 @@ import '../../utils/backup_service.dart' show BackupFrequency;
 import '../../utils/data_export_service.dart';
 import '../../widgets/shared/app_dialogs.dart';
 import '../../widgets/shared/error_feedback.dart';
+import '../../widgets/shared/export_destination_sheet.dart';
 import 'settings_backup_section.dart';
 import 'settings_backup_sheets.dart';
 import 'settings_calendar_data_section.dart';
@@ -101,24 +101,51 @@ class _BackupDataScreenState extends ConsumerState<BackupDataScreen> {
 
   // -- Shared export / import / clear flows ----------------------------------
 
+  /// Asks "save to device / share", then exports; the SnackBar is skipped
+  /// when the user backs out of the sheet, the save dialog or the share.
+  Future<void> _export(
+    BuildContext context, {
+    required Future<ExportOutcome> Function(ExportDestination) export,
+    required String exportedMessage,
+  }) async {
+    final destination = await pickExportDestination(context);
+    if (destination == null) return;
+    try {
+      final outcome = await export(destination);
+      if (!context.mounted || outcome == ExportOutcome.cancelled) return;
+      _showSnack(context, exportedMessage);
+    } catch (e) {
+      if (!context.mounted) return;
+      _showSnack(context, context.l10n.exportFailed('$e'), seconds: 4);
+    }
+  }
+
   Future<void> _exportJson(
     BuildContext context, {
     required Map<String, dynamic> Function() buildData,
     required String fileNamePrefix,
     required String exportedMessage,
-    required String savedMessagePrefix,
-  }) async {
-    final savedPath = await DataExportService.exportJson(
-      buildData: buildData,
-      fileNamePrefix: fileNamePrefix,
-    );
-    if (!context.mounted) return;
-    _showSnack(
-      context,
-      !kIsWeb && savedPath != null
-          ? '$savedMessagePrefix$savedPath'
-          : exportedMessage,
-    );
+  }) => _export(
+    context,
+    exportedMessage: exportedMessage,
+    export:
+        (destination) => DataExportService.exportJson(
+          data: buildData(),
+          fileNamePrefix: fileNamePrefix,
+          destination: destination,
+        ),
+  );
+
+  /// Null (after an error SnackBar) if the picked file isn't valid JSON.
+  Future<Map<String, dynamic>?> _pickJson(BuildContext context) async {
+    try {
+      return await DataExportService.pickAndDecodeJson();
+    } catch (e) {
+      if (context.mounted) {
+        _showSnack(context, context.l10n.settingsImportError('$e'), seconds: 4);
+      }
+      return null;
+    }
   }
 
   Future<void> _importJson(
@@ -137,7 +164,7 @@ class _BackupDataScreenState extends ConsumerState<BackupDataScreen> {
     if (!confirmed) return;
     if (!context.mounted) return;
 
-    final decoded = await DataExportService.pickAndDecodeJson();
+    final decoded = await _pickJson(context);
     if (decoded == null) return;
     if (!context.mounted) return;
 
@@ -177,7 +204,6 @@ class _BackupDataScreenState extends ConsumerState<BackupDataScreen> {
     context,
     fileNamePrefix: 'noteep_backup',
     exportedMessage: context.l10n.settingsBackupExported,
-    savedMessagePrefix: context.l10n.settingsBackupSavedIn,
     buildData: _actions.fullBackupExport,
   );
 
@@ -185,7 +211,7 @@ class _BackupDataScreenState extends ConsumerState<BackupDataScreen> {
   /// confirming, so the dialog can offer to restore the preferences only
   /// when the backup has them.
   Future<void> _importFullBackup(BuildContext context) async {
-    final decoded = await DataExportService.pickAndDecodeJson();
+    final decoded = await _pickJson(context);
     if (decoded == null || !context.mounted) return;
 
     final FullBackupData data;
@@ -205,7 +231,7 @@ class _BackupDataScreenState extends ConsumerState<BackupDataScreen> {
     if (restoreSettings == null || !context.mounted) return;
 
     notifyOnError(
-      _actions.importFullBackup(data, restoreSettings: restoreSettings),
+      _actions.restore(data, restoreSettings: restoreSettings),
       context,
     );
     _showSnack(context, context.l10n.settingsBackupImported);
@@ -226,7 +252,6 @@ class _BackupDataScreenState extends ConsumerState<BackupDataScreen> {
     context,
     fileNamePrefix: 'noteep_notes',
     exportedMessage: context.l10n.settingsNotesExported,
-    savedMessagePrefix: context.l10n.settingsNotesSavedIn,
     buildData: _actions.notesExport,
   );
 
@@ -252,7 +277,6 @@ class _BackupDataScreenState extends ConsumerState<BackupDataScreen> {
     context,
     fileNamePrefix: 'noteep_tasks',
     exportedMessage: context.l10n.settingsTasksExported,
-    savedMessagePrefix: context.l10n.settingsTasksSavedIn,
     buildData: _actions.tasksExport,
   );
 
@@ -278,7 +302,6 @@ class _BackupDataScreenState extends ConsumerState<BackupDataScreen> {
     context,
     fileNamePrefix: 'noteep_calendar',
     exportedMessage: context.l10n.settingsCalendarExported,
-    savedMessagePrefix: context.l10n.settingsCalendarSavedIn,
     buildData: _actions.calendarExport,
   );
 
@@ -304,18 +327,15 @@ class _BackupDataScreenState extends ConsumerState<BackupDataScreen> {
       _showSnack(context, context.l10n.settingsNoEventsToExport);
       return;
     }
-    final savedPath = await DataExportService.exportIcs(
-      content,
-      'noteep_calendario.ics',
-    );
-    if (!context.mounted) return;
-    _showSnack(
+    await _export(
       context,
-      kIsWeb
-          ? context.l10n.settingsIcsDownloaded
-          : savedPath != null
-          ? context.l10n.settingsIcsSavedIn(savedPath)
-          : context.l10n.settingsIcsExported,
+      exportedMessage: context.l10n.settingsIcsExported,
+      export:
+          (destination) => DataExportService.exportIcs(
+            content,
+            DataExportService.timestampedName('noteep_calendar', 'ics'),
+            destination,
+          ),
     );
   }
 

@@ -9,30 +9,104 @@
 // GitHub: https://github.com/ndenicolais
 
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:intl/intl.dart';
-import 'downloader.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 
-/// JSON/ICS encode-decode and file picking/writing for the Settings screen's
-/// import/export/backup features, kept out of the widget layer.
+/// Where an exported file goes.
+enum ExportDestination {
+  /// System "Save as" dialog: the user picks the folder (Downloads, Drive,
+  /// SD card...). On web it starts a browser download.
+  device,
+
+  /// System share sheet (Drive, email, chat...). Not available on web.
+  share,
+}
+
+enum ExportOutcome { saved, shared, cancelled }
+
+/// File writing, sharing and picking for the import/export/backup features,
+/// kept out of the widget layer. Nothing is ever written to a folder chosen
+/// by the app: the user always picks the destination.
 class DataExportService {
-  /// Encodes [buildData] as pretty JSON and writes it to a timestamped
-  /// `<fileNamePrefix>_yyyyMMdd_HHmmss.json` file. Returns the saved path
-  /// (null on web, where the browser handles the download directly).
-  static Future<String?> exportJson({
-    required Map<String, dynamic> Function() buildData,
-    required String fileNamePrefix,
-  }) async {
-    final data = buildData();
-    final json = const JsonEncoder.withIndent('  ').convert(data);
-    final bytes = utf8.encode(json);
+  /// `<prefix>_yyyyMMdd_HHmmss.<extension>`.
+  static String timestampedName(String prefix, String extension) {
     final dateStr = DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
-    final fileName = '${fileNamePrefix}_$dateStr.json';
-    return downloadFile(bytes, fileName, 'application/json');
+    return '${prefix}_$dateStr.$extension';
   }
 
+  /// Sends [bytes] to [destination] as [fileName].
+  static Future<ExportOutcome> exportBytes({
+    required List<int> bytes,
+    required String fileName,
+    required String mimeType,
+    required ExportDestination destination,
+  }) async {
+    final data = Uint8List.fromList(bytes);
+    switch (destination) {
+      case ExportDestination.device:
+        final uri = await FilePicker.saveFile(
+          fileName: fileName,
+          bytes: data,
+          mimeType: mimeType,
+        );
+        return uri == null ? ExportOutcome.cancelled : ExportOutcome.saved;
+      case ExportDestination.share:
+        // A real file with the final name: with XFile.fromData some targets
+        // give the shared file a generic internal name.
+        final dir = await getTemporaryDirectory();
+        final file = File('${dir.path}/$fileName');
+        await file.writeAsBytes(data);
+        final result = await SharePlus.instance.share(
+          ShareParams(
+            files: [XFile(file.path, mimeType: mimeType)],
+            // Some targets (e.g. "Save to Drive") name the document after
+            // the subject instead of the file.
+            subject: fileName,
+          ),
+        );
+        // Some platforms report `unavailable` even when the file was sent:
+        // only an explicit dismissal counts as cancelled.
+        return result.status == ShareResultStatus.dismissed
+            ? ExportOutcome.cancelled
+            : ExportOutcome.shared;
+    }
+  }
+
+  /// Encodes [data] as pretty JSON and exports it as a timestamped
+  /// `<fileNamePrefix>_yyyyMMdd_HHmmss.json` file.
+  static Future<ExportOutcome> exportJson({
+    required Map<String, dynamic> data,
+    required String fileNamePrefix,
+    required ExportDestination destination,
+  }) {
+    final json = const JsonEncoder.withIndent('  ').convert(data);
+    return exportBytes(
+      bytes: utf8.encode(json),
+      fileName: timestampedName(fileNamePrefix, 'json'),
+      mimeType: 'application/json',
+      destination: destination,
+    );
+  }
+
+  /// Exports [content] as an ICS file named [fileName].
+  static Future<ExportOutcome> exportIcs(
+    String content,
+    String fileName,
+    ExportDestination destination,
+  ) => exportBytes(
+    bytes: utf8.encode(content),
+    fileName: fileName,
+    mimeType: 'text/calendar',
+    destination: destination,
+  );
+
   /// Opens a file picker for a single `.json` file and returns its decoded
-  /// content, or null if the user cancelled or picked an empty file.
+  /// content, or null if the user cancelled. Throws [FormatException] if the
+  /// file isn't a JSON object.
   static Future<Map<String, dynamic>?> pickAndDecodeJson() async {
     final picked = await FilePicker.pickFile(
       type: FileType.custom,
@@ -40,14 +114,11 @@ class DataExportService {
     );
     if (picked == null) return null;
     final bytes = await picked.readAsBytes();
-    return jsonDecode(utf8.decode(bytes)) as Map<String, dynamic>;
-  }
-
-  /// Writes [content] to `fileName` with an ICS mime type. Returns the saved
-  /// path (null on web).
-  static Future<String?> exportIcs(String content, String fileName) {
-    final bytes = utf8.encode(content);
-    return downloadFile(bytes, fileName, 'text/calendar');
+    final decoded = jsonDecode(utf8.decode(bytes));
+    if (decoded is! Map<String, dynamic>) {
+      throw const FormatException('Not a JSON object');
+    }
+    return decoded;
   }
 
   /// Opens a file picker for a single `.ics` file and returns its decoded

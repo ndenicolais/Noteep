@@ -60,21 +60,22 @@ void main() {
     test('each export carries its own sections and a header', () async {
       await seed();
 
+      const header = ['app', 'schemaVersion', 'appVersion', 'exportedAt'];
+
       final notes = actions.notesExport();
-      expect(notes.keys, unorderedEquals(['version', 'exportedAt', 'notes']));
+      expect(notes.keys, unorderedEquals([...header, 'notes']));
       expect((notes['notes'] as List).single['id'], note.id);
 
       final tasks = actions.tasksExport();
-      expect(
-        tasks.keys,
-        unorderedEquals(['version', 'exportedAt', 'tasks', 'taskLists']),
-      );
+      expect(tasks.keys, unorderedEquals([...header, 'tasks', 'taskLists']));
 
       final calendar = actions.calendarExport();
       expect((calendar['calendar'] as List).single['id'], event.id);
 
       final full = actions.fullBackupExport();
-      expect(full['version'], appVersion);
+      expect(full['app'], DataActions.backupAppId);
+      expect(full['schemaVersion'], DataActions.backupSchemaVersion);
+      expect(full['appVersion'], appVersion);
       expect(
         full.keys,
         containsAll([
@@ -90,6 +91,39 @@ void main() {
     });
   });
 
+  group('backup file header', () {
+    test('a file of another app is refused', () {
+      expect(
+        () => actions.parseFullBackup({'app': 'flowdget', 'notes': []}),
+        throwsA(isA<BackupFileException>()),
+      );
+      expect(
+        () => actions.importNotes({'app': 'flowdget', 'notes': []}),
+        throwsA(isA<BackupFileException>()),
+      );
+    });
+
+    test('a newer schema is refused', () {
+      expect(
+        () => actions.parseFullBackup({
+          'app': DataActions.backupAppId,
+          'schemaVersion': DataActions.backupSchemaVersion + 1,
+        }),
+        throwsA(isA<BackupFileException>()),
+      );
+    });
+
+    test('files of older versions (only "version") are accepted', () async {
+      final data = actions.parseFullBackup({
+        'version': '1.0.0',
+        'exportedAt': '2026-01-01T10:00:00.000',
+        'notes': [note.toJson()],
+      });
+      await actions.restore(data);
+      expect(container.read(notesProvider).single.id, note.id);
+    });
+  });
+
   group('JSON imports', () {
     test('full backup export re-imports into an empty account', () async {
       await seed();
@@ -97,7 +131,7 @@ void main() {
       await actions.clearAll();
       expect(container.read(notesProvider), isEmpty);
 
-      await actions.importFullBackup(actions.parseFullBackup(exported));
+      await actions.restore(actions.parseFullBackup(exported));
       expect(container.read(notesProvider).single.id, note.id);
       expect(container.read(tasksProvider).single.id, task.id);
       expect(container.read(taskListsProvider).single.id, list.id);
@@ -117,11 +151,11 @@ void main() {
         container.read(themeModeProvider.notifier).set(ThemeMode.light);
         final data = actions.parseFullBackup(exported);
 
-        await actions.importFullBackup(data);
+        await actions.restore(data);
         expect(container.read(labelsProvider).map((l) => l.name), ['Casa']);
         expect(container.read(themeModeProvider), ThemeMode.light);
 
-        await actions.importFullBackup(data, restoreSettings: true);
+        await actions.restore(data, restoreSettings: true);
         expect(container.read(themeModeProvider), ThemeMode.dark);
       },
     );

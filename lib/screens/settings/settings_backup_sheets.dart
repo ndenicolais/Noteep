@@ -13,6 +13,7 @@ import '../../l10n/l10n.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/settings/backup_provider.dart';
 import '../../providers/settings/backup_restore.dart';
+import '../../providers/settings/data_actions.dart';
 import '../../theme/app_font_sizes.dart';
 import '../../theme/app_spacing.dart';
 import '../../utils/backup_service.dart' show BackupFrequency, BackupService;
@@ -116,7 +117,9 @@ Future<void> _restoreBackup(
 
   final messenger = ScaffoldMessenger.of(context);
   notifyOnError(
-    restorer.apply(data, restoreSettings: restoreSettings),
+    ref
+        .read(dataActionsProvider)
+        .restore(data, restoreSettings: restoreSettings),
     context,
   );
   messenger.showSnackBar(
