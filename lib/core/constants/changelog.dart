@@ -42,13 +42,6 @@ class ChangelogEntry {
 /// keys of `lib/l10n/app_*.arb`.
 final List<ChangelogEntry> changelogEntries = [
   ChangelogEntry(
-    version: '2.0.1',
-    items: [
-      ChangelogItem(ChangeType.improved, (l) => l.changelog_v2_0_1_bullet_1),
-      ChangelogItem(ChangeType.added, (l) => l.changelog_v2_0_1_bullet_2),
-    ],
-  ),
-  ChangelogEntry(
     version: '2.0.0',
     items: [
       ChangelogItem(ChangeType.added, (l) => l.changelog_v2_0_0_bullet_1),
@@ -64,9 +57,11 @@ final List<ChangelogEntry> changelogEntries = [
       ChangelogItem(ChangeType.added, (l) => l.changelog_v2_0_0_bullet_11),
       ChangelogItem(ChangeType.added, (l) => l.changelog_v2_0_0_bullet_12),
       ChangelogItem(ChangeType.added, (l) => l.changelog_v2_0_0_bullet_13),
+      ChangelogItem(ChangeType.added, (l) => l.changelog_v2_0_0_bullet_24),
       ChangelogItem(ChangeType.improved, (l) => l.changelog_v2_0_0_bullet_14),
       ChangelogItem(ChangeType.improved, (l) => l.changelog_v2_0_0_bullet_15),
       ChangelogItem(ChangeType.improved, (l) => l.changelog_v2_0_0_bullet_16),
+      ChangelogItem(ChangeType.improved, (l) => l.changelog_v2_0_0_bullet_23),
       ChangelogItem(ChangeType.security, (l) => l.changelog_v2_0_0_bullet_17),
       ChangelogItem(ChangeType.security, (l) => l.changelog_v2_0_0_bullet_18),
       ChangelogItem(ChangeType.fixed, (l) => l.changelog_v2_0_0_bullet_19),

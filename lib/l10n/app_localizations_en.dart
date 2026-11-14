@@ -69,14 +69,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get changelog_section_security => 'Security';
 
   @override
-  String get changelog_v2_0_1_bullet_1 =>
-      'Picking the date and time of tasks, reminders and events is quicker: the calendar and the time are in the same window, so changing just the time (or just the day) takes a single tap.';
-
-  @override
-  String get changelog_v2_0_1_bullet_2 =>
-      'In Settings you can choose separately when to get the day-before and the same-day alert of all-day events, birthdays and name days.';
-
-  @override
   String get changelog_v2_0_0_bullet_1 =>
       'Completely redesigned app: notes, tasks and calendar in one place, synced to your account.';
 
@@ -163,6 +155,14 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get changelog_v2_0_0_bullet_22 =>
       'Notifications for tasks and events already on your account, restored from a backup or imported from a calendar file now arrive after signing in or restarting the app too, not just for the ones created or edited on the phone.';
+
+  @override
+  String get changelog_v2_0_0_bullet_23 =>
+      'Picking the date and time of tasks, reminders and events is quicker: the calendar and the time are in the same window, so changing just the time (or just the day) takes a single tap.';
+
+  @override
+  String get changelog_v2_0_0_bullet_24 =>
+      'In Settings you can choose separately when to get the day-before and the same-day alert of all-day events, birthdays and name days.';
 
   @override
   String get commonCancel => 'Cancel';

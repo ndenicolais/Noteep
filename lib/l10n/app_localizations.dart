@@ -212,18 +212,6 @@ abstract class AppLocalizations {
   /// **'Sicurezza'**
   String get changelog_section_security;
 
-  /// No description provided for @changelog_v2_0_1_bullet_1.
-  ///
-  /// In it, this message translates to:
-  /// **'Scegliere la data e l\'orario di task, promemoria ed eventi è più rapido: calendario e orario sono nella stessa finestra, così per cambiare solo l\'orario (o solo il giorno) basta un tocco.'**
-  String get changelog_v2_0_1_bullet_1;
-
-  /// No description provided for @changelog_v2_0_1_bullet_2.
-  ///
-  /// In it, this message translates to:
-  /// **'Puoi scegliere in Impostazioni a che ora ricevere l\'avviso del giorno prima e quello del giorno stesso degli eventi di tutto il giorno, dei compleanni e degli onomastici, in modo indipendente.'**
-  String get changelog_v2_0_1_bullet_2;
-
   /// No description provided for @changelog_v2_0_0_bullet_1.
   ///
   /// In it, this message translates to:
@@ -355,6 +343,18 @@ abstract class AppLocalizations {
   /// In it, this message translates to:
   /// **'Le notifiche di task ed eventi già presenti sul tuo account, ripristinati da un backup o importati da un file di calendario ora arrivano anche dopo l\'accesso o il riavvio dell\'app, non solo per quelli creati o modificati sul telefono.'**
   String get changelog_v2_0_0_bullet_22;
+
+  /// No description provided for @changelog_v2_0_0_bullet_23.
+  ///
+  /// In it, this message translates to:
+  /// **'Scegliere la data e l\'orario di task, promemoria ed eventi è più rapido: calendario e orario sono nella stessa finestra, così per cambiare solo l\'orario (o solo il giorno) basta un tocco.'**
+  String get changelog_v2_0_0_bullet_23;
+
+  /// No description provided for @changelog_v2_0_0_bullet_24.
+  ///
+  /// In it, this message translates to:
+  /// **'Puoi scegliere in Impostazioni a che ora ricevere l\'avviso del giorno prima e quello del giorno stesso degli eventi di tutto il giorno, dei compleanni e degli onomastici, in modo indipendente.'**
+  String get changelog_v2_0_0_bullet_24;
 
   /// No description provided for @commonCancel.
   ///
