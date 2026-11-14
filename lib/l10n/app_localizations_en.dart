@@ -146,6 +146,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'Pinned notes and tasks always stay at the top; formatted notes show clean text, without asterisks or hash signs; tasks with a due time, for example imported from Google Tasks, keep their time.';
 
   @override
+  String get changelog_v2_0_0_bullet_22 =>
+      'Notifications for tasks and events already on your account, restored from a backup or imported from a calendar file now arrive after signing in or restarting the app too, not just for the ones created or edited on the phone.';
+
+  @override
   String get commonCancel => 'Cancel';
 
   @override

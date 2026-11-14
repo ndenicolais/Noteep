@@ -44,6 +44,16 @@ class RemindersActions {
   Future<void> resync() async {
     if (kIsWeb) return;
     try {
+      // Called from the listener of the uid change, before the data
+      // notifiers have rebuilt for the new account: their initialLoad would
+      // still be the signed-out one (completed with false) and nothing would
+      // be scheduled. Waiting for the change to settle, then reading their
+      // state, rebuilds them, so the futures below belong to this account.
+      await Future<void>.delayed(Duration.zero);
+      _ref
+        ..read(notesProvider)
+        ..read(tasksProvider)
+        ..read(calendarProvider);
       final loaded = await Future.wait([
         _ref.read(notesProvider.notifier).initialLoad,
         _ref.read(tasksProvider.notifier).initialLoad,

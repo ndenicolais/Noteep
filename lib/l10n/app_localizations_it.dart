@@ -146,6 +146,10 @@ class AppLocalizationsIt extends AppLocalizations {
       'Note e task fissati restano sempre in cima; le note con formattazione mostrano il testo pulito, senza asterischi o cancelletti; i task con una scadenza con orario, ad esempio importati da Google Tasks, mantengono il loro orario.';
 
   @override
+  String get changelog_v2_0_0_bullet_22 =>
+      'Le notifiche di task ed eventi già presenti sul tuo account, ripristinati da un backup o importati da un file di calendario ora arrivano anche dopo l\'accesso o il riavvio dell\'app, non solo per quelli creati o modificati sul telefono.';
+
+  @override
   String get commonCancel => 'Annulla';
 
   @override

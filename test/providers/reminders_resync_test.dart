@@ -2,12 +2,17 @@
 // Licensed under a source-available, non-commercial license. See LICENSE.
 
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:noteep/models/calendar_model.dart';
 import 'package:noteep/models/note_model.dart';
 import 'package:noteep/models/task_model.dart';
+import 'package:noteep/providers/auth_provider.dart';
+import 'package:noteep/providers/calendar_provider.dart';
 import 'package:noteep/providers/core_providers.dart';
+import 'package:noteep/providers/notes_provider.dart';
 import 'package:noteep/providers/reminders_actions.dart';
+import 'package:noteep/providers/tasks_provider.dart';
 import 'package:noteep/utils/event_alerts.dart';
 import 'package:noteep/utils/notification_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -156,6 +161,43 @@ void main() {
     await container.read(remindersActionsProvider).resync();
 
     expect(notifications.cancelAllCalls, 0);
+  });
+
+  test('resync after a sign-in schedules the new account reminders', () async {
+    // The data notifiers are already built signed out (as in the app, where
+    // the home widget listeners read them at startup), then the user signs
+    // in and resync runs from the uid listener.
+    final at = DateTime(later.year, later.month, later.day, 10, 30);
+    final task = TaskModel(title: 'Task', dueDate: at);
+    await put('tasks', task.id, task.toJson());
+    final uid = StateProvider<String>((_) => '');
+    final container = ProviderContainer(
+      overrides: [
+        firestoreProvider.overrideWithValue(firestore),
+        currentUidProvider.overrideWith((ref) => ref.watch(uid)),
+        notificationServiceProvider.overrideWithValue(notifications),
+        sharedPreferencesProvider.overrideWithValue(basePrefs),
+      ],
+    );
+    addTearDown(container.dispose);
+    container
+      ..read(notesProvider)
+      ..read(tasksProvider)
+      ..read(calendarProvider);
+    await pumpEventQueue();
+    Future<void>? resync;
+    container.listen<String>(currentUidProvider, (_, next) {
+      if (next.isNotEmpty) {
+        resync = container.read(remindersActionsProvider).resync();
+      }
+    });
+
+    container.read(uid.notifier).state = 'test-uid';
+    container.read(currentUidProvider);
+    await resync;
+
+    expect(notifications.cancelAllCalls, 1);
+    expect(notifications.scheduled, ['task:${task.id}']);
   });
 
   test('cancelAll cancels every scheduled reminder', () async {

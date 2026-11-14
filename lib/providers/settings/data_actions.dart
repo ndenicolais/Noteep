@@ -21,6 +21,7 @@ import '../calendar_provider.dart';
 import '../core_providers.dart';
 import '../labels_provider.dart';
 import '../notes_provider.dart';
+import '../reminders_actions.dart';
 import '../tasks_provider.dart';
 import 'backup_restore.dart';
 import 'preferences_backup.dart';
@@ -142,10 +143,10 @@ class DataActions {
   ({int count, Future<void> saved}) importIcs(String content) {
     final events = IcsImportService.parseIcs(content);
     if (events.isEmpty) return (count: 0, saved: Future.value());
-    return (
-      count: events.length,
-      saved: _ref.read(calendarProvider.notifier).importEvents(events),
-    );
+    final saved = _ref.read(calendarProvider.notifier).importEvents(events);
+    // The new events are already in the state: schedule their alerts.
+    _ref.read(remindersActionsProvider).resync().ignore();
+    return (count: events.length, saved: saved);
   }
 
   // -- Clear -----------------------------------------------------------------
